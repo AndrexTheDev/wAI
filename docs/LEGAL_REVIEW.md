@@ -31,13 +31,15 @@
 
 ### 1.2 Verbraucherrecht (Fernabsatz / digitale Inhalte)
 
-- [ ] Widerrufsrecht: Bei digitalen Inhalten erlischt es gemäß § 356 Abs. 5 BGB,
+- [x] Widerrufsrecht: Bei digitalen Inhalten erlischt es gemäß § 356 Abs. 5 BGB,
       wenn der Unternehmer mit der Ausführung begonnen hat, nachdem der Verbraucher
       **ausdrücklich zugestimmt** und seine Kenntnis vom Erlöschen bestätigt hat.
-      → Die AGB enthalten den Text; im Kauf-Flow muss eine **aktive Checkbox**
-      vor der Zahlung stehen (nicht vorausgewählt).
-- [ ] Widerrufsbelehrung als eigenständiges, druckbares Dokument (Muster des
-      BMJ verwenden) – derzeit nur in den AGB integriert.
+      → Umgesetzt: aktive, nicht vorausgewählte Checkbox im Pro-Sheet; ohne
+      Zustimmung werden keine Zahlungswege angezeigt. Zeitpunkt wird lokal
+      gespeichert (`purchaseConsentAt`). Formulierung anwaltlich bestätigen lassen.
+- [x] Widerrufsbelehrung als eigenständiges Dokument: `/legal/withdrawal`
+      (`packages/shared/src/legal/withdrawal.ts`) inkl. Muster-Widerrufsformular.
+      Anwaltlich zu prüfen bleibt die exakte Formulierung der Erlöschens-Klausel.
 - [ ] Preisangabenverordnung: Endpreis inkl. USt., Hinweis "einmalig, kein Abo".
       Bei reinen Krypto-Preisen ist zusätzlich ein Euro-Preis anzugeben.
 - [ ] Button-Lösung (§ 312j Abs. 3 BGB): Schaltfläche muss "Zahlungspflichtig
@@ -166,16 +168,13 @@
 | Lokale Speicherung, Berechtigungen | Datenschutzhinweis Ziffern 2–4, Berechtigungsliste |
 | Kontakt/Impressum | `legal/imprint.ts`, überall verlinkt |
 | Empfehlung anwaltlicher Prüfung | Sichtbar in App (Rechtliches) und auf der Website |
-| Widerrufsverzicht bei digitalen Inhalten | AGB-Text vorhanden; **Checkbox im Kauf-Flow fehlt noch** |
+| Widerrufsverzicht bei digitalen Inhalten | Eigene Seite `/legal/withdrawal` + **aktive Checkbox im Pro-Sheet** (nicht vorausgewählt, Zeitpunkt lokal gespeichert) |
 
 ### Offene technische Punkte aus der rechtlichen Prüfung
 
-1. **Widerrufs-Checkbox** vor dem Kauf-Dialog (aktive Bestätigung, nicht
-   vorausgewählt) + Speicherung des Zeitpunkts im Order-Datensatz.
-2. **Eigenständige Widerrufsbelehrung** als eigene Seite `/legal/withdrawal`
-   (Mustertext BMJ) und Link aus AGB und Checkout.
-3. **Druckbare Fassung** der Rechtstexte (PDF oder `print.css`) für die
-   Nachweispflicht.
+1. **Druckbare Fassung** der Rechtstexte (PDF oder `print.css`) für die
+   Nachweispflicht. Die Consent-Checkbox und die Seite `/legal/withdrawal` sind
+   bereits umgesetzt.
 4. **Hosting-Details** im Datenschutzhinweis ergänzen, sobald der Hoster feststeht
    (Name, Ort, AVV-Referenz, Logfile-Speicherdauer).
 5. **Steuerliche Erfassung** der Krypto-Zuflüsse (Ledger-Template in
