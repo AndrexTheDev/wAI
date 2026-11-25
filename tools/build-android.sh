@@ -81,6 +81,18 @@ if ! logged "$LOG_DIR/gradle-assemble.log" ./gradlew --no-daemon clean assembleR
   echo "──────────── last 120 lines of the failing Gradle run ────────────" >&2
   tail -n 120 "$LOG_DIR/gradle-assemble.log" >&2
   echo "──────────────────────────────────────────────────────────────────" >&2
+  # Surface the failure as GitHub check annotations, which stay readable even
+  # when the raw job log is not accessible from outside the runner.
+  if [[ -n "${GITHUB_ACTIONS:-}" ]]; then
+    grep -E "^(e: |FAILURE:|\* What went wrong|> |Execution failed|Caused by|  [A-Za-z].*error)" \
+      "$LOG_DIR/gradle-assemble.log" | tail -n 8 | while IFS= read -r line; do
+      safe="${line//'%'/%25}"
+      safe="${safe//$'\r'/}"
+      safe="${safe//$'\n'/' '}"
+      printf '::error title=Gradle::%s\n' "${safe:0:600}"
+    done
+    printf '::error title=Gradle log::%s\n' "$(tail -n 3 "$LOG_DIR/gradle-assemble.log" | tr '\n' ' ' | tail -c 700)"
+  fi
   exit 1
 fi
 if [[ $APK_ONLY -eq 0 ]]; then
