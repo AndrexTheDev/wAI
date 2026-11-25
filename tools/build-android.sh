@@ -15,6 +15,8 @@
 #           WAI_KEY_PASSWORD, or run tools/ci-signing.sh first.
 #
 # Usage: bash tools/build-android.sh [--skip-tests] [--apk-only]
+# CI: all output is additionally written to $WAI_BUILD_LOG_DIR (default:
+#     $RUNNER_TEMP/wai-build-logs) so a failing job can attach it as an artifact.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -33,8 +35,22 @@ for arg in "$@"; do
   esac
 done
 
+LOG_DIR="${WAI_BUILD_LOG_DIR:-${RUNNER_TEMP:-/tmp}/wai-build-logs}"
+mkdir -p "$LOG_DIR"
+
 step() { printf '\n\033[1;35m▶ %s\033[0m\n' "$*"; }
 ok()   { printf '\033[32m✔\033[0m %s\n' "$*"; }
+
+# Runs a command while mirroring output into a log file, so the exact failure of a
+# CI run can be inspected even when the runner's own logs are unavailable.
+logged() {
+  local logfile="$1"; shift
+  set +e
+  "$@" 2>&1 | tee "$logfile"
+  local status="${PIPESTATUS[0]}"
+  set -e
+  return "$status"
+}
 
 step "0/7  environment"
 command -v java >/dev/null || { echo "JDK 21 missing" >&2; exit 1; }
@@ -60,9 +76,15 @@ npm run cap:sync
 
 step "4/7  gradle release build"
 cd "$ANDROID"
-./gradlew --no-daemon clean assembleRelease
+if ! logged "$LOG_DIR/gradle-assemble.log" ./gradlew --no-daemon clean assembleRelease --stacktrace; then
+  echo
+  echo "──────────── last 120 lines of the failing Gradle run ────────────" >&2
+  tail -n 120 "$LOG_DIR/gradle-assemble.log" >&2
+  echo "──────────────────────────────────────────────────────────────────" >&2
+  exit 1
+fi
 if [[ $APK_ONLY -eq 0 ]]; then
-  ./gradlew --no-daemon bundleRelease
+  logged "$LOG_DIR/gradle-bundle.log" ./gradlew --no-daemon bundleRelease --stacktrace
 fi
 
 step "5/7  verify signature & manifest"

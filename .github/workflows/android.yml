@@ -111,8 +111,6 @@ jobs:
         run: bash tools/ci-signing.sh
 
       - name: Build release artifacts
-        env:
-          WAI_SIGNING_MODE: ${{ env.WAI_SIGNING_MODE }}
         run: bash tools/build-android.sh
 
       - name: Read build metadata
@@ -138,12 +136,13 @@ jobs:
           path: dist-release/*.aab
           retention-days: 90
 
-      - name: Upload mapping / debug info
+      - name: Upload build logs and mapping
         if: always()
         uses: actions/upload-artifact@v5
         with:
-          name: wai-mapping-${{ steps.meta.outputs.version }}
+          name: wai-build-logs-${{ github.run_attempt }}
           path: |
+            ${{ runner.temp }}/wai-build-logs/**
             packages/app/android/app/build/outputs/mapping/release/mapping.txt
             packages/app/android/app/build/reports/**
           if-no-files-found: ignore
