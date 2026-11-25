@@ -156,9 +156,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || format('v{0}', steps.meta.outputs.version) }}
-          name: wAI ${{ steps.meta.outputs.version }}
+          # Not marked prerelease: the landing page links to /releases/latest, and
+          # GitHub excludes prereleases there. Preview-signed builds are clearly
+          # labelled in the title and body instead.
+          name: wAI ${{ steps.meta.outputs.version }}${{ steps.meta.outputs.signed != 'true' && ' (preview build)' || '' }}
           draft: false
-          prerelease: ${{ steps.meta.outputs.signed != 'true' }}
+          prerelease: false
           body: |
             ## wAI ${{ steps.meta.outputs.version }}
 
@@ -169,7 +172,7 @@ jobs:
             | Package | `dev.andrexthedev.wai` |
             | Min Android | 8.0 (API 26) |
             | Target | API 36 |
-            | Signed | ${{ steps.meta.outputs.signed == 'true' && 'release keystore' || 'preview key — do not distribute' }} |
+            | Signed | ${{ steps.meta.outputs.signed == 'true' && 'release keystore' || 'preview key — for testing only, do not distribute' }} |
             | Commit | `${{ github.sha }}` |
 
             **Install:** download `wai-${{ steps.meta.outputs.version }}.apk`, allow
