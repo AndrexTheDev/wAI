@@ -30,6 +30,10 @@ if [[ -n "${WAI_KEYSTORE_BASE64:-}" ]]; then
   export WAI_KEY_PASSWORD="${WAI_KEY_PASSWORD:-$WAI_KEYSTORE_PASSWORD}"
   SIGNING_MODE="release"
 else
+  if ! command -v keytool >/dev/null; then
+    echo "keytool not found – install a JDK 21 or set WAI_KEYSTORE_BASE64" >&2
+    exit 1
+  fi
   # Throwaway key for CI verification builds. Never used for distribution.
   KEYSTORE="$WORK/wai-unsigned-preview.jks"
   STOREPASS="wai-preview-only"

@@ -24,7 +24,23 @@ jobs:
   build:
     name: Build site
     runs-on: ubuntu-latest
+    outputs:
+      pages_enabled: ${{ steps.check.outputs.enabled }}
     steps:
+      # GitHub Pages must be switched on once in Settings → Pages → Source:
+      # "GitHub Actions". Without that the deploy step would fail on every push,
+      # so we detect the state and skip cleanly instead.
+      - id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh api "repos/${{ github.repository }}/pages" > /dev/null 2>&1; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Pages not enabled::Enable Settings → Pages → Source: GitHub Actions to publish the site and the embedded app demo."
+          fi
+
       - uses: actions/checkout@v5
 
       - uses: actions/setup-node@v5
@@ -55,6 +71,7 @@ jobs:
   deploy:
     name: Deploy
     needs: build
+    if: needs.build.outputs.pages_enabled == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

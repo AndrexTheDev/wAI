@@ -26,6 +26,8 @@ OUT="$ROOT/dist-release"
 VERSION="$(node -p "require('$APP/package.json').version")"
 SKIP_TESTS=0
 APK_ONLY=0
+SIGNING_MODE="${WAI_SIGNING_MODE:-preview}"
+export SIGNING_MODE
 
 for arg in "$@"; do
   case "$arg" in
@@ -135,4 +137,25 @@ console.log(JSON.stringify(info, null, 2));
 
 step "7/7  done"
 ls -lh "$OUT"
+
+# Publish the essentials as a GitHub check annotation / job summary so the build
+# can be verified without downloading the (large) artifacts.
+SUMMARY="wAI $VERSION · $SIGNING_MODE · APK $(du -h "$APK" | cut -f1) · AAB $([[ $APK_ONLY -eq 0 ]] && du -h "$ANDROID/app/build/outputs/bundle/release/app-release.aab" | cut -f1 || echo n/a) · sha256 $(sha256sum "$OUT/wai-$VERSION.apk" | cut -d' ' -f1)"
+printf '\n%s\n' "$SUMMARY"
+if [[ -n "${GITHUB_ACTIONS:-}" ]]; then
+  printf '::notice title=Build summary::%s\n' "$SUMMARY"
+  if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+    {
+      echo "## wAI $VERSION"
+      echo
+      echo "| | |"
+      echo "|---|---|"
+      echo "| Signing | \`${SIGNING_MODE:-unknown}\` |"
+      echo "| APK | $(du -h "$OUT/wai-$VERSION.apk" | cut -f1) |"
+      echo "| SHA-256 | \`$(sha256sum "$OUT/wai-$VERSION.apk" | cut -d' ' -f1)\` |"
+      [[ $APK_ONLY -eq 0 ]] && echo "| AAB | $(du -h "$OUT/wai-$VERSION.aab" | cut -f1) |"
+    } >> "$GITHUB_STEP_SUMMARY"
+  fi
+fi
+
 printf '\nAPK ready: %s\n' "$OUT/wai-$VERSION.apk"
