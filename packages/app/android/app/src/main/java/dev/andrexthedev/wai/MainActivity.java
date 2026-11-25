@@ -9,20 +9,27 @@ import com.getcapacitor.BridgeActivity;
 /**
  * wAI main activity.
  *
- * Besides registering the torch plugin we make sure the WebView is configured for
- * a fully offline app: no mixed content, no file access from file:// URLs, DOM
- * storage enabled (anchors live in localStorage) and hardware acceleration kept
- * on for smooth compass rendering.
+ * <p>Besides registering the torch plugin we configure the WebView for a fully
+ * offline app: DOM storage enabled (anchors live in localStorage), no file or
+ * mixed-content access, media capture allowed so photo and voice notes work.
+ *
+ * <p>Capacitor already installs its own {@code BridgeWebChromeClient} on the
+ * WebView, which is what grants camera/microphone capture inside the WebView.
+ * We must not replace it, because doing so would break the bridge.
  */
 public class MainActivity extends BridgeActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Register before super.onCreate(): the bridge is created there.
         registerPlugin(TorchPlugin.class);
         super.onCreate(savedInstanceState);
 
-        WebView webView = getBridge().getWebView();
-        if (webView == null) return;
+        WebView webView = getBridge() != null ? getBridge().getWebView() : null;
+        if (webView == null) {
+            return;
+        }
+
         WebSettings settings = webView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
@@ -31,7 +38,8 @@ public class MainActivity extends BridgeActivity {
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         settings.setMediaPlaybackRequiresUserGesture(false);
         settings.setGeolocationEnabled(true);
-        // Keep media capture working inside the WebView (photo/voice notes).
-        webView.setWebChromeClient(getBridge().getWebChromeClient());
+        // MediaRecorder needs a secure origin; Capacitor serves the app from
+        // https://localhost, so getUserMedia keeps working without extra flags.
+        settings.setJavaScriptEnabled(true);
     }
 }
