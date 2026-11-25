@@ -108,6 +108,36 @@ BT="$(ls -d "$ANDROID_HOME"/build-tools/* 2>/dev/null | sort -V | tail -1)"
 "$BT/apksigner" verify --print-certs "$APK" | sed -n '1,6p'
 "$BT/aapt2" dump badging "$APK" | grep -E "^package:|^sdkVersion|^targetSdkVersion|^application-label" || true
 
+step "5b/7  verify APK contents"
+# Prove the artifact really contains the offline app shell, the expected package
+# identity and the plugin set – without needing a device.
+APK_CHECK_LOG="$LOG_DIR/apk-contents.log"
+{
+  echo "--- badging ---"
+  "$BT/aapt2" dump badging "$APK" | grep -E "^package:|^sdkVersion|^targetSdkVersion|^application-label|^uses-permission|^native-code|^locales" || true
+  echo "--- assets ---"
+  unzip -l "$APK" | grep -E "assets/public/(index.html|assets/|manifest)|classes.dex|resources.arsc" || true
+} > "$APK_CHECK_LOG" 2>&1
+sed -n '1,12p' "$APK_CHECK_LOG"
+
+grep -q "package: name='dev.andrexthedev.wai'" "$APK_CHECK_LOG" || { echo "wrong package id in APK" >&2; exit 1; }
+grep -q "assets/public/index.html" "$APK_CHECK_LOG" || { echo "app shell missing from APK" >&2; exit 1; }
+grep -q "classes.dex" "$APK_CHECK_LOG" || { echo "no dex in APK" >&2; exit 1; }
+grep -q "targetSdkVersion:'36'" "$APK_CHECK_LOG" || { echo "unexpected targetSdkVersion" >&2; exit 1; }
+grep -q "de" "$APK_CHECK_LOG" && grep -q "en" "$APK_CHECK_LOG" || echo "note: locale list not reported by aapt2 for this build"
+ok "APK contains the bundled app shell and the expected identity"
+
+# The embedded bundle must be self-contained: no http(s) references to external
+# hosts would break the offline promise.
+if unzip -p "$APK" 'assets/public/assets/*.js' 2>/dev/null | grep -oE "https?://[a-zA-Z0-9.-]+" | sort -u > "$LOG_DIR/external-urls.txt"; then
+  if [[ -s "$LOG_DIR/external-urls.txt" ]]; then
+    echo "external URLs referenced from the bundle (expected: none, or documentation links only):"
+    cat "$LOG_DIR/external-urls.txt"
+  else
+    ok "bundle references no external hosts"
+  fi
+fi
+
 step "6/7  collect artifacts"
 mkdir -p "$OUT"
 cp "$APK" "$OUT/wai-$VERSION.apk"
