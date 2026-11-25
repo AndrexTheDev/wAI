@@ -1,0 +1,30 @@
+{
+  "name": "wai-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "wAI - Umgebungs-Gedächtnisanker / Environmental Memory Anchor. Offline-first Android app + bilingual landing page + legal & growth kit.",
+  "license": "UNLICENSED",
+  "author": "AndrexTheDev <hippie.highho@gmail.com>",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:landing": "npm run dev -w @wai/landing",
+    "dev:app": "npm run dev -w @wai/app",
+    "build": "node tools/build-all.mjs",
+    "build:landing": "npm run build -w @wai/landing",
+    "build:app": "npm run build -w @wai/app",
+    "build:android": "npm run cap:sync -w @wai/app && cd packages/app/android && ./gradlew assembleRelease",
+    "test": "npm test -w @wai/shared",
+    "verify": "npm run typecheck && npm test && npm run smoke && npm run check:android",
+    "typecheck": "tsc --noEmit -p packages/shared && tsc --noEmit -p packages/app && tsc --noEmit -p packages/landing",
+    "smoke": "npm run smoke:render -w @wai/app && npm run smoke:render -w @wai/landing",
+    "check:android": "node tools/check-android-assets.mjs",
+    "license:keygen": "node tools/license-cli.mjs keygen",
+    "license:issue": "node tools/license-cli.mjs issue",
+    "license:verify": "node tools/license-cli.mjs verify"
+  },
+  "devDependencies": {
+    "yaml": "^2.9.1"
+  }
+}

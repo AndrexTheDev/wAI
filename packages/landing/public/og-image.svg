@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="wAI – Nie wieder suchen.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070b14"/>
+      <stop offset="0.55" stop-color="#0b1424"/>
+      <stop offset="1" stop-color="#101a2e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6ee7b7"/>
+      <stop offset="0.5" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.8" cy="0.2" r="0.8">
+      <stop offset="0" stop-color="#38bdf8" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <g transform="translate(80 96)">
+    <rect width="72" height="72" rx="18" fill="#0d1524" stroke="url(#accent)" stroke-width="2"/>
+    <circle cx="36" cy="30" r="13" fill="none" stroke="url(#accent)" stroke-width="4"/>
+    <circle cx="36" cy="30" r="4" fill="url(#accent)"/>
+    <path d="M36 44 L36 58" stroke="url(#accent)" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <text x="176" y="146" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="46" font-weight="700" fill="#e8eefb">wAI</text>
+  <text x="80" y="290" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="82" font-weight="800" fill="#f4f8ff">Nie wieder suchen.</text>
+  <text x="80" y="366" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="40" font-weight="600" fill="url(#accent)">Auch dort, wo GPS aufgibt.</text>
+  <text x="80" y="452" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="30" fill="#a8b6cc">Offline · Privat · Ohne Konto · Einmal kaufen</text>
+  <g transform="translate(80 512)">
+    <rect width="232" height="52" rx="26" fill="url(#accent)"/>
+    <text x="116" y="34" text-anchor="middle" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#061018">Android-App laden</text>
+  </g>
+  <g transform="translate(880 150)">
+    <circle cx="80" cy="80" r="120" fill="none" stroke="#6ee7b7" stroke-opacity="0.25" stroke-width="1"/>
+    <circle cx="80" cy="80" r="80" fill="none" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="1"/>
+    <circle cx="80" cy="80" r="40" fill="none" stroke="#a78bfa" stroke-opacity="0.5" stroke-width="1"/>
+    <circle cx="80" cy="80" r="8" fill="#6ee7b7"/>
+  </g>
+</svg>

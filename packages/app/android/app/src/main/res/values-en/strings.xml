@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">wAI</string>
+    <string name="title_activity_main">wAI</string>
+    <string name="channel_parking_name">Parking timer</string>
+    <string name="channel_parking_desc">Reminders about parking time and your return</string>
+</resources>

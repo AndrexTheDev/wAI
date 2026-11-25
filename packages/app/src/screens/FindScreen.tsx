@@ -1,0 +1,477 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  bearingDeg,
+  distanceMeters,
+  elevationHint,
+  formatBearing,
+  formatDistance,
+  formatDuration,
+  guidanceFor,
+  parkingStatus,
+  proximityInterval,
+  proximityTier,
+  relativeBearing,
+  trailDistance,
+  type Anchor,
+} from '@wai/shared';
+import { useApp, startTrailRecording, stopTrailRecording } from '../store/AppStore';
+import { useT } from '../i18n/useT';
+import { useToast } from '../ui/Toast';
+import { beep, isDemo, vibrate } from '../platform/native';
+import {
+  Camera,
+  ChevronLeft,
+  Compass,
+  Crown,
+  Elevation,
+  Info,
+  Layers,
+  Mic,
+  Play,
+  Timer,
+  Trail,
+  Vibrate,
+  ArrowUpRight,
+  Anchor as AnchorIcon,
+} from '../ui/icons';
+import { EmptyState } from './EmptyState';
+
+/**
+ * Guidance screen: compass, elevation beam, breadcrumb trail, photo reference
+ * and proximity feedback. Multi-view (all at once) is a Pro-only layout; the
+ * free plan shows a single view at a time.
+ */
+export function FindScreen({
+  anchor,
+  onBack,
+  onChooseAnother,
+  onOpenPro,
+}: {
+  anchor: Anchor | null;
+  onBack: () => void;
+  onChooseAnother: () => void;
+  onOpenPro: (reason: string) => void;
+}) {
+  const { t, locale } = useT();
+  const { fix, sensors, plan, activeAnchors, appendTrail, anchors } = useApp();
+  const toast = useToast();
+  const [view, setView] = useState<'compass' | 'trail' | 'media'>('compass');
+  const [proximityOn, setProximityOn] = useState(plan === 'pro');
+  const [recording, setRecording] = useState(false);
+  const lastTier = useRef(0);
+  const lastPulse = useRef(0);
+
+  const current = anchor ?? activeAnchors[0] ?? null;
+
+  const guidance = useMemo(() => {
+    if (!current || !fix) return null;
+    const heading = sensors.heading ?? bearingDeg(fix, current);
+    return guidanceFor(fix, current, heading, locale, fix.altitude, Math.max(8, (fix.accuracy ?? 10) * 1.5));
+  }, [current, fix, sensors.heading, locale]);
+
+  /* Proximity feedback: vibration/tone intensity grows as you approach. */
+  useEffect(() => {
+    if (!guidance || !proximityOn || plan !== 'pro') return;
+    const tier = proximityTier(guidance.distance, Math.max(8, (fix?.accuracy ?? 10) * 1.5));
+    if (tier !== lastTier.current) {
+      lastTier.current = tier;
+      if (tier >= 2) {
+        void vibrate(tier >= 4 ? 'arrived' : tier === 3 ? 'strong' : 'medium');
+        beep(600 + tier * 90, tier >= 4 ? 180 : 80);
+      }
+    }
+    const now = Date.now();
+    if (tier >= 2 && now - lastPulse.current > proximityInterval(tier)) {
+      lastPulse.current = now;
+      void vibrate('soft');
+      beep(500 + tier * 100, 60, 0.04);
+    }
+  }, [guidance, proximityOn, plan, fix]);
+
+  /* Trail recording while walking back (stops when leaving the screen). */
+  useEffect(() => {
+    if (!current || !recording) return;
+    startTrailRecording(current.id);
+    return () => stopTrailRecording();
+  }, [current, recording]);
+
+  if (!current) {
+    return (
+      <>
+        <div className="topbar" style={{ paddingTop: 6 }}>
+          <h1 className="topbar__name">{t('app.find.title')}</h1>
+        </div>
+        <EmptyState
+          icon={<Compass size={26} />}
+          title={t('app.find.choose')}
+          body={t('app.find.chooseBody')}
+        />
+        {anchors.length > 0 && (
+          <div className="anchor-list" style={{ marginTop: 12 }}>
+            {anchors.slice(0, 4).map((item) => (
+              <button key={item.id} type="button" className="btn btn--block" onClick={onChooseAnother}>
+                {item.name || t('app.anchor.untitled')}
+              </button>
+            ))}
+          </div>
+        )}
+      </>
+    );
+  }
+
+  if (!fix) {
+    return (
+      <EmptyState
+        icon={<Info size={26} />}
+        title={t('app.permissions.noLocation')}
+        body={t('app.find.compassHint')}
+        action={
+          <button type="button" className="btn btn--sm" onClick={onBack}>
+            {t('common.back')}
+          </button>
+        }
+      />
+    );
+  }
+
+  const trailLength = trailDistance(current.trail);
+  const elevation = elevationHint(current.altitude, fix.altitude);
+  const parking = parkingStatus(current);
+  const tier = proximityTier(guidance?.distance ?? Infinity, Math.max(8, (fix.accuracy ?? 10) * 1.5));
+  const arrived = guidance?.arrived ?? false;
+  const distanceText = formatDistance(guidance?.distance ?? 0, locale);
+  const multiView = plan === 'pro';
+
+  const elevationText =
+    elevation.level === 'same'
+      ? t('app.find.elevationSame')
+      : elevation.level === 'higher'
+        ? t('app.find.elevationHigher', {
+            meters: Math.abs(Math.round(elevation.delta)),
+            floors: Math.max(1, elevation.floors),
+          })
+        : t('app.find.elevationLower', {
+            meters: Math.abs(Math.round(elevation.delta)),
+            floors: Math.max(1, elevation.floors),
+          });
+
+  return (
+    <>
+      <div className="topbar" style={{ paddingTop: 4 }}>
+        <button type="button" className="icon-btn" onClick={onBack} aria-label={t('common.back')}>
+          <ChevronLeft size={18} />
+        </button>
+        <div className="topbar__titles" style={{ flex: 1 }}>
+          <span className="topbar__name" style={{ fontSize: 15 }}>
+            {current.name || t('app.anchor.untitled')}
+          </span>
+          <span className="topbar__sub">
+            {t(`app.anchor.categories.${current.category}`)} · {formatBearing(guidance?.bearing ?? 0, locale)}
+          </span>
+        </div>
+        <button type="button" className="icon-btn" onClick={onChooseAnother} aria-label={t('app.find.choose')}>
+          <Layers size={17} />
+        </button>
+      </div>
+
+      <div className="guide">
+        {arrived && (
+          <div className="banner banner--ok">
+            <AnchorIcon size={16} />
+            <div className="banner__body">
+              <span className="banner__title">{t('app.find.arrived')}</span>
+              <span>{current.note ?? t('app.find.arriving')}</span>
+            </div>
+          </div>
+        )}
+
+        {(multiView || view === 'compass') && (
+          <div className="guide__compass">
+            <span className="guide__compass-cardinal guide__compass-cardinal--n">N</span>
+            <span className="guide__compass-cardinal guide__compass-cardinal--e">O/E</span>
+            <span className="guide__compass-cardinal guide__compass-cardinal--s">S</span>
+            <span className="guide__compass-cardinal guide__compass-cardinal--w">W</span>
+            <div className="guide__rings" />
+            <div
+              className="guide__needle"
+              style={{ rotate: `${guidance?.relative ?? 0}deg` }}
+              aria-hidden="true"
+            >
+              <span className="guide__needle-arrow" />
+              <span className="guide__needle-tail" />
+            </div>
+            <div className="guide__center">
+              <div className="guide__distance">
+                <strong>{distanceText}</strong>
+                <span>{arrived ? t('app.find.arrived') : t('app.find.distance')}</span>
+              </div>
+            </div>
+            {sensors.magneticAccuracy === 'low' && (
+              <span
+                className="status-chip status-chip--warn"
+                style={{ position: 'absolute', bottom: 8, left: '50%', translate: '-50% 0' }}
+              >
+                <Info size={11} /> {t('app.find.headingLow')}
+              </span>
+            )}
+          </div>
+        )}
+
+        {multiView && (
+          <div className="row" style={{ gap: 8 }}>
+            <div className="tile" style={{ flex: 1 }}>
+              <span className="tile__label">
+                <Elevation size={11} /> {t('app.find.elevation')}
+              </span>
+              <span className={`tile__value ${elevation.level === 'same' ? 'tile__value--mint' : 'tile__value--amber'}`}>
+                {elevation.level === 'same'
+                  ? t('app.find.elevationSame')
+                  : `${Math.abs(Math.round(elevation.delta))} m ${elevation.level === 'higher' ? '↑' : '↓'}`}
+              </span>
+              <span className="tile__sub">
+                {elevation.level === 'same'
+                  ? current.floorLabel ?? '—'
+                  : t('app.find.elevationHigher', {
+                      meters: Math.abs(Math.round(elevation.delta)),
+                      floors: Math.max(1, elevation.floors),
+                    }).slice(0, 28)}
+              </span>
+            </div>
+            <div className="tile" style={{ flex: 1 }}>
+              <span className="tile__label">
+                <Trail size={11} /> {t('app.find.trail')}
+              </span>
+              <span className="tile__value tile__value--mint">
+                {trailLength ? formatDistance(trailLength, locale) : '—'}
+              </span>
+              <span className="tile__sub">{current.trail?.length ?? 0} GPS</span>
+            </div>
+          </div>
+        )}
+
+        {!multiView && view === 'trail' && (
+          <div className="card">
+            <div className="card__head">
+              <span className="card__title">
+                <Trail size={14} /> {t('app.find.trail')}
+              </span>
+              <span className="muted">{formatDistance(trailLength, locale)}</span>
+            </div>
+            <TrailCanvas anchor={current} currentLat={fix.lat} currentLng={fix.lng} />
+            <p className="muted" style={{ marginTop: 6 }}>
+              {current.trail && current.trail.length > 1 ? t('app.find.trailLength', { distance: formatDistance(trailLength, locale) }) : t('app.find.trailPro')}
+            </p>
+          </div>
+        )}
+
+        {!multiView && view === 'media' && (
+          <div className="card">
+            <div className="card__head">
+              <span className="card__title">
+                <Camera size={14} /> {t('app.find.photoRef')}
+              </span>
+            </div>
+            {current.photos.length ? (
+              <div className="photo-strip">
+                {current.photos.map((photo) => (
+                  <img key={photo.id} className="reference-photo" src={photo.file} alt={t('app.find.photoRef')} />
+                ))}
+              </div>
+            ) : (
+              <p className="muted">{t('app.find.noPhoto')}</p>
+            )}
+            {current.note && <p style={{ marginTop: 10, fontSize: 13 }}>{current.note}</p>}
+            {current.voices.length > 0 && (
+              <div style={{ display: 'grid', gap: 6, marginTop: 10 }}>
+                {current.voices.map((voice) => (
+                  <button
+                    key={voice.id}
+                    type="button"
+                    className="btn btn--sm"
+                    onClick={() => void new Audio(voice.file).play().catch(() => {})}
+                  >
+                    <Play size={13} /> {t('app.anchor.voiceSeconds', { seconds: Math.round(voice.durationMs / 1000) })}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {multiView && current.photos.length > 0 && (
+          <div className="photo-strip">
+            {current.photos.map((photo) => (
+              <img key={photo.id} className="reference-photo" src={photo.file} alt={t('app.find.photoRef')} />
+            ))}
+          </div>
+        )}
+
+        <div className="tiles">
+          <div className="tile">
+            <span className="tile__label">
+              <Vibrate size={11} /> {t('app.find.proximity')}
+            </span>
+            <div className="row" style={{ gap: 8 }}>
+              <div className="proximity-bar" aria-hidden="true">
+                {[0, 1, 2, 3].map((index) => (
+                  <span key={index} className={index < tier ? 'is-on' : ''} />
+                ))}
+              </div>
+              <span className="tile__value" style={{ fontSize: 12 }}>
+                {tier === 0 ? '—' : `${tier}/4`}
+              </span>
+            </div>
+            <button
+              type="button"
+              className={`btn btn--xs ${proximityOn ? 'btn--primary' : ''}`}
+              style={{ justifySelf: 'start' }}
+              onClick={() => {
+                if (plan !== 'pro') {
+                  onOpenPro(t('app.pro.proximityBanner'));
+                  return;
+                }
+                setProximityOn((value) => !value);
+                void vibrate('tap');
+              }}
+            >
+              {plan === 'pro' ? (proximityOn ? 'ON' : 'OFF') : 'PRO'}
+            </button>
+          </div>
+
+          <div className="tile">
+            <span className="tile__label">
+              <Timer size={11} /> {t('app.timer.title')}
+            </span>
+            <span className={`tile__value ${parking.overdue ? 'tile__value--amber' : ''}`}>
+              {formatDuration(parking.elapsed, locale)}
+            </span>
+            <span className="tile__sub">
+              {parking.overdue ? t('app.timer.expired') : current.parking?.limitMinutes ? t('app.timer.remaining') : '—'}
+            </span>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="card__head">
+            <span className="card__title">
+              <Elevation size={14} /> {t('app.find.elevation')}
+            </span>
+            <span className="muted">
+              {typeof current.altitude === 'number' ? `${Math.round(current.altitude)} m` : t('app.find.noElevation')}
+            </span>
+          </div>
+          <p style={{ fontSize: 13 }}>{elevationText}</p>
+          {current.floorLabel && <p className="muted">{current.floorLabel}</p>}
+        </div>
+
+        {!multiView && (
+          <div className="segmented" role="tablist">
+            <button type="button" role="tab" aria-selected={view === 'compass'} className={view === 'compass' ? 'is-active' : ''} onClick={() => setView('compass')}>
+              <Compass size={13} /> {locale === 'de' ? 'Kompass' : 'Compass'}
+            </button>
+            <button type="button" role="tab" aria-selected={view === 'trail'} className={view === 'trail' ? 'is-active' : ''} onClick={() => setView('trail')}>
+              <Trail size={13} /> {locale === 'de' ? 'Spur' : 'Trail'}
+            </button>
+            <button type="button" role="tab" aria-selected={view === 'media'} className={view === 'media' ? 'is-active' : ''} onClick={() => setView('media')}>
+              <Camera size={13} /> {locale === 'de' ? 'Foto' : 'Photo'}
+            </button>
+          </div>
+        )}
+
+        {multiView && (
+          <div className="row" style={{ gap: 6 }}>
+            <button
+              type="button"
+              className={`btn btn--sm ${recording ? 'btn--danger' : ''}`}
+              style={{ flex: 1 }}
+              onClick={() => {
+                setRecording((value) => !value);
+                toast.show(recording ? t('app.find.trail') : t('app.home.recordingTrail'), 'info');
+              }}
+            >
+              <Trail size={14} /> {recording ? t('app.home.recordingTrail') : t('app.home.recordTrail')}
+            </button>
+            <a
+              className="btn btn--sm"
+              href={`geo:${current.lat},${current.lng}?q=${current.lat},${current.lng}(${encodeURIComponent(current.name || 'wAI')})`}
+            >
+              <ArrowUpRight size={14} /> {t('app.find.openMap')}
+            </a>
+          </div>
+        )}
+
+        {isDemo && (
+          <p className="muted" style={{ textAlign: 'center' }}>
+            {t('app.demo.simulated')} · {t('app.demo.hint')}
+          </p>
+        )}
+
+        {!multiView && (
+          <div className="banner banner--info">
+            <Crown size={15} />
+            <div className="banner__body">
+              <span>{t('app.find.multiViewPro')}</span>
+              <button type="button" className="btn btn--xs" style={{ justifySelf: 'start' }} onClick={() => onOpenPro(t('app.pro.multViewBanner'))}>
+                {t('app.pro.seeWallets')}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+/** Simple canvas-free SVG trail renderer normalised to the bounding box. */
+function TrailCanvas({ anchor, currentLat, currentLng }: { anchor: Anchor; currentLat: number; currentLng: number }) {
+  const points = useMemo(() => {
+    const trail = anchor.trail ?? [];
+    const all = [
+      ...trail.map((p) => ({ lat: p.lat, lng: p.lng })),
+      { lat: currentLat, lng: currentLng },
+      { lat: anchor.lat, lng: anchor.lng },
+    ];
+    const lat0 = anchor.lat;
+    const lng0 = anchor.lng;
+    const scaleLat = 111132;
+    const scaleLng = 111320 * Math.cos((lat0 * Math.PI) / 180);
+    const projected = all.map((p) => ({
+      x: (p.lng - lng0) * scaleLng,
+      y: -(p.lat - lat0) * scaleLat,
+    }));
+    const xs = projected.map((p) => p.x);
+    const ys = projected.map((p) => p.y);
+    const minX = Math.min(...xs, -10);
+    const maxX = Math.max(...xs, 10);
+    const minY = Math.min(...ys, -10);
+    const maxY = Math.max(...ys, 10);
+    const width = Math.max(maxX - minX, 20);
+    const height = Math.max(maxY - minY, 20);
+    const pad = 14;
+    const viewW = 320;
+    const viewH = 200;
+    const scale = Math.min((viewW - pad * 2) / width, (viewH - pad * 2) / height);
+    return {
+      trail: projected.slice(0, -2).map((p) => ({ x: pad + (p.x - minX) * scale, y: pad + (p.y - minY) * scale })),
+      you: { x: pad + (projected[projected.length - 2].x - minX) * scale, y: pad + (projected[projected.length - 2].y - minY) * scale },
+      target: { x: pad + (projected[projected.length - 1].x - minX) * scale, y: pad + (projected[projected.length - 1].y - minY) * scale },
+    };
+  }, [anchor, currentLat, currentLng]);
+
+  return (
+    <div className="trail-map">
+      <svg viewBox="0 0 320 200" role="img" aria-label={anchor.name}>
+        <polyline
+          points={points.trail.map((p) => `${p.x},${p.y}`).join(' ')}
+          fill="none"
+          stroke="var(--violet)"
+          strokeWidth="2.2"
+          strokeDasharray="5 4"
+        />
+        <circle cx={points.target.x} cy={points.target.y} r="5" fill="var(--mint)" />
+        <circle cx={points.target.x} cy={points.target.y} r="11" fill="none" stroke="var(--mint)" strokeOpacity="0.4" />
+        <circle cx={points.you.x} cy={points.you.y} r="4.5" fill="#fff" stroke="var(--sky)" strokeWidth="2.5" />
+      </svg>
+    </div>
+  );
+}

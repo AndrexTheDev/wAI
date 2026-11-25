@@ -1,0 +1,12 @@
+{
+  "name": "wAI – Umgebungs-Gedächtnisanker",
+  "short_name": "wAI",
+  "description": "Anker setzen, offline zurückfinden. Kein Konto, keine Cloud.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070b14",
+  "theme_color": "#070b14",
+  "lang": "de",
+  "icons": [{ "src": "./favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

@@ -1,0 +1,41 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build output
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# android / capacitor generated artifacts
+packages/app/android/.gradle/
+packages/app/android/build/
+packages/app/android/app/build/
+packages/app/android/.idea/
+packages/app/android/local.properties
+packages/app/android/app/release/
+*.jks
+*.keystore
+!packages/app/android/app/debug.keystore
+
+# env & secrets
+.env
+.env.*
+!.env.example
+tools/keys/issuer.private.json
+tools/keys/license-*.txt
+tools/keys/mail-*.txt
+tools/keys/*.secret*
+!tools/keys/dev-issuer.private.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+
+# temp
+tmp/
+.cache/

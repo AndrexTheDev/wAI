@@ -1,0 +1,81 @@
+name: Deploy website
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/app/**'
+      - 'packages/shared/**'
+      - 'packages/landing/**'
+      - 'tools/build-all.mjs'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    outputs:
+      pages_enabled: ${{ steps.check.outputs.enabled }}
+    steps:
+      # GitHub Pages must be switched on once in Settings → Pages → Source:
+      # "GitHub Actions". Without that the deploy step would fail on every push,
+      # so we detect the state and skip cleanly instead.
+      - id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh api "repos/${{ github.repository }}/pages" > /dev/null 2>&1; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Pages not enabled::Enable Settings → Pages → Source: GitHub Actions to publish the site and the embedded app demo."
+          fi
+
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+
+      - name: Build app + landing (single-origin demo)
+        run: node tools/build-all.mjs
+
+      - name: Add SPA fallback for deep links
+        run: |
+          # GitHub Pages serves 404.html for unknown paths; the landing router
+          # reads location.pathname, so a copy of index.html makes /legal/* work.
+          cp packages/landing/dist/index.html packages/landing/dist/404.html
+          # The embedded app is a separate SPA under /app/.
+          cp packages/landing/dist/app/index.html packages/landing/dist/app/404.html 2>/dev/null || true
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: packages/landing/dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    if: needs.build.outputs.pages_enabled == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,42 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // AGP 8.13 requires Gradle 8.14+ (matching gradle-wrapper.properties) and JDK 21.
+        classpath 'com.android.tools.build:gradle:8.13.0'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+apply from: "variables.gradle"
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+/**
+ * Version metadata is injected from package.json at build time so the APK, the
+ * landing page and the in-app "about" screen always agree.
+ */
+tasks.register('syncWebVersion') {
+    def pkg = new groovy.json.JsonSlurper().parseText(file('../../../package.json').text)
+    def versionName = pkg.version ?: '1.0.0'
+    def versionCode = versionName.tokenize('.').inject(0) { acc, part -> acc * 100 + (part as Integer) }
+    doLast {
+        println "wAI version ${versionName} (code ${versionCode})"
+    }
+}
+
+tasks.register('clean', Delete) {
+    delete rootProject.layout.buildDirectory
+}
