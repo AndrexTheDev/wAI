@@ -11,6 +11,7 @@ store listings are fully bilingual.
 | [MARKETING_STRATEGY.md](MARKETING_STRATEGY.md) | Positioning, audiences, 90-day launch plan, channels, content, KPIs | ✔ | ✔ summary |
 | [STORE_LISTING.md](STORE_LISTING.md) | Play Store texts, screenshot plan, ASO, review replies, press kit | ✔ | ✔ |
 | [LICENSING.md](LICENSING.md) | Crypto checkout, licence issuing, support & refund runbook, bookkeeping | ✔ | ✔ summary |
+| [CI_CD.md](CI_CD.md) | GitHub Actions: workflows, signing secrets, releases, Pages, troubleshooting | ✔ | ✔ summary |
 | [BUILD_AND_RELEASE.md](BUILD_AND_RELEASE.md) | Toolchain, signing, release checklist, distribution, troubleshooting | ✔ | ✔ |
 | [LEGAL_REVIEW.md](LEGAL_REVIEW.md) | Exactly what a lawyer must confirm before launch + what is already done | ✔ | ✔ |
 | [DELIVERY_SUMMARY.md](DELIVERY_SUMMARY.md) | What was delivered, how it was verified, what remains before launch | ✔ | ✔ summary |

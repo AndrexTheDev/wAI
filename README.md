@@ -68,7 +68,18 @@ node tools/build-all.mjs         # the same, plus reporting
 
 ### Building the Android APK
 
-A JDK 21 and the Android SDK are required; Gradle itself is handled by the wrapper.
+**Recommended: let GitHub Actions do it.** Push a tag and CI produces a signed
+APK + AAB with checksums as a GitHub release:
+
+```bash
+bash tools/make-keystore.sh     # once: create the upload key, add 4 repo secrets
+bash tools/release.sh patch     # verify → bump version → tag → build → release
+```
+
+Downloads land on `/releases/latest`. Details: [docs/CI_CD.md](docs/CI_CD.md).
+
+Locally, a JDK 21 and the Android SDK are required; Gradle itself is handled by
+the wrapper.
 
 ```bash
 cd packages/app
@@ -130,8 +141,10 @@ WAI1.<base64url(canonical JSON payload)>.<base64url(ed25519 signature)>
 | [MARKETING_STRATEGY.md](docs/MARKETING_STRATEGY.md) | Positioning, audiences, channels, content calendar, KPIs |
 | [STORE_LISTING.md](docs/STORE_LISTING.md) | Play Store texts DE/EN, screenshots plan, ASO keywords |
 | [LICENSING.md](docs/LICENSING.md) | Crypto paywall, licence issuing, refund & support runbook |
-| [BUILD_AND_RELEASE.md](docs/BUILD_AND_RELEASE.md) | Toolchain, signing, release checklist |
+| [CI_CD.md](docs/CI_CD.md) | GitHub Actions pipelines, signing secrets, release process, Pages |
+| [BUILD_AND_RELEASE.md](docs/BUILD_AND_RELEASE.md) | Local toolchain, signing, release checklist |
 | [LEGAL_REVIEW.md](docs/LEGAL_REVIEW.md) | What a lawyer must check before going live |
+| [DELIVERY_SUMMARY.md](docs/DELIVERY_SUMMARY.md) | What was delivered and what remains before launch |
 
 ---
 

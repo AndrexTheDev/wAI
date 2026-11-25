@@ -1,5 +1,9 @@
 # wAI — Build & Release Runbook
 
+> **Shortcut:** you do not need a local Android toolchain. The GitHub Actions
+> pipeline builds a signed APK + AAB on every tag — see [CI_CD.md](CI_CD.md).
+> Everything below is for local builds, debugging and understanding the steps.
+
 Everything needed to turn this repository into a signed Android artifact.
 Written for a single maintainer on macOS/Linux; Windows works with the same
 commands in Git Bash or WSL.
