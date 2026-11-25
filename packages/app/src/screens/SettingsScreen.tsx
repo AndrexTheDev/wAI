@@ -34,7 +34,7 @@ import {
   Anchor as AnchorIcon,
 } from '../ui/icons';
 
-const SITE = import.meta.env.VITE_WEBSITE_URL ?? 'https://wai.app';
+const SITE = import.meta.env.VITE_WEBSITE_URL ?? PRODUCT.website;
 
 export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => void }) {
   const { t, locale } = useT();

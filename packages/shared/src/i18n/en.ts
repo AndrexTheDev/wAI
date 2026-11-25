@@ -470,7 +470,11 @@ export const en: Widen<GermanDictionary> = {
         },
       ],
       apkButton: 'Download APK',
-      apkSoon: 'The signed release build is published on the project release page.',
+      apkSoon:
+        'The direct APK download and all previous versions are available on the release page.',
+      releaseButton: 'Go to release (APK)',
+      releaseNote:
+        'Builds run on GitHub Actions. Every release ships the APK, AAB, SHA-256 checksum and build information.',
       checksumLabel: 'SHA-256 checksum',
       alternativesTitle: 'Other ways to install',
       alternatives: [

@@ -9,7 +9,11 @@ export const PRODUCT = {
   legalBrand: 'AndrexTheDev',
   contactEmail: 'hippie.highho@gmail.com',
   version: '1.0.0',
-  website: 'https://wai.app',
+  /**
+   * Canonical website. CI deploys the landing page to GitHub Pages, so this
+   * matches the live URL. Override per build with VITE_WEBSITE_URL.
+   */
+  website: 'https://andrexthedev.github.io/wAI',
   packageId: 'dev.andrexthedev.wai',
 } as const;
 

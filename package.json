@@ -22,5 +22,8 @@
     "license:keygen": "node tools/license-cli.mjs keygen",
     "license:issue": "node tools/license-cli.mjs issue",
     "license:verify": "node tools/license-cli.mjs verify"
+  },
+  "devDependencies": {
+    "yaml": "^2.9.1"
   }
 }

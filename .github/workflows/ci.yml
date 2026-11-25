@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  verify:
+    name: Typecheck · tests · render smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Typecheck (shared + app + landing)
+        run: npm run typecheck
+
+      - name: Unit tests (geo, engine, codec, licence)
+        run: npm test
+
+      - name: Render smoke tests (both locales, all routes)
+        run: npm run smoke
+
+      - name: Production web build
+        run: node tools/build-all.mjs --skip-smoke
+
+      - name: Upload landing build
+        uses: actions/upload-artifact@v4
+        with:
+          name: landing-dist
+          path: packages/landing/dist
+          retention-days: 14

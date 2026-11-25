@@ -13,7 +13,7 @@ import { useT } from '../i18n/useT';
 import { useToast } from '../ui/Toast';
 import { storage } from '../store/storage';
 
-const SITE = import.meta.env.VITE_WEBSITE_URL ?? 'https://wai.andrexthedev.dev';
+const SITE = import.meta.env.VITE_WEBSITE_URL ?? PRODUCT.website;
 import { Sheet } from '../ui/Sheet';
 import { openExternal } from '../platform/links';
 import {

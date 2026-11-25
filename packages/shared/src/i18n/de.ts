@@ -468,7 +468,11 @@ export const de = {
         },
       ],
       apkButton: 'APK herunterladen',
-      apkSoon: 'Der signierte Release-Build wird über die Release-Seite des Projekts bereitgestellt.',
+      apkSoon:
+        'Direkter APK-Download und alle früheren Versionen stehen auf der Release-Seite bereit.',
+      releaseButton: 'Zum Release (APK)',
+      releaseNote:
+        'Der Build läuft über GitHub Actions. Jeder Release enthält APK, AAB, SHA-256-Prüfsumme und Build-Informationen.',
       checksumLabel: 'SHA-256-Prüfsumme',
       alternativesTitle: 'Alternativen zur Installation',
       alternatives: [

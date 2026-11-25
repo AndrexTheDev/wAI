@@ -10,7 +10,6 @@ import {
   CopyIcon,
   DownloadIcon,
   InfoIcon,
-  PhoneIcon,
   ShieldIcon,
   ArrowRightIcon,
 } from '../components/Icons';
@@ -20,6 +19,13 @@ const APK_URL = import.meta.env.VITE_APK_URL ?? '';
 const APK_SHA = import.meta.env.VITE_APK_SHA256 ?? '';
 const WEBAPP_URL = import.meta.env.VITE_WEBAPP_URL ?? '/app/';
 const VERSION = import.meta.env.VITE_APP_VERSION ?? PRODUCT.version;
+/**
+ * Where the "download" button points when no direct APK URL is configured.
+ * CI publishes APKs as GitHub release assets, so the release page is the
+ * canonical download location until a custom CDN/domain is wired up.
+ */
+const RELEASES_URL =
+  import.meta.env.VITE_RELEASES_URL ?? 'https://github.com/AndrexTheDev/wAI/releases/latest';
 
 export function Download() {
   const { t, locale } = useLocale();
@@ -71,14 +77,15 @@ export function Download() {
                   <DownloadIcon size={18} /> {t('landing.download.apkButton')} ({VERSION})
                 </a>
               ) : (
-                <button
-                  type="button"
+                <a
                   className="btn btn--primary btn--lg"
-                  onClick={() => navigate('/#crypto')}
+                  href={RELEASES_URL}
+                  target="_blank"
+                  rel="noreferrer noopener"
                   title={t('landing.download.apkSoon')}
                 >
-                  <PhoneIcon size={18} /> {t('common.ctaPrimary')}
-                </button>
+                  <DownloadIcon size={18} /> {t('landing.download.releaseButton')} ({VERSION})
+                </a>
               )}
               <button type="button" className="btn btn--ghost btn--lg" onClick={() => navigate('/app/')}>
                 <AndroidIcon size={18} /> {t('landing.download.openWebApp')}
@@ -86,7 +93,7 @@ export function Download() {
             </div>
 
             <p className="download__apk-note reveal">
-              <InfoIcon size={13} /> {t('landing.download.apkSoon')}
+              <InfoIcon size={13} /> {t('landing.download.releaseNote')}
             </p>
 
             {APK_SHA && (
