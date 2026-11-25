@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status-bar icon for parking-timer notifications (monochrome, 24dp grid). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="#FFFFFF">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M12,3.2a2.2,2.2 0 1,0 0.001,4.4A2.2,2.2 0 0,0 12,3.2zM11.1,8.2v11.6h1.8V8.2h-1.8zM7.6,10.6h1.8v1.8H7.6zM14.6,10.6h1.8v1.8h-1.8zM4.2,12.6h1.8v1.8H4.2zM18,12.6h1.8v1.8H18zM5.6,17.1c0,2.2 2.9,3.9 6.4,3.9s6.4,-1.7 6.4,-3.9v-1.8h-1.8v1.8c0,1.2 -2,2.1 -4.6,2.1S7.4,18.3 7.4,17.1v-1.8H5.6z" />
+</vector>

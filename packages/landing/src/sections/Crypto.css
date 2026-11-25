@@ -1,0 +1,429 @@
+.crypto {
+  position: relative;
+  overflow: hidden;
+}
+
+.crypto::before {
+  content: '';
+  position: absolute;
+  inset: 8% 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.4), transparent);
+}
+
+.crypto__steps {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 215px), 1fr));
+  gap: 0.8rem;
+  margin-bottom: clamp(1.4rem, 3vw, 2.2rem);
+}
+
+.crypto__steps li {
+  display: flex;
+  gap: 0.7rem;
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--c-border);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.crypto__step-num {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #04121a;
+  background: var(--grad-aurora);
+}
+
+.crypto__steps strong {
+  display: block;
+  font-size: var(--fs-sm);
+  margin-bottom: 0.2rem;
+}
+
+.crypto__steps p {
+  font-size: var(--fs-xs);
+  color: var(--c-text-dim);
+  line-height: 1.55;
+}
+
+.crypto__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: clamp(0.8rem, 1.8vw, 1.2rem);
+}
+
+/* ---------- Wallet cards ---------- */
+
+.wallet-card {
+  --accent: var(--c-mint);
+  display: grid;
+  gap: 0.8rem;
+  padding: clamp(1rem, 2vw, 1.3rem);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--c-border);
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%),
+    var(--grad-card);
+  transition: border-color var(--dur);
+  height: 100%;
+}
+
+.wallet-card:hover {
+  border-color: var(--c-border-strong);
+}
+
+.wallet-card--sol { --accent: #14f195; }
+.wallet-card--btc { --accent: #f7931a; }
+.wallet-card--eth { --accent: #627eea; }
+
+.wallet-card__head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.wallet-card__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  flex: none;
+}
+
+.wallet-card__head strong {
+  display: block;
+  font-size: var(--fs-sm);
+  line-height: 1.2;
+}
+
+.wallet-card__network {
+  font-size: 0.62rem;
+  color: var(--c-text-dim);
+  letter-spacing: 0.03em;
+}
+
+.wallet-card__amount {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--accent);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  white-space: nowrap;
+}
+
+.wallet-card__body {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.wallet-card__address {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 1 1 160px;
+}
+
+.wallet-card__label {
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--c-text-dim);
+  font-weight: 700;
+}
+
+.wallet-card__address code {
+  font-size: 0.66rem;
+  line-height: 1.5;
+  word-break: break-all;
+  color: var(--c-text);
+  background: rgba(0, 0, 0, 0.28);
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--c-border);
+}
+
+:root[data-theme='light'] .wallet-card__address code {
+  background: rgba(11, 18, 32, 0.05);
+}
+
+.wallet-card__copy {
+  justify-self: start;
+  width: fit-content;
+}
+
+.crypto__qr {
+  flex: none;
+}
+
+.crypto__qr canvas {
+  width: 104px;
+  height: 104px;
+}
+
+.wallet-card__warn {
+  display: flex;
+  gap: 0.35rem;
+  align-items: flex-start;
+  font-size: 0.66rem;
+  color: var(--c-amber);
+  line-height: 1.45;
+  opacity: 0.9;
+}
+
+.wallet-card__warn svg {
+  flex: none;
+  margin-top: 1px;
+}
+
+.wallet-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+/* ---------- Proof + licence ---------- */
+
+.crypto__proof {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(1rem, 2.4vw, 1.8rem);
+  margin-top: clamp(1.2rem, 2.6vw, 1.8rem);
+  padding: clamp(1.1rem, 2.4vw, 1.7rem);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--c-border);
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(56, 189, 248, 0.07), transparent 55%),
+    var(--grad-card);
+}
+
+.crypto__proof-main {
+  display: grid;
+  gap: 0.7rem;
+  align-content: start;
+}
+
+.crypto__proof-main h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--fs-lg);
+}
+
+.crypto__proof-main h3 svg {
+  color: var(--c-mint);
+}
+
+.crypto__proof-main > p {
+  font-size: var(--fs-xs);
+  color: var(--c-text-dim);
+  max-width: 58ch;
+}
+
+.crypto__proof-row {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.crypto__field {
+  flex: 1 1 210px;
+}
+
+.crypto__field span {
+  font-size: 0.6rem;
+}
+
+.crypto__proof-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.crypto__crypto__meta,
+.crypto__meta {
+  font-size: var(--fs-xs);
+  color: var(--c-text-dim);
+}
+
+.crypto__meta code {
+  color: var(--c-mint);
+}
+
+.license {
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(110, 231, 183, 0.25);
+  background: rgba(110, 231, 183, 0.05);
+}
+
+.license__title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.license__title svg {
+  color: var(--c-mint);
+}
+
+.license__body {
+  font-size: var(--fs-xs);
+  color: var(--c-text-dim);
+}
+
+.license__row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.license__input {
+  flex: 1 1 180px;
+  padding: 0.6rem 0.7rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--c-border);
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--c-text);
+  font-size: 0.7rem;
+}
+
+.license__input:focus {
+  outline: none;
+  border-color: var(--c-mint);
+  box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.16);
+}
+
+.license__result {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--fs-xs);
+  font-weight: 650;
+  flex-wrap: wrap;
+}
+
+.license__result--ok {
+  color: var(--c-success);
+}
+
+.license__result--err {
+  color: var(--c-danger);
+}
+
+.license__hint {
+  font-size: 0.62rem;
+  color: var(--c-text-dim);
+  line-height: 1.5;
+}
+
+.license__order {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--c-border);
+  font-size: 0.64rem;
+  color: var(--c-text-dim);
+}
+
+.license__order code {
+  color: var(--c-mint);
+  font-weight: 700;
+}
+
+.license__order-help {
+  flex-basis: 100%;
+  font-size: 0.6rem;
+  line-height: 1.4;
+}
+
+/* ---------- Support + notes ---------- */
+
+.crypto__support {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.2rem;
+  padding: 1.1rem 1.3rem;
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--c-border-strong);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.crypto__support h3 {
+  font-size: var(--fs-base);
+  margin-bottom: 0.2rem;
+}
+
+.crypto__support p {
+  font-size: var(--fs-xs);
+  color: var(--c-text-dim);
+  max-width: 62ch;
+}
+
+.crypto__support-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.crypto__notes {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+}
+
+.crypto__notes .callout {
+  align-items: flex-start;
+}
+
+.crypto__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  font-size: var(--fs-xs);
+  color: var(--c-text-dim);
+}
+
+.crypto__legal a {
+  color: var(--c-text-dim);
+  text-decoration: none;
+}
+
+.crypto__legal a:hover {
+  color: var(--c-mint);
+}
+
+@media (max-width: 900px) {
+  .crypto__proof {
+    grid-template-columns: 1fr;
+  }
+}

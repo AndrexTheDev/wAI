@@ -1,0 +1,32 @@
+.faq__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(1.6rem, 4vw, 3.4rem);
+  align-items: start;
+}
+
+.faq__aside {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+  position: sticky;
+  top: calc(var(--header-h) + 24px);
+}
+
+.faq__aside .btn {
+  width: fit-content;
+  font-size: var(--fs-xs);
+}
+
+.faq__list {
+  min-width: 0;
+}
+
+@media (max-width: 860px) {
+  .faq__inner {
+    grid-template-columns: 1fr;
+  }
+  .faq__aside {
+    position: static;
+  }
+}

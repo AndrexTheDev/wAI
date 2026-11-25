@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5"
+    />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#070b14" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>wAI – Umgebungs-Gedächtnisanker</title>
+    <meta
+      name="description"
+      content="wAI: Anker setzen, offline zurückfinden. Richtung, Etage, Brotkrumen-Spur und Fotos kombiniert – ohne Konto, ohne Cloud."
+    />
+    <!-- Content Security Policy: no outbound network is needed at all.
+         Everything (fonts, icons, QR codes) is generated locally. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data: blob:; media-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' data:; font-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>wAI benötigt JavaScript, um offline zu funktionieren.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,328 @@
+import { useEffect, useMemo, useState } from 'react';
+import type { Anchor } from '@wai/shared';
+import { useApp } from '../store/AppStore';
+import { useT } from '../i18n/useT';
+import { useToast } from '../ui/Toast';
+import { AnchorEditor } from './AnchorEditor';
+import { ArchiveScreen } from './ArchiveScreen';
+import { FindScreen } from './FindScreen';
+import { HomeScreen } from './HomeScreen';
+import { ProScreen } from './ProScreen';
+import { SettingsScreen } from './SettingsScreen';
+import { ShareSheet } from './ShareSheet';
+import { ParkingTimerSheet } from './ParkingTimerSheet';
+import { Onboarding } from './Onboarding';
+import {
+  Anchor as AnchorIcon,
+  Archive,
+  Compass,
+  Crown,
+  Globe,
+  Info,
+  Settings as SettingsIcon,
+
+  Timer,
+  Cross,
+  Check,
+} from '../ui/icons';
+import { vibrate } from '../platform/native';
+
+type Tab = 'anchors' | 'find' | 'archive' | 'settings';
+
+export function AppShell() {
+  const { t, locale } = useT();
+  const {
+    ready,
+    settings,
+    plan,
+    activeAnchors,
+    fix,
+    sensors,
+    locationError,
+    demo,
+    setAnchor,
+    setLocale,
+    updateSettings,
+  } = useApp();
+  const toast = useToast();
+
+  const [tab, setTab] = useState<Tab>('anchors');
+  const [selected, setSelected] = useState<Anchor | null>(null);
+  const [editing, setEditing] = useState<{ anchor: Anchor | null; mode: 'create' | 'edit' }>({
+    anchor: null,
+    mode: 'create',
+  });
+  const [proOpen, setProOpen] = useState(false);
+  const [proReason, setProReason] = useState<string | undefined>();
+  const [shareAnchor, setShareAnchor] = useState<Anchor | null>(null);
+  const [timerAnchor, setTimerAnchor] = useState<Anchor | null>(null);
+  const [helpOpen, setHelpOpen] = useState(false);
+
+  useEffect(() => {
+    setSelected((current) => {
+      if (!current) return current;
+      return activeAnchors.find((anchor) => anchor.id === current.id) ?? null;
+    });
+  }, [activeAnchors]);
+
+  const openPro = (reason = '') => {
+    setProReason(reason || undefined);
+    setProOpen(true);
+  };
+
+  const createAnchorNow = () => {
+    if (!fix) {
+      toast.show(t('app.permissions.noLocation'), 'warn');
+      return;
+    }
+    const result = setAnchor({ fix });
+    if (!result.ok || !result.anchor) {
+      openPro(t('app.home.limitBody', { limit: 3 }));
+      return;
+    }
+    void vibrate('strong');
+    setEditing({ anchor: result.anchor, mode: 'create' });
+    toast.show(t('app.home.saved'), 'ok', {
+      label: t('app.home.undo'),
+      onClick: () => {
+        /* undo handled by editor delete */
+      },
+    });
+  };
+
+  const startFind = (anchor: Anchor) => {
+    setSelected(anchor);
+    setTab('find');
+    void vibrate('tap');
+  };
+
+  const tabs = useMemo(
+    () =>
+      [
+        { id: 'anchors' as const, label: t('app.tabs.anchors'), icon: AnchorIcon, badge: activeAnchors.length },
+        { id: 'find' as const, label: t('app.tabs.find'), icon: Compass },
+        { id: 'archive' as const, label: t('app.tabs.archive'), icon: Archive },
+        { id: 'settings' as const, label: t('app.tabs.settings'), icon: SettingsIcon },
+      ],
+    [t, activeAnchors.length],
+  );
+
+  if (!ready) {
+    return (
+      <div style={{ display: 'grid', placeItems: 'center', height: '100dvh' }}>
+        <span className="muted">{t('common.loading')}</span>
+      </div>
+    );
+  }
+
+  if (!settings.onboardingDone) {
+    return <Onboarding onDone={() => updateSettings({ onboardingDone: true })} />;
+  }
+
+  return (
+    <div className={`app ${tab === 'find' && selected ? 'app--full' : ''}`}>
+      {/* Header (hidden on the find tab, which brings its own) */}
+      {tab !== 'find' && (
+        <header className="topbar">
+          <div className="topbar__brand">
+            <span className="topbar__mark">
+              <AnchorIcon size={17} />
+            </span>
+            <div className="topbar__titles">
+              <span className="topbar__name">wAI</span>
+              <span className="topbar__sub">{t('meta.productSub')}</span>
+            </div>
+          </div>
+          <div className="topbar__actions">
+            <button
+              type="button"
+              className="icon-btn"
+              onClick={() => setLocale(locale === 'de' ? 'en' : 'de')}
+              aria-label={t('common.language')}
+            >
+              <Globe size={17} />
+            </button>
+            {plan === 'pro' ? (
+              <span className="mini-badge mini-badge--pro" style={{ padding: '4px 7px' }}>
+                PRO
+              </span>
+            ) : (
+              <button type="button" className="icon-btn" onClick={() => openPro()} aria-label={t('common.ctaPro')}>
+                <Crown size={17} />
+              </button>
+            )}
+            <button
+              type="button"
+              className="icon-btn"
+              onClick={() => setHelpOpen(true)}
+              aria-label={t('landing.how.eyebrow')}
+            >
+              <Info size={17} />
+            </button>
+          </div>
+        </header>
+      )}
+
+      {/* Status strip */}
+      {tab !== 'find' && (
+        <div className="status-strip">
+          <span className={`status-chip ${fix ? 'status-chip--ok' : 'status-chip--warn'}`}>
+            <span className="dot" />
+            {fix ? t('app.home.gpsOk') : t('app.home.noGps')}
+          </span>
+          {fix?.accuracy !== undefined && (
+            <span className="status-chip">{t('app.home.accuracy', { meters: Math.round(fix.accuracy) })}</span>
+          )}
+          {sensors.heading !== null && (
+            <span className="status-chip">
+              <Compass size={10} /> {Math.round(sensors.heading)}°
+            </span>
+          )}
+          {demo && <span className="status-chip status-chip--demo">{t('common.demo')}</span>}
+          {locationError && <span className="status-chip status-chip--warn">{t('app.permissions.noLocation')}</span>}
+        </div>
+      )}
+
+      <main className="app__body">
+        {tab === 'anchors' && (
+          <HomeScreen
+            onOpenAnchor={(anchor) => setEditing({ anchor, mode: 'edit' })}
+            onNewAnchor={createAnchorNow}
+            onOpenPro={() => openPro()}
+            onFind={startFind}
+          />
+        )}
+
+        {tab === 'find' && (
+          <FindScreen
+            anchor={selected}
+            onBack={() => setTab('anchors')}
+            onChooseAnother={() => {
+              setSelected(null);
+              setTab('anchors');
+            }}
+            onOpenPro={openPro}
+          />
+        )}
+
+        {tab === 'archive' && (
+          <ArchiveScreen
+            onOpenAnchor={(anchor) => setEditing({ anchor, mode: 'edit' })}
+            onOpenPro={openPro}
+          />
+        )}
+
+        {tab === 'settings' && <SettingsScreen onOpenPro={openPro} />}
+      </main>
+
+      <nav className="tabbar" aria-label={t('app.tabs.anchors')}>
+        {tabs.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            className={`tab ${tab === item.id ? 'is-active' : ''}`}
+            onClick={() => {
+              setTab(item.id);
+              void vibrate('tap');
+            }}
+            aria-current={tab === item.id ? 'page' : undefined}
+          >
+            <span className="tab__icon">
+              <item.icon size={20} />
+              {item.badge ? <span className="tab__badge">{item.badge}</span> : null}
+            </span>
+            {item.label}
+          </button>
+        ))}
+      </nav>
+
+      <AnchorEditor
+        anchor={editing.anchor}
+        mode={editing.mode}
+        open={Boolean(editing.anchor)}
+        onClose={() => setEditing({ anchor: null, mode: 'edit' })}
+        onUpgrade={openPro}
+        onShare={(anchor) => {
+          setEditing({ anchor: null, mode: 'edit' });
+          setShareAnchor(anchor);
+        }}
+        onTimer={(anchor) => {
+          setEditing({ anchor: null, mode: 'edit' });
+          setTimerAnchor(anchor);
+        }}
+      />
+
+      <ProScreen open={proOpen} onClose={() => setProOpen(false)} reason={proReason} />
+
+      <ShareSheet
+        anchor={shareAnchor}
+        open={Boolean(shareAnchor)}
+        onClose={() => setShareAnchor(null)}
+        onUpgrade={openPro}
+      />
+
+      <ParkingTimerSheet
+        anchor={timerAnchor}
+        open={Boolean(timerAnchor)}
+        onClose={() => setTimerAnchor(null)}
+        onUpgrade={openPro}
+      />
+
+      {helpOpen && <HelpSheet onClose={() => setHelpOpen(false)} />}
+    </div>
+  );
+}
+
+function HelpSheet({ onClose }: { onClose: () => void }) {
+  const { t, locale } = useT();
+  const steps = [
+    {
+      title: t('landing.how.steps.0.title'),
+      body: t('landing.how.steps.0.body'),
+    },
+    {
+      title: t('landing.how.steps.1.title'),
+      body: t('landing.how.steps.1.body'),
+    },
+    {
+      title: t('landing.how.steps.2.title'),
+      body: t('landing.how.steps.2.body'),
+    },
+  ];
+  return (
+    <div className="sheet-backdrop" onClick={onClose}>
+      <div
+        className="sheet"
+        style={{ gridTemplateRows: 'auto 1fr' }}
+        onClick={(event) => event.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+      >
+        <div className="sheet__head">
+          <h2 className="sheet__title">{t('landing.how.eyebrow')}</h2>
+          <button type="button" className="icon-btn" style={{ marginLeft: 'auto' }} onClick={onClose} aria-label={t('common.ctaClose')}>
+            <Cross size={16} />
+          </button>
+        </div>
+        <div className="sheet__body">
+          {steps.map((step, index) => (
+            <div key={step.title} className="card">
+              <div className="card__head">
+                <span className="card__title">
+                  <Check size={13} /> {`0${index + 1} · ${step.title}`}
+                </span>
+              </div>
+              <p className="muted">{step.body}</p>
+            </div>
+          ))}
+          <p className="muted">{t('app.find.compassHint')}</p>
+          <p className="muted">
+            {locale === 'de'
+              ? 'wAI ist ein Orientierungshelfer und kein Rettungsgerät. In Notfällen gilt immer der Notruf 112.'
+              : 'wAI is an orientation aid, not a rescue device. In an emergency always call 112.'}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
