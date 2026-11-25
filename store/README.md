@@ -12,6 +12,18 @@ store/
 └── screenshots/                 ← vom echten Gerät/Browser, nie erfunden
 ```
 
+## Assets neu erzeugen
+
+Die Bilder sind reproduzierbar, kein Einmal-Commit:
+
+```bash
+bash tools/make-store-assets.sh
+```
+
+Erzeugt `icon-512.png` (aus dem echten Launcher-Icon) und
+`feature-graphic-1024x500.png` neu. Voraussetzung: ImageMagick + DejaVu-Fonts
+(auf Debian/Ubuntu vorhanden).
+
 ## Prüfen
 
 ```bash

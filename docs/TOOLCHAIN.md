@@ -30,6 +30,9 @@ Android SDK, keystore, issuer key, gh auth) and then a concrete "next step".
 | See what CI did | `npm run ci:status` / `npm run ci:logs` | gh auth | 2 s |
 | Cut a release | `bash tools/release.sh patch` | gh auth | 5 min |
 | Create the upload key | `npm run keystore` | JDK (keytool) | 1 min |
+| Check the Play listing | `npm run check:store` | nothing | 1 s |
+| Regenerate store images | `bash tools/make-store-assets.sh` | ImageMagick | 5 s |
+| Capture store screenshots | `npm run screenshots` | Playwright + Chromium or a device | 1 min |
 | Issue a Pro licence | `npm run license:issue -- --sub …` | issuer key | instant |
 
 `npm run verify` = typecheck (3 packages) → 28 unit tests → render smoke test
@@ -49,6 +52,9 @@ tools/
   release.sh              ← bump version everywhere → tag → push → CI builds
   check-android-assets.mjs← XML, icons, permissions, DE/EN parity, gradle sanity
   license-cli.mjs         ← keygen / issue / verify / mail for Pro licences
+  check-store-listing.mjs ← Play limits + DE/EN parity + product consistency
+  make-store-assets.sh    ← icon-512 + feature graphic, reproduced from the real icon
+  capture-store-screenshots.mjs ← real screenshots, refuses to fake them
   keys/                   ← issuer key pair (private key is git-ignored)
 .github/workflows/
   ci.yml                  ← every push/PR: verify + web build
