@@ -42,6 +42,9 @@ jobs:
       - name: Android project checks (XML, icons, permissions, locales)
         run: npm run check:android
 
+      - name: Store listing checks (limits, locales, product consistency)
+        run: npm run check:store
+
       - name: Production web build
         run: node tools/build-all.mjs --skip-smoke
 

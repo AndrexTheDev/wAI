@@ -54,12 +54,18 @@ that runs on the phone. `packages/shared` holds:
 
 ## Quick start
 
+> **Toolchain first:** `npm run doctor` tells you what this machine can do,
+> `npm run status` shows version, size and open launch items. Details and the
+> rule for *when* to build the APK: [docs/TOOLCHAIN.md](docs/TOOLCHAIN.md).
+
 ```bash
 npm install                      # installs all workspaces
 
 npm run dev:landing              # http://localhost:5173  marketing site
 npm run dev:app                  # http://localhost:5174  the app in a browser
 
+npm run doctor                   # environment probe (no side effects)
+npm run status                   # version, code size, release state, open items
 npm test -w @wai/shared          # 28 unit tests (geo, engine, licence, codec)
 npm run smoke:render -w @wai/app # SSR render + dictionary completeness
 npm run build                    # builds app → landing demo → landing site
@@ -141,6 +147,7 @@ WAI1.<base64url(canonical JSON payload)>.<base64url(ed25519 signature)>
 | [MARKETING_STRATEGY.md](docs/MARKETING_STRATEGY.md) | Positioning, audiences, channels, content calendar, KPIs |
 | [STORE_LISTING.md](docs/STORE_LISTING.md) | Play Store texts DE/EN, screenshots plan, ASO keywords |
 | [LICENSING.md](docs/LICENSING.md) | Crypto paywall, licence issuing, refund & support runbook |
+| [TOOLCHAIN.md](docs/TOOLCHAIN.md) | Every tool, every command, and when an APK build is actually needed |
 | [CI_CD.md](docs/CI_CD.md) | GitHub Actions pipelines, signing secrets, release process, Pages |
 | [BUILD_AND_RELEASE.md](docs/BUILD_AND_RELEASE.md) | Local toolchain, signing, release checklist |
 | [LEGAL_REVIEW.md](docs/LEGAL_REVIEW.md) | What a lawyer must check before going live |
