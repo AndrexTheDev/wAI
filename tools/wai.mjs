@@ -96,6 +96,11 @@ const commands = {
     sh('bash', [path.join(ROOT, 'tools/build-android.sh'), ...args]);
   },
 
+  'check:store'() {
+    step('store: listing limits, locales, product consistency');
+    sh('node', [path.join(ROOT, 'tools/check-store-listing.mjs')]);
+  },
+
   'ci:android'() {
     step('ci: trigger the Android APK/AAB workflow');
     const branch = currentBranch();
@@ -212,6 +217,7 @@ ${c.bold('wAI toolchain')}
   node tools/wai.mjs ci:status       latest workflow runs
   node tools/wai.mjs ci:logs         why the newest run failed
   node tools/wai.mjs release patch   bump version, tag, push → CI builds + releases
+  node tools/wai.mjs check:store     Play listing limits + product consistency
   node tools/wai.mjs make-keystore   create the upload key + print the secrets to set
   node tools/wai.mjs status          versions, code size, release state, open items
 

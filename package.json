@@ -17,7 +17,7 @@
     "build:landing": "npm run build -w @wai/landing",
     "build:app": "npm run build -w @wai/app",
     "build:android": "bash tools/build-android.sh",
-    "verify": "npm run typecheck && npm test && npm run smoke && npm run check:android",
+    "verify": "npm run typecheck && npm test && npm run smoke && npm run check:android && npm run check:store",
     "typecheck": "tsc --noEmit -p packages/shared && tsc --noEmit -p packages/app && tsc --noEmit -p packages/landing",
     "test": "npm test -w @wai/shared",
     "smoke": "npm run smoke:render -w @wai/app && npm run smoke:render -w @wai/landing",
@@ -29,7 +29,9 @@
     "keystore": "bash tools/make-keystore.sh",
     "license:keygen": "node tools/license-cli.mjs keygen",
     "license:issue": "node tools/license-cli.mjs issue",
-    "license:verify": "node tools/license-cli.mjs verify"
+    "license:verify": "node tools/license-cli.mjs verify",
+    "check:store": "node tools/check-store-listing.mjs",
+    "screenshots": "node tools/capture-store-screenshots.mjs"
   },
   "devDependencies": {
     "yaml": "^2.9.1"
