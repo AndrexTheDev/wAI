@@ -48,6 +48,22 @@ docs              concept, design system, marketing, store texts, runbooks
 `packages/app` and `packages/landing` both import `@wai/shared` via the source
 alias, so there is no build step or version skew between them.
 
+## Toolchain — read `docs/TOOLCHAIN.md` first
+
+Everything repeatable is wrapped. Do not rebuild or rediscover tooling:
+
+```bash
+npm run doctor     # what works in THIS environment (no side effects)
+npm run status     # version, size, release state, open launch items
+npm run wai -- help   # (equivalent) node tools/wai.mjs help
+```
+
+**Build the APK only when it is actually required** — i.e. when native config
+(`capacitor.config.ts`, plugins), anything under `packages/app/android/`, or the
+version number changed. UI/text/logic changes are covered by `npm run verify`.
+The APK is produced by GitHub Actions (`npm run ci:android`), not after every
+change: this sandbox has no JDK/SDK by design.
+
 ## Commands
 
 ```bash
@@ -60,6 +76,14 @@ npm run smoke              # SSR render checks + dictionary completeness
 npm run verify             # typecheck + test + smoke — run before every commit
 npm run build              # app → landing/public/app → landing dist
 ```
+
+## Working rhythm
+
+1. `npm run doctor` when the environment is unknown.
+2. Change code, then `npm run verify` (15 s, no JDK needed).
+3. `npm run build` only when the website/demo output matters.
+4. `npm run ci:android` only for native/version changes; `npm run ci:logs` if red.
+5. `bash tools/release.sh patch` to ship.
 
 ## Conventions
 

@@ -6,6 +6,7 @@ store listings are fully bilingual.
 
 | Document | What it answers | DE | EN |
 |---|---|---|---|
+| [TOOLCHAIN.md](TOOLCHAIN.md) | **Start here:** all commands, environments, when to build an APK, quirks | ✔ | ✔ summary |
 | [PRODUCT_CONCEPT.md](PRODUCT_CONCEPT.md) | Vision, personas, USP, feature spec, sensor research, roadmap, KPIs | ✔ | ✔ summary |
 | [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) | Colour, type, components, motion, accessibility rules | ✔ | ✔ summary |
 | [MARKETING_STRATEGY.md](MARKETING_STRATEGY.md) | Positioning, audiences, 90-day launch plan, channels, content, KPIs | ✔ | ✔ summary |
@@ -22,10 +23,11 @@ website and in any export: `packages/shared/src/legal/`
 
 ## Reading order for a new contributor
 
-1. `AGENTS.md` at the repository root — the constraints that must not break.
-2. `docs/PRODUCT_CONCEPT.md` — what the product is and why.
-3. `docs/DESIGN_SYSTEM.md` — how it looks and feels.
-4. `docs/BUILD_AND_RELEASE.md` — how to get it onto a phone.
+1. `docs/TOOLCHAIN.md` — run `npm run doctor` and `npm run status`; never rebuild tooling.
+2. `AGENTS.md` at the repository root — the constraints that must not break.
+3. `docs/PRODUCT_CONCEPT.md` — what the product is and why.
+4. `docs/DESIGN_SYSTEM.md` — how it looks and feels.
+5. `docs/CI_CD.md` — how the APK is built and released.
 
 ## Reading order for a launch
 
