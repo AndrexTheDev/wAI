@@ -5,6 +5,7 @@ import {
   WALLET_LIST,
   formatBytes,
   type AppSettings,
+  type LegalSlug,
 } from '@wai/shared';
 import { useApp } from '../store/AppStore';
 import { useT } from '../i18n/useT';
@@ -17,6 +18,7 @@ import {
   isDemo,
 } from '../platform/native';
 import { openExternal } from '../platform/links';
+import { LegalSheet } from './LegalSheet';
 import {
   Check,
   Copy,
@@ -37,6 +39,9 @@ import {
 const SITE = import.meta.env.VITE_WEBSITE_URL ?? PRODUCT.website;
 
 export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => void }) {
+  // Legal documents render inside the app from the bundled texts, so they are
+  // readable offline. The website link stays available as a secondary option.
+  const [legalSlug, setLegalSlug] = useState<LegalSlug | null>(null);
   const { t, locale } = useT();
   const {
     settings,
@@ -333,7 +338,7 @@ export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => v
               key={item.slug}
               type="button"
               className="setting-row"
-              onClick={() => openExternal(`${SITE}/legal/${item.slug}`)}
+              onClick={() => setLegalSlug(item.slug)}
               style={{ textAlign: 'left', width: '100%' }}
             >
               <span className="setting-row__label" style={{ fontWeight: 500 }}>
@@ -343,6 +348,14 @@ export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => v
             </button>
           ))}
         </div>
+        <button
+          type="button"
+          className="btn btn--quiet btn--xs"
+          style={{ justifySelf: 'start', marginTop: 4 }}
+          onClick={() => openExternal(`${SITE}/legal/imprint`)}
+        >
+          <Globe size={11} /> {locale === 'de' ? 'Impressum auf der Website' : 'Imprint on the website'}
+        </button>
         <p className="muted" style={{ marginTop: 8 }}>
           {t('app.settings.aboutBody', { version: PRODUCT.version, developer: PRODUCT.legalBrand, email: PRODUCT.contactEmail })}
         </p>
@@ -355,6 +368,8 @@ export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => v
           </button>
         </div>
       </div>
+
+      <LegalSheet slug={legalSlug} open={Boolean(legalSlug)} onClose={() => setLegalSlug(null)} />
 
       {isDemo && <p className="muted" style={{ textAlign: 'center' }}>{t('app.demo.body')}</p>}
     </>

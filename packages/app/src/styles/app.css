@@ -1602,3 +1602,160 @@ a {
   border: 1px solid rgba(110, 231, 183, 0.22);
   border-radius: var(--radius-pill);
 }
+
+/* ── In-app legal reader ───────────────────────────────────────────────────
+   Legal texts render inside the app from the bundled module, so they stay
+   readable in airplane mode. Long-form text therefore needs a comfortable,
+   scrollable reading rhythm inside the bottom sheet. */
+.legal-doc {
+  display: grid;
+  gap: 14px;
+  font-size: 13.5px;
+  line-height: 1.62;
+  color: var(--text-2);
+}
+
+.legal-doc__meta {
+  margin: 0;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: var(--text-3);
+  text-transform: uppercase;
+}
+
+.legal-doc__intro {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.legal-doc__section {
+  display: grid;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.legal-doc__section h3 {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 650;
+  color: var(--text);
+}
+
+.legal-doc__h4 {
+  margin: 4px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.legal-doc__p {
+  margin: 0;
+}
+
+.legal-doc__list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 18px;
+  list-style: disc;
+}
+
+.legal-doc__olist {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: legal;
+}
+
+.legal-doc__olist li {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 8px;
+  align-items: start;
+}
+
+.legal-doc__num {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-3);
+}
+
+.legal-doc__note {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(110, 231, 183, 0.24);
+  background: rgba(110, 231, 183, 0.07);
+  font-size: 12.5px;
+  color: var(--text);
+}
+
+.legal-doc__quote {
+  margin: 0;
+  padding: 12px;
+  border-left: 2px solid var(--sky);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--surface);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.7;
+  white-space: pre-line;
+  color: var(--text-2);
+}
+
+.legal-doc__tablewrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.legal-doc__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.legal-doc__table th,
+.legal-doc__table td {
+  padding: 7px 9px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.legal-doc__table th {
+  color: var(--text-3);
+  font-weight: 600;
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.legal-doc__table tr:last-child td {
+  border-bottom: 0;
+}
+
+.legal-doc__outro {
+  margin: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.legal-doc__foot {
+  display: grid;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  justify-items: start;
+}
