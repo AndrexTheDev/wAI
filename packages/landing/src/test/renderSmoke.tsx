@@ -9,6 +9,10 @@ import { setTestPath } from './testEnv'; // must come first: installs browser sh
 import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
 import { App } from '../App';
+import { LegalPage } from '../pages/LegalPage';
+import { LocaleProvider } from '../lib/locale';
+import { RouterProvider } from '../lib/router';
+import { loadLegalDocument } from '@wai/shared';
 
 const routes = [
   '/',
@@ -28,6 +32,34 @@ let failures = 0;
 for (const locale of locales) {
   for (const route of routes) {
     setTestPath(route, locale);
+
+    // Legal documents are code-split, so the first render is a skeleton. Render
+    // the real document explicitly to prove every chunk exists and renders in
+    // both languages (this is what the skeleton is waiting for).
+    const legalSlug = route.startsWith('/legal/') ? route.split('/')[2] : null;
+    if (legalSlug) {
+      const doc = await loadLegalDocument(legalSlug);
+      if (!doc) {
+        failures++;
+        console.log(`✖ ${locale} ${route.padEnd(22)} legal document did not load`);
+        continue;
+      }
+      const html = renderToString(
+        createElement(LocaleProvider, null, createElement(RouterProvider, null, createElement(LegalPage, { doc }))),
+      );
+      const problems = [
+        html.length < 4000 ? `suspiciously short (${html.length} chars)` : '',
+        /\bundefined\b/.test(html) ? '"undefined" in markup' : '',
+        !html.includes(doc[locale].title.replace(/&/g, '&amp;')) ? 'title missing' : '',
+      ].filter(Boolean);
+      if (problems.length) {
+        failures++;
+        console.log(`✖ ${locale} ${route.padEnd(22)} ${problems.join(' · ')}`);
+      } else {
+        console.log(`✔ ${locale} ${route.padEnd(22)} ${String(html.length).padStart(6)} chars · ${doc[locale].sections.length} sections`);
+      }
+      continue;
+    }
     const warnings: string[] = [];
     const originalWarn = console.warn;
     const originalError = console.error;

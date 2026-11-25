@@ -476,3 +476,49 @@ table.clean th.is-centered {
   font-size: var(--fs-sm);
   max-width: 68ch;
 }
+
+/* Legal document loading placeholder – the documents are code-split, so there is
+   a sub-100 ms window while the requested chunk arrives. Keep it calm. */
+.legal--loading {
+  padding-top: 6rem;
+  padding-bottom: 8rem;
+  display: grid;
+  gap: 1rem;
+  max-width: 46rem;
+}
+
+.skeleton {
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+  background-size: 200% 100%;
+  animation: skeleton-sweep 1.4s ease-in-out infinite;
+}
+
+.skeleton--title {
+  height: 2.4rem;
+  width: 60%;
+}
+
+.skeleton--line {
+  height: 0.9rem;
+  width: 100%;
+}
+
+.skeleton--short {
+  width: 45%;
+}
+
+@keyframes skeleton-sweep {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
