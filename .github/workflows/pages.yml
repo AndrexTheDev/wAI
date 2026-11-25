@@ -61,10 +61,15 @@ jobs:
           # The embedded app is a separate SPA under /app/.
           cp packages/landing/dist/app/index.html packages/landing/dist/app/404.html 2>/dev/null || true
 
+      # The steps below only run once Pages is enabled; until then the build is
+      # still verified on every push and the job exits green with a notice.
       - name: Configure Pages
+        if: steps.check.outputs.enabled == 'true'
         uses: actions/configure-pages@v5
 
-      - uses: actions/upload-pages-artifact@v4
+      - name: Upload Pages artifact
+        if: steps.check.outputs.enabled == 'true'
+        uses: actions/upload-pages-artifact@v4
         with:
           path: packages/landing/dist
 
