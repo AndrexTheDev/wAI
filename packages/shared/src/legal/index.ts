@@ -1,46 +1,41 @@
 import type { LegalDocument, LegalSlug } from './types';
-import { terms } from './terms';
-import { privacy } from './privacy';
-import { disclaimer } from './disclaimer';
-import { imprint } from './imprint';
-import { cryptoGuide } from './cryptoGuide';
-import { withdrawal } from './withdrawal';
 import type { Locale } from '../i18n';
 
 export * from './types';
-export { terms, privacy, disclaimer, imprint, cryptoGuide, withdrawal };
+export { LEGAL_NAV, legalPath } from './nav';
 
-export const LEGAL_DOCUMENTS: Record<LegalSlug, LegalDocument> = {
-  terms,
-  privacy,
-  disclaimer,
-  imprint,
-  'crypto-guide': cryptoGuide,
-  withdrawal,
+/**
+ * Legal documents are loaded on demand.
+ *
+ * The six documents total roughly 100 kB of prose. Shipping them in the initial
+ * bundle would slow down the first paint of the app and of the landing page for
+ * content that most visitors never open. Instead every document is its own chunk:
+ * the store and the UI only ever import `LEGAL_NAV` (a few hundred bytes), and a
+ * reader pulls exactly the one document they asked for.
+ *
+ * The dynamic imports are static enough for the bundler to split them, and each
+ * document stays in the bundle – so this still works completely offline.
+ */
+const LOADERS: Record<LegalSlug, () => Promise<LegalDocument>> = {
+  terms: () => import('./terms').then((m) => m.terms),
+  privacy: () => import('./privacy').then((m) => m.privacy),
+  disclaimer: () => import('./disclaimer').then((m) => m.disclaimer),
+  imprint: () => import('./imprint').then((m) => m.imprint),
+  'crypto-guide': () => import('./cryptoGuide').then((m) => m.cryptoGuide),
+  withdrawal: () => import('./withdrawal').then((m) => m.withdrawal),
 };
 
-export const LEGAL_NAV: { slug: LegalSlug; path: string; de: string; en: string }[] = [
-  { slug: 'disclaimer', path: '/legal/disclaimer', de: 'Haftungsausschluss', en: 'Disclaimer' },
-  { slug: 'terms', path: '/legal/terms', de: 'AGB', en: 'Terms' },
-  {
-    slug: 'withdrawal',
-    path: '/legal/withdrawal',
-    de: 'Widerrufsbelehrung',
-    en: 'Withdrawal notice',
-  },
-  { slug: 'privacy', path: '/legal/privacy', de: 'Datenschutz', en: 'Privacy' },
-  { slug: 'imprint', path: '/legal/imprint', de: 'Impressum', en: 'Imprint' },
-  { slug: 'crypto-guide', path: '/legal/crypto-guide', de: 'Krypto-Kaufanleitung', en: 'Crypto guide' },
-];
+export const LEGAL_SLUGS = Object.keys(LOADERS) as LegalSlug[];
 
-export const getLegalDocument = (slug: string): LegalDocument | undefined =>
-  slug in LEGAL_DOCUMENTS ? LEGAL_DOCUMENTS[slug as LegalSlug] : undefined;
+export const isLegalSlug = (slug: string): slug is LegalSlug => slug in LOADERS;
 
-export const getLegalContent = (slug: string, locale: Locale) => {
-  const doc = getLegalDocument(slug);
+/** Loads one document. Resolves to `undefined` for unknown slugs. */
+export const loadLegalDocument = async (slug: string): Promise<LegalDocument | undefined> =>
+  isLegalSlug(slug) ? LOADERS[slug]() : undefined;
+
+/** Loads one document in one language, ready to render. */
+export const loadLegalContent = async (slug: string, locale: Locale) => {
+  const doc = await loadLegalDocument(slug);
   if (!doc) return undefined;
   return { doc, content: doc[locale] };
 };
-
-/** Path helper shared by routing and the footer links. */
-export const legalPath = (slug: LegalSlug): string => `/legal/${slug}`;

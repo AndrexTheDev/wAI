@@ -1,8 +1,8 @@
-import { getLegalDocument, type LegalBlock, type LegalSlug } from '@wai/shared';
+import { useEffect, useState } from 'react';
+import { PRODUCT, loadLegalDocument, type LegalBlock, type LegalDocument, type LegalSlug } from '@wai/shared';
 import { useT } from '../i18n/useT';
 import { Sheet } from '../ui/Sheet';
 import { openExternal } from '../platform/links';
-import { PRODUCT } from '@wai/shared';
 
 /**
  * Renders the legal documents *inside* the app, from the bundled shared module —
@@ -20,66 +20,95 @@ export function LegalSheet({
   onClose: () => void;
 }) {
   const { t, locale } = useT();
-  const doc = slug ? getLegalDocument(slug) : null;
-  const content = doc ? doc[locale] : null;
+  const [doc, setDoc] = useState<LegalDocument | null>(null);
+
+  // Documents are code-split, so they are fetched on demand. They ship inside the
+  // bundle, which keeps the reader working in airplane mode.
+  useEffect(() => {
+    let cancelled = false;
+    if (!slug) {
+      setDoc(null);
+      return () => {
+        cancelled = true;
+      };
+    }
+    void loadLegalDocument(slug).then((loaded) => {
+      if (!cancelled) setDoc(loaded ?? null);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [slug]);
 
   return (
     <Sheet
-      open={open && Boolean(content)}
+      open={open && Boolean(doc)}
       onClose={onClose}
-      title={content?.title ?? ''}
+      title={doc ? doc[locale].title : ''}
       footer={
         <button type="button" className="btn btn--primary btn--block" onClick={onClose}>
           {t('common.ctaClose')}
         </button>
       }
     >
-      {content && (
-        <article className="legal-doc" lang={locale}>
-          <p className="legal-doc__meta">
-            {content.subtitle} · v{doc!.version} · {doc!.updated}
-          </p>
-
-          {content.intro.map((paragraph) => (
-            <p key={paragraph.slice(0, 40)} className="legal-doc__intro">
-              {paragraph}
-            </p>
-          ))}
-
-          {content.sections.map((section) => (
-            <section key={section.id} className="legal-doc__section">
-              <h3>{section.title}</h3>
-              {section.blocks.map((block, index) => (
-                <LegalBlockView key={`${section.id}-${index}`} block={block} />
-              ))}
-            </section>
-          ))}
-
-          {content.outro?.map((paragraph) => (
-            <p key={paragraph.slice(0, 40)} className="legal-doc__outro">
-              {paragraph}
-            </p>
-          ))}
-
-          <div className="legal-doc__foot">
-            <p className="muted">
-              {t('app.settings.aboutBody', {
-                version: PRODUCT.version,
-                developer: PRODUCT.legalBrand,
-                email: PRODUCT.contactEmail,
-              })}
-            </p>
-            <button
-              type="button"
-              className="btn btn--xs"
-              onClick={() => openExternal(`mailto:${PRODUCT.contactEmail}`)}
-            >
-              {PRODUCT.contactEmail}
-            </button>
-          </div>
-        </article>
-      )}
+      {doc && <LegalDocumentView doc={doc} />}
     </Sheet>
+  );
+}
+
+/**
+ * Pure renderer for a legal document. Kept free of data loading so it can be
+ * rendered and asserted in tests without a browser or an effect flush.
+ */
+export function LegalDocumentView({ doc }: { doc: LegalDocument }) {
+  const { t, locale } = useT();
+  const content = doc[locale];
+
+  return (
+    <article className="legal-doc" lang={locale}>
+      <h2 className="legal-doc__title">{content.title}</h2>
+      <p className="legal-doc__meta">
+        {content.subtitle} · v{doc.version} · {doc.updated}
+      </p>
+
+      {content.intro.map((paragraph) => (
+        <p key={paragraph.slice(0, 40)} className="legal-doc__intro">
+          {paragraph}
+        </p>
+      ))}
+
+      {content.sections.map((section) => (
+        <section key={section.id} className="legal-doc__section">
+          <h3>{section.title}</h3>
+          {section.blocks.map((block, index) => (
+            <LegalBlockView key={`${section.id}-${index}`} block={block} />
+          ))}
+        </section>
+      ))}
+
+      {content.outro?.map((paragraph) => (
+        <p key={paragraph.slice(0, 40)} className="legal-doc__outro">
+          {paragraph}
+        </p>
+      ))}
+
+      <div className="legal-doc__foot">
+        <p className="muted">
+          {t('app.settings.aboutBody', {
+            version: PRODUCT.version,
+            developer: PRODUCT.legalBrand,
+            email: PRODUCT.contactEmail,
+          })}
+        </p>
+        <button
+          type="button"
+          className="btn btn--xs"
+          onClick={() => openExternal(`mailto:${PRODUCT.contactEmail}`)}
+        >
+          {PRODUCT.contactEmail}
+        </button>
+      </div>
+    </article>
   );
 }
 
