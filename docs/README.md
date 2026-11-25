@@ -16,6 +16,7 @@ store listings are fully bilingual.
 | [BUILD_AND_RELEASE.md](BUILD_AND_RELEASE.md) | Toolchain, signing, release checklist, distribution, troubleshooting | ✔ | ✔ |
 | [LEGAL_REVIEW.md](LEGAL_REVIEW.md) | Exactly what a lawyer must confirm before launch + what is already done | ✔ | ✔ |
 | [DELIVERY_SUMMARY.md](DELIVERY_SUMMARY.md) | What was delivered, how it was verified, what remains before launch | ✔ | ✔ summary |
+| [SHARE_LINKS.md](SHARE_LINKS.md) | Shared-anchor links: format, why the payload sits in the fragment, preview page, app intake, how to test | ✔ | ✔ |
 
 Legal texts themselves live in code so they render identically in the app, on the
 website and in any export: `packages/shared/src/legal/`

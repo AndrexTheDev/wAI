@@ -16,6 +16,24 @@ const useHashRouting = () =>
   typeof window !== 'undefined' &&
   (window.location.protocol === 'file:' || window.location.pathname.includes('/_preview'));
 
+/**
+ * Site base as a path prefix: "/wAI/" on a GitHub Pages project page, "/"
+ * everywhere else. The deployed 404.html carries `<base href="/wAI/">`, so this
+ * is also how a deep link such as /wAI/a/#WAIX1.… knows where the site root is.
+ */
+export function siteBase(): string {
+  if (typeof document === 'undefined') return '/';
+  const raw = document.querySelector('base')?.getAttribute('href') ?? '/';
+  return raw.endsWith('/') ? raw : `${raw}/`;
+}
+
+/** Prefixes a router path with the site base, for real hrefs and pushState. */
+export function withBase(to: string): string {
+  const base = siteBase().replace(/\/$/, '');
+  if (!base) return to;
+  return `${base}${to.startsWith('/') ? to : `/${to}`}`;
+}
+
 function currentPath(): string {
   if (typeof window === 'undefined') return '/';
   if (useHashRouting() && window.location.hash) {
@@ -53,7 +71,7 @@ export function RouterProvider({ children }: { children: ReactNode }) {
     if (useHashRouting()) {
       window.location.hash = pathname;
     } else {
-      window.history[opts.replace ? 'replaceState' : 'pushState']({}, '', to);
+      window.history[opts.replace ? 'replaceState' : 'pushState']({}, '', withBase(to));
     }
     setPath(pathname || '/');
     if (hash) {
@@ -91,7 +109,7 @@ export function Link({
   const { navigate } = useRouter();
   return (
     <a
-      href={to}
+      href={withBase(to)}
       className={className}
       onClick={(event) => {
         if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;

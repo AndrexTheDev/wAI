@@ -8,6 +8,7 @@ import { LandingPage } from './pages/LandingPage';
 import { LegalPage } from './pages/LegalPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { DemoPage } from './pages/DemoPage';
+import { SharePreviewPage } from './pages/SharePreviewPage';
 import { loadLegalDocument, type LegalDocument } from '@wai/shared';
 
 function RoutedContent() {
@@ -43,6 +44,7 @@ function RoutedContent() {
         en: 'wAI – Environmental Memory Anchor | Stop searching',
       },
       '/app/': { de: 'wAI App – Demo', en: 'wAI app – demo' },
+      '/a/': { de: 'Geteilter Anker · wAI', en: 'Shared anchor · wAI' },
     };
     if (legalDoc) {
       document.title = `${legalDoc[locale].title} · wAI`;
@@ -58,6 +60,10 @@ function RoutedContent() {
   if (legalSlug) {
     if (!legalDoc) return <LegalSkeleton />;
     return <LegalPage doc={legalDoc} />;
+  }
+  // /a/#WAIX1.… – public preview of a shared anchor (code stays in the fragment).
+  if (path === '/a' || path === '/a/') {
+    return <SharePreviewPage />;
   }
   if (path === '/app' || path === '/app/' || path === '/demo') {
     return <DemoPage />;

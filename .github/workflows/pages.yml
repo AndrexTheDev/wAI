@@ -54,12 +54,36 @@ jobs:
         run: node tools/build-all.mjs
 
       - name: Add SPA fallback for deep links
+        env:
+          # Project pages live under /<repo>/ – derive the base from the repo name.
+          SITE_BASE: /${{ github.event.repository.name }}/
         run: |
           # GitHub Pages serves 404.html for unknown paths; the landing router
-          # reads location.pathname, so a copy of index.html makes /legal/* work.
-          cp packages/landing/dist/index.html packages/landing/dist/404.html
+          # reads location.pathname, so a copy of index.html makes /legal/* and
+          # /a/ (shared anchors) work.
+          #
+          # The bundle uses relative asset URLs (base './'), which resolve
+          # against the *requested* path – /wAI/a/#… would ask for
+          # /wAI/a/assets/… and get this 404 page instead of the script. A single
+          # <base href> therefore pins every relative URL to the site root, no
+          # matter how deep the deep link is. The router reads the same tag and
+          # strips the prefix, so paths stay intact.
+          node -e '
+            const fs = require("node:fs");
+            const base = process.env.SITE_BASE.replace(/\/*$/, "/");
+            const html = fs.readFileSync("packages/landing/dist/index.html", "utf8");
+            const tag = `<base href="${base}" />`;
+            if (!html.includes("<head>")) throw new Error("index.html has no <head>");
+            fs.writeFileSync("packages/landing/dist/404.html", html.replace("<head>", `<head>\n    ${tag}`));
+            console.log(`404.html fallback written with ${tag}`);
+          '
           # The embedded app is a separate SPA under /app/.
           cp packages/landing/dist/app/index.html packages/landing/dist/app/404.html 2>/dev/null || true
+
+      - name: Verify deep-link fallback
+        run: |
+          grep -q '<base href=' packages/landing/dist/404.html || { echo "::error::404.html lacks a <base href>; deep links would load no assets"; exit 1; }
+          echo "deep-link fallback looks correct: $(grep -o '<base href="[^"]*"' packages/landing/dist/404.html)"
 
       # The steps below only run once Pages is enabled; until then the build is
       # still verified on every push and the job exits green with a notice.

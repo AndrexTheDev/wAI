@@ -12,10 +12,12 @@ import { App } from '../App';
 import { LegalPage } from '../pages/LegalPage';
 import { LocaleProvider } from '../lib/locale';
 import { RouterProvider } from '../lib/router';
-import { loadLegalDocument } from '@wai/shared';
+import { SharePreview } from '../pages/SharePreviewPage';
+import { encodeSharePayload, loadLegalDocument } from '@wai/shared';
 
 const routes = [
   '/',
+  '/a/',
   '/legal/terms',
   '/legal/privacy',
   '/legal/disclaimer',
@@ -95,6 +97,49 @@ for (const locale of locales) {
       console.log(`✖ ${locale} ${route.padEnd(22)} ${problems.join(' · ')}`);
     } else {
       console.log(`✔ ${locale} ${route.padEnd(22)} ${String(html.length).padStart(6)} chars`);
+    }
+  }
+}
+
+// Shared-anchor preview (/a/#WAIX1.…) – three states, both languages.
+{
+  const code = encodeSharePayload({
+    v: 1,
+    a: { lat: 48.13715, lng: 11.57549, n: 'Tiefgarage Marienplatz', cat: 'car', alt: 519, note: 'Reihe C, rechts neben dem blauen Pfeiler', zone: 'B2' },
+  } as never);
+  for (const locale of locales) {
+    const cases: Array<{ label: string; code: string | null; expect: string[] }> = [
+      {
+        label: 'valid',
+        code,
+        expect: ['Tiefgarage Marienplatz', locale === 'de' ? '48,13715' : '48.13715', 'wai://anchor/', 'intent://anchor/', 'B2'],
+      },
+      { label: 'broken', code: 'WAIX1.kaputt', expect: ['invalid'] },
+      { label: 'empty', code: null, expect: ['noCode'] },
+    ];
+    for (const item of cases) {
+      setTestPath('/a/', locale);
+      const html = renderToString(
+        createElement(LocaleProvider, null, createElement(RouterProvider, null, createElement(SharePreview, { code: item.code }))),
+      );
+      const missing = item.expect.filter((needle) => {
+        if (needle === 'invalid') return !html.includes(locale === 'de' ? 'beschädigt' : 'damaged');
+        if (needle === 'noCode') return !html.includes(locale === 'de' ? 'Kein Anker-Code' : 'No anchor code');
+        return !html.includes(needle);
+      });
+      const problems = [
+        ...missing.map((needle) => `missing "${needle}"`),
+        /\bundefined\b/.test(html) ? '"undefined" in markup' : '',
+        html.length < (item.label === 'valid' ? 1500 : 400) ? `suspiciously short (${html.length} chars)` : '',
+        // The code must never appear in a form that a server could log.
+        html.includes('?code=') ? 'code leaked into a query string' : '',
+      ].filter(Boolean);
+      if (problems.length) {
+        failures++;
+        console.log(`✖ ${locale} /a/ (${item.label}) ${problems.join(' · ')}`);
+      } else {
+        console.log(`✔ ${locale} /a/ (${item.label}) ${String(html.length).padStart(6)} chars`);
+      }
     }
   }
 }

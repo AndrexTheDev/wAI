@@ -32,6 +32,7 @@ import {
   trailDistance,
 } from '../engine.ts';
 import { anchorToShare, decodeSharePayload, encodeSharePayload, sanitizeImportedAnchor } from '../codec.ts';
+import { buildIntentLink, buildShareLink, extractShareCode } from '../deeplink.ts';
 import { base64urlDecode, base64urlEncode, canonicalJson, licenseFingerprint, verifyLicense } from '../license.ts';
 import type { Anchor, PastePoint } from '../types.ts';
 
@@ -232,4 +233,30 @@ test('licence fingerprint is stable and short', () => {
   const b = licenseFingerprint('WAI1.abc.def');
   assert.equal(a, b);
   assert.match(a, /^[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}$/);
+});
+
+test('share links carry the code in the fragment, never the query', () => {
+  const code = encodeSharePayload({ v: 1, a: { lat: 48.1, lng: 11.5, n: 'Auto' } });
+  const link = buildShareLink(code, 'https://example.org/');
+  assert.equal(link, `https://example.org/a/#${code}`);
+  assert.ok(!link.includes('?'), 'no query string: a fragment is never sent to a server');
+  assert.equal(extractShareCode(link), code);
+});
+
+test('share codes are recovered from links, deep links and pasted text', () => {
+  const code = encodeSharePayload({ v: 1, a: { lat: 40.4, lng: -3.7 } });
+  assert.equal(extractShareCode(code), code);
+  assert.equal(extractShareCode(`Schau mal: https://wai.example/a/?code=${code}`), code);
+  assert.equal(extractShareCode(`wai://anchor/${code}`), code);
+  assert.equal(extractShareCode(buildIntentLink(code, 'https://wai.example')), code);
+  assert.equal(extractShareCode('kein Code hier'), null);
+  assert.equal(extractShareCode(''), null);
+});
+
+test('deep links fall back to the web preview when the app is missing', () => {
+  const code = encodeSharePayload({ v: 1, a: { lat: 1, lng: 2 } });
+  const intent = buildIntentLink(code, 'https://wai.example');
+  assert.match(intent, /^intent:\/\/anchor\//);
+  assert.match(intent, /package=dev\.andrexthedev\.wai/);
+  assert.match(intent, /browser_fallback_url=https%3A%2F%2Fwai\.example%2Fa%2F%23/);
 });
