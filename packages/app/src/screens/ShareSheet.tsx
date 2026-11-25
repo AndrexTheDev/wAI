@@ -2,13 +2,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import QRCode from 'qrcode';
 import {
   anchorToShare,
-  decodeSharePayload,
+  buildShareLink,
   encodeSharePayload,
-  formatDistance,
-  sanitizeImportedAnchor,
+  PRODUCT,
   type Anchor,
 } from '@wai/shared';
 import { useApp, makePhotoRef } from '../store/AppStore';
+import { anchorFromShareCode } from '../store/shareImport';
 import { useT } from '../i18n/useT';
 import { useToast } from '../ui/Toast';
 import { Sheet } from '../ui/Sheet';
@@ -19,6 +19,8 @@ import { Camera, Check, Copy, Crown, Download, QrIcon, Share } from '../ui/icons
  * Sharing without a server: a compact text code, a QR code, or a full JSON pack
  * (Pro) that includes the note and media references.
  */
+const SITE = import.meta.env.VITE_WEBSITE_URL ?? PRODUCT.website;
+
 export function ShareSheet({
   anchor,
   open,
@@ -39,16 +41,26 @@ export function ShareSheet({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const code = useMemo(() => (anchor ? encodeSharePayload(anchorToShare(anchor, includeNote)) : ''), [anchor, includeNote]);
+  /**
+   * A share link is a normal https URL with the code in the fragment — the
+   * fragment never reaches the host, so the coordinates stay local. Messengers
+   * render it as a preview card, and without the app the web page explains the
+   * anchor and offers the hand-off.
+   */
+  const shareLink = useMemo(() => (code ? buildShareLink(code, SITE) : ''), [code]);
 
   useEffect(() => {
     if (!showQr || !canvasRef.current || !code) return;
-    void QRCode.toCanvas(canvasRef.current, code, {
+    // The QR code carries the share link: scanning it on a phone opens the web
+    // preview, which hands the anchor over to the app. The bare code stays
+    // available above for offline copying.
+    void QRCode.toCanvas(canvasRef.current, shareLink || code, {
       width: 340,
       margin: 1,
       errorCorrectionLevel: 'L',
       color: { dark: '#07101c', light: '#ffffff' },
     }).catch(() => {});
-  }, [showQr, code]);
+  }, [showQr, shareLink, code]);
 
   if (!anchor) return null;
 
@@ -82,40 +94,39 @@ export function ShareSheet({
   };
 
   const doImport = () => {
-    const payload = decodeSharePayload(importCode);
-    if (!payload) {
+    const anchor = anchorFromShareCode(importCode);
+    if (!anchor) {
       toast.show(t('app.share.invalid'), 'err');
       return;
     }
-    const data = sanitizeImportedAnchor(payload.a);
-    if (!data) {
-      toast.show(t('app.share.invalid'), 'err');
-      return;
-    }
-    const now = Date.now();
-    importAnchors([
-      {
-        id: `a_${now.toString(16)}${Math.random().toString(16).slice(2, 6)}`,
-        name: data.n ?? '',
-        category: data.cat ?? 'other',
-        lat: data.lat,
-        lng: data.lng,
-        altitude: data.alt,
-        source: 'import',
-        createdAt: data.t ?? now,
-        updatedAt: now,
-        note: data.note,
-        zone: data.zone,
-        photos: [],
-        voices: [],
-        favorite: false,
-        archived: false,
-        trail: [],
-      },
-    ]);
+    importAnchors([anchor]);
     setImportCode('');
     toast.show(t('app.share.imported'), 'ok');
     onClose();
+  };
+
+  /**
+   * A share link is a normal https URL with the code in the fragment — the
+   * fragment never reaches the host, so the coordinates stay local. Messengers
+   * turn it into a preview card, and without the app the web page explains the
+   * anchor and offers the hand-off.
+   */
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareLink);
+      toast.show(t('common.copiedToClipboard'), 'ok');
+    } catch {
+      toast.show(t('app.errors.generic'), 'err');
+    }
+  };
+
+  const shareAsLink = async () => {
+    const title = anchor.name || t('app.anchor.untitled');
+    const coords = `${anchor.lat.toFixed(5)}, ${anchor.lng.toFixed(5)}`;
+    const text = `${title} · ${coords}\n${shareLink}`;
+    const result = await shareText(text, title);
+    if (result === 'copied') toast.show(t('common.copiedToClipboard'), 'ok');
+    if (result === 'failed') toast.show(t('app.errors.share'), 'err');
   };
 
   return (
@@ -128,8 +139,8 @@ export function ShareSheet({
           <button type="button" className="btn btn--ghost" onClick={() => setShowQr((value) => !value)}>
             <QrIcon size={15} /> {t('app.share.asQr')}
           </button>
-          <button type="button" className="btn btn--primary" onClick={() => void shareAsText()}>
-            <Share size={15} /> {t('app.share.asText')}
+          <button type="button" className="btn btn--primary" onClick={() => void shareAsLink()}>
+            <Share size={15} /> {t('app.share.asLink')}
           </button>
         </>
       }
@@ -163,6 +174,24 @@ export function ShareSheet({
             <Copy size={12} /> {t('common.ctaCopy')}
           </button>
           <span className="muted">{includeNote ? t('app.anchor.shareFull') : t('app.anchor.sharePositionOnly')}</span>
+        </div>
+      </div>
+
+      <div className="card">
+        <div className="row row--between">
+          <span className="field__label">{t('app.share.asLink')}</span>
+        </div>
+        <code
+          className="mono"
+          style={{ display: 'block', wordBreak: 'break-all', marginTop: 8, fontSize: 10.5, color: 'var(--text-3)' }}
+        >
+          {shareLink}
+        </code>
+        <div className="row" style={{ marginTop: 8 }}>
+          <button type="button" className="btn btn--xs" onClick={() => void copyLink()}>
+            <Copy size={12} /> {t('app.share.copyLink')}
+          </button>
+          <span className="muted">{t('app.share.linkHint')}</span>
         </div>
       </div>
 

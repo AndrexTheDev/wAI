@@ -14,6 +14,8 @@ import { ToastProvider } from '../ui/Toast';
 import { AppShell } from '../screens/AppShell';
 import { en, de, createTranslator, resolvePath, LEGAL_NAV, loadLegalDocument, type Locale } from '@wai/shared';
 import { LegalDocumentView } from '../screens/LegalSheet';
+import { anchorFromShareCode } from '../store/shareImport';
+import { encodeSharePayload, buildShareLink, buildIntentLink } from '@wai/shared';
 
 let failures = 0;
 
@@ -48,6 +50,49 @@ for (const key of placeholderChecks) {
   if (value.includes('{')) {
     failures++;
     console.log(`✖ placeholder not interpolated: ${key} → ${value}`);
+  }
+}
+
+/**
+ * 2b. Incoming share links and deep links must end up as a usable anchor —
+ * the same code path serves the import field, the https preview hand-off and
+ * the wai:// intent. A broken link must be rejected instead of half-imported.
+ */
+{
+  const code = encodeSharePayload({
+    v: 1,
+    a: { lat: 41.38744, lng: 2.17006, n: 'Parkhaus BSM', cat: 'car', alt: 12, note: 'Ebene 2, Säule B17', zone: 'Zona 3' },
+  } as never);
+  const sources = [
+    ['bare code', code],
+    ['share link', buildShareLink(code, 'https://andrexthedev.github.io/wAI')],
+    ['hash only', `#${code}`],
+    ['query', `?code=${code}`],
+    ['intent', buildIntentLink(code, 'https://andrexthedev.github.io/wAI')],
+    ['deep link', `wai://anchor/${code}`],
+  ] as const;
+
+  const problems: string[] = [];
+  for (const [label, input] of sources) {
+    const anchor = anchorFromShareCode(input);
+    if (!anchor) {
+      problems.push(`${label}: not parsed`);
+      continue;
+    }
+    if (anchor.name !== 'Parkhaus BSM') problems.push(`${label}: wrong name (${anchor.name})`);
+    if (Math.abs(anchor.lat - 41.38744) > 1e-9) problems.push(`${label}: wrong latitude`);
+    if (anchor.note !== 'Ebene 2, Säule B17') problems.push(`${label}: note lost`);
+    if (anchor.photos.length || anchor.voices.length) problems.push(`${label}: media imported without consent`);
+  }
+  for (const broken of ['', 'kein code', 'WAIX1.unsinn', `${code.slice(0, 20)}`]) {
+    if (anchorFromShareCode(broken)) problems.push(`broken input accepted: "${broken}"`);
+  }
+
+  if (problems.length) {
+    failures++;
+    console.log(`✖ share links: ${problems.join(' · ')}`);
+  } else {
+    console.log(`✔ share links (${sources.length} forms, 4 rejected inputs)`);
   }
 }
 

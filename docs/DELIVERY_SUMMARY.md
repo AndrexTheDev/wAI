@@ -17,13 +17,13 @@ Brand: **AndrexTheDev** · hippie.highho@gmail.com
 | Rückführung | Kompasspfeil + Entfernung, Höhen-/Etagen-Lotse, Brotkrumen-Spur (SVG), Foto-/Notiz-Abgleich, 5-stufiges Näher-dran-Feedback (Vibration + Ton) |
 | Multi-Ansicht | Kompass + Spur + Umgebungsabgleich gleichzeitig (Pro) |
 | Parken | Timer mit lokaler Benachrichtigung, Zonen-/Kostnotiz, Überzieh-Warnung |
-| Teilen | `WAIX1`-Code, QR am Gerät erzeugt, Deep-Link, Medienpaket `.waipack.json` (Pro), Import mit Sanitisierung |
+| Teilen | `WAIX1`-Code, teilbarer Link `…/a/#WAIX1.…` mit Web-Vorschau (Name, Notiz, Koordinaten) und Ein-Tipp-Übergabe an die App, QR mit Link, Deep-Link `wai://anchor/…`, Medienpaket `.waipack.json` (Pro), Import mit Sanitisierung für Code, Link, `?code=`, Fragment und Intent-URL |
 | Datenschutz | Export (JSON), Import, „Alle Daten löschen“, Speichergrößenanzeige, Auto-Backup aus |
 | Sprachen | DE/EN vollständig, Umschaltung in App + Onboarding, Gerätesprache als Default |
 | Themes | Dunkel, Hell, Nacht (rotverschoben), System |
 | Extras | Taschenlampe (eigenes natives Torch-Plugin), Sensor-Diagnose, Kalibrierhinweise |
 
-Verifiziert mit `tsc --noEmit`, `vite build`, 28 Unit-Tests und SSR-Render-Smoke-Tests
+Verifiziert mit `tsc --noEmit`, `vite build`, 31 Unit-Tests und SSR-Render-Smoke-Tests
 in beiden Sprachen (578 i18n-Schlüssel, keine fehlenden Keys).
 
 ### 1.2 Android-Projekt (`packages/app/android`)
@@ -133,7 +133,7 @@ manifest, adaptive icons and a custom torch plugin, a bilingual conversion-focus
 landing page that embeds the actual app as a live demo, complete bilingual legal
 texts including a new standalone withdrawal notice with an active consent gate
 before any payment route is shown, the non-custodial SOL/BTC/ETH unlock flow with
-offline Ed25519 licences, 28 unit tests, render smoke tests for every route in both
+offline Ed25519 licences, 31 unit tests, render smoke tests for every route in both
 languages, and the full documentation suite (concept, design system, marketing,
 store listing, licensing, release runbook, legal review, delivery).
 

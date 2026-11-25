@@ -108,6 +108,23 @@ export const privacy: LegalDocument = {
             type: 'p',
             text: 'Für den Park-Timer können lokale Benachrichtigungen geplant werden. Diese werden vom Betriebssystem auf deinem Gerät ausgelöst; es werden keine Push-Server genutzt.',
           },
+          {
+            type: 'h3',
+            text: '3.6 Geteilte Anker und Links',
+          },
+          {
+            type: 'p',
+            text: 'Teilen ist ein Vorgang, den du selbst auslöst. Beim Teilen erzeugt die App einen Link bzw. Code, in dem die Ankerdaten (Name, Kategorie, Koordinaten, Höhe, optional Notiz und Zone) direkt enthalten sind. Dieser Link wird ausschließlich über die von dir gewählte App (z. B. Messenger oder Mail) übermittelt – nicht über unsere Systeme. Wir erhalten davon keine Kopie und können ihn nicht einsehen.',
+          },
+          {
+            type: 'ul',
+            items: [
+              'Der Link enthält die Daten im Fragment (dem Teil nach dem #). Dieses Fragment wird vom Browser nicht an den Webserver übertragen, auf dem die Vorschauseite liegt.',
+              'Die Vorschauseite (…/a/#…) liest den Code ausschließlich lokal in deinem Browser aus, um Name, Notiz und Koordinaten anzuzeigen. Es findet keine Speicherung, keine Auswertung und keine Übermittlung an uns statt; die Seite ist für Suchmaschinen gesperrt.',
+              'Bitte beachte, dass Empfänger und Betreiber des von dir genutzten Messengers den Inhalt sehen können. Teile Anker nur mit Personen, denen du deinen Standort anvertrauen würdest.',
+              'Ein empfangener Anker wird erst durch dein Bestätigen (bzw. das Öffnen des Links in der App) lokal gespeichert und kann jederzeit gelöscht werden.',
+            ],
+          },
         ],
       },
       {
@@ -347,6 +364,20 @@ export const privacy: LegalDocument = {
           {
             type: 'p',
             text: 'Local notifications can be scheduled for the parking timer. They are triggered by the operating system on your device; no push servers are used.',
+          },
+          { type: 'h3', text: '3.6 Shared anchors and links' },
+          {
+            type: 'p',
+            text: 'Sharing is an action you initiate. When you share, the app creates a link or code that contains the anchor data itself (name, category, coordinates, altitude, optionally note and zone). That link is transmitted only through the app you choose (e.g. a messenger or mail) – never through our systems. We receive no copy and cannot read it.',
+          },
+          {
+            type: 'ul',
+            items: [
+              'The link carries the data in the fragment (the part after #). Browsers do not send the fragment to the web server hosting the preview page.',
+              'The preview page (…/a/#…) reads the code exclusively in your browser to display name, note and coordinates. There is no storage, no evaluation and no transfer to us; the page is blocked for search engines.',
+              'Keep in mind that the recipient and the operator of the messenger you use can see the content. Share anchors only with people you would trust with your location.',
+              'A received anchor is stored locally only after you confirm it (or open the link in the app) and can be deleted at any time.',
+            ],
           },
         ],
       },

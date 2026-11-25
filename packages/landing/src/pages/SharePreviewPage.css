@@ -1,0 +1,139 @@
+/*
+ * Public preview of a shared anchor (/a/#WAIX1.…).
+ * Reads like a small hand-over card: who/what, note, coordinates, action.
+ */
+.share {
+  padding-block: clamp(1.8rem, 5vw, 3.4rem) clamp(3rem, 7vw, 5rem);
+  min-height: 70vh;
+}
+
+.share__inner {
+  max-width: 720px;
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.share__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-mint);
+  margin: 0;
+}
+
+.share__title {
+  font-size: clamp(1.9rem, 5vw, 2.8rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.share__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.share__note {
+  margin: 0.4rem 0 0;
+  padding: 0.9rem 1.1rem;
+  border-left: 3px solid var(--c-mint);
+  background: color-mix(in oklab, var(--c-mint) 8%, transparent);
+  border-radius: 0 var(--r-md, 10px) var(--r-md, 10px) 0;
+  color: var(--c-text-soft);
+  display: grid;
+  gap: 0.35rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.share__note-label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--c-text-dim);
+}
+
+.share__card {
+  margin-top: 0.6rem;
+  padding: clamp(1rem, 3vw, 1.4rem);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg, 16px);
+  background: var(--c-surface, rgba(255, 255, 255, 0.02));
+  display: grid;
+  gap: 0.7rem;
+}
+
+.share__card-title {
+  margin: 0;
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--c-text-dim);
+}
+
+.share__coords {
+  margin: 0;
+  font-size: clamp(1.05rem, 3.4vw, 1.35rem);
+  letter-spacing: 0.02em;
+  color: var(--c-text);
+  overflow-wrap: anywhere;
+}
+
+.share__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.share__hint {
+  margin: 0;
+  font-size: var(--fs-xs);
+  line-height: 1.55;
+}
+
+.share__hint a {
+  color: var(--c-mint);
+}
+
+.share__raw {
+  border-top: 1px solid var(--c-border);
+  padding-top: 0.9rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.share__raw summary {
+  cursor: pointer;
+  font-size: var(--fs-sm);
+  color: var(--c-text-dim);
+}
+
+.share__raw summary:hover {
+  color: var(--c-text);
+}
+
+.share__raw code {
+  display: block;
+  padding: 0.7rem 0.8rem;
+  border-radius: var(--r-md, 10px);
+  background: var(--c-surface, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--c-border);
+  font-size: var(--fs-xs);
+  word-break: break-all;
+  color: var(--c-text-soft);
+}
+
+.share__privacy {
+  margin: 0.6rem 0 0;
+  font-size: var(--fs-xs);
+  line-height: 1.6;
+  color: var(--c-text-dim);
+}

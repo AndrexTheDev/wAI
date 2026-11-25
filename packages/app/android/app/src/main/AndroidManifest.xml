@@ -66,6 +66,24 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!--
+              Receiving a shared anchor: wai://anchor/WAIX1.…
+
+              https share links are deliberately not registered as Android App
+              Links: verification needs /.well-known/assetlinks.json at the domain
+              root, and the site lives on a GitHub Pages project path (/wAI/).
+              The share page therefore hands over through an intent:// URL with
+              scheme=wai, package=dev.andrexthedev.wai and a browser fallback
+              URL — no verification needed, and the web preview stays as the
+              fallback when the app is not installed.
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wai" android:host="anchor" />
+            </intent-filter>
         </activity>
 
         <provider

@@ -141,7 +141,7 @@ PR-/Actions-Tab sichtbar, ohne das komplette Log herunterzuladen.
 
 ## English summary
 
-Three workflows: **CI** (every push/PR — typecheck, 28 unit tests, bilingual
+Three workflows: **CI** (every push/PR — typecheck, 31 unit tests, bilingual
 render smoke tests, Android asset checks, web build), **Android build** (JDK 21 +
 SDK 36, `tools/ci-signing.sh`, `tools/build-android.sh` producing a signed APK and
 AAB with signature, manifest and bundle-content verification, artifacts plus an

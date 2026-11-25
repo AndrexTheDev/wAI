@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
-import type { Anchor } from '@wai/shared';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { extractShareCode, type Anchor } from '@wai/shared';
 import { useApp } from '../store/AppStore';
+import { anchorFromShareCode } from '../store/shareImport';
 import { useT } from '../i18n/useT';
 import { useToast } from '../ui/Toast';
 import { AnchorEditor } from './AnchorEditor';
@@ -25,7 +26,7 @@ import {
   Cross,
   Check,
 } from '../ui/icons';
-import { vibrate } from '../platform/native';
+import { isNative, vibrate } from '../platform/native';
 
 type Tab = 'anchors' | 'find' | 'archive' | 'settings';
 
@@ -43,6 +44,7 @@ export function AppShell() {
     setAnchor,
     setLocale,
     updateSettings,
+    importAnchors,
   } = useApp();
   const toast = useToast();
 
@@ -64,6 +66,59 @@ export function AppShell() {
       return activeAnchors.find((anchor) => anchor.id === current.id) ?? null;
     });
   }, [activeAnchors]);
+
+  /**
+   * Receives anchors from share links and deep links.
+   *
+   * Three entry points, all funnelled through the same parser and sanitiser as
+   * the manual import in the share sheet:
+   *   - https://<site>/a/#<code>     (App Link / web preview → "In der App öffnen")
+   *   - wai://anchor/<code>          (explicit hand-off from the browser)
+   *   - anything pasted into the import field
+   * The code is stripped from the address bar afterwards, so a reload cannot
+   * import the same anchor twice.
+   */
+  const handleIncomingShare = useCallback(
+    (raw: string) => {
+      const anchor = anchorFromShareCode(raw);
+      if (!anchor) {
+        toast.show(t('app.share.invalid'), 'err');
+        return;
+      }
+      importAnchors([anchor]);
+      toast.show(t('app.share.imported'), 'ok');
+      setTab('anchors');
+      if (window.location.hash.includes('WAIX1.')) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    },
+    [importAnchors, t, toast],
+  );
+
+  useEffect(() => {
+    if (!ready) return;
+    const incoming = extractShareCode(window.location.hash) ?? extractShareCode(window.location.search);
+    if (incoming) handleIncomingShare(incoming);
+  }, [ready, handleIncomingShare]);
+
+  useEffect(() => {
+    if (!isNative) return;
+    let remove: (() => void) | undefined;
+    void (async () => {
+      try {
+        const { App } = await import('@capacitor/app');
+        const listener = await App.addListener('appUrlOpen', (event) => handleIncomingShare(event.url));
+        remove = () => void listener.remove();
+        // Cold start: the intent that started the app is not always re-emitted as
+        // an event, so read it once explicitly.
+        const launch = await App.getLaunchUrl();
+        if (launch?.url) handleIncomingShare(launch.url);
+      } catch {
+        /* the plugin is absent in a plain web build — links then stay in the browser */
+      }
+    })();
+    return () => remove?.();
+  }, [handleIncomingShare]);
 
   const openPro = (reason = '') => {
     setProReason(reason || undefined);

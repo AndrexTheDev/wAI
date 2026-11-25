@@ -3,6 +3,7 @@ export * from './geo';
 export * from './license';
 export * from './license-key';
 export * from './codec';
+export * from './deeplink';
 export * from './types';
 export * from './i18n';
 export * from './legal';
