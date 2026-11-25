@@ -46,16 +46,33 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install SDK packages
+      # Uses the Android SDK that ships with the GitHub-hosted Ubuntu image and
+      # only installs what is missing. No third-party action, no custom download,
+      # so the pipeline cannot break because an action or mirror disappears.
+      - name: Prepare Android SDK 36
         run: |
-          sdkmanager --install \
-            "platform-tools" \
-            "platforms;android-36" \
-            "build-tools;36.0.0"
-          yes | sdkmanager --licenses >/dev/null || true
+          set -euo pipefail
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          if [ ! -d "$SDK" ]; then
+            echo "No Android SDK found at $SDK" >&2
+            exit 1
+          fi
+          export ANDROID_HOME="$SDK"
+          export ANDROID_SDK_ROOT="$SDK"
+          SDKMANAGER="$(find "$SDK/cmdline-tools" -maxdepth 2 -name sdkmanager -type f | head -1)"
+          if [ -z "$SDKMANAGER" ]; then
+            echo "sdkmanager not found in $SDK/cmdline-tools" >&2
+            exit 1
+          fi
+          echo "using $SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
+          "$SDKMANAGER" --install "platform-tools" "platforms;android-36" "build-tools;36.0.0" > /dev/null
+          echo "--- installed ---"
+          "$SDKMANAGER" --list_installed | sed -n '1,20p'
+          echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK" >> "$GITHUB_ENV"
+          echo "$SDK/platform-tools" >> "$GITHUB_PATH"
+          echo "$SDK/build-tools/36.0.0" >> "$GITHUB_PATH"
 
       - uses: actions/setup-node@v5
         with:
