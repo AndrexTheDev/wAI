@@ -195,6 +195,20 @@ const commands = {
       console.log(`  last APK build ${lastOk ? c.green('success') : c.red('none yet')}`);
     }
 
+    // Delivery progress: the four blocking items below are what stands between a
+    // green pipeline and a public launch.
+    const blockers = [
+      ['toolchain + CI + APK pipeline', true],
+      ['website, legal texts, store package', true],
+      ['store images + listing validation', true],
+      ['release keystore + repo secrets', existsSync(path.join(process.env.HOME ?? '', '.wai/wai-release.jks'))],
+      ['GitHub Pages enabled', false],
+      ['lawyer review of the legal texts', false],
+      ['device test in airplane mode', false],
+    ];
+    const doneCount = blockers.filter(([, done]) => done).length;
+    console.log(`  delivery       ${doneCount}/${blockers.length} to launch (~${Math.round((doneCount / blockers.length) * 100)}%)`);
+
     step('open items for launch');
     const open = [];
     const keystore = path.join(process.env.HOME ?? '', '.wai/wai-release.jks');
