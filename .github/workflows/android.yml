@@ -102,6 +102,9 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('packages/app/android/**/*.gradle*', 'packages/app/android/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: gradle-${{ runner.os }}-
 
+      - name: Android project checks (XML, icons, permissions, locales)
+        run: npm run check:android
+
       - name: Configure signing
         env:
           WAI_KEYSTORE_BASE64: ${{ secrets.WAI_KEYSTORE_BASE64 }}

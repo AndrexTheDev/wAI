@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name">wAI</string>
     <string name="title_activity_main">wAI</string>
-    <string name="package_name">dev.andrexthedev.wai</string>
-    <string name="custom_url_scheme">dev.andrexthedev.wai</string>
+    <string name="package_name" translatable="false">dev.andrexthedev.wai</string>
+    <string name="custom_url_scheme" translatable="false">dev.andrexthedev.wai</string>
     <string name="channel_parking_name">Park-Timer / Parking timer</string>
     <string name="channel_parking_desc">Erinnerungen an Parkzeit und Rückkehr / Parking and return reminders</string>
 </resources>

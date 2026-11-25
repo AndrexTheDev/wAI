@@ -4,16 +4,19 @@
 
     <!--
       wAI permission rationale
-      ------------------------
-      INTERNET           required only for opening wallet/explorer links in the
-                         browser. All core features work without any network.
-      ACCESS_*_LOCATION  anchors + guidance (foreground only, no background service)
+
+      INTERNET           only used to open wallet and explorer links in the
+                         browser. Every core feature works with no network at all.
+      ACCESS_*_LOCATION  anchors and guidance (foreground only, no background
+                         service, no location sharing)
       CAMERA             reference photos
       RECORD_AUDIO       voice notes (Pro)
       POST_NOTIFICATIONS parking timer reminders (Pro, Android 13+)
       VIBRATE            "getting closer" haptics (Pro)
-      FLASHLIGHT         darkness/emergency mode torch
-      WRITE_EXTERNAL...  user-initiated data export (Android <= 9 only)
+      FLASHLIGHT         darkness / emergency mode torch
+      WRITE_EXTERNAL_STORAGE  user initiated data export (Android 9 and older)
+
+      No advertising ID, no analytics, no tracking, no cloud backup.
     -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -75,6 +78,5 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" tools:node="remove" />
     </application>
 </manifest>

@@ -39,6 +39,9 @@ jobs:
       - name: Render smoke tests (both locales, all routes)
         run: npm run smoke
 
+      - name: Android project checks (XML, icons, permissions, locales)
+        run: npm run check:android
+
       - name: Production web build
         run: node tools/build-all.mjs --skip-smoke
 
