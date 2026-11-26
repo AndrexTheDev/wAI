@@ -190,6 +190,22 @@ for (const key of placeholderChecks) {
   if (!spotHtml.includes('carspot')) problems.push('car-spot card did not render');
   if (!spotHtml.includes('−3')) problems.push('car-spot card lost the level');
   if (!spotHtml.includes('240')) problems.push('car-spot card lost the distance');
+
+  // Ein Anker 1400 km entfernt: die Kachel darf keine Kilometer behaupten,
+  // sondern muss auf die Etage zurückfallen (Screenshot-Befund).
+  const farHtml = renderToString(
+    createElement(AppProvider, null, createElement(CarSpotCard, {
+      anchor: {
+        id: 'a_far', name: 'Auto weit weg', category: 'car', lat: 40.4, lng: -3.7,
+        source: 'demo', createdAt: Date.now(), updatedAt: Date.now(),
+        photos: [], voices: [], favorite: false, archived: false, floorLabel: '−3',
+      },
+      distanceMeters: null,
+      onFind: () => {},
+      onTimer: () => {},
+    })),
+  );
+  if (!farHtml.includes('−3')) problems.push('far anchor: card lost the fallback level');
   if (!/Zum Auto|To the car/.test(spotHtml)) problems.push('car-spot card has no way to the compass');
 
   if (problems.length) {

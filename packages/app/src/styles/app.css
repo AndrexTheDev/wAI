@@ -2502,3 +2502,16 @@ a {
 .carspot__actions .btn:first-child {
   flex: 1;
 }
+
+/* An anchor on the other side of the country: the needle points somewhere, but
+   it means nothing. Dim it instead of pretending it guides you. */
+.guide__compass.is-far .guide__needle,
+.guide__compass.is-far .guide__sweep,
+.guide__compass.is-far .guide__pulse {
+  opacity: 0.18;
+  animation: none;
+}
+
+.guide__compass.is-far {
+  filter: saturate(0.45);
+}

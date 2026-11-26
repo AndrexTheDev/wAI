@@ -245,6 +245,23 @@ export function FindScreen({
           </div>
         )}
 
+        {/*
+          Ein Anker 1400 km entfernt ist kein Ziel, sondern ein Datensatz-Fehler.
+          Die App sagt das, statt einen Kompass auf einen anderen Kontinent zu
+          richten – derselbe Fehler wie „1423,2 km entfernt" auf der Auto-Kachel.
+        */}
+        {(guidance?.distance ?? 0) > 50_000 && (
+          <div className="banner banner--warn">
+            <Info size={16} />
+            <div className="banner__body">
+              <span className="banner__title">
+                {t('app.find.farTitle', { distance: fmtDistance(guidance?.distance ?? 0) })}
+              </span>
+              <span>{t('app.find.farBody')}</span>
+            </div>
+          </div>
+        )}
+
         {estimated && (
           <div className="banner banner--warn">
             <Info size={16} />
@@ -256,7 +273,11 @@ export function FindScreen({
         )}
 
         {(multiView || view === 'compass') && (
-          <div className={`guide__compass guide__compass--tier${tier} ${arrived ? 'is-arrived' : ''}`}>
+          <div
+            className={`guide__compass guide__compass--tier${tier} ${arrived ? 'is-arrived' : ''} ${
+              (guidance?.distance ?? 0) > 50_000 ? 'is-far' : ''
+            }`}
+          >
             <span className="guide__compass-cardinal guide__compass-cardinal--n">N</span>
             <span className="guide__compass-cardinal guide__compass-cardinal--e">O/E</span>
             <span className="guide__compass-cardinal guide__compass-cardinal--s">S</span>
@@ -305,10 +326,12 @@ export function FindScreen({
               <span className="tile__sub">
                 {elevation.level === 'same'
                   ? current.floorLabel ?? '—'
-                  : t('app.find.elevationHigher', {
-                      meters: Math.abs(Math.round(elevation.delta)),
-                      floors: Math.max(1, elevation.floors),
-                    }).slice(0, 28)}
+                  : elevation.implausible
+                    ? t('app.find.elevationUnclearShort')
+                    : t(elevation.level === 'higher' ? 'app.find.elevationHigher' : 'app.find.elevationLower', {
+                        meters: Math.abs(Math.round(elevation.delta)),
+                        floors: Math.max(1, elevation.floors),
+                      }).slice(0, 28)}
               </span>
             </div>
             <div className="tile" style={{ flex: 1 }}>
@@ -435,7 +458,13 @@ export function FindScreen({
             </span>
           </div>
           <p style={{ fontSize: 13 }}>{elevationText}</p>
-          {current.floorLabel && <p className="muted">{current.floorLabel}</p>}
+          {/* Ohne Beschriftung war „−3" unter der Höhenzeile nur eine Zahl, die
+              man raten musste. */}
+          {current.floorLabel && (
+            <p className="muted">
+              {t('app.find.floorLabel')}: <strong>{current.floorLabel}</strong>
+            </p>
+          )}
         </div>
 
         {!multiView && (

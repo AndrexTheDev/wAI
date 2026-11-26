@@ -702,6 +702,8 @@ export const de = {
       arriving: 'Fast da',
       elevation: 'Höhe',
       elevationSame: 'Gleiche Ebene',
+      floorLabel: 'Etage',
+      elevationUnclearShort: 'außerhalb jeder Etage',
       elevationUnclear: 'Höhe unklar – {meters} m Unterschied, das ist kein Gebäude. Prüfe den Ort.',
       elevationHigher: 'Ziel liegt höher ({meters} m, ca. {floors} Etage(n))',
       elevationLower: 'Ziel liegt tiefer ({meters} m, ca. {floors} Etage(n))',
@@ -719,6 +721,9 @@ export const de = {
       proximityLevel: 'Signalstärke',
       compassHint: 'Halte das Handy flach und bewege es in einer Acht, wenn der Pfeil springt.',
       headingLow: 'Kompass ungenau – bitte kalibrieren',
+      farTitle: 'Der Anker liegt {distance} entfernt',
+      farBody:
+        'Das ist kein Parkhaus, sondern ein anderer Ort – vermutlich falscher Standort oder Demo-Daten. Kompass und Höhe sind hier nicht aussagekräftig. Setze den Anker neu, wenn du am Auto stehst.',
       estimatedTitle: 'Kein GPS – Position aus Schritten geschätzt',
       estimatedBody:
         'Seit dem letzten Signal {steps} Schritte, noch etwa {meters} m. Der Pfeil zeigt die Richtung; exakt wird es wieder, sobald du Empfang hast.',

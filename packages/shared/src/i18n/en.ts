@@ -704,6 +704,8 @@ export const en: Widen<GermanDictionary> = {
       arriving: 'Almost there',
       elevation: 'Elevation',
       elevationSame: 'Same level',
+      floorLabel: 'Level',
+      elevationUnclearShort: 'not a floor difference',
       elevationUnclear: 'Elevation unclear – {meters} m difference, not a building. Check the location.',
       elevationHigher: 'Target is higher ({meters} m, approx. {floors} floor(s))',
       elevationLower: 'Target is lower ({meters} m, approx. {floors} floor(s))',
@@ -721,6 +723,9 @@ export const en: Widen<GermanDictionary> = {
       proximityLevel: 'Signal strength',
       compassHint: 'Hold the phone flat and move it in a figure eight if the arrow jumps.',
       headingLow: 'Compass inaccurate – please calibrate',
+      farTitle: 'This anchor is {distance} away',
+      farBody:
+        'That is not a car park, it is another place – most likely a wrong location or demo data. Compass and elevation mean nothing here. Drop the anchor again while you stand at the car.',
       estimatedTitle: 'No GPS – position estimated from your steps',
       estimatedBody:
         'About {steps} steps since the last signal, roughly {meters} m to go. Follow the arrow; it becomes exact again as soon as you have a signal.',
