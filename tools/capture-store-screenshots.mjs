@@ -39,32 +39,36 @@ const SHOTS = [
     slug: '02-anchor',
     caption: { de: 'Säule B17, Ebene −3', en: 'Pillar B17, level −3' },
     // Der Editor: Etage, Zone, Notiz – das, was man nach drei Stunden vergisst.
-    steps: [['Mein Auto', 'Pillar']],
+    steps: [{ selector: '.anchor-card__tap', text: ['Mein Auto', 'Pillar'] }],
   },
   {
     slug: '03-list',
     caption: { de: 'Alle Anker im Blick', en: 'Every anchor in view' },
     // Kategorie-Filter, damit sich Liste und Detail klar unterscheiden.
-    steps: [['Anker', 'Anchors'], ['Natur', 'Nature']],
+    // Filter-Chip statt bloßer Liste, damit sich 02/03 klar unterscheiden.
+    steps: [{ selector: '.chips .chip', text: ['Natur', 'Nature'] }],
   },
   {
     slug: '04-trail',
     caption: { de: 'Dein eigener Weg zurück', en: 'Your own way back' },
     // Die Spur zeigt der Find-Bildschirm; der Knopf trägt nur die Distanz,
     // deshalb über aria-label ("Finden: …") ansteuern.
-    steps: [{ aria: ['Finden', 'Find', 'Compass'] }],
+    steps: [{ aria: ['Zurückfinden', 'Back to'] }],
   },
   {
     slug: '05-share',
     caption: { de: 'Teilen ohne Server', en: 'Share without a server' },
     // Teilen liegt im Editor eines Ankers – nicht im Find-Bildschirm.
-    steps: [['Wegkreuzung', 'West'], ['Teilen', 'Share']],
+    steps: [
+      { selector: '.anchor-card__tap', text: ['Wegkreuzung', 'West'] },
+      { aria: ['Teilen', 'Share'] },
+    ],
   },
   {
     slug: '06-timer',
     caption: { de: 'Bevor das Ticket abläuft', en: 'Before the ticket expires' },
-    // Auf der Auto-Kachel steht der Timer-Knopf mit dem Parkzeit-Label.
-    steps: [['Timer', 'Parkzeit', 'Parking time']],
+    // Auf der Auto-Kachel steht der Timer-Knopf; sein aria-label beginnt mit "Park-Timer".
+    steps: [{ selector: '.anchor-card__timer' }],
   },
   {
     slug: '07-settings',
@@ -74,7 +78,7 @@ const SHOTS = [
   {
     slug: '08-pro',
     caption: { de: 'Einmal zahlen. Für immer.', en: 'Pay once. Keep it.' },
-    steps: [['Einstellungen', 'Settings'], ['Pro']],
+    steps: [['Einstellungen', 'Settings'], { aria: ['Pro', 'Free upgraden', 'Upgrade'] }],
   },
 ];
 
@@ -188,10 +192,12 @@ await page.waitForTimeout(1200);
  * wären alle identisch gewesen).
  */
 async function clickLabel(page, step) {
-  const { labels, aria } = Array.isArray(step) ? { labels: step, aria: [] } : { labels: [], aria: step.aria ?? [] };
+  const { labels, aria, selector } = Array.isArray(step)
+    ? { labels: step, aria: [] }
+    : { labels: step.text ?? [], aria: step.aria ?? [], selector: step.selector };
   const hit = await page.evaluate(
-    ({ texts, ariaTexts }) => {
-      const nodes = Array.from(document.querySelectorAll('button, a, [role="tab"], [role="button"], li'));
+    ({ texts, ariaTexts, sel }) => {
+      const nodes = Array.from(document.querySelectorAll(sel ?? 'button, a, [role="tab"], [role="button"], li'));
       for (const node of nodes) {
         const text = (node.textContent ?? '').replace(/\s+/g, ' ').trim();
         // Knöpfe, die nur ein Symbol und eine Distanz zeigen, sind nur über ihr
@@ -206,7 +212,7 @@ async function clickLabel(page, step) {
       }
       return null;
     },
-    { texts: labels, ariaTexts: aria },
+    { texts: labels, ariaTexts: aria, sel: selector },
   );
   await page.waitForTimeout(700);
   return hit;
