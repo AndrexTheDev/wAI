@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-26T22:40:55.396Z",
+  "capturedAt": "2026-11-26T22:46:38.053Z",
   "viewport": {
     "width": 412,
     "height": 732,
@@ -20,7 +20,7 @@
       "navigation": [
         "Zum Auto"
       ],
-      "visibleText": "Mein Auto · Säule B17 AUTO · SW 240° N O/E S W 1484,9 km LUFTLINIE NÄHER-DRAN-SIGNAL — PRO PARK-TIMER 1 Std. 35 Min. Verbleibend Höhe 640 m Höhe unklar – 228 m Unterschied, das ist kein Gebäude. Prüfe den Ort. −3 Kompass Spur Foto Simuliert",
+      "visibleText": "Mein Auto · Säule B17 AUTO · SW 240° Der Anker liegt 1484,9 km entfernt Das ist kein Parkhaus, sondern ein anderer Ort – vermutlich falscher Standort oder Demo-Daten. Kompass und Höhe sind hier nicht aussagekräftig. Setze den Anker neu, wen",
       "signature": "compass",
       "hasAppShell": true,
       "cssViewport": {
@@ -54,7 +54,7 @@
       "navigation": [
         "Natur2"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 66° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 64° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
       "signature": "carspot + chips",
       "hasAppShell": true,
       "cssViewport": {
@@ -71,7 +71,7 @@
       "navigation": [
         "Zurückfinden: Wegkreuzung West"
       ],
-      "visibleText": "Wegkreuzung West NATUR · SW 240° N O/E S W 1484,9 km LUFTLINIE NÄHER-DRAN-SIGNAL — PRO PARK-TIMER 8 Std. 0 Min. — Höhe 640 m Höhe unklar – 228 m Unterschied, das ist kein Gebäude. Prüfe den Ort. Kompass Spur Foto Simulierte Sensoren · Tippe",
+      "visibleText": "Wegkreuzung West NATUR · SW 240° Der Anker liegt 1484,9 km entfernt Das ist kein Parkhaus, sondern ein anderer Ort – vermutlich falscher Standort oder Demo-Daten. Kompass und Höhe sind hier nicht aussagekräftig. Setze den Anker neu, wenn du",
       "signature": "compass",
       "hasAppShell": true,
       "cssViewport": {
@@ -141,7 +141,7 @@
         "Einstellungen",
         "Pro freischalten"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 79° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nachtmodus (kontrastarm) Näher-dran-Signal Näher-dra",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 81° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nachtmodus (kontrastarm) Näher-dran-Signal Näher-dra",
       "signature": "settings + sheet:Pro freischalten",
       "hasAppShell": true,
       "cssViewport": {
