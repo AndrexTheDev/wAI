@@ -25,6 +25,8 @@ on:
 
 permissions:
   contents: write
+  # Für den Bericht als Commit-Kommentar (lesbar über die API, anders als die Logs).
+  pull-requests: write
 
 concurrency:
   group: screenshots-${{ github.ref }}
@@ -65,7 +67,26 @@ jobs:
           done
 
       - name: Capture
-        run: npm run screenshots -- --url http://127.0.0.1:5174 --out store/screenshots
+        run: |
+          set -o pipefail
+          npm run screenshots -- --url http://127.0.0.1:5174 --out store/screenshots 2>&1 | tee capture.log
+
+      # Die Logs liegen für den Agenten hinter einem gesperrten CDN; ein
+      # Commit-Kommentar ist über die API lesbar. Deshalb hier die Selbstauskunft.
+      - name: Report
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          {
+            echo "### Screenshot capture"
+            echo '```'
+            grep -E '✔|!|gesehen|✖|Error' capture.log | head -40 || tail -20 capture.log
+            echo '```'
+            [ -f store/screenshots/capture.json ] && echo "capture.json: $(wc -c < store/screenshots/capture.json) bytes"
+          } > report.md
+          gh api -X POST "repos/${{ github.repository }}/commits/${{ github.sha }}/comments" \
+            -f body="$(cat report.md)" >/dev/null 2>&1 || echo 'Kommentar nicht möglich'
 
       - name: Check the set
         # Der Capture-Schritt meldet Erfolg, auch wenn ein Navigationsschritt ins
