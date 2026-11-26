@@ -119,11 +119,27 @@ const required = ['01-find', '02-anchor', '03-list', '04-trail', '05-share', '06
 if (!existsSync(shotsDir)) {
   warn('store/screenshots/ does not exist yet — the screenshot script creates it');
 } else {
+  let missing = 0;
   for (const slug of required) {
-    const found = ['png', 'webp', 'jpg'].some((ext) => existsSync(path.join(shotsDir, `${slug}.${ext}`)));
-    if (!found) warn(`missing screenshot ${slug}`);
+    const file = ['png', 'webp', 'jpg']
+      .map((ext) => path.join(shotsDir, `${slug}.${ext}`))
+      .find((candidate) => existsSync(candidate));
+    if (!file) {
+      missing++;
+      continue;
+    }
+    // Play verlangt mindestens 320 px Kantenlänge und ein Seitenverhältnis
+    // zwischen 1:2 und 2:1 – ein leeres 1×1-Pixel-Bild wäre ein Blindgänger.
+    const { size } = statSync(file);
+    if (size < 8_000) warn(`${slug}: nur ${Math.round(size / 1024)} kB — sieht nach leerem Bild aus`);
   }
-  ok('screenshot folder present');
+  if (missing === required.length) {
+    warn(`keine der ${required.length} Screenshots vorhanden — Workflow "Store screenshots" erzeugt sie auf einem Runner mit Chromium`);
+  } else if (missing > 0) {
+    warn(`${missing} von ${required.length} Screenshots fehlen`);
+  } else {
+    ok(`alle ${required.length} Screenshots vorhanden`);
+  }
 }
 
 console.log('');

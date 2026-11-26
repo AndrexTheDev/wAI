@@ -29,14 +29,47 @@ const outDir = path.resolve(ROOT, getArg('out', 'store/screenshots'));
 const VIEWPORT = { width: 1080, height: 1920, deviceScaleFactor: 1 };
 
 const SHOTS = [
-  { slug: '01-find', caption: { de: 'In 38 m – 3 Etagen über dir', en: '38 m away — 3 floors up' } },
-  { slug: '02-anchor', caption: { de: 'Säule B17, Ebene 3', en: 'Pillar B17, level 3' } },
-  { slug: '03-list', caption: { de: 'Alle Anker im Blick', en: 'Every anchor in view' } },
-  { slug: '04-trail', caption: { de: 'Dein eigener Weg zurück', en: 'Your own way back' } },
-  { slug: '05-share', caption: { de: 'Teilen ohne Server', en: 'Share without a server' } },
-  { slug: '06-timer', caption: { de: 'Bevor das Ticket abläuft', en: 'Before the ticket expires' } },
-  { slug: '07-settings', caption: { de: 'Ohne Konto. Ohne Cloud.', en: 'No account. No cloud.' } },
-  { slug: '08-pro', caption: { de: 'Einmal zahlen. Für immer.', en: 'Pay once. Keep it.' } },
+  {
+    slug: '01-find',
+    caption: { de: 'In 38 m – 3 Etagen über dir', en: '38 m away — 3 floors up' },
+    steps: [['Zum Auto', 'To the car']],
+  },
+  {
+    slug: '02-anchor',
+    caption: { de: 'Säule B17, Ebene −3', en: 'Pillar B17, level −3' },
+    steps: [['Anker', 'Anchors']],
+  },
+  {
+    slug: '03-list',
+    caption: { de: 'Alle Anker im Blick', en: 'Every anchor in view' },
+    steps: [['Anker', 'Anchors']],
+  },
+  {
+    slug: '04-trail',
+    caption: { de: 'Dein eigener Weg zurück', en: 'Your own way back' },
+    // Der Anker mit Spur steht in der Liste; die Spur zeigt der Find-Bildschirm.
+    steps: [['Wegkreuzung', 'West']],
+  },
+  {
+    slug: '05-share',
+    caption: { de: 'Teilen ohne Server', en: 'Share without a server' },
+    steps: [['Wegkreuzung', 'West'], ['Teilen', 'Share']],
+  },
+  {
+    slug: '06-timer',
+    caption: { de: 'Bevor das Ticket abläuft', en: 'Before the ticket expires' },
+    steps: [['Parkzeit', 'Parking time', 'Timer starten', 'Start timer']],
+  },
+  {
+    slug: '07-settings',
+    caption: { de: 'Ohne Konto. Ohne Cloud.', en: 'No account. No cloud.' },
+    steps: [['Einstellungen', 'Settings']],
+  },
+  {
+    slug: '08-pro',
+    caption: { de: 'Einmal zahlen. Für immer.', en: 'Pay once. Keep it.' },
+    steps: [['Einstellungen', 'Settings'], ['Pro']],
+  },
 ];
 
 function bail(reason, detail) {
@@ -103,13 +136,34 @@ await page.evaluate(() => {
     archived: false,
     ...over,
   });
+  // Kategorien und Feldnamen müssen exakt dem Domain-Modell entsprechen
+  // (packages/shared/src/types.ts) – erfundenes „vehicle" hätte leere Icons gezeigt.
   const anchors = [
-    anchor({ name: 'Auto – Säule B17', category: 'vehicle', floorLabel: 'Ebene 3', zone: 'Zone B · 2,50 €/h', parking: { startedAt: now - 95 * 60_000, limitMinutes: 180, reminderState: 'scheduled' }, favorite: true, createdAt: now - 95 * 60_000 }),
+    anchor({
+      name: 'Mein Auto · Säule B17',
+      category: 'car',
+      floorLabel: '−3',
+      zone: 'Zone B · 2,50 €/h',
+      note: 'Rechts neben dem blauen Pfeiler, Ausgang Ost.',
+      parking: { startedAt: now - 95 * 60_000, limitMinutes: 120, reminderState: 'scheduled' },
+      favorite: true,
+      createdAt: now - 95 * 60_000,
+    }),
     anchor({ name: 'Zelt – blaue Kuppel', category: 'tent', note: 'Hinter der Wiese, neben dem roten Pavillon', createdAt: now - 3 * 3_600_000 }),
-    anchor({ name: 'Werkzeugkasten', category: 'object', note: 'Regal links, hinter der Leiter', createdAt: now - 26 * 3_600_000 }),
-    anchor({ name: 'Treffpunkt Eingang Nord', category: 'meeting', createdAt: now - 40 * 60_000, favorite: true }),
+    anchor({ name: 'Werkzeugkasten', category: 'tool', note: 'Regal links, hinter der Leiter', createdAt: now - 26 * 3_600_000 }),
+    anchor({ name: 'Treffpunkt Eingang Nord', category: 'entrance', createdAt: now - 40 * 60_000, favorite: true }),
     anchor({ name: 'Wasserstelle am Bach', category: 'nature', createdAt: now - 30 * 3_600_000 }),
-    anchor({ name: 'Fahrrad – Hinterhof', category: 'vehicle', createdAt: now - 8 * 3_600_000 }),
+    anchor({
+      name: 'Wegkreuzung West',
+      category: 'nature',
+      note: 'Nach dem Bach links, an der Bank vorbei.',
+      trail: [
+        { lat: 40.4172, lng: -3.7044, at: now - 3 * 3_600_000 - 480_000 },
+        { lat: 40.4176, lng: -3.7039, at: now - 3 * 3_600_000 - 360_000 },
+        { lat: 40.4179, lng: -3.7033, at: now - 3 * 3_600_000 - 240_000 },
+      ],
+      createdAt: now - 8 * 3_600_000,
+    }),
   ];
   window.localStorage.setItem('wai.v1.anchors', JSON.stringify(anchors));
   window.localStorage.setItem(
@@ -121,14 +175,47 @@ await page.evaluate(() => {
 await page.reload({ waitUntil: 'networkidle' });
 await page.waitForTimeout(1200);
 
+/**
+ * Klickt den ersten Knopf/Tab, dessen Beschriftung passt.
+ * Die App navigiert über Tabs und Buttons – nicht über ein Capture-Event, das
+ * früher hier gesendet wurde und das niemand empfangen hat (die Screenshots
+ * wären alle identisch gewesen).
+ */
+async function clickLabel(page, labels) {
+  const hit = await page.evaluate((texts) => {
+    const nodes = Array.from(document.querySelectorAll('button, a, [role="tab"], [role="button"], li'));
+    for (const node of nodes) {
+      const text = (node.textContent ?? '').replace(/\s+/g, ' ').trim();
+      if (texts.some((t) => text === t || text.startsWith(t))) {
+        node.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        return text.slice(0, 40);
+      }
+    }
+    return null;
+  }, labels);
+  await page.waitForTimeout(700);
+  return hit;
+}
+
+// Onboarding überspringen und in die App starten – ohne das zeigen alle acht
+// Bilder denselben Begrüßungsschirm.
+await clickLabel(page, ['Überspringen', 'Skip', 'Los geht', 'Los geht’s', 'Get started', 'Weiter', 'Continue']);
+await page.waitForTimeout(400);
+
 const results = [];
 for (const shot of SHOTS) {
-  // The screens are reached through the app's own navigation, not by injecting
-  // markup: what is captured is genuinely what a user sees.
-  await page.evaluate((slug) => {
-    window.dispatchEvent(new CustomEvent('wai:capture', { detail: { slug } }));
-  }, shot.slug).catch(() => {});
-  await page.waitForTimeout(600);
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('.app', { timeout: 15_000 }).catch(() => {});
+  await page.waitForTimeout(800);
+
+  const reached = [];
+  for (const step of shot.steps) {
+    reached.push(await clickLabel(page, step));
+  }
+  const missing = reached.filter((hit) => hit === null);
+  if (missing.length) {
+    console.warn(`  ! ${shot.slug}: ${missing.length} Navigationsschritt(e) nicht gefunden — Bild zeigt ggf. die falsche Ansicht`);
+  }
   const file = path.join(outDir, `${shot.slug}.png`);
   await page.screenshot({ path: file, fullPage: false });
   results.push({ slug: shot.slug, file, caption: shot.caption });
