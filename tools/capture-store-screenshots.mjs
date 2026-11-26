@@ -230,7 +230,10 @@ async function clickLabel(page, step) {
         const label = (node.getAttribute('aria-label') ?? '').trim();
         const textHit = texts.some((t) => text === t || text.startsWith(t));
         const ariaHit = ariaTexts.some((t) => label.startsWith(t));
-        if (textHit || ariaHit) {
+        // Ein Schritt, der nur einen Selektor nennt, meint den ersten Treffer –
+        // vorher gab es dafür kein Kriterium und der Klick lief immer ins Leere.
+        const selectorOnly = texts.length === 0 && ariaTexts.length === 0;
+        if (textHit || ariaHit || selectorOnly) {
           node.dispatchEvent(new MouseEvent('click', { bubbles: true }));
           return (label || text).slice(0, 40);
         }
