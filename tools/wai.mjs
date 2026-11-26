@@ -178,7 +178,14 @@ const commands = {
     // Code size
     const counts = countLines(path.join(ROOT, 'packages'));
     console.log(`  code           ${counts.files} source files, ${counts.lines.toLocaleString('de-DE')} lines`);
-    console.log(`  tests          ${readFileSync(path.join(ROOT, 'README.md'), 'utf8').match(/(\d+) unit tests/)?.[1] ?? '?'} unit tests + render smoke`);
+    // Count from the test file itself – a stale README number already lied once.
+    const testFiles = ['packages/shared/src/test/engine.test.ts', 'packages/shared/src/test/license.test.ts'];
+    const testCount = testFiles.reduce((sum, file) => {
+      const full = path.join(ROOT, file);
+      if (!existsSync(full)) return sum;
+      return sum + (readFileSync(full, 'utf8').match(/^test\(/gm)?.length ?? 0);
+    }, 0);
+    console.log(`  tests          ${testCount} unit tests + render smoke (claims, legal, app)`);
 
     // Release state
     const release = ghJson(['release', 'view', '--repo', REPO, '--json', 'tagName,assets,isPrerelease']);

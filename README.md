@@ -66,7 +66,7 @@ npm run dev:app                  # http://localhost:5174  the app in a browser
 
 npm run doctor                   # environment probe (no side effects)
 npm run status                   # version, code size, release state, open items
-npm test -w @wai/shared          # 33 unit tests (geo, engine, licence, codec)
+npm test -w @wai/shared          # 34 unit tests (geo, engine, licence, codec)
 npm run smoke:render -w @wai/app # SSR render + dictionary completeness
 npm run build                    # builds app → landing demo → landing site
 node tools/build-all.mjs         # the same, plus reporting

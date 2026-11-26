@@ -259,8 +259,8 @@ export const de = {
           tag: 'Stadt',
           title: 'Tiefgarage & Parkhaus',
           body:
-            'Ebene 3, Säule B17, Ausgang Ost. Foto der Säule, Tarifzone, Parkzeit-Timer – und der Kompass führt dich auch ohne Empfang zurück.',
-          bullets: ['Etagen-Lotse', 'Foto der Säule', 'Park-Timer mit Erinnerung'],
+            'Ebene 3, Säule B17, Ausgang Ost. Foto der Säule, Tarifzone, Parkzeit-Timer – und der Kompass führt dich auch ohne Empfang zurück. Oben in der App steht dein Auto mit Etage und Restzeit, ein Tipp bringt dich hin.',
+          bullets: ['Auto-Kachel mit Etage', 'Erinnerung 10 Min. vorher', 'Foto von Säule & Parkschein'],
         },
         {
           id: 'city',
