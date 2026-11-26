@@ -201,6 +201,17 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
   }, [tiles, visible, viewport.unitsPerPixel, coversArea]);
 
   const metersPerPixel = metresPerUnit(here.lat) * viewport.unitsPerPixel;
+  // Diagnose für den Capture-Lauf (nicht sichtbar, nur abfragbar).
+  if (typeof window !== 'undefined') {
+    (window as unknown as { __waiMap?: unknown }).__waiMap = {
+      centre: viewport.centre,
+      unitsPerPixel: viewport.unitsPerPixel,
+      size,
+      visible: visible.length,
+      loaded: tiles.size,
+      projected: visible.map((v) => ({ x: v.tile.x, y: v.tile.y, dx: Math.round(v.dx), dy: Math.round(v.dy) })),
+    };
+  }
   const scaleBar = scaleFor(metersPerPixel, locale);
   const userPoint = position ? toScreen(viewport, project(position.lat, position.lng)) : null;
   const targetPoint = target ? toScreen(viewport, project(target.lat, target.lng)) : null;

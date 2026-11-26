@@ -295,6 +295,10 @@ for (const shot of SHOTS) {
    * wenn ein Klick ins Leere lief und achtmal dieselbe Ansicht fotografiert
    * wurde — der Screenshot selbst sieht ja immer „richtig" aus.
    */
+  if (shot.slug === '04b-map') {
+    const diag = await page.evaluate(() => (window).__waiMap ?? null);
+    console.warn(`      Karte: ${JSON.stringify(diag).slice(0, 700)}`);
+  }
   const viewportUsed = page.viewportSize();
   const seen = await page.evaluate(() => {
     const body = document.body.innerText.replace(/\s+/g, ' ').trim();
