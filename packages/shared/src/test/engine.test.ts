@@ -34,6 +34,7 @@ import {
   queryAnchors,
   rebaseWalker,
   trailDistance,
+  reminderTransition,
 } from '../engine.ts';
 import { anchorToShare, decodeSharePayload, encodeSharePayload, sanitizeImportedAnchor } from '../codec.ts';
 import { buildIntentLink, buildShareLink, extractShareCode } from '../deeplink.ts';
@@ -320,4 +321,30 @@ test('a parking reminder can warn early without cancelling itself', () => {
   const overdue = parkingStatus(withTimer, now + 70 * 60_000);
   assert.equal(overdue.overdue, true);
   assert.ok((overdue.remaining ?? 0) < 0);
+});
+
+test('a reminder that already went off stops claiming to be scheduled', () => {
+  const anchor = createAnchor({
+    fix: { lat: 48.1, lng: 11.5, source: 'gps', timestamp: Date.now() },
+    name: 'Auto',
+    category: 'car',
+  });
+  const remindAt = 5_000_000;
+  const timed: typeof anchor = {
+    ...anchor,
+    parking: { startedAt: 0, limitMinutes: 60, remindAt, reminderState: 'scheduled' },
+  };
+
+  // Before the deadline: nothing to do.
+  assert.equal(reminderTransition(timed, remindAt - 60_000), null);
+  // Right after: still a grace window, so a tap can win the race.
+  assert.equal(reminderTransition(timed, remindAt + 60_000), null);
+  // Well after: it fired, honestly.
+  assert.deepEqual(reminderTransition(timed, remindAt + 11 * 60_000), { state: 'fired', notify: false });
+  // Already reconciled → idempotent, no loop.
+  const fired: typeof anchor = {
+    ...timed,
+    parking: { ...timed.parking!, reminderState: 'fired' },
+  };
+  assert.equal(reminderTransition(fired, remindAt + 60 * 60_000), null);
 });
