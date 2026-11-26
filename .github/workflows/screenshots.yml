@@ -1,0 +1,93 @@
+# Screenshots, die niemand fälschen muss.
+#
+# Der einzige Store-Asset, den diese Umgebung nicht selbst herstellen kann: hier
+# fehlen die NSS-Bibliotheken für Chromium. Auf einem Runner ist beides da, also
+# wird dort fotografiert — aus der echten App, nicht aus einem Design-Tool.
+#
+# Manuell startbar und zusätzlich bei jedem PR, der die App-Oberfläche anfasst.
+# Die Bilder landen als Artefakt am Lauf; mit "commit" werden sie zusätzlich in
+# denselben Branch zurückgeschrieben, damit sie im Repo liegen.
+name: Store screenshots
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: 'Screenshots in den Branch zurückschreiben'
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths:
+      - 'packages/app/src/screens/**'
+      - 'packages/app/src/styles/**'
+      - 'tools/capture-store-screenshots.mjs'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: screenshots-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  capture:
+    name: Capture 8 screens
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build the app
+        run: npm run build -w @wai/app
+
+      - name: Serve the build
+        run: |
+          cd packages/app/dist
+          python3 -m http.server 5174 --bind 127.0.0.1 &
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:5174/ >/dev/null && break
+            sleep 1
+          done
+
+      - name: Capture
+        run: node tools/capture-store-screenshots.mjs --url http://127.0.0.1:5174 --out store/screenshots
+
+      - name: Check the set
+        run: node tools/check-store-listing.mjs
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: store-screenshots
+          path: store/screenshots/*.png
+          if-no-files-found: error
+          retention-days: 30
+
+      # Nur wenn ausdrücklich gewünscht: Bilder in den Branch zurück, damit sie
+      # reviewbar im Repo liegen. Kein Force-Push, keine History-Umschreibung.
+      - name: Commit back
+        if: ${{ inputs.commit }}
+        run: |
+          git config user.name 'wAI screenshot bot'
+          git config user.email 'bot@andrexthedev.dev'
+          git add store/screenshots
+          if git diff --cached --quiet; then
+            echo 'Keine Änderung — Bilder sind aktuell.'
+            exit 0
+          fi
+          git commit -m "chore: refresh store screenshots from the running app"
+          git push origin HEAD:${{ github.head_ref || github.ref_name }}
