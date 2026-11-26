@@ -2341,3 +2341,164 @@ a {
   flex-wrap: wrap;
   gap: 6px;
 }
+
+/* ============================================================
+   "My car" – the most common question, answered without searching
+   ============================================================ */
+.carspot {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 12px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(56, 189, 248, 0.26);
+  background:
+    radial-gradient(130% 130% at 0% 0%, rgba(56, 189, 248, 0.18), transparent 58%),
+    radial-gradient(120% 120% at 100% 100%, rgba(110, 231, 183, 0.12), transparent 55%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 14px 34px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+  animation: card-in 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Slow light sweep so the card reads as "live" without being loud. */
+.carspot::after {
+  content: '';
+  position: absolute;
+  inset: -40% -60% auto;
+  height: 140%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07), transparent);
+  animation: carspot-sheen 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes carspot-sheen {
+  0%,
+  100% {
+    translate: -30% 0;
+  }
+  50% {
+    translate: 30% 0;
+  }
+}
+
+.carspot.is-urgent {
+  border-color: rgba(251, 191, 36, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 0 0 1px rgba(251, 191, 36, 0.18),
+    0 14px 34px rgba(0, 0, 0, 0.28);
+}
+
+.carspot.is-overdue {
+  border-color: rgba(248, 113, 113, 0.5);
+}
+
+.carspot__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.carspot__badge {
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(56, 189, 248, 0.16);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--sky);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.carspot__name {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.carspot__body {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 8px;
+}
+
+.carspot__main,
+.carspot__side {
+  display: grid;
+  gap: 1px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.18);
+  text-align: left;
+  transition: border-color 140ms, background 140ms;
+}
+
+.carspot__main:hover,
+.carspot__side:hover {
+  border-color: var(--border-2);
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.carspot__value {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.carspot__label,
+.carspot__side-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+}
+
+.carspot__side {
+  align-content: center;
+  justify-items: start;
+  gap: 2px;
+  color: var(--text-2);
+}
+
+.carspot__side-value {
+  font-size: 14px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.carspot.is-urgent .carspot__side-value {
+  color: var(--amber);
+}
+
+.carspot__meta {
+  font-size: 12px;
+  color: var(--text-2);
+}
+
+.carspot__meta strong {
+  color: var(--text);
+}
+
+.carspot__actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.carspot__actions .btn:first-child {
+  flex: 1;
+}

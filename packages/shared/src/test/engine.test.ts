@@ -300,3 +300,24 @@ test('step estimation only engages when a real fix goes stale', () => {
   assert.equal(rebased.accuracy, 8);
   assert.equal(rebased.estimating, false);
 });
+
+test('a parking reminder can warn early without cancelling itself', () => {
+  const anchor = createAnchor({
+    fix: { lat: 48.1, lng: 11.5, source: 'gps', timestamp: Date.now() - 3_600_000 },
+    name: 'Auto',
+    category: 'car',
+  });
+  const now = Date.now();
+  const withTimer: typeof anchor = {
+    ...anchor,
+    parking: { startedAt: now - 60 * 60_000, limitMinutes: 120, remindAt: now + 60 * 60_000, reminderState: 'scheduled' },
+  };
+  const status = parkingStatus(withTimer, now);
+  assert.equal(Math.round((status.remaining ?? 0) / 60_000), 60);
+  assert.equal(status.overdue, false);
+
+  // Ten minutes later the same anchor reports an honest negative remainder.
+  const overdue = parkingStatus(withTimer, now + 70 * 60_000);
+  assert.equal(overdue.overdue, true);
+  assert.ok((overdue.remaining ?? 0) < 0);
+});
