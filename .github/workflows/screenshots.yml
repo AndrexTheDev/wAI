@@ -48,8 +48,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # playwright ist devDependency (package-lock), die Browser kommen separat.
       - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium --only-shell
 
       - name: Build the app
         run: npm run build -w @wai/app
@@ -64,7 +65,7 @@ jobs:
           done
 
       - name: Capture
-        run: node tools/capture-store-screenshots.mjs --url http://127.0.0.1:5174 --out store/screenshots
+        run: npm run screenshots -- --url http://127.0.0.1:5174 --out store/screenshots
 
       - name: Check the set
         run: node tools/check-store-listing.mjs
