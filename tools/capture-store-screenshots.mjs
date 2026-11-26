@@ -293,7 +293,9 @@ for (const shot of SHOTS) {
      * ihre Bauteile und die Überschrift des offenen Sheets.
      */
     const sheetTitle = document.querySelector('.sheet__title, .sheet h2, [role="dialog"] h2');
+    const header = document.querySelector('.topbar__titles');
     const parts = [
+      header ? `anchor:${(header.textContent ?? '').trim().slice(0, 24)}` : '',
       document.querySelector('.carspot') ? 'carspot' : '',
       document.querySelector('.chips') ? 'chips' : '',
       document.querySelector('.compass, .guide') ? 'compass' : '',
