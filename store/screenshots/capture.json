@@ -1,0 +1,110 @@
+{
+  "capturedAt": "2026-11-26T22:24:39.968Z",
+  "viewport": {
+    "width": 1080,
+    "height": 1920,
+    "deviceScaleFactor": 1
+  },
+  "url": "http://127.0.0.1:5174",
+  "shots": [
+    {
+      "slug": "01-find",
+      "caption": {
+        "de": "In 38 m – 3 Etagen über dir",
+        "en": "38 m away — 3 floors up"
+      },
+      "navigation": [
+        "Zum Auto"
+      ],
+      "visibleText": "Mein Auto · Säule B17 AUTO · SW 240° N O/E S W 1484,9 km ENTFERNUNG NÄHER-DRAN-SIGNAL — PRO PARK-TIMER 1 Std. 35 Min. Verbleibend Höhe 640 m Ziel liegt höher (228 m, ca. 76 Etage(n)) −3 Kompass Spur Foto Simulierte Sensoren · Tippe irgendwo",
+      "hasAppShell": true
+    },
+    {
+      "slug": "02-anchor",
+      "caption": {
+        "de": "Säule B17, Ebene −3",
+        "en": "Pillar B17, level −3"
+      },
+      "navigation": [
+        "Mein Auto · Säule B17 – Bearbeiten"
+      ],
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 66° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
+      "hasAppShell": true
+    },
+    {
+      "slug": "03-list",
+      "caption": {
+        "de": "Alle Anker im Blick",
+        "en": "Every anchor in view"
+      },
+      "navigation": [
+        "Anker setzen",
+        "Natur2"
+      ],
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 79° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
+      "hasAppShell": true
+    },
+    {
+      "slug": "04-trail",
+      "caption": {
+        "de": "Dein eigener Weg zurück",
+        "en": "Your own way back"
+      },
+      "navigation": [
+        null
+      ],
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 64° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
+      "hasAppShell": true
+    },
+    {
+      "slug": "05-share",
+      "caption": {
+        "de": "Teilen ohne Server",
+        "en": "Share without a server"
+      },
+      "navigation": [
+        "Wegkreuzung West – Bearbeiten",
+        "Teilen"
+      ],
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 79° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
+      "hasAppShell": true
+    },
+    {
+      "slug": "06-timer",
+      "caption": {
+        "de": "Bevor das Ticket abläuft",
+        "en": "Before the ticket expires"
+      },
+      "navigation": [
+        null
+      ],
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 64° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
+      "hasAppShell": true
+    },
+    {
+      "slug": "07-settings",
+      "caption": {
+        "de": "Ohne Konto. Ohne Cloud.",
+        "en": "No account. No cloud."
+      },
+      "navigation": [
+        "Einstellungen"
+      ],
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 64° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nachtmodus (kontrastarm) Näher-dran-Signal Näher-dra",
+      "hasAppShell": true
+    },
+    {
+      "slug": "08-pro",
+      "caption": {
+        "de": "Einmal zahlen. Für immer.",
+        "en": "Pay once. Keep it."
+      },
+      "navigation": [
+        "Einstellungen",
+        null
+      ],
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 77° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nachtmodus (kontrastarm) Näher-dran-Signal Näher-dra",
+      "hasAppShell": true
+    }
+  ]
+}
