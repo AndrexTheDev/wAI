@@ -267,8 +267,8 @@ export const en: Widen<GermanDictionary> = {
           tag: 'City',
           title: 'Underground & multi-storey car parks',
           body:
-            'Level 3, pillar B17, east exit. A photo of the pillar, the tariff zone and a parking timer – and the compass walks you back without any signal. Your car sits at the top of the app with its level and remaining time, one tap away.',
-          bullets: ['Car card with level', 'Photo of pillar & ticket', 'Reminder 10 min. ahead'],
+            'Level 3, pillar B17, east exit. A photo of the pillar, the tariff zone and a parking timer – and the map shows buildings and streets so you recognise the corner. Your car sits at the top of the app with its level and remaining time.',
+          bullets: ['Map with buildings, offline', 'Car card with level', 'Reminder 10 min. ahead', 'Photo of pillar & ticket'],
         },
         {
           id: 'city',
@@ -740,6 +740,20 @@ export const en: Widen<GermanDictionary> = {
       calibrationBody:
         'Move the device in a flat figure eight and rotate it once around its own axis. Keep away from metal and magnets.',
       unsupported: 'This device provides no compass data. Direction is estimated from the GPS course.',
+    },
+    map: {
+      title: 'Map',
+      tab: 'Map',
+      zoomIn: 'Zoom in',
+      zoomOut: 'Zoom out',
+      noPack: 'No map pack installed',
+      noPackBody:
+        'The map works offline and needs an area stored on the device. You can still find your way back – the compass and the trail work without it.',
+      outsidePack: '“{name}” is somewhere else',
+      outsidePackBody:
+        'Your position is outside the stored map pack. Compass, trail and distance still work – the map only shows areas saved on the device.',
+      attribution: '© OpenStreetMap contributors, ODbL',
+      offlineNote: 'Map pack on the device · no network, no account',
     },
     timer: {
       title: 'Parking timer',

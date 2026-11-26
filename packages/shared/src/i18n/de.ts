@@ -259,8 +259,8 @@ export const de = {
           tag: 'Stadt',
           title: 'Tiefgarage & Parkhaus',
           body:
-            'Ebene 3, Säule B17, Ausgang Ost. Foto der Säule, Tarifzone, Parkzeit-Timer – und der Kompass führt dich auch ohne Empfang zurück. Oben in der App steht dein Auto mit Etage und Restzeit, ein Tipp bringt dich hin.',
-          bullets: ['Auto-Kachel mit Etage', 'Erinnerung 10 Min. vorher', 'Foto von Säule & Parkschein'],
+            'Ebene 3, Säule B17, Ausgang Ost. Foto der Säule, Tarifzone, Parkzeit-Timer – und die Karte zeigt dir Häuser und Straßen, damit du die Ecke wiedererkennst. Oben in der App steht dein Auto mit Etage und Restzeit.',
+          bullets: ['Karte mit Häusern, offline', 'Auto-Kachel mit Etage', 'Erinnerung 10 Min. vorher', 'Foto von Säule & Parkschein'],
         },
         {
           id: 'city',
@@ -738,6 +738,20 @@ export const de = {
       calibrationBody:
         'Bewege das Gerät in einer liegenden Acht und drehe es einmal um die eigene Achse. Halte Abstand zu Metall und Magneten.',
       unsupported: 'Dieses Gerät liefert keine Kompassdaten. Richtung wird über GPS-Kurs geschätzt.',
+    },
+    map: {
+      title: 'Karte',
+      tab: 'Karte',
+      zoomIn: 'Näher heran',
+      zoomOut: 'Weiter heraus',
+      noPack: 'Kein Kartenpaket installiert',
+      noPackBody:
+        'Die Karte ist offline und braucht ein Gebiet auf dem Gerät. Du kannst trotzdem zurückfinden – Kompass und Spur funktionieren ohne.',
+      outsidePack: '„{name}" liegt woanders',
+      outsidePackBody:
+        'Dein Standort liegt außerhalb des Kartenpakets. Kompass, Spur und Entfernung funktionieren trotzdem – die Karte zeigt nur Gebiete, die auf dem Gerät gespeichert sind.',
+      attribution: '© OpenStreetMap-Mitwirkende, ODbL',
+      offlineNote: 'Kartenpaket auf dem Gerät · kein Netz, kein Konto',
     },
     timer: {
       title: 'Park-Timer',

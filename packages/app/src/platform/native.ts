@@ -91,8 +91,17 @@ export async function watchLocation({
     const id = await Geolocation.watchPosition(
       {
         enableHighAccuracy: accuracy === 'high',
-        timeout: timeoutMs,
-        maximumAge: 2000,
+        /**
+         * Der Timeout gilt pro Messung, nicht für den ganzen Watch. 20 s waren zu
+         * lang: im Parkhaus kommt der erste Fix oft erst nach dem Verlassen des
+         * Betons, und bis dahin stand die App ohne Position da. 8 s reichen für
+         * einen kalten Fix im Freien und lassen die Schrittschätzung übernehmen,
+         * statt zu warten.
+         */
+        timeout: Math.min(timeoutMs, 8000),
+        // Ein Fix, der eine Minute alt ist, ist im Parkhaus wertlos – er zeigt
+        // auf die Einfahrt, nicht auf die Säule.
+        maximumAge: 1000,
       },
       (position, err) => {
         if (err || !position) {

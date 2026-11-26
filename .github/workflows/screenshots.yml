@@ -81,7 +81,7 @@ jobs:
           {
             echo "### Screenshot capture"
             echo '```'
-            grep -E '✔|!|gesehen|✖|Error|Karten im DOM' capture.log | head -50 || tail -25 capture.log
+            grep -E '✔|!|gesehen|✖|Error|Karten im DOM|Karte:' capture.log | head -50 || tail -25 capture.log
             echo '```'
             [ -f store/screenshots/capture.json ] && echo "capture.json: $(wc -c < store/screenshots/capture.json) bytes"
           } > report.md
@@ -95,7 +95,7 @@ jobs:
           node tools/check-store-listing.mjs
           count=$(ls store/screenshots/*.png 2>/dev/null | wc -l)
           echo "$count PNG(s) erzeugt"
-          test "$count" -eq 8 || { echo "✖ erwartet 8, gefunden $count"; exit 1; }
+          test "$count" -eq 9 || { echo "✖ erwartet 9, gefunden $count"; exit 1; }
 
       - name: Upload
         uses: actions/upload-artifact@v4

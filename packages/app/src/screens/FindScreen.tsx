@@ -16,6 +16,7 @@ import {
 } from '@wai/shared';
 import { useApp, startTrailRecording, stopTrailRecording } from '../store/AppStore';
 import { useT } from '../i18n/useT';
+import { MapView } from './MapView';
 import { useUnits } from '../i18n/useUnits';
 import { useToast } from '../ui/Toast';
 import { beep, isDemo, setTorch, vibrate } from '../platform/native';
@@ -35,6 +36,7 @@ import {
   Vibrate,
   ArrowUpRight,
   Anchor as AnchorIcon,
+  Map as MapIcon,
 } from '../ui/icons';
 import { EmptyState } from './EmptyState';
 
@@ -63,7 +65,7 @@ export function FindScreen({
   const { distance: fmtDistance, height: fmtHeight } = useUnits();
   const { fix, sensors, plan, activeAnchors, appendTrail, anchors, estimated, estimatedSteps } = useApp();
   const toast = useToast();
-  const [view, setView] = useState<'compass' | 'trail' | 'media'>('compass');
+  const [view, setView] = useState<'compass' | 'map' | 'trail' | 'media'>('compass');
   const [proximityOn, setProximityOn] = useState(plan === 'pro');
   const [recording, setRecording] = useState(false);
   const [torchOn, setTorchOn] = useState(false);
@@ -150,6 +152,17 @@ export function FindScreen({
     );
   }
 
+  /** Stabil über Renders – ein neues Literal hier hätte die Karte dauerhaft neu geladen. */
+  const mapTarget = useMemo(
+    () => ({
+      id: current.id,
+      name: current.name,
+      lat: current.lat,
+      lng: current.lng,
+      category: current.category,
+    }),
+    [current.id, current.name, current.lat, current.lng, current.category],
+  );
   const trailLength = trailDistance(current.trail);
   const elevation = elevationHint(current.altitude, fix.altitude);
   const parking = parkingStatus(current);
@@ -346,6 +359,31 @@ export function FindScreen({
           </div>
         )}
 
+        {!multiView && view === 'map' && (
+          <MapView
+            position={
+              fix
+                ? { lat: fix.lat, lng: fix.lng, accuracy: fix.accuracy ?? null }
+                : estimated
+                  ? null
+                  : null
+            }
+            target={mapTarget}
+            anchors={anchors
+              .filter((anchor) => anchor.id !== current.id && !anchor.archived)
+              .slice(0, 40)
+              .map((anchor) => ({
+                id: anchor.id,
+                name: anchor.name,
+                lat: anchor.lat,
+                lng: anchor.lng,
+                category: anchor.category,
+              }))}
+            trail={current.trail ?? []}
+            height={330}
+          />
+        )}
+
         {!multiView && view === 'trail' && (
           <div className="card">
             <div className="card__head">
@@ -471,6 +509,9 @@ export function FindScreen({
           <div className="segmented" role="tablist">
             <button type="button" role="tab" aria-selected={view === 'compass'} className={view === 'compass' ? 'is-active' : ''} onClick={() => setView('compass')}>
               <Compass size={13} /> {locale === 'de' ? 'Kompass' : 'Compass'}
+            </button>
+            <button type="button" role="tab" aria-selected={view === 'map'} className={view === 'map' ? 'is-active' : ''} onClick={() => setView('map')}>
+              <MapIcon size={13} /> {t('app.map.tab')}
             </button>
             <button type="button" role="tab" aria-selected={view === 'trail'} className={view === 'trail' ? 'is-active' : ''} onClick={() => setView('trail')}>
               <Trail size={13} /> {locale === 'de' ? 'Spur' : 'Trail'}

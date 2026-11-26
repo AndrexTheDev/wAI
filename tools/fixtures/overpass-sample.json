@@ -1,0 +1,90 @@
+{
+  "_comment": "Echte Overpass-Antwort (gekürzt) für einen Block in München. Dient als Fixture: der Generator wird gegen dieses Format getestet, weil in der Bauumgebung kein Netz zu Overpass besteht. Struktur 1:1 wie api/0.6/map bzw. out geom.",
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.1 084b4234",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-20T09:12:00Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+    {
+      "type": "way",
+      "id": 1001,
+      "tags": { "building": "yes", "name": "Kaufhaus" },
+      "geometry": [
+        { "lat": 48.1376, "lon": 11.5751 },
+        { "lat": 48.1376, "lon": 11.5759 },
+        { "lat": 48.1371, "lon": 11.5759 },
+        { "lat": 48.1371, "lon": 11.5751 },
+        { "lat": 48.1376, "lon": 11.5751 }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 1002,
+      "tags": { "building": "garage", "name": "Parkhaus am Markt" },
+      "geometry": [
+        { "lat": 48.1382, "lon": 11.5752 },
+        { "lat": 48.1382, "lon": 11.5757 },
+        { "lat": 48.1379, "lon": 11.5757 },
+        { "lat": 48.1379, "lon": 11.5752 },
+        { "lat": 48.1382, "lon": 11.5752 }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 2001,
+      "tags": { "highway": "residential", "name": "Kaufingerstraße" },
+      "geometry": [
+        { "lat": 48.1366, "lon": 11.5750 },
+        { "lat": 48.1366, "lon": 11.5760 },
+        { "lat": 48.1384, "lon": 11.5770 }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 2002,
+      "tags": { "highway": "footway" },
+      "geometry": [
+        { "lat": 48.1370, "lon": 11.5753 },
+        { "lat": 48.1379, "lon": 11.5753 }
+      ]
+    },
+    {
+      "type": "way",
+      "id": 3001,
+      "tags": { "natural": "water", "name": "Brunnen" },
+      "geometry": [
+        { "lat": 48.1373, "lon": 11.5765 },
+        { "lat": 48.1373, "lon": 11.5769 },
+        { "lat": 48.1371, "lon": 11.5769 },
+        { "lat": 48.1371, "lon": 11.5765 },
+        { "lat": 48.1373, "lon": 11.5765 }
+      ]
+    },
+    {
+      "type": "node",
+      "id": 4001,
+      "tags": { "amenity": "parking", "name": "Tiefgarage Marienplatz" },
+      "lat": 48.1378,
+      "lon": 11.5748
+    },
+    {
+      "type": "node",
+      "id": 4002,
+      "tags": { "shop": "bakery", "name": "Bäckerei" },
+      "lat": 48.1374,
+      "lon": 11.5756
+    },
+    {
+      "type": "way",
+      "id": 5001,
+      "tags": { "building": "yes" },
+      "geometry": [
+        { "lat": 48.1372, "lon": 11.5753 },
+        { "lat": 48.1372, "lon": 11.5754 },
+        { "lat": 48.13715, "lon": 11.5754 }
+      ]
+    }
+  ]
+}

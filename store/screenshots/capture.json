@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-26T22:46:38.053Z",
+  "capturedAt": "2026-11-26T23:25:50.717Z",
   "viewport": {
     "width": 412,
     "height": 732,
@@ -20,8 +20,8 @@
       "navigation": [
         "Zum Auto"
       ],
-      "visibleText": "Mein Auto · Säule B17 AUTO · SW 240° Der Anker liegt 1484,9 km entfernt Das ist kein Parkhaus, sondern ein anderer Ort – vermutlich falscher Standort oder Demo-Daten. Kompass und Höhe sind hier nicht aussagekräftig. Setze den Anker neu, wen",
-      "signature": "compass",
+      "visibleText": "Mein Auto · Säule B17 AUTO · O 91° N O/E S W 71 m LUFTLINIE NÄHER-DRAN-SIGNAL 1/4 PRO PARK-TIMER 1 Std. 35 Min. Verbleibend Höhe 640 m Höhe unklar – 228 m Unterschied, das ist kein Gebäude. Prüfe den Ort. Etage: −3 Kompass Karte Spur Foto S",
+      "signature": "anchor:Mein Auto · Säule B17Aut + compass",
       "hasAppShell": true,
       "cssViewport": {
         "width": 412,
@@ -38,7 +38,7 @@
         "Mein Auto · Säule B17 – Bearbeiten"
       ],
       "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 66° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
-      "signature": "carspot + chips + sheet:Bearbeiten",
+      "signature": "anchor:wAIUmgebungs-Gedächtnisa + carspot + chips + sheet:Bearbeiten",
       "hasAppShell": true,
       "cssViewport": {
         "width": 412,
@@ -54,8 +54,8 @@
       "navigation": [
         "Natur2"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 64° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
-      "signature": "carspot + chips",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 66° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
+      "signature": "anchor:wAIUmgebungs-Gedächtnisa + carspot + chips",
       "hasAppShell": true,
       "cssViewport": {
         "width": 412,
@@ -71,8 +71,26 @@
       "navigation": [
         "Zurückfinden: Wegkreuzung West"
       ],
-      "visibleText": "Wegkreuzung West NATUR · SW 240° Der Anker liegt 1484,9 km entfernt Das ist kein Parkhaus, sondern ein anderer Ort – vermutlich falscher Standort oder Demo-Daten. Kompass und Höhe sind hier nicht aussagekräftig. Setze den Anker neu, wenn du",
-      "signature": "compass",
+      "visibleText": "Wegkreuzung West NATUR · O 93° N O/E S W 96 m LUFTLINIE NÄHER-DRAN-SIGNAL 1/4 PRO PARK-TIMER 8 Std. 0 Min. — Höhe 640 m Höhe unklar – 228 m Unterschied, das ist kein Gebäude. Prüfe den Ort. Kompass Karte Spur Foto Simulierte Sensoren · Tipp",
+      "signature": "anchor:Wegkreuzung WestNatur ·  + compass",
+      "hasAppShell": true,
+      "cssViewport": {
+        "width": 412,
+        "height": 732
+      }
+    },
+    {
+      "slug": "04b-map",
+      "caption": {
+        "de": "Die Straße, das Haus, dein Auto",
+        "en": "The street, the house, your car"
+      },
+      "navigation": [
+        "Zurückfinden: Mein Auto · Säule B17",
+        "Karte"
+      ],
+      "visibleText": "Mein Auto · Säule B17 AUTO · O 91° Parkhaus Lehel + − 50 m © OpenStreetMap-Mitwirkende, ODbL 1.0 – openstreetmap.org/copyright NÄHER-DRAN-SIGNAL 1/4 PRO PARK-TIMER 1 Std. 35 Min. Verbleibend Höhe 640 m Höhe unklar – 228 m Unterschied, das i",
+      "signature": "anchor:Mein Auto · Säule B17Aut + compass",
       "hasAppShell": true,
       "cssViewport": {
         "width": 412,
@@ -89,8 +107,8 @@
         "Wegkreuzung West – Bearbeiten",
         "Teilen"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 79° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
-      "signature": "carspot + chips + sheet:Anker teilen",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±8 m 81° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±8 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
+      "signature": "anchor:wAIUmgebungs-Gedächtnisa + carspot + chips + sheet:Anker teilen",
       "hasAppShell": true,
       "cssViewport": {
         "width": 412,
@@ -107,7 +125,7 @@
         "24 Min.Verbleibend"
       ],
       "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 66° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
-      "signature": "carspot + chips + sheet:Park-Timer",
+      "signature": "anchor:wAIUmgebungs-Gedächtnisa + carspot + chips + sheet:Park-Timer",
       "hasAppShell": true,
       "cssViewport": {
         "width": 412,
@@ -123,8 +141,8 @@
       "navigation": [
         "Einstellungen"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 66° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nachtmodus (kontrastarm) Näher-dran-Signal Näher-dra",
-      "signature": "settings",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 68° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nachtmodus (kontrastarm) Näher-dran-Signal Näher-dra",
+      "signature": "anchor:wAIUmgebungs-Gedächtnisa + settings",
       "hasAppShell": true,
       "cssViewport": {
         "width": 412,
@@ -141,8 +159,8 @@
         "Einstellungen",
         "Pro freischalten"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 81° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nachtmodus (kontrastarm) Näher-dran-Signal Näher-dra",
-      "signature": "settings + sheet:Pro freischalten",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±8 m 81° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nachtmodus (kontrastarm) Näher-dran-Signal Näher-dra",
+      "signature": "anchor:wAIUmgebungs-Gedächtnisa + settings + sheet:Pro freischalten",
       "hasAppShell": true,
       "cssViewport": {
         "width": 412,

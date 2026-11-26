@@ -1,0 +1,267 @@
+{
+  "version": 1,
+  "name": "München Lehel (Demo)",
+  "zoom": 18,
+  "bounds": {
+    "south": 48.128,
+    "west": 11.555,
+    "north": 48.145,
+    "east": 11.595
+  },
+  "tiles": [
+    {
+      "x": 139503,
+      "y": 90974,
+      "bytes": 212,
+      "buildings": 1,
+      "roads": 1
+    },
+    {
+      "x": 139504,
+      "y": 90974,
+      "bytes": 275,
+      "buildings": 1,
+      "roads": 2
+    },
+    {
+      "x": 139505,
+      "y": 90974,
+      "bytes": 216,
+      "buildings": 1,
+      "roads": 1
+    },
+    {
+      "x": 139506,
+      "y": 90974,
+      "bytes": 349,
+      "buildings": 2,
+      "roads": 2
+    },
+    {
+      "x": 139507,
+      "y": 90974,
+      "bytes": 218,
+      "buildings": 1,
+      "roads": 1
+    },
+    {
+      "x": 139508,
+      "y": 90974,
+      "bytes": 287,
+      "buildings": 2,
+      "roads": 1
+    },
+    {
+      "x": 139509,
+      "y": 90974,
+      "bytes": 336,
+      "buildings": 1,
+      "roads": 3
+    },
+    {
+      "x": 139503,
+      "y": 90975,
+      "bytes": 232,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139504,
+      "y": 90975,
+      "bytes": 234,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139505,
+      "y": 90975,
+      "bytes": 236,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139506,
+      "y": 90975,
+      "bytes": 385,
+      "buildings": 4,
+      "roads": 0
+    },
+    {
+      "x": 139507,
+      "y": 90975,
+      "bytes": 240,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139508,
+      "y": 90975,
+      "bytes": 473,
+      "buildings": 4,
+      "roads": 0
+    },
+    {
+      "x": 139509,
+      "y": 90975,
+      "bytes": 353,
+      "buildings": 2,
+      "roads": 2
+    },
+    {
+      "x": 139503,
+      "y": 90976,
+      "bytes": 226,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139504,
+      "y": 90976,
+      "bytes": 228,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139505,
+      "y": 90976,
+      "bytes": 319,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139506,
+      "y": 90976,
+      "bytes": 492,
+      "buildings": 3,
+      "roads": 0
+    },
+    {
+      "x": 139507,
+      "y": 90976,
+      "bytes": 234,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139508,
+      "y": 90976,
+      "bytes": 373,
+      "buildings": 4,
+      "roads": 0
+    },
+    {
+      "x": 139509,
+      "y": 90976,
+      "bytes": 351,
+      "buildings": 2,
+      "roads": 2
+    },
+    {
+      "x": 139503,
+      "y": 90977,
+      "bytes": 232,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139504,
+      "y": 90977,
+      "bytes": 234,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139505,
+      "y": 90977,
+      "bytes": 236,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139506,
+      "y": 90977,
+      "bytes": 385,
+      "buildings": 4,
+      "roads": 0
+    },
+    {
+      "x": 139507,
+      "y": 90977,
+      "bytes": 240,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139508,
+      "y": 90977,
+      "bytes": 385,
+      "buildings": 4,
+      "roads": 0
+    },
+    {
+      "x": 139509,
+      "y": 90977,
+      "bytes": 416,
+      "buildings": 2,
+      "roads": 3
+    },
+    {
+      "x": 139503,
+      "y": 90978,
+      "bytes": 228,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139504,
+      "y": 90978,
+      "bytes": 230,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139505,
+      "y": 90978,
+      "bytes": 232,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139506,
+      "y": 90978,
+      "bytes": 377,
+      "buildings": 4,
+      "roads": 0
+    },
+    {
+      "x": 139507,
+      "y": 90978,
+      "bytes": 236,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139508,
+      "y": 90978,
+      "bytes": 377,
+      "buildings": 4,
+      "roads": 0
+    },
+    {
+      "x": 139509,
+      "y": 90978,
+      "bytes": 355,
+      "buildings": 2,
+      "roads": 2
+    },
+    {
+      "x": 139509,
+      "y": 90979,
+      "bytes": 140,
+      "buildings": 0,
+      "roads": 1
+    }
+  ],
+  "source": "© OpenStreetMap-Mitwirkende, ODbL 1.0 – openstreetmap.org/copyright",
+  "generatedAt": "2026-11-26T23:15:23.903Z"
+}
