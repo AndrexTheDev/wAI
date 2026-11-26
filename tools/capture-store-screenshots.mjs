@@ -14,7 +14,7 @@
  * in a restricted sandbox), it exits with precise instructions instead of writing
  * placeholder images — a missing screenshot is honest, a fake one is not.
  */
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -221,8 +221,19 @@ for (const shot of SHOTS) {
   }
   const file = path.join(outDir, `${shot.slug}.png`);
   await page.screenshot({ path: file, fullPage: false });
-  results.push({ slug: shot.slug, file, caption: shot.caption });
+
+  /**
+   * Was ist tatsächlich zu sehen? Ohne diese Selbstauskunft bliebe unbemerkt,
+   * wenn ein Klick ins Leere lief und achtmal dieselbe Ansicht fotografiert
+   * wurde — der Screenshot selbst sieht ja immer „richtig" aus.
+   */
+  const seen = await page.evaluate(() => {
+    const body = document.body.innerText.replace(/\s+/g, ' ').trim();
+    return { text: body.slice(0, 240), hasApp: Boolean(document.querySelector('.app')), title: document.title };
+  });
+  results.push({ slug: shot.slug, file, caption: shot.caption, reached, seen });
   console.log(`  ✔ ${shot.slug}.png — ${shot.caption.de}`);
+  console.log(`      gesehen: ${seen.text.slice(0, 110)}`);
 }
 
 await browser.close();
@@ -230,4 +241,32 @@ await browser.close();
 console.log(`\n${results.length} screenshots written to ${path.relative(ROOT, outDir)}`);
 console.log('Captions to burn in (Play allows up to 6 words per image):');
 for (const r of results) console.log(`  ${r.slug}: DE "${r.caption.de}" · EN "${r.caption.en}"`);
+// Bericht neben die Bilder: prüfbar per git, ohne Artefakt-Download.
+writeFileSync(
+  path.join(outDir, 'capture.json'),
+  `${JSON.stringify(
+    {
+      capturedAt: new Date().toISOString(),
+      viewport: VIEWPORT,
+      url,
+      shots: results.map((r) => ({
+        slug: r.slug,
+        caption: r.caption,
+        navigation: r.reached,
+        visibleText: r.seen.text,
+        hasAppShell: r.seen.hasApp,
+      })),
+    },
+    null,
+    2,
+  )}\n`,
+);
+
+// Zwei Bilder mit identischem Text sind kein Screenshot-Set, sondern ein Fehler.
+const distinct = new Set(results.map((r) => r.seen.text.slice(0, 60)));
+if (distinct.size < results.length) {
+  console.error(`\n✖ Nur ${distinct.size} von ${results.length} Ansichten unterscheiden sich — Navigation greift nicht.`);
+  process.exit(1);
+}
+
 console.log('\nVerify the set: node tools/check-store-listing.mjs');

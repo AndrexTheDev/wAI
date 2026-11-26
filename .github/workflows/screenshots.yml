@@ -91,7 +91,10 @@ jobs:
         run: |
           git config user.name 'wAI screenshot bot'
           git config user.email 'bot@andrexthedev.dev'
-          git add store/screenshots
+          # PNGs sind absichtlich gitignored (nur finalisiert wird committet) –
+          # dieser Lauf ist diese Finalisierung, deshalb -f.
+          git add -f store/screenshots/*.png
+          git add store/screenshots/capture.json
           if git diff --cached --quiet; then
             echo 'Keine Änderung — Bilder sind aktuell.'
             exit 0
