@@ -81,7 +81,7 @@ die Schrittschätzung verspricht und keine hat, ist ein Widerrufsgrund).
 | 41 | Rechtstexte DE/EN inkl. Widerruf + Crypto | ✅ |
 | 42 | Datenschutz deckt Teilen ab | ✅ (3.6) |
 | 43 | Store-Paket, Screenshot-Plan, Prüfskripte | ✅ |
-| 44 | **Marketing-Claims vs. Code** | ❌ | „Schrittschätzung“ (14) und „1 Foto **oder** Textnotiz“ (Gate prüft korrekt, UI erklärt es aber nicht) weichen ab |
+| 44 | **Marketing-Claims vs. Code** | ✅ | **behoben:** `tools/check-claims.mjs` hält 11 Behauptungen gegen den Code (wortgrenzen-scharf) und läuft in `npm run verify`. Schrittschätzung existiert jetzt wirklich (14), das Notiz-Gate ist im Editor erklärt |
 | 45 | Screenshots | ⚠️ fehlen noch (kein Browser in der Sandbox → Skript verweigert Fake-Bilder) |
 
 ## 6. Die drei teuersten Funde
@@ -97,21 +97,21 @@ die Schrittschätzung verspricht und keine hat, ist ein Widerrufsgrund).
 Reihenfolge nach „Schaden pro Tag, den der Punkt verursacht“, nicht nach Aufwand.
 Jede Phase endet mit `npm run verify` + Commit; APK nur, wenn native Dateien betroffen sind.
 
-### Phase 1 — Ehrlichkeit & Kernlücken (P1, jetzt)
+### Phase 1 — Ehrlichkeit & Kernlücken (P1) — ✅ erledigt (PR #6)
 Ziel: Nichts Behauptetes bleibt unimplementiert, kein toter Schalter.
 
 | Task | Datei(en) | Fertig, wenn |
 |---|---|---|
 | 1.1 Etagen-Eingabe | `AnchorEditor` | Feld „Etage/Ebene“ sichtbar, speichert `floorLabel`, Lotse zeigt es |
 | 1.2 Leerzustand | `HomeScreen` | 0 Anker → eigener Titel + „So funktioniert's“-Knopf |
-| 1.3 Einheiten wirksam | `geo.ts`, `HomeScreen`, `FindScreen` | imperial → ft/mi, Tests decken es ab |
+| 1.3 Einheiten wirksam ✅ | `geo.ts`, `useUnits.ts`, Liste + Suche | imperial → ft/mi, Tests decken es ab |
 | 1.4 Schrittschätzung | `AppStore`, `engine.ts` | bei GPS-Aussetzer > 8 s Position aus Schritten fortgeschrieben, sichtbar als „geschätzt ±X m“ |
 | 1.5 Eigener Bestätigungsdialog | `ui/Confirm.tsx` | Löschen fragt bilingual im App-Stil |
 | 1.6 Benachrichtigung antippbar | `AppShell`, `native.ts` | Tippen öffnet den Anker im Suchbildschirm, `fired` gesetzt |
 | 1.7 Timer von der Karte | `HomeScreen` | Auto-Anker hat einen Uhr-Knopf, ein Tipp → Timer-Sheet |
 | 1.8 Taschenlampe im Suchbildschirm | `FindScreen` | Knopf oben rechts, auch im Nachtmodus sichtbar |
 
-### Phase 2 — Selbsterklärend (P1)
+### Phase 2 — Selbsterklärend (P1) — 2.1/2.2/2.3/2.5 ✅ (PR #6)
 | Task | Fertig, wenn |
 |---|---|
 | 2.1 Hilfe-Center in der App (FAQ, Sensoren, Notfall, „was wAI nicht kann“) | ersetzt das 3-Schritte-Sheet, offline, DE/EN |
@@ -120,7 +120,7 @@ Ziel: Nichts Behauptetes bleibt unimplementiert, kein toter Schalter.
 | 2.4 Foto mit Blickrichtung im Abgleich | „aufgenommen bei 240° — dreh dich nach rechts“ |
 | 2.5 Fokus-Trap + deutsche ARIA-Labels | Sheets fangen Tab-Fokus, Labels lokalisiert |
 
-### Phase 3 — Optik (P1)
+### Phase 3 — Optik (P1) — ✅ erledigt (PR #6)
 | Task | Fertig, wenn |
 |---|---|
 | 3.1 Aurora-Hintergrund + Glas-Kanten | Tiefe ohne Lesbarkeitsverlust, `prefers-reduced-motion` aus |
@@ -137,10 +137,10 @@ Ziel: Nichts Behauptetes bleibt unimplementiert, kein toter Schalter.
 | 4.3 Rückweg-Reminder („noch 10 Min. bis Ablauf“) | zweite Erinnerung, nicht nur eine |
 | 4.4 Etagen-Assistent beim Setzen („Ebene? −3, −2, …“) | Etage ohne Tippen wählen |
 
-### Phase 5 — Außenwirkung angleichen (P2)
+### Phase 5 — Außenwirkung angleichen (P2) — 5.1 ✅ (`check:claims`)
 | Task | Warum |
 |---|---|
-| 5.1 Claims gegen Code prüfen (Skript) | Store/ Landing dürfen nichts versprechen, was fehlt |
+| 5.1 Claims gegen Code prüfen ✅ | `tools/check-claims.mjs`, in `verify` verdrahtet, gegen Fehlalarm getestet |
 | 5.2 Screenshots erzeugen (Runner mit Chromium) | letzte fehlende Store-Zutat |
 | 5.3 Store-Text um Etagen-Assistent + Parkspot-Modus ergänzen | ASO |
 
