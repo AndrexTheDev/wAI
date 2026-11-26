@@ -95,7 +95,7 @@ jobs:
           node tools/check-store-listing.mjs
           count=$(ls store/screenshots/*.png 2>/dev/null | wc -l)
           echo "$count PNG(s) erzeugt"
-          test "$count" -eq 8 || { echo "✖ erwartet 8, gefunden $count"; exit 1; }
+          test "$count" -eq 9 || { echo "✖ erwartet 9, gefunden $count"; exit 1; }
 
       - name: Upload
         uses: actions/upload-artifact@v4

@@ -66,7 +66,11 @@ const SHOTS = [
   {
     slug: '04b-map',
     caption: { de: 'Die Straße, das Haus, dein Auto', en: 'The street, the house, your car' },
-    steps: [{ within: 'Mein Auto', selector: '.anchor-card__distance' }, ['Karte', 'Map']],
+    // Der Distanz-Knopf öffnet den Fund-Screen (Kompass); dort dann auf "Karte".
+    steps: [
+      { within: 'Mein Auto', selector: '.anchor-card__distance' },
+      { selector: '.segmented button', text: ['Karte', 'Map'] },
+    ],
   },
   {
     slug: '05-share',
