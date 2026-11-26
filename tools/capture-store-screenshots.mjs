@@ -32,7 +32,8 @@ const SHOTS = [
   {
     slug: '01-find',
     caption: { de: 'In 38 m – 3 Etagen über dir', en: '38 m away — 3 floors up' },
-    steps: [['Zum Auto', 'To the car']],
+    // Die Auto-Kachel steht über der Liste; ihr Knopf führt zum Kompass.
+    steps: [['Zum Auto', 'To the car', 'Mein Auto']],
   },
   {
     slug: '02-anchor',
@@ -53,12 +54,14 @@ const SHOTS = [
   {
     slug: '05-share',
     caption: { de: 'Teilen ohne Server', en: 'Share without a server' },
-    steps: [['Wegkreuzung', 'West'], ['Teilen', 'Share']],
+    // Teilen liegt im Editor eines Ankers – nicht im Find-Bildschirm.
+    steps: [['Wegkreuzung', 'West'], ['Bearbeiten', 'Edit'], ['Teilen', 'Share']],
   },
   {
     slug: '06-timer',
     caption: { de: 'Bevor das Ticket abläuft', en: 'Before the ticket expires' },
-    steps: [['Parkzeit', 'Parking time', 'Timer starten', 'Start timer']],
+    // Auf der Auto-Kachel steht der Timer-Knopf mit dem Parkzeit-Label.
+    steps: [['Timer', 'Parkzeit', 'Parking time']],
   },
   {
     slug: '07-settings',

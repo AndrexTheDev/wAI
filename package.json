@@ -35,6 +35,7 @@
     "screenshots": "node tools/capture-store-screenshots.mjs"
   },
   "devDependencies": {
+    "playwright": "1.49",
     "yaml": "^2.9.1"
   }
 }
