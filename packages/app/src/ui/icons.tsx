@@ -46,6 +46,13 @@ export const Trail = (p: P) => (
   </svg>
 );
 
+export const Map = (p: P) => (
+  <svg {...s(p)}>
+    <path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20z" />
+    <path d="M9 4v13.5M15 6.5V20" />
+  </svg>
+);
+
 export const Camera = (p: P) => (
   <svg {...s(p)}>
     <rect x="3" y="7" width="18" height="13" rx="3" />

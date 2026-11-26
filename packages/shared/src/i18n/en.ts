@@ -741,6 +741,17 @@ export const en: Widen<GermanDictionary> = {
         'Move the device in a flat figure eight and rotate it once around its own axis. Keep away from metal and magnets.',
       unsupported: 'This device provides no compass data. Direction is estimated from the GPS course.',
     },
+    map: {
+      title: 'Map',
+      tab: 'Map',
+      zoomIn: 'Zoom in',
+      zoomOut: 'Zoom out',
+      noPack: 'No map pack installed',
+      noPackBody:
+        'The map works offline and needs an area stored on the device. You can still find your way back – the compass and the trail work without it.',
+      attribution: '© OpenStreetMap contributors, ODbL',
+      offlineNote: 'Map pack on the device · no network, no account',
+    },
     timer: {
       title: 'Parking timer',
       remaining: 'Remaining',

@@ -115,7 +115,7 @@ console.log(`  · imprint for the console: ${imprintUrl}`);
 
 console.log('\nScreenshot plan');
 const shotsDir = path.join(ROOT, 'store/screenshots');
-const required = ['01-find', '02-anchor', '03-list', '04-trail', '05-share', '06-timer', '07-settings', '08-pro'];
+const required = ['01-find', '02-anchor', '03-list', '04-trail', '04b-map', '05-share', '06-timer', '07-settings', '08-pro'];
 if (!existsSync(shotsDir)) {
   warn('store/screenshots/ does not exist yet — the screenshot script creates it');
 } else {

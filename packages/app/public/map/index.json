@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "name": "München Lehel (Demo)",
+  "zoom": 18,
+  "bounds": {
+    "south": 48.128,
+    "west": 11.555,
+    "north": 48.145,
+    "east": 11.595
+  },
+  "tiles": [
+    {
+      "x": 139504,
+      "y": 90975,
+      "bytes": 138,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139505,
+      "y": 90975,
+      "bytes": 215,
+      "buildings": 1,
+      "roads": 1
+    },
+    {
+      "x": 139506,
+      "y": 90975,
+      "bytes": 347,
+      "buildings": 2,
+      "roads": 2
+    },
+    {
+      "x": 139507,
+      "y": 90975,
+      "bytes": 280,
+      "buildings": 1,
+      "roads": 2
+    },
+    {
+      "x": 139508,
+      "y": 90975,
+      "bytes": 209,
+      "buildings": 1,
+      "roads": 1
+    },
+    {
+      "x": 139505,
+      "y": 90976,
+      "bytes": 319,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139506,
+      "y": 90976,
+      "bytes": 492,
+      "buildings": 3,
+      "roads": 0
+    },
+    {
+      "x": 139507,
+      "y": 90976,
+      "bytes": 357,
+      "buildings": 2,
+      "roads": 2
+    },
+    {
+      "x": 139508,
+      "y": 90976,
+      "bytes": 314,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139505,
+      "y": 90977,
+      "bytes": 236,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139506,
+      "y": 90977,
+      "bytes": 385,
+      "buildings": 4,
+      "roads": 0
+    },
+    {
+      "x": 139507,
+      "y": 90977,
+      "bytes": 422,
+      "buildings": 2,
+      "roads": 3
+    },
+    {
+      "x": 139508,
+      "y": 90977,
+      "bytes": 228,
+      "buildings": 2,
+      "roads": 0
+    },
+    {
+      "x": 139507,
+      "y": 90978,
+      "bytes": 140,
+      "buildings": 0,
+      "roads": 1
+    }
+  ],
+  "source": "© OpenStreetMap-Mitwirkende, ODbL 1.0 – openstreetmap.org/copyright",
+  "generatedAt": "2026-11-26T23:06:09.531Z"
+}

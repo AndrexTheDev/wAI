@@ -64,6 +64,11 @@ const SHOTS = [
     steps: [{ within: 'Wegkreuzung', selector: '.anchor-card__distance' }],
   },
   {
+    slug: '04b-map',
+    caption: { de: 'Die Straße, das Haus, dein Auto', en: 'The street, the house, your car' },
+    steps: [{ within: 'Mein Auto', selector: '.anchor-card__distance' }, ['Karte', 'Map']],
+  },
+  {
     slug: '05-share',
     caption: { de: 'Teilen ohne Server', en: 'Share without a server' },
     // Teilen liegt im Editor eines Ankers – nicht im Find-Bildschirm.

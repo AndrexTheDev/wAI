@@ -1,5 +1,6 @@
 export * from './product';
 export * from './geo';
+export * from './map';
 export * from './license';
 export * from './license-key';
 export * from './codec';

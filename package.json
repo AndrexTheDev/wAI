@@ -32,7 +32,8 @@
     "license:verify": "node tools/license-cli.mjs verify",
     "check:store": "node tools/check-store-listing.mjs",
     "check:claims": "node tools/check-claims.mjs",
-    "screenshots": "node tools/capture-store-screenshots.mjs"
+    "screenshots": "node tools/capture-store-screenshots.mjs",
+    "build:map": "node tools/build-map-pack.mjs"
   },
   "devDependencies": {
     "playwright": "1.49",

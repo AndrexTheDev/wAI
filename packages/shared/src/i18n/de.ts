@@ -739,6 +739,17 @@ export const de = {
         'Bewege das Gerät in einer liegenden Acht und drehe es einmal um die eigene Achse. Halte Abstand zu Metall und Magneten.',
       unsupported: 'Dieses Gerät liefert keine Kompassdaten. Richtung wird über GPS-Kurs geschätzt.',
     },
+    map: {
+      title: 'Karte',
+      tab: 'Karte',
+      zoomIn: 'Näher heran',
+      zoomOut: 'Weiter heraus',
+      noPack: 'Kein Kartenpaket installiert',
+      noPackBody:
+        'Die Karte ist offline und braucht ein Gebiet auf dem Gerät. Du kannst trotzdem zurückfinden – Kompass und Spur funktionieren ohne.',
+      attribution: '© OpenStreetMap-Mitwirkende, ODbL',
+      offlineNote: 'Kartenpaket auf dem Gerät · kein Netz, kein Konto',
+    },
     timer: {
       title: 'Park-Timer',
       remaining: 'Verbleibend',

@@ -18,6 +18,7 @@ import { anchorFromShareCode } from '../store/shareImport';
 import { EmptyState } from '../screens/EmptyState';
 import { AnchorCard } from '../screens/HomeScreen';
 import { CarSpotCard } from '../screens/CarSpotCard';
+import { MapView } from '../screens/MapView';
 import { formatDistance, formatHeight } from '@wai/shared';
 import { encodeSharePayload, buildShareLink, buildIntentLink } from '@wai/shared';
 
@@ -222,6 +223,27 @@ for (const key of placeholderChecks) {
     })),
   );
   if (!farHtml.includes('−3')) problems.push('far anchor: card lost the fallback level');
+
+  /**
+   * Die Karte muss ohne Netz einen Rahmen zeichnen: SVG, Maßstab, Attribution und
+   * die beiden Punkte (du / Ziel). Ob Kacheln geladen sind, entscheidet der Effekt
+   * im Browser – hier zählt, dass die Ansicht nicht zusammenfällt.
+   */
+  const mapHtml = renderToString(
+    createElement(AppProvider, null, createElement(MapView, {
+      position: { lat: 48.1355, lng: 11.5826, accuracy: 8 },
+      target: { id: 'a_car', name: 'Auto', lat: 48.1361, lng: 11.5831, category: 'car' },
+      anchors: [{ id: 'a_x', name: 'Zelt', lat: 48.1359, lng: 11.582, category: 'tent' }],
+      trail: [{ lat: 48.1356, lng: 11.5827 }, { lat: 48.1358, lng: 11.5829 }],
+      height: 300,
+    })),
+  );
+  if (!mapHtml.includes('map__svg')) problems.push('map: no svg');
+  if (!mapHtml.includes('map__user-dot')) problems.push('map: user position missing');
+  if (!mapHtml.includes('map__target-dot')) problems.push('map: target missing');
+  if (!mapHtml.includes('map__scale-bar')) problems.push('map: scale bar missing');
+  // ODbL verlangt die Namensnennung sichtbar, nicht im Impressum.
+  if (!/OpenStreetMap/.test(mapHtml)) problems.push('map: attribution missing');
   if (!/Zum Auto|To the car/.test(spotHtml)) problems.push('car-spot card has no way to the compass');
 
   if (problems.length) {
