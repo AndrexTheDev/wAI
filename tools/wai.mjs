@@ -179,7 +179,14 @@ const commands = {
     const counts = countLines(path.join(ROOT, 'packages'));
     console.log(`  code           ${counts.files} source files, ${counts.lines.toLocaleString('de-DE')} lines`);
     // Count from the test file itself – a stale README number already lied once.
-    const testFiles = ['packages/shared/src/test/engine.test.ts', 'packages/shared/src/test/license.test.ts'];
+    // Alle Testdateien zählen, nicht eine gepflegte Liste – die ist schon zweimal
+    // hinterhergehinkt (map.test.ts, mappack.test.ts).
+    const testDir = path.join(ROOT, 'packages/shared/src/test');
+    const testFiles = existsSync(testDir)
+      ? readdirSync(testDir)
+          .filter((file) => file.endsWith('.test.ts'))
+          .map((file) => `packages/shared/src/test/${file}`)
+      : [];
     const testCount = testFiles.reduce((sum, file) => {
       const full = path.join(ROOT, file);
       if (!existsSync(full)) return sum;
