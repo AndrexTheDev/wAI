@@ -152,6 +152,17 @@ export function FindScreen({
     );
   }
 
+  /** Stabil über Renders – ein neues Literal hier hätte die Karte dauerhaft neu geladen. */
+  const mapTarget = useMemo(
+    () => ({
+      id: current.id,
+      name: current.name,
+      lat: current.lat,
+      lng: current.lng,
+      category: current.category,
+    }),
+    [current.id, current.name, current.lat, current.lng, current.category],
+  );
   const trailLength = trailDistance(current.trail);
   const elevation = elevationHint(current.altitude, fix.altitude);
   const parking = parkingStatus(current);
@@ -357,7 +368,7 @@ export function FindScreen({
                   ? null
                   : null
             }
-            target={current ? { id: current.id, name: current.name, lat: current.lat, lng: current.lng, category: current.category } : null}
+            target={mapTarget}
             anchors={anchors
               .filter((anchor) => anchor.id !== current.id && !anchor.archived)
               .slice(0, 40)

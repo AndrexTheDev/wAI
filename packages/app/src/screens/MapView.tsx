@@ -125,25 +125,35 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
 
   /* ---------------- tile loading ---------------- */
 
+  /** Kacheln, deren Anfrage läuft – sonst feuert jeder Render dieselbe Anfrage. */
+  const inFlight = useRef(new Set<string>());
   const available = useMemo(() => index?.tiles ?? [], [index]);
   const visible = useMemo(() => visibleTiles(viewport), [viewport]);
 
+  /**
+   * Kacheln nachladen.
+   *
+   * Der Cleanup darf laufende Anfragen **nicht** verwerfen: `target` ist ein
+   * Objekt-Literal aus dem Aufrufer, also bei jedem Render neu, also ändert sich
+   * `visible` bei jedem Render, also lief der Effekt neu — und die Antworten der
+   * ersten Runde kamen als „abgebrochen" zurück. Ergebnis: die Karte blieb leer,
+   * während im Netzwerk-Tab 20 Anfragen erfolgreich waren. Jetzt wird nur beim
+   * Unmount abgebrochen; Zwischenstände sind ohnehin im Cache.
+   */
   useEffect(() => {
     if (!index || available.length === 0) return;
-    let cancelled = false;
-    const wanted = new Set<string>();
     for (const { tile } of visible) {
       // Kacheln außerhalb des gepackten Gebiets bleiben leer – das ist der Rand
       // der Karte, kein Fehler.
       const known = available.some((entry) => entry.x === tile.x && entry.y === tile.y);
       const key = `${tile.x}/${tile.y}`;
       if (!known) continue;
-      wanted.add(key);
-      if (cache.current.has(key)) continue;
+      if (cache.current.has(key) || inFlight.current.has(key)) continue;
+      inFlight.current.add(key);
       fetch(`./map/${MAP_ZOOM}/${tile.x}/${tile.y}.json`)
         .then((response) => (response.ok ? response.json() : null))
         .then((json: MapTile | null) => {
-          if (!json || cancelled) return;
+          if (!json) return;
           cache.current.set(key, json);
           if (cache.current.size > TILE_CACHE_LIMIT) {
             const oldest = cache.current.keys().next().value;
@@ -153,12 +163,12 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
         })
         .catch(() => {
           /* eine fehlende Kachel ist ein leeres Feld, kein Absturz */
+        })
+        .finally(() => {
+          inFlight.current.delete(key);
         });
     }
-    return () => {
-      cancelled = true;
-    };
-  }, [index, available, visible]);
+  }, [index, available.length, visible]);
 
   /* ---------------- geometry ---------------- */
 

@@ -81,7 +81,7 @@ jobs:
           {
             echo "### Screenshot capture"
             echo '```'
-            grep -E '✔|!|gesehen|✖|Error|Karten im DOM' capture.log | head -50 || tail -25 capture.log
+            grep -E '✔|!|gesehen|✖|Error|Karten im DOM|Karte:' capture.log | head -50 || tail -25 capture.log
             echo '```'
             [ -f store/screenshots/capture.json ] && echo "capture.json: $(wc -c < store/screenshots/capture.json) bytes"
           } > report.md
