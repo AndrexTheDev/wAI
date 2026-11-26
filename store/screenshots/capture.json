@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-26T22:37:38.792Z",
+  "capturedAt": "2026-11-26T22:40:55.396Z",
   "viewport": {
     "width": 412,
     "height": 732,
@@ -35,10 +35,10 @@
         "en": "Pillar B17, level −3"
       },
       "navigation": [
-        null
+        "Mein Auto · Säule B17 – Bearbeiten"
       ],
       "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 66° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
-      "signature": "carspot + chips",
+      "signature": "carspot + chips + sheet:Bearbeiten",
       "hasAppShell": true,
       "cssViewport": {
         "width": 412,
@@ -69,10 +69,10 @@
         "en": "Your own way back"
       },
       "navigation": [
-        null
+        "Zurückfinden: Wegkreuzung West"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 66° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
-      "signature": "carspot + chips",
+      "visibleText": "Wegkreuzung West NATUR · SW 240° N O/E S W 1484,9 km LUFTLINIE NÄHER-DRAN-SIGNAL — PRO PARK-TIMER 8 Std. 0 Min. — Höhe 640 m Höhe unklar – 228 m Unterschied, das ist kein Gebäude. Prüfe den Ort. Kompass Spur Foto Simulierte Sensoren · Tippe",
+      "signature": "compass",
       "hasAppShell": true,
       "cssViewport": {
         "width": 412,
@@ -86,11 +86,11 @@
         "en": "Share without a server"
       },
       "navigation": [
-        null,
-        null
+        "Wegkreuzung West – Bearbeiten",
+        "Teilen"
       ],
       "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 79° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
-      "signature": "carspot + chips",
+      "signature": "carspot + chips + sheet:Anker teilen",
       "hasAppShell": true,
       "cssViewport": {
         "width": 412,
@@ -104,10 +104,10 @@
         "en": "Before the ticket expires"
       },
       "navigation": [
-        null
+        "24 Min.Verbleibend"
       ],
       "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 66° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
-      "signature": "carspot + chips",
+      "signature": "carspot + chips + sheet:Park-Timer",
       "hasAppShell": true,
       "cssViewport": {
         "width": 412,
@@ -141,7 +141,7 @@
         "Einstellungen",
         "Pro freischalten"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 81° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nachtmodus (kontrastarm) Näher-dran-Signal Näher-dra",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 79° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nachtmodus (kontrastarm) Näher-dran-Signal Näher-dra",
       "signature": "settings + sheet:Pro freischalten",
       "hasAppShell": true,
       "cssViewport": {
