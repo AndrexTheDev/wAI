@@ -182,6 +182,8 @@ export interface ElevationHint {
   level: 'same' | 'higher' | 'lower';
   /** Estimated floors, 3 m per storey – car parks and buildings. */
   floors: number;
+  /** True when the difference is too large to be a building – do not quote floors. */
+  implausible?: boolean;
 }
 
 export function elevationHint(targetAltitude?: number, currentAltitude?: number): ElevationHint {
@@ -196,10 +198,24 @@ export function elevationHint(targetAltitude?: number, currentAltitude?: number)
   const delta = targetAltitude - currentAltitude;
   const tolerance = 1.5;
   if (Math.abs(delta) <= tolerance) return { delta, level: 'same', floors: 0 };
+
+  /**
+   * Ein Höhenunterschied ist nur dann eine Aussage über Etagen, wenn er plausibel
+   * zu einem Gebäude passt. Ein Demo-Anker bei 640 m und ein Kompass bei 411 m
+   * ergaben „ca. 76 Etage(n)" — technisch korrekt gerechnet und trotzdem Unsinn:
+   * bei über 60 m Differenz ist die Ursache eine andere (falscher Ort, falsche
+   * Höhenreferenz), und die App sollte das zugeben statt eine Zahl zu erfinden.
+   */
+  const FLOOR_HEIGHT_M = 3;
+  const PLAUSIBLE_BUILDING_M = 60;
+  const magnitude = Math.abs(delta);
+  if (magnitude > PLAUSIBLE_BUILDING_M) {
+    return { delta, level: delta > 0 ? 'higher' : 'lower', floors: 0, implausible: true };
+  }
   return {
     delta,
     level: delta > 0 ? 'higher' : 'lower',
-    floors: Math.round(Math.abs(delta) / 3),
+    floors: Math.max(1, Math.round(magnitude / FLOOR_HEIGHT_M)),
   };
 }
 
@@ -292,7 +308,10 @@ export function guidanceText(
   const elevationText =
     elevation.level === 'same'
       ? ''
-      : locale === 'de'
+      : // Bei unplausiblem Unterschied keine Etagen erfinden (siehe elevationHint).
+        elevation.implausible
+        ? ''
+        : locale === 'de'
         ? elevation.level === 'higher'
           ? ` · ${elevation.floors || 1} Etage(n) höher`
           : ` · ${elevation.floors || 1} Etage(n) tiefer`

@@ -161,6 +161,9 @@ export function FindScreen({
   const elevationText =
     elevation.level === 'same'
       ? t('app.find.elevationSame')
+      : // Zu großer Unterschied für ein Gebäude: Höhe nennen, Etagen weglassen.
+        elevation.implausible
+      ? t('app.find.elevationUnclear', { meters: Math.abs(Math.round(elevation.delta)) })
       : elevation.level === 'higher'
         ? t('app.find.elevationHigher', {
             meters: Math.abs(Math.round(elevation.delta)),

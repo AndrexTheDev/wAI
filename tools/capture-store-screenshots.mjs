@@ -26,7 +26,15 @@ const getArg = (name, fallback) => {
 
 const url = getArg('url', 'http://localhost:5174');
 const outDir = path.resolve(ROOT, getArg('out', 'store/screenshots'));
-const VIEWPORT = { width: 1080, height: 1920, deviceScaleFactor: 1 };
+/**
+ * Play verlangt 1080×1920 **Pixel** – das sind auf einem Gerät mit 2,625×
+ * Pixeldichte 412×732 CSS-Pixel. Vorher wurde 1080×1920 als CSS-Viewport gesetzt:
+ * die App rendert dann wie auf einem 3-Etagen-Monitor, mit riesigen Lücken und
+ * Text, den es so auf keinem Handy gibt. Deshalb: echter Geräte-Viewport ×
+ * Skalierung = geforderte Pixelgröße.
+ */
+const VIEWPORT = { width: 412, height: 732, deviceScaleFactor: 2.621 };
+const PIXELS = { width: 1080, height: 1920 };
 
 const SHOTS = [
   {
@@ -115,7 +123,13 @@ try {
 }
 
 mkdirSync(outDir, { recursive: true });
-const context = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: 1, locale: 'de-DE' });
+const context = await browser.newContext({
+  viewport: { width: VIEWPORT.width, height: VIEWPORT.height },
+  deviceScaleFactor: VIEWPORT.deviceScaleFactor,
+  locale: 'de-DE',
+  isMobile: true,
+  hasTouch: true,
+});
 const page = await context.newPage();
 
 try {
@@ -245,11 +259,12 @@ for (const shot of SHOTS) {
    * wenn ein Klick ins Leere lief und achtmal dieselbe Ansicht fotografiert
    * wurde — der Screenshot selbst sieht ja immer „richtig" aus.
    */
+  const viewportUsed = page.viewportSize();
   const seen = await page.evaluate(() => {
     const body = document.body.innerText.replace(/\s+/g, ' ').trim();
     return { text: body.slice(0, 240), hasApp: Boolean(document.querySelector('.app')), title: document.title };
   });
-  results.push({ slug: shot.slug, file, caption: shot.caption, reached, seen });
+  results.push({ slug: shot.slug, file, caption: shot.caption, reached, seen, viewportUsed });
   console.log(`  ✔ ${shot.slug}.png — ${shot.caption.de}`);
   console.log(`      gesehen: ${seen.text.slice(0, 110)}`);
 }
@@ -265,7 +280,7 @@ writeFileSync(
   `${JSON.stringify(
     {
       capturedAt: new Date().toISOString(),
-      viewport: VIEWPORT,
+      viewport: { ...VIEWPORT, outputPixels: PIXELS },
       url,
       shots: results.map((r) => ({
         slug: r.slug,
@@ -273,6 +288,7 @@ writeFileSync(
         navigation: r.reached,
         visibleText: r.seen.text,
         hasAppShell: r.seen.hasApp,
+        cssViewport: r.viewportUsed,
       })),
     },
     null,

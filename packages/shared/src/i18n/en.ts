@@ -704,6 +704,7 @@ export const en: Widen<GermanDictionary> = {
       arriving: 'Almost there',
       elevation: 'Elevation',
       elevationSame: 'Same level',
+      elevationUnclear: 'Elevation unclear – {meters} m difference, not a building. Check the location.',
       elevationHigher: 'Target is higher ({meters} m, approx. {floors} floor(s))',
       elevationLower: 'Target is lower ({meters} m, approx. {floors} floor(s))',
       noElevation: 'No elevation data',

@@ -348,3 +348,32 @@ test('a reminder that already went off stops claiming to be scheduled', () => {
   };
   assert.equal(reminderTransition(fired, remindAt + 60 * 60_000), null);
 });
+
+test('a 228 m height difference does not become a 76-storey building', () => {
+  // Der Screenshot zeigte „Ziel liegt höher (228 m, ca. 76 Etage(n))": technisch
+  // gerechnet, praktisch Unsinn. Ein Höhenunterschied über 60 m ist kein Gebäude.
+  const absurd = elevationHint(640, 412);
+  assert.equal(absurd.implausible, true);
+  assert.equal(absurd.floors, 0);
+
+  // Ein echtes Parkhaus bleibt eine Aussage über Etagen.
+  const garage = elevationHint(412 + 9, 412);
+  assert.equal(garage.implausible, undefined);
+  assert.equal(garage.floors, 3);
+  assert.equal(garage.level, 'higher');
+
+  // 1,2 m ist „gleiche Ebene" – keine Etage, kein Pfeil.
+  assert.equal(elevationHint(412 + 1.2, 412).level, 'same');
+});
+
+test('a fabricated floor count is worse than none', () => {
+  // Der Screenshot zeigte „(228 m, ca. 76 Etage(n))" – die Zahl war gerechnet,
+  // aber unmöglich. Über 60 m ist die Ursache eine andere als ein Gebäude.
+  const absurd = elevationHint(640, 412);
+  assert.equal(absurd.implausible, true);
+  assert.equal(absurd.floors, 0);
+  // Und die Textzeile schweigt dazu, statt eine Zahl zu erfinden.
+  assert.equal(guidanceText(120, 0, absurd, 'de'), '120 m geradeaus');
+  // Im Parkhaus bleibt die Etage eine echte Aussage.
+  assert.match(guidanceText(30, 0, elevationHint(421, 412), 'de'), /3 Etage\(n\) höher/);
+});
