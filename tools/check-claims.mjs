@@ -171,6 +171,36 @@ for (const item of CLAIMS) {
   }
 }
 
+/**
+ * Der zweite, unabhängige Widerspruch: die Free-Spalte wirbt mit "unbegrenzt",
+ * während `FREE_LIMITS.activeAnchors` bei 3 steht. Ein Nutzer merkt das beim
+ * vierten Anker — und dann ist es kein Marketingproblem mehr.
+ */
+const comparisonSources = [
+  read('packages/landing/src/sections/Comparison.tsx'),
+  read('packages/shared/src/i18n/de.ts'),
+  read('packages/shared/src/i18n/en.ts'),
+].join('\n');
+
+const freeLimit = /activeAnchors:\s*(\d+)/.exec(read('packages/shared/src/product.ts'))?.[1];
+if (!freeLimit) {
+  console.log('✖ product.ts: FREE_LIMITS.activeAnchors nicht gefunden');
+  failures++;
+} else {
+  // Nur die Free-Zeilen prüfen: "free: 'unbegrenzt'" wäre eine Lüge.
+  const freeUnlimited = /free:\s*'[^']*unbegrenzt/i.test(comparisonSources);
+  if (freeUnlimited) {
+    console.log(`✖ Free-Tarif verspricht "unbegrenzt", der Code erlaubt ${freeLimit} aktive Anker`);
+    failures++;
+  }
+  const claimsThree = comparisonSources.toLowerCase().includes(`${freeLimit} gleichzeitige`) ||
+    comparisonSources.toLowerCase().includes(`${freeLimit} simultaneous`);
+  if (!claimsThree) {
+    console.log(`✖ Free-Tarif nennt die Grenze von ${freeLimit} aktiven Ankern nirgends`);
+    failures++;
+  }
+}
+
 if (failures) {
   console.log(`\n${failures} Behauptung(en) ohne Deckung. Entweder Code nachziehen oder Text korrigieren (docs/ROADMAP.md).`);
   process.exit(1);

@@ -133,7 +133,7 @@ manifest, adaptive icons and a custom torch plugin, a bilingual conversion-focus
 landing page that embeds the actual app as a live demo, complete bilingual legal
 texts including a new standalone withdrawal notice with an active consent gate
 before any payment route is shown, the non-custodial SOL/BTC/ETH unlock flow with
-offline Ed25519 licences, 34 unit tests, render smoke tests for every route in both
+offline Ed25519 licences, 35 unit tests, render smoke tests for every route in both
 languages, and the full documentation suite (concept, design system, marketing,
 store listing, licensing, release runbook, legal review, delivery).
 

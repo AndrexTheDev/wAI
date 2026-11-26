@@ -41,6 +41,7 @@ import {
   type PhotoRef,
   type VoiceRef,
   type WalkerState,
+  reminderTransition,
 } from '@wai/shared';
 import { storage, STORAGE_KEYS } from './storage';
 import {
@@ -298,6 +299,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   });
   const [storageBytes, setStorageBytes] = useState(0);
   const trailTarget = useRef<string | null>(null);
+  /** Latest anchors for timer callbacks that outlive a render. */
+  const stateRef = useRef(state);
+
+  stateRef.current = state;
 
   /* ---------------- initial storage size ---------------- */
   useEffect(() => {
@@ -539,6 +544,30 @@ export function AppProvider({ children }: { children: ReactNode }) {
       storageBytes,
     ],
   );
+
+  /**
+   * Der Zustand `fired` wurde nie gesetzt: nach dem Ablauf behauptete die App
+   * weiter „geplant“. Beim Öffnen und danach jede Minute holen wir das nach —
+   * eine Erinnerung, die rausgegangen ist, ist rausgegangen.
+   */
+  useEffect(() => {
+    const reconcile = () => {
+      const now = Date.now();
+      for (const anchor of stateRef.current?.anchors ?? []) {
+        const transition = reminderTransition(anchor, now);
+        if (transition) {
+          dispatch({
+            type: 'set-parking',
+            id: anchor.id,
+            parking: { ...anchor.parking!, reminderState: transition.state },
+          });
+        }
+      }
+    };
+    reconcile();
+    const timer = window.setInterval(reconcile, 60_000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   // Expose the trail recorder to other components without prop drilling.
   useEffect(() => {

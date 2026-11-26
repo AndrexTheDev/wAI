@@ -18,7 +18,7 @@ import {
   type ElevationHint,
   type LatLng,
 } from './geo';
-import type { Anchor, AnchorCategory, GeoFix, PastePoint } from './types';
+import type { Anchor, AnchorCategory, GeoFix, ParkingReminderState, PastePoint } from './types';
 
 export interface PlanLimits {
   activeAnchors: number;
@@ -344,6 +344,26 @@ export function parkingStatus(anchor: Anchor, now = Date.now()) {
     overdue: remaining !== undefined && remaining < 0,
     startedAt,
   };
+}
+
+/**
+ * Welche Erinnerung ist inzwischen vorbei, ohne dass die App es mitbekommen hat?
+ *
+ * Der Zustand `fired` existierte im Typ, wurde aber nie gesetzt — eine
+ * Behauptung ohne Deckung. Wird die App nach dem Ablauf geöffnet, holen wir das
+ * hier ehrlich nach: die Erinnerung *ist* rausgegangen (das System hat sie
+ * gestellt), also darf die App nicht weiter „geplant“ behaupten.
+ */
+export function reminderTransition(
+  anchor: Anchor,
+  now = Date.now(),
+): { state: ParkingReminderState; notify: boolean } | null {
+  const parking = anchor.parking;
+  if (!parking || parking.reminderState !== 'scheduled' || !parking.remindAt) return null;
+  // Zehn Minuten Karenz: kurz nach dem Termin nicht sofort als „verschickt“ werten,
+  // damit ein Tipp auf die Benachrichtigung den Zustand nicht überholt.
+  if (now < parking.remindAt + 10 * 60000) return null;
+  return { state: 'fired', notify: false };
 }
 
 /** Clamp a coordinate pair to valid ranges, returning null if unusable. */

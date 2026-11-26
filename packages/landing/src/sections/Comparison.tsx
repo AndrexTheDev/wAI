@@ -30,6 +30,13 @@ export function Comparison() {
   const { t, locale } = useLocale();
   const { navigate } = useRouter();
   const rows = tArray<Row>(locale, 'landing.comparison.rows');
+  /**
+   * Die Plankarten waren als Ternäre im JSX verdrahtet – zwei Wahrheiten über
+   * denselben Preis. Jetzt kommen sie aus denselben Wörterbüchern wie alles
+   * andere, damit Free/Pro nirgends auseinanderlaufen kann.
+   */
+  const freeList = tArray<string>(locale, 'landing.comparison.freeIncludes');
+  const proList = tArray<string>(locale, 'landing.comparison.proIncludes');
 
   return (
     <section className="section comparison" id="pricing">
@@ -58,12 +65,9 @@ export function Comparison() {
               </p>
             </header>
             <ul className="plan__list">
-              <li><CheckIcon size={15} /> {locale === 'de' ? 'Unbegrenzt Anker setzen' : 'Unlimited anchor drops'}</li>
-              <li><CheckIcon size={15} /> {locale === 'de' ? '3 gleichzeitige aktive Anker' : '3 simultaneous active anchors'}</li>
-              <li><CheckIcon size={15} /> {locale === 'de' ? 'Kompass & Höhen-Lotse' : 'Compass & elevation beam'}</li>
-              <li><CheckIcon size={15} /> {locale === 'de' ? '1 Foto oder Textnotiz pro Anker' : '1 photo or text note per anchor'}</li>
-              <li><CheckIcon size={15} /> {locale === 'de' ? 'Grundlegendes Teilen' : 'Basic sharing'}</li>
-              <li><CheckIcon size={15} /> {locale === 'de' ? 'Dunkelheits- & Notfallmodus' : 'Darkness & emergency mode'}</li>
+              {freeList.map((item) => (
+                <li key={item}><CheckIcon size={15} /> {item}</li>
+              ))}
             </ul>
             <button type="button" className="btn btn--ghost btn--block" onClick={() => navigate('/#download')}>
               <DownloadIcon size={16} /> {locale === 'de' ? 'Kostenlos starten' : 'Start for free'}
@@ -85,14 +89,9 @@ export function Comparison() {
               <p className="plan__tagline">{PRICING.proCompareLabel[locale]}</p>
             </header>
             <ul className="plan__list plan__list--pro">
-              <li><CheckIcon size={15} /> {locale === 'de' ? 'Unbegrenzte aktive Anker & Archiv' : 'Unlimited active anchors & archive'}</li>
-              <li><CheckIcon size={15} /> {locale === 'de' ? 'Unbegrenzte Fotos & Sprachnotizen' : 'Unlimited photos & voice notes'}</li>
-              <li><CheckIcon size={15} /> {locale === 'de' ? 'Multi-Ansicht gleichzeitig' : 'Multi-view at the same time'}</li>
-              <li><CheckIcon size={15} /> {locale === 'de' ? 'Brotkrumen-Spur aufzeichnen' : 'Record breadcrumb trail'}</li>
-              <li><CheckIcon size={15} /> {locale === 'de' ? 'Näher-dran-Vibration & Ton' : 'Getting-closer vibration & tone'}</li>
-              <li><CheckIcon size={15} /> {locale === 'de' ? 'Park-Timer mit Erinnerungen' : 'Parking timer with reminders'}</li>
-              <li><CheckIcon size={15} /> {locale === 'de' ? 'Teilen inkl. Medienpaket' : 'Sharing incl. media pack'}</li>
-              <li><CheckIcon size={15} /> {locale === 'de' ? 'Favoriten & Filter' : 'Favourites & filters'}</li>
+              {proList.map((item) => (
+                <li key={item}><CheckIcon size={15} /> {item}</li>
+              ))}
             </ul>
             <button type="button" className="btn btn--primary btn--block" onClick={() => navigate('/#crypto')}>
               <CrownIcon size={16} /> {t('common.ctaPro')}
