@@ -1,0 +1,163 @@
+# wAI — Vollständigkeitsprüfung & Roadmap zur „perfekten Parkspot-App“
+
+> **Zweck:** systematisch feststellen, was vorhanden ist, was nur behauptet wird
+> und was fehlt — und in welcher Reihenfolge es abgearbeitet wird.
+>
+> **Summary (EN):** an audit of every promised capability with evidence, plus a
+> phased roadmap. Legend: ✅ vorhanden und geprüft · ⚠️ teilweise / nur behauptet
+> · ❌ fehlt · 🔒 Pro-Gate fehlt oder falsch.
+
+Stand: 2026-11-25 · geprüft gegen `packages/app`, `packages/shared`, `packages/landing`.
+
+---
+
+## 1. Prüfmethode
+
+Nicht „gibt es die Datei?“, sondern **„erreicht der Nutzer das Versprechen in
+zwei Tipps?“** Jede Zeile unten wurde im Code nachverfolgt: Einstiegspunkt →
+Zustand → Anzeige. Behauptungen aus Store-Listing, Landingpage und Rechtstexten
+wurden gegen den Code geprüft, weil dort die teuersten Fehler stecken (eine App,
+die Schrittschätzung verspricht und keine hat, ist ein Widerrufsgrund).
+
+## 2. Befund — Kernfunktionen
+
+| # | Versprechen | Status | Beleg / Lücke |
+|---|---|---|---|
+| 1 | Ein-Tipp-Anker | ✅ | `HomeScreen` → `setAnchor()` → sofort gespeichert, Editor nur zum Anreichern |
+| 2 | Anker ohne GPS setzbar | ⚠️ | `createAnchorNow` bricht bei `!fix` ab; „manuell“ fehlt im UI, obwohl `source: 'manual'` existiert |
+| 3 | Foto mit Blickrichtung | ✅ | `makePhotoRef(captured, sensors.heading)` |
+| 4 | Sprachnotiz | ✅ | `startVoiceRecording` + `VoiceRef` (Pro) |
+| 5 | Kategorien, Titel, Notiz | ✅ | `AnchorEditor` |
+| 6 | **Etage / Ebenen-Label** | ✅ | **behoben:** Presets (−3 … 3) + Freitext im Editor, Lotse liest `floorLabel` | `floorLabel` existiert im Draft, wird aber **nirgends eingegeben** — das Höhen-Lotse zeigt dauerhaft nichts. Genau das Feature, das Tiefgaragen rettet |
+| 7 | Viele Anker parallel, Suche, Filter, Sortierung | ✅ | `queryAnchors` |
+| 8 | Favoriten / Archiv | 🔒 | vorhanden, aber Pro-Gate inkonsistent: Favoriten-Stern ist im Free-UI klickbar (`AnchorEditor`), Archiv leitet auf Pro um |
+| 9 | Kompass + Entfernung | ✅ | `guidanceFor` + Nadel mit relativer Peilung |
+| 10 | Höhen-/Etagen-Lotse | ⚠️ | `elevationHint` rechnet, aber ohne `floorLabel`-Eingabe und ohne Barometer-Fallback halb blind |
+| 11 | Brotkrumen-Spur | ✅ | Aufzeichnung + `TrailCanvas` (SVG) |
+| 12 | Foto-/Notiz-Abgleich beim Suchen | ⚠️ | Fotos ja, aber ohne Blickrichtungs-Hinweis („Foto wurde bei 240° aufgenommen“) — der eigentliche Mehrwert fehlt |
+| 13 | Näher-dran-Feedback | ✅ | `proximityTier` + `beep`/`vibrate` |
+| 14 | **Schrittschätzung / Dead Reckoning** | ✅ | **behoben:** Schritterkennung über `devicemotion`, `advanceWalker` greift nach 8 s ohne Fix, Anzeige „geschätzte Position“ + Banner mit Schrittzahl und ehrlicher Fehlermarge |
+| 15 | Park-Timer + Erinnerung | ⚠️ | Timer läuft, Benachrichtigung kommt — aber **Tippen auf die Benachrichtigung tut nichts** (`localNotificationActionPerformed` fehlt), `reminderState: 'fired'` wird nie gesetzt |
+| 16 | Park-Timer erreichbar | ✅ | **behoben:** Uhr-Knopf direkt auf jeder Auto-Karte; Benachrichtigung trägt `anchorId` und öffnet den Anker beim Antippen |
+| 17 | Zonen-/Kostennotiz | ✅ | `zone` im Editor |
+| 18 | Teilen (Link/QR/Datei) | ✅ | Link mit Web-Vorschau, Intent-Handoff, `.waipack` (Pro) |
+| 19 | Taschenlampe beim Suchen | ✅ | **behoben:** Knopf im Suchbildschirm, schaltet beim Verlassen automatisch aus |
+| 20 | Nacht-/Notfallmodus | ✅ | Theme `night` (rotverschoben) |
+| 21 | Näherung ohne GPS ehrlich anzeigen | ✅ | **behoben:** Statuschip „geschätzte Position“, Banner im Suchbildschirm mit Schritten + Restdistanz |
+| 22 | Ankunft | ⚠️ | Banner „angekommen“, aber keine Folgeaktion (Timer stoppen, Anker ablegen) |
+
+## 3. Befund — Bedienbarkeit („selbsterklärend“)
+
+| # | Punkt | Status | Beleg / Lücke |
+|---|---|---|---|
+| 23 | Leerer Zustand erklärt sich | ✅ | **behoben:** eigener Text, Tipp und „So funktioniert wAI“; gefilterte Leere bietet „Filter zurücksetzen“ |
+| 24 | Löschen bestätigen | ✅ | **behoben:** `ui/Confirm.tsx` — bilingual, themebar, Fokus-Falle, Abbruch vorausgewählt |
+| 25 | Hilfe in der App | ⚠️ | `HelpSheet` zeigt nur drei Landingpage-Schritte, keine FAQ, keine Sensor-Hilfe, keine Krisen-Hinweise |
+| 26 | Fehlermeldungen erklären den nächsten Schritt | ⚠️ | „Standort nicht verfügbar“ ohne Handlungsanweisung |
+| 27 | Einheiten (metrisch/imperial) | ✅ | **behoben:** `formatDistance`/`formatHeight` mit Einheitensystem, `useUnits()` in Liste und Suche, Tests decken ft/mi ab |
+| 28 | Fokusführung in Sheets | ⚠️ | kein Fokus-Trap; `aria-label="Close"` auf Englisch |
+| 29 | Pro-Momente erklären den Nutzen | ✅ | `ProScreen` mit Grund-Kontext + Wallets + QR |
+| 30 | Erster Start | ✅ | Onboarding mit Sprachwahl + Berechtigungen |
+
+## 4. Befund — Optik
+
+| # | Punkt | Status |
+|---|---|---|
+| 31 | Tokens, Themes, Verläufe | ✅ |
+| 32 | Bewegung (Sheets, Toast, Reveal) | ✅, `prefers-reduced-motion` respektiert |
+| 33 | Kompass-Nadel, Ringe | ✅ Sweep, Glow, Näherungspuls in 5 Stufen, Ankunfts-Zustand |
+| 34 | Anker-Button | ✅ „Einschlag“ beim Speichern (Skalierung + Ring-Burst) |
+| 35 | Listen-Einstieg | ✅ Stagger bis 8 Karten, neue Karte mit mint Ring |
+| 36 | Hintergrund | ✅ Aurora-Verlauf (26 s Drift) + feines Grid, statisch bei reduced motion |
+| 37 | Distanzanzeige | ✅ Wert tickt bei jeder Änderung ein |
+| 38 | Karten/Sheets | ✅ Glas-Kante, Innenlicht, Tab-Pille mit Slide |
+
+## 5. Befund — Außenwirkung (Landing, Store, Recht)
+
+| # | Punkt | Status |
+|---|---|---|
+| 39 | Landingpage DE/EN, 10 Sektionen, Vergleichstabelle, Crypto, FAQ | ✅ |
+| 40 | Deep-Link-Vorschau `/a/` | ✅ |
+| 41 | Rechtstexte DE/EN inkl. Widerruf + Crypto | ✅ |
+| 42 | Datenschutz deckt Teilen ab | ✅ (3.6) |
+| 43 | Store-Paket, Screenshot-Plan, Prüfskripte | ✅ |
+| 44 | **Marketing-Claims vs. Code** | ❌ | „Schrittschätzung“ (14) und „1 Foto **oder** Textnotiz“ (Gate prüft korrekt, UI erklärt es aber nicht) weichen ab |
+| 45 | Screenshots | ⚠️ fehlen noch (kein Browser in der Sandbox → Skript verweigert Fake-Bilder) |
+
+## 6. Die drei teuersten Funde
+
+1. **`floorLabel` ist nicht eingebbar** (#6). Das Höhen-Lotse — Kern-USP für Tiefgaragen — hat keine Datenquelle. Ein Nutzer merkt das erst, wenn er in Ebene 3 steht.
+2. **Der Leerzustand heißt „Unbenannter Anker“** (#23). Der allererste Eindruck einer neuen Installation ist ein Platzhaltertext.
+3. **Der Einheiten-Schalter lügt** (#27). Eine Einstellung, die nichts tut, kostet Vertrauen in *alle* Einstellungen.
+
+---
+
+## 7. Roadmap
+
+Reihenfolge nach „Schaden pro Tag, den der Punkt verursacht“, nicht nach Aufwand.
+Jede Phase endet mit `npm run verify` + Commit; APK nur, wenn native Dateien betroffen sind.
+
+### Phase 1 — Ehrlichkeit & Kernlücken (P1, jetzt)
+Ziel: Nichts Behauptetes bleibt unimplementiert, kein toter Schalter.
+
+| Task | Datei(en) | Fertig, wenn |
+|---|---|---|
+| 1.1 Etagen-Eingabe | `AnchorEditor` | Feld „Etage/Ebene“ sichtbar, speichert `floorLabel`, Lotse zeigt es |
+| 1.2 Leerzustand | `HomeScreen` | 0 Anker → eigener Titel + „So funktioniert's“-Knopf |
+| 1.3 Einheiten wirksam | `geo.ts`, `HomeScreen`, `FindScreen` | imperial → ft/mi, Tests decken es ab |
+| 1.4 Schrittschätzung | `AppStore`, `engine.ts` | bei GPS-Aussetzer > 8 s Position aus Schritten fortgeschrieben, sichtbar als „geschätzt ±X m“ |
+| 1.5 Eigener Bestätigungsdialog | `ui/Confirm.tsx` | Löschen fragt bilingual im App-Stil |
+| 1.6 Benachrichtigung antippbar | `AppShell`, `native.ts` | Tippen öffnet den Anker im Suchbildschirm, `fired` gesetzt |
+| 1.7 Timer von der Karte | `HomeScreen` | Auto-Anker hat einen Uhr-Knopf, ein Tipp → Timer-Sheet |
+| 1.8 Taschenlampe im Suchbildschirm | `FindScreen` | Knopf oben rechts, auch im Nachtmodus sichtbar |
+
+### Phase 2 — Selbsterklärend (P1)
+| Task | Fertig, wenn |
+|---|---|
+| 2.1 Hilfe-Center in der App (FAQ, Sensoren, Notfall, „was wAI nicht kann“) | ersetzt das 3-Schritte-Sheet, offline, DE/EN |
+| 2.2 Ankunft mit Folgeaktion | „Angekommen“ bietet Timer stoppen / archivieren / löschen |
+| 2.3 Fehlermeldungen mit Handlung | jeder Warnhinweis nennt den nächsten Schritt |
+| 2.4 Foto mit Blickrichtung im Abgleich | „aufgenommen bei 240° — dreh dich nach rechts“ |
+| 2.5 Fokus-Trap + deutsche ARIA-Labels | Sheets fangen Tab-Fokus, Labels lokalisiert |
+
+### Phase 3 — Optik (P1)
+| Task | Fertig, wenn |
+|---|---|
+| 3.1 Aurora-Hintergrund + Glas-Kanten | Tiefe ohne Lesbarkeitsverlust, `prefers-reduced-motion` aus |
+| 3.2 Kompass: Glow + Näherungspuls + zählende Distanz | Distanz animiert, Ring atmet schneller je näher |
+| 3.3 Anker-Einschlag | beim Speichern ein kurzer Impuls am Knopf + Haptik |
+| 3.4 Listen-Stagger + Karten-Hover/Press | Karten erscheinen gestaffelt (max. 8) |
+| 3.5 Mikro-Details | Skeletons, Tab-Indikator, Zahlen-Ticker, reduzierte Bewegung überall |
+
+### Phase 4 — Parkspot-Tiefe (P2)
+| Task | Warum |
+|---|---|
+| 4.1 Parkhaus-Modus: „Wo steht mein Auto?“ als Startkachel | der häufigste Fall verdient einen eigenen Einstieg |
+| 4.2 Ticket-Foto + Tarif-Schnellwahl | Zettel unterm Scheibenwischer ersetzen |
+| 4.3 Rückweg-Reminder („noch 10 Min. bis Ablauf“) | zweite Erinnerung, nicht nur eine |
+| 4.4 Etagen-Assistent beim Setzen („Ebene? −3, −2, …“) | Etage ohne Tippen wählen |
+
+### Phase 5 — Außenwirkung angleichen (P2)
+| Task | Warum |
+|---|---|
+| 5.1 Claims gegen Code prüfen (Skript) | Store/ Landing dürfen nichts versprechen, was fehlt |
+| 5.2 Screenshots erzeugen (Runner mit Chromium) | letzte fehlende Store-Zutat |
+| 5.3 Store-Text um Etagen-Assistent + Parkspot-Modus ergänzen | ASO |
+
+### Phase 6 — Launch-Gate (P3, blockiert Veröffentlichung)
+| Task | Status |
+|---|---|
+| 6.1 Release-Keystore + 4 `WAI_*`-Secrets | offen (Nutzer) |
+| 6.2 GitHub Pages aktivieren | offen (Nutzer) |
+| 6.3 Anwaltliche Prüfung `docs/LEGAL_REVIEW.md` | offen (Nutzer) |
+| 6.4 Gerätetest im Flugmodus | offen |
+
+---
+
+## 8. Definition of Done für „perfekte Parkspot-App“
+
+- Jede Zeile in §2/§3 ist ✅ — keine ⚠️/❌ mehr ohne bewusste Entscheidung.
+- Kein Bedienelement ohne Wirkung, kein Text ohne Beleg im Code.
+- Ein neuer Nutzer schafft „Auto abstellen → wiederfinden“ in unter 30 Sekunden
+  ohne Anleitung, im Dunkeln, ohne Netz.
+- `npm run verify` grün, APK auf echtem Gerät im Flugmodus geprüft.

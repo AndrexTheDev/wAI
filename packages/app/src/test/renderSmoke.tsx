@@ -15,6 +15,9 @@ import { AppShell } from '../screens/AppShell';
 import { en, de, createTranslator, resolvePath, LEGAL_NAV, loadLegalDocument, type Locale } from '@wai/shared';
 import { LegalDocumentView } from '../screens/LegalSheet';
 import { anchorFromShareCode } from '../store/shareImport';
+import { EmptyState } from '../screens/EmptyState';
+import { AnchorCard } from '../screens/HomeScreen';
+import { formatDistance, formatHeight } from '@wai/shared';
 import { encodeSharePayload, buildShareLink, buildIntentLink } from '@wai/shared';
 
 let failures = 0;
@@ -93,6 +96,77 @@ for (const key of placeholderChecks) {
     console.log(`✖ share links: ${problems.join(' · ')}`);
   } else {
     console.log(`✔ share links (${sources.length} forms, 4 rejected inputs)`);
+  }
+}
+
+/**
+ * 2c. The things a user *sees* – empty state, level display, unit switch.
+ * These are exactly the places where the audit found false promises, so they
+ * are asserted by text, not by "it rendered without throwing".
+ */
+{
+  const problems: string[] = [];
+
+  // The empty state must not be titled "Untitled anchor" – that placeholder was
+  // the very first screen a new install saw.
+  for (const locale of ['de', 'en'] as Locale[]) {
+    const tr = createTranslator(locale);
+    const html = renderToString(
+      createElement(EmptyState, {
+        icon: null,
+        title: tr('app.home.emptyTitle'),
+        body: tr('app.home.emptyBody'),
+        action: createElement('button', null, tr('app.home.emptyCta')),
+      }),
+    );
+    if (/Untitled anchor|Unbenannter Anker/.test(html)) problems.push(`${locale}: empty state shows the placeholder title`);
+    if (!html.includes(tr('app.home.emptyCta'))) problems.push(`${locale}: empty state has no "how it works" action`);
+    if (html.length < 200) problems.push(`${locale}: empty state too short (${html.length})`);
+  }
+
+  // Units: the switch must change real output (it used to be inert).
+  const metric = formatDistance(1200, 'de', 'metric');
+  const imperial = formatDistance(1200, 'de', 'imperial');
+  if (metric === imperial) problems.push('imperial and metric render identically');
+  if (!imperial.includes('mi')) problems.push(`imperial distance lacks miles: ${imperial}`);
+  if (formatHeight(12, 'en', 'imperial') !== '39 ft') problems.push('imperial height wrong');
+
+  // A vehicle card must offer the parking timer without opening the editor.
+  const tr = createTranslator('de');
+  const carHtml = renderToString(
+    // AnchorCard reads the unit system from the store, so it needs the provider.
+    createElement(AppProvider, null, createElement(AnchorCard, {
+      anchor: {
+        id: 'a_car',
+        name: 'Auto Ebene 3',
+        category: 'car',
+        lat: 48.1,
+        lng: 11.5,
+        source: 'demo',
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        photos: [],
+        voices: [],
+        favorite: false,
+        archived: false,
+        floorLabel: '−3',
+      },
+      onOpen: () => {},
+      onFind: () => {},
+      onTimer: () => {},
+      originLat: 48.1001,
+      originLng: 11.5001,
+      locale: 'de',
+      t: tr,
+    } as never)),
+  );
+  if (!carHtml.includes('anchor-card__timer')) problems.push('vehicle card has no timer shortcut');
+
+  if (problems.length) {
+    failures++;
+    console.log(`✖ visible promises: ${problems.join(' · ')}`);
+  } else {
+    console.log('✔ visible promises (empty state, units, timer shortcut)');
   }
 }
 

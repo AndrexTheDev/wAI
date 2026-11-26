@@ -158,6 +158,55 @@ a {
     var(--bg);
   position: relative;
   overflow: hidden;
+  isolation: isolate;
+}
+
+/*
+ * Aurora layer: two slow-moving colour fields plus a fine grid.
+ * Pointer-events are off and it sits behind everything, so it costs one paint
+ * layer and no interaction risk. Reduced-motion users get the static version.
+ */
+.app::before {
+  content: '';
+  position: absolute;
+  inset: -30% -20% auto;
+  height: 78%;
+  z-index: -1;
+  background:
+    radial-gradient(38% 45% at 22% 28%, rgba(110, 231, 183, 0.16), transparent 70%),
+    radial-gradient(42% 50% at 78% 18%, rgba(167, 139, 250, 0.15), transparent 72%),
+    radial-gradient(46% 42% at 52% 64%, rgba(56, 189, 248, 0.1), transparent 74%);
+  filter: blur(6px);
+  animation: aurora-drift 26s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.app::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(120% 60% at 50% 0%, #000 30%, transparent 78%);
+  pointer-events: none;
+}
+
+@keyframes aurora-drift {
+  0% {
+    translate: 0 0;
+    scale: 1;
+  }
+  50% {
+    translate: -3% 2%;
+    scale: 1.06;
+  }
+  100% {
+    translate: 3% -1%;
+    scale: 1.02;
+  }
 }
 
 .app__body {
@@ -452,6 +501,13 @@ a {
   display: none;
 }
 
+/* Level presets wrap instead of scrolling: seven short labels fit in two rows
+   and every one of them must stay visible without a swipe. */
+.chips--wrap {
+  flex-wrap: wrap;
+  overflow: visible;
+}
+
 .chip {
   display: inline-flex;
   align-items: center;
@@ -504,8 +560,42 @@ a {
     transform 120ms;
 }
 
+.anchor-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+.anchor-card:hover {
+  border-color: var(--border-2);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+}
+
 .anchor-card:active {
   transform: scale(0.988);
+}
+
+/* Staggered entrance: at most 8 cards animate, the rest appear instantly. */
+.anchor-list > .anchor-card {
+  animation: card-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.anchor-list > .anchor-card:nth-child(1) { animation-delay: 0ms; }
+.anchor-list > .anchor-card:nth-child(2) { animation-delay: 40ms; }
+.anchor-list > .anchor-card:nth-child(3) { animation-delay: 80ms; }
+.anchor-list > .anchor-card:nth-child(4) { animation-delay: 120ms; }
+.anchor-list > .anchor-card:nth-child(5) { animation-delay: 160ms; }
+.anchor-list > .anchor-card:nth-child(6) { animation-delay: 200ms; }
+.anchor-list > .anchor-card:nth-child(7) { animation-delay: 240ms; }
+.anchor-list > .anchor-card:nth-child(n + 8) { animation-delay: 280ms; }
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+    scale: 0.985;
+  }
 }
 
 .anchor-card__tap {
@@ -646,7 +736,11 @@ a {
   padding: 14px;
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 8px 22px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(10px);
 }
 
 .card + .card {
@@ -790,6 +884,31 @@ a {
 
 .tab.is-active {
   color: var(--mint);
+}
+
+/* Sliding pill behind the active tab: one moving light instead of four
+   independent colour changes – it makes the current position obvious. */
+.tab {
+  position: relative;
+  z-index: 0;
+}
+
+.tab.is-active::before {
+  content: '';
+  position: absolute;
+  inset: 2px 6px;
+  z-index: -1;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(110, 231, 183, 0.16), rgba(110, 231, 183, 0.05));
+  box-shadow: inset 0 0 0 1px rgba(110, 231, 183, 0.22);
+  animation: tab-in 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes tab-in {
+  from {
+    opacity: 0;
+    scale: 0.9;
+  }
 }
 
 .tab__icon {
@@ -1765,4 +1884,460 @@ a {
   font-size: 16px;
   font-weight: 700;
   color: var(--text);
+}
+
+/* ============================================================
+   Confirmation dialog (replaces window.confirm)
+   ============================================================ */
+.sheet-backdrop--solid {
+  z-index: 70;
+  background: rgba(3, 6, 12, 0.74);
+  backdrop-filter: blur(6px);
+}
+
+.confirm {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: min(420px, calc(100vw - 32px));
+  z-index: 71;
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03)), var(--bg-1);
+  border: 1px solid var(--border-2);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  animation: confirm-in 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes confirm-in {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
+
+.confirm__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.confirm__title {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.confirm__body {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+
+.confirm__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* ============================================================
+   Empty state: primary hint + action stack
+   ============================================================ */
+.empty__action {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.empty__stack {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+
+.empty__hint {
+  font-size: 12.5px;
+  color: var(--text-3);
+  max-width: 34ch;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Timer shortcut on a vehicle card */
+.anchor-card__timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: all 130ms;
+}
+
+.anchor-card__timer:hover {
+  border-color: var(--border-2);
+  color: var(--text);
+}
+
+.anchor-card__timer.is-running {
+  border-color: rgba(251, 191, 36, 0.45);
+  background: rgba(251, 191, 36, 0.14);
+  color: var(--amber);
+}
+
+/* ============================================================
+   Compass: light, pulse and approach feedback
+   ============================================================ */
+
+.guide__compass {
+  box-shadow:
+    inset 0 0 60px rgba(56, 189, 248, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* Soft rotating sweep, like a radar. Very low contrast on purpose: it gives
+   the dial life without competing with the needle. */
+.guide__sweep {
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(110, 231, 183, 0.16), transparent 28%);
+  mask-image: radial-gradient(circle, #000 55%, transparent 72%);
+  animation: sweep 5.5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes sweep {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* Approach pulse: faster and stronger the closer you get. Tier 0 = idle. */
+.guide__pulse {
+  position: absolute;
+  inset: 30%;
+  border-radius: 50%;
+  border: 1px solid rgba(110, 231, 183, 0.35);
+  opacity: 0;
+  animation: approach 2.6s ease-out infinite;
+  pointer-events: none;
+}
+
+.guide__compass--tier0 .guide__pulse { animation: none; }
+.guide__compass--tier1 .guide__pulse { animation-duration: 2.2s; }
+.guide__compass--tier2 .guide__pulse { animation-duration: 1.5s; border-color: rgba(110, 231, 183, 0.55); }
+.guide__compass--tier3 .guide__pulse { animation-duration: 1s; border-color: rgba(110, 231, 183, 0.75); }
+.guide__compass--tier4 .guide__pulse { animation-duration: 0.7s; border-color: var(--mint); }
+
+@keyframes approach {
+  0% {
+    scale: 0.7;
+    opacity: 0.9;
+  }
+  70% {
+    opacity: 0.15;
+  }
+  100% {
+    scale: 2.4;
+    opacity: 0;
+  }
+}
+
+.guide__compass.is-arrived {
+  box-shadow:
+    inset 0 0 80px rgba(110, 231, 183, 0.22),
+    0 0 0 1px rgba(110, 231, 183, 0.35),
+    0 18px 44px rgba(0, 0, 0, 0.35);
+}
+
+/* Needle gets a glow, stronger as you approach. */
+.guide__needle-arrow {
+  filter: drop-shadow(0 0 6px rgba(110, 231, 183, 0.45));
+}
+
+.guide__compass--tier3 .guide__needle-arrow,
+.guide__compass--tier4 .guide__needle-arrow {
+  filter: drop-shadow(0 0 12px rgba(110, 231, 183, 0.8));
+}
+
+/* Distance counts in with a short scale-in whenever the value changes. */
+.guide__distance-value {
+  display: inline-block;
+  animation: distance-tick 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes distance-tick {
+  from {
+    opacity: 0.35;
+    scale: 0.94;
+  }
+}
+
+/* ============================================================
+   Anchor button: the "impact" when an anchor is saved
+   ============================================================ */
+
+.anchor-btn.is-impact .anchor-btn__inner {
+  animation: anchor-impact 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.anchor-btn.is-impact .anchor-btn__ring {
+  animation: anchor-burst 620ms ease-out;
+}
+
+@keyframes anchor-impact {
+  0% {
+    scale: 1;
+  }
+  28% {
+    scale: 0.94;
+  }
+  60% {
+    scale: 1.035;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@keyframes anchor-burst {
+  from {
+    opacity: 0.9;
+    scale: 0.9;
+  }
+  to {
+    opacity: 0;
+    scale: 1.5;
+  }
+}
+
+/* Freshly created anchor: one-off mint ring, then calm. */
+.anchor-card.is-new {
+  animation:
+    card-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both,
+    new-ring 1.6s ease-out 120ms;
+}
+
+@keyframes new-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(110, 231, 183, 0.55);
+    border-color: rgba(110, 231, 183, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgba(110, 231, 183, 0);
+    border-color: var(--border);
+  }
+}
+
+/* ============================================================
+   Help centre
+   ============================================================ */
+.help-steps {
+  display: grid;
+  gap: 10px;
+  margin-block: 12px;
+}
+
+.help-step {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 11px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+}
+
+.help-step__num {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background: var(--grad-soft);
+  border: 1px solid rgba(110, 231, 183, 0.28);
+  color: var(--mint);
+  font-size: 11.5px;
+  font-weight: 800;
+}
+
+.help-step__title {
+  font-size: 13.5px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.help-step__body {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+
+.help__section {
+  margin: 18px 0 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+}
+
+.help-accordion {
+  display: grid;
+  gap: 6px;
+}
+
+.help-item {
+  border-radius: 13px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+  transition: border-color 140ms, background 140ms;
+}
+
+.help-item.is-open {
+  border-color: rgba(110, 231, 183, 0.28);
+  background: linear-gradient(180deg, rgba(110, 231, 183, 0.07), rgba(110, 231, 183, 0.02));
+}
+
+.help-item__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 13px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.help-item__q svg {
+  flex: none;
+  color: var(--text-3);
+  transition: rotate 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.help-item.is-open .help-item__q svg {
+  rotate: 180deg;
+  color: var(--mint);
+}
+
+.help-item__a {
+  padding: 0 13px 13px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--text-2);
+  animation: help-in 180ms ease-out;
+}
+
+@keyframes help-in {
+  from {
+    opacity: 0;
+    translate: 0 -4px;
+  }
+}
+
+.help-warning {
+  border-color: rgba(251, 191, 36, 0.28);
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.08), rgba(251, 191, 36, 0.02));
+}
+
+.help-list {
+  display: grid;
+  gap: 7px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-2);
+}
+
+.help-list li {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 7px;
+  align-items: start;
+}
+
+.help-list svg {
+  margin-top: 2px;
+  color: var(--amber);
+}
+
+.help__meta {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 4px;
+}
+
+/* ============================================================
+   Arrival card – the one moment where "done" makes sense
+   ============================================================ */
+.arrived-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(110, 231, 183, 0.32);
+  background:
+    radial-gradient(120% 120% at 100% 0%, rgba(110, 231, 183, 0.16), transparent 60%),
+    linear-gradient(180deg, rgba(110, 231, 183, 0.07), rgba(110, 231, 183, 0.02));
+  box-shadow: 0 10px 30px rgba(110, 231, 183, 0.08);
+  animation: arrived-in 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes arrived-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+    scale: 0.985;
+  }
+}
+
+.arrived-card__head {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.arrived-card__icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: rgba(110, 231, 183, 0.16);
+  border: 1px solid rgba(110, 231, 183, 0.32);
+  color: var(--mint);
+}
+
+.arrived-card__title {
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+}
+
+.arrived-card__body {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-2);
+  margin-top: 2px;
+}
+
+.arrived-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
