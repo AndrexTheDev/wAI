@@ -47,7 +47,7 @@ const SHOTS = [
     slug: '02-anchor',
     caption: { de: 'Säule B17, Ebene −3', en: 'Pillar B17, level −3' },
     // Der Editor: Etage, Zone, Notiz – das, was man nach drei Stunden vergisst.
-    steps: [{ selector: '.anchor-card__tap', text: ['Mein Auto', 'Pillar'] }],
+    steps: [{ within: 'Mein Auto', selector: '.anchor-card__tap' }],
   },
   {
     slug: '03-list',
@@ -61,22 +61,23 @@ const SHOTS = [
     caption: { de: 'Dein eigener Weg zurück', en: 'Your own way back' },
     // Die Spur zeigt der Find-Bildschirm; der Knopf trägt nur die Distanz,
     // deshalb über aria-label ("Finden: …") ansteuern.
-    steps: [{ aria: ['Zurückfinden', 'Back to'] }],
+    steps: [{ within: 'Wegkreuzung', selector: '.anchor-card__distance' }],
   },
   {
     slug: '05-share',
     caption: { de: 'Teilen ohne Server', en: 'Share without a server' },
     // Teilen liegt im Editor eines Ankers – nicht im Find-Bildschirm.
     steps: [
-      { selector: '.anchor-card__tap', text: ['Wegkreuzung', 'West'] },
+      { within: 'Wegkreuzung', selector: '.anchor-card__tap' },
       { aria: ['Teilen', 'Share'] },
     ],
   },
   {
     slug: '06-timer',
     caption: { de: 'Bevor das Ticket abläuft', en: 'Before the ticket expires' },
-    // Auf der Auto-Kachel steht der Timer-Knopf; sein aria-label beginnt mit "Park-Timer".
-    steps: [{ selector: '.anchor-card__timer' }],
+    // Der Timer-Knopf sitzt auf der Auto-Kachel oben (carspot) und zusätzlich in
+    // der Liste; der obere ist der, den ein Nutzer zuerst sieht.
+    steps: [{ selector: '.carspot__side' }],
   },
   {
     slug: '07-settings',
@@ -206,12 +207,22 @@ await page.waitForTimeout(1200);
  * wären alle identisch gewesen).
  */
 async function clickLabel(page, step) {
-  const { labels, aria, selector } = Array.isArray(step)
+  const { labels, aria, selector, within } = Array.isArray(step)
     ? { labels: step, aria: [] }
-    : { labels: step.text ?? [], aria: step.aria ?? [], selector: step.selector };
+    : { labels: step.text ?? [], aria: step.aria ?? [], selector: step.selector, within: step.within };
   const hit = await page.evaluate(
-    ({ texts, ariaTexts, sel }) => {
-      const nodes = Array.from(document.querySelectorAll(sel ?? 'button, a, [role="tab"], [role="button"], li'));
+    ({ texts, ariaTexts, sel, scope }) => {
+      // Mit `within` wird die Karte gesucht, die diesen Anker enthält – sonst
+      // landet man beim ersten Anker der Liste, nicht beim gemeinten.
+      let root = document;
+      if (scope) {
+        const card = Array.from(document.querySelectorAll('.anchor-card')).find((node) =>
+          (node.textContent ?? '').includes(scope),
+        );
+        if (!card) return null;
+        root = card;
+      }
+      const nodes = Array.from(root.querySelectorAll(sel ?? 'button, a, [role="tab"], [role="button"], li'));
       for (const node of nodes) {
         const text = (node.textContent ?? '').replace(/\s+/g, ' ').trim();
         // Knöpfe, die nur ein Symbol und eine Distanz zeigen, sind nur über ihr
@@ -226,7 +237,7 @@ async function clickLabel(page, step) {
       }
       return null;
     },
-    { texts: labels, ariaTexts: aria, sel: selector },
+    { texts: labels, ariaTexts: aria, sel: selector, scope: within },
   );
   await page.waitForTimeout(700);
   return hit;
@@ -262,7 +273,27 @@ for (const shot of SHOTS) {
   const viewportUsed = page.viewportSize();
   const seen = await page.evaluate(() => {
     const body = document.body.innerText.replace(/\s+/g, ' ').trim();
-    return { text: body.slice(0, 240), hasApp: Boolean(document.querySelector('.app')), title: document.title };
+    /**
+     * Signatur statt Textanfang: der Kopfbereich ist auf jeder Ansicht gleich, also
+     * verglichen frühere Fassungen nur Rauschen. Was eine Ansicht ausmacht, sind
+     * ihre Bauteile und die Überschrift des offenen Sheets.
+     */
+    const sheetTitle = document.querySelector('.sheet__title, .sheet h2, [role="dialog"] h2');
+    const parts = [
+      document.querySelector('.carspot') ? 'carspot' : '',
+      document.querySelector('.chips') ? 'chips' : '',
+      document.querySelector('.compass, .guide') ? 'compass' : '',
+      document.querySelector('.settings, .setting-row') ? 'settings' : '',
+      document.querySelector('.pro, .pro__hero') ? 'pro' : '',
+      sheetTitle ? `sheet:${(sheetTitle.textContent ?? '').trim()}` : '',
+      location.hash || '',
+    ].filter(Boolean);
+    return {
+      text: body.slice(0, 240),
+      signature: parts.join(' + '),
+      hasApp: Boolean(document.querySelector('.app')),
+      title: document.title,
+    };
   });
   results.push({ slug: shot.slug, file, caption: shot.caption, reached, seen, viewportUsed });
   console.log(`  ✔ ${shot.slug}.png — ${shot.caption.de}`);
@@ -287,6 +318,7 @@ writeFileSync(
         caption: r.caption,
         navigation: r.reached,
         visibleText: r.seen.text,
+        signature: r.seen.signature,
         hasAppShell: r.seen.hasApp,
         cssViewport: r.viewportUsed,
       })),
@@ -302,7 +334,7 @@ writeFileSync(
  * ohne lesbares Log hilft niemandem weiter. Der Befund steht in capture.json und
  * im Exit-Status des Workflows.
  */
-const distinct = new Set(results.map((r) => r.seen.text.slice(0, 60)));
+const distinct = new Set(results.map((r) => r.seen.signature || r.seen.text.slice(0, 60)));
 if (distinct.size < results.length) {
   console.warn(`\n! Nur ${distinct.size} von ${results.length} Ansichten unterscheiden sich — Navigation greift nicht überall.`);
 }
