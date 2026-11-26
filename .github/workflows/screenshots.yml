@@ -68,7 +68,13 @@ jobs:
         run: npm run screenshots -- --url http://127.0.0.1:5174 --out store/screenshots
 
       - name: Check the set
-        run: node tools/check-store-listing.mjs
+        # Der Capture-Schritt meldet Erfolg, auch wenn ein Navigationsschritt ins
+        # Leere lief – hier wird nachgezählt, was wirklich auf der Platte liegt.
+        run: |
+          node tools/check-store-listing.mjs
+          count=$(ls store/screenshots/*.png 2>/dev/null | wc -l)
+          echo "$count PNG(s) erzeugt"
+          test "$count" -eq 8 || { echo "✖ erwartet 8, gefunden $count"; exit 1; }
 
       - name: Upload
         uses: actions/upload-artifact@v4

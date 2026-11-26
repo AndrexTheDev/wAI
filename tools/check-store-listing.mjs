@@ -13,7 +13,7 @@
  *   - no claims that contradict the product (offline, no account, no tracking)
  *   - contact email and privacy URL are correct and reachable in shape
  */
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
