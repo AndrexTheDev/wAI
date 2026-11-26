@@ -84,6 +84,19 @@ const CLAIMS = [
     ],
   },
   {
+    id: 'map',
+    // Der Marketing-Text sagt „Häuser", nicht „Gebäude" – der Claim muss die
+    // Wörter der Anzeige verwenden, sonst prüft er an der Werbung vorbei.
+    claim: { de: 'Häuser', en: 'buildings' },
+    evidence: [
+      // Die Karte ist nur dann eine Karte, wenn Umrisse ankommen: Renderer,
+      // Generator und ein tatsächlich ausgeliefertes Paket.
+      ['packages/app/src/screens/MapView.tsx', 'map__building'],
+      ['tools/build-map-pack.mjs', 'overpass-api.de'],
+      ['packages/app/public/map/index.json', '"buildings"'],
+    ],
+  },
+  {
     id: 'offline',
     claim: { de: 'offline', en: 'offline' },
     evidence: [

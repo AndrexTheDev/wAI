@@ -35,7 +35,7 @@ Android SDK, keystore, issuer key, gh auth) and then a concrete "next step".
 | Capture store screenshots | `npm run screenshots` | Playwright + Chromium or a device | 1 min |
 | Issue a Pro licence | `npm run license:issue -- --sub …` | issuer key | instant |
 
-`npm run verify` = typecheck (3 packages) → 37 unit tests → render smoke test
+`npm run verify` = typecheck (3 packages) → 52 unit tests → render smoke test
 (both locales, every route) → Android asset checks. It is the gate before any
 commit and the only thing needed for 95 % of changes.
 
@@ -54,6 +54,7 @@ tools/
   license-cli.mjs         ← keygen / issue / verify / mail for Pro licences
   check-store-listing.mjs ← Play limits + DE/EN parity + product consistency
   check-claims.mjs        ← jeder Marketing-Claim muss im Code gedeckt sein (docs/ROADMAP.md)
+  build-map-pack.mjs      ← OpenStreetMap → Offline-Kartenkacheln (public/map)
   make-store-assets.sh    ← icon-512 + feature graphic, reproduced from the real icon
   capture-store-screenshots.mjs ← real screenshots, refuses to fake them
   keys/                   ← issuer key pair (private key is git-ignored)

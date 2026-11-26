@@ -156,6 +156,16 @@ Ziel: Nichts Behauptetes bleibt unimplementiert, kein toter Schalter.
 
 ---
 
+## 6a. Karte & GPS (2026-11-25)
+
+| Punkt | Zustand |
+|---|---|
+| **GPS** | `@capacitor/geolocation` mit echtem Watch; Timeout pro Messung auf 8 s gesenkt (20 s ließ die App im Parkhaus ohne Position stehen), `maximumAge` 1 s — ein Minuten alter Fix zeigt auf die Einfahrt, nicht auf die Säule. Ohne Fix übernimmt nach 8 s die Schrittschätzung (14) |
+| **Karte** | Offline-Paket aus OpenStreetMap, Zoom 18, ~0,4 m pro Einheit. Reiter „Karte" im Fund-Screen: Häuser, Straßen (nach Klasse), Wasser, Grün, Parkhäuser hervorgehoben, Straßennamen, eigene Position mit Genauigkeitskreis, Ziel, Brotkrumen-Spur, Maßstab, ODbL-Nennung |
+| **Paket** | `tools/build-map-pack.mjs` fragt Overpass einmal ab und schneidet Kacheln. Demo-Paket „München Lehel" (36 Kacheln, 156 kB, 80 Gebäude) liegt im Repo; echte Städte erzeugt derselbe Befehl |
+| **Warum kein Google/OSM-Tile-Layer** | Der Kern der App ist „offline, kein Konto". Kacheln aus dem Netz hätten die CSP, die Store-Texte und `check:claims` gebrochen |
+| **Grenzen** | Ein Paket deckt ein Gebiet ab. Liegt der Standort außerhalb, sagt die Karte das (`app.map.outsidePack`) statt eine leere Fläche zu zeigen. Etagen im Gebäude bleiben Sache des Höhen-Lotsen (9) |
+
 ## 7a. Erledigte Arbeit (Stand nach PR #9)
 
 | PR | Inhalt |

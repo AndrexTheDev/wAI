@@ -267,8 +267,8 @@ export const en: Widen<GermanDictionary> = {
           tag: 'City',
           title: 'Underground & multi-storey car parks',
           body:
-            'Level 3, pillar B17, east exit. A photo of the pillar, the tariff zone and a parking timer – and the compass walks you back without any signal. Your car sits at the top of the app with its level and remaining time, one tap away.',
-          bullets: ['Car card with level', 'Photo of pillar & ticket', 'Reminder 10 min. ahead'],
+            'Level 3, pillar B17, east exit. A photo of the pillar, the tariff zone and a parking timer – and the map shows buildings and streets so you recognise the corner. Your car sits at the top of the app with its level and remaining time.',
+          bullets: ['Map with buildings, offline', 'Car card with level', 'Reminder 10 min. ahead', 'Photo of pillar & ticket'],
         },
         {
           id: 'city',
