@@ -145,6 +145,20 @@ a {
   outline-offset: 2px;
 }
 
+/**
+ * Ein Chip, der nur den Fokus hat, sah durch den Mint-Ring wie der gewählte aus —
+ * im Park-Timer standen so „30 min" (Fokus) und „2 h" (gewählt) gleichzeitig
+ * markiert. Fokus wird deshalb zurückhaltend gezeichnet, Auswahl bleibt eindeutig.
+ */
+.chip:focus-visible {
+  outline: 2px solid var(--border-2);
+  outline-offset: 2px;
+}
+
+.chip.is-active:focus-visible {
+  outline-color: var(--mint);
+}
+
 /* ---------------- app shell ---------------- */
 
 .app {

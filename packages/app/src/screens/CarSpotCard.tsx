@@ -60,10 +60,12 @@ export function CarSpotCard({
         </button>
       </div>
 
-      {anchor.floorLabel && (
+      {/* Nur die Zone hier: die Etage steht schon als große Zahl darüber, und
+          zweimal untereinander liest sich wie ein Fehler. */}
+      {anchor.zone && (
         <p className="carspot__meta">
-          {t('app.carSpot.level')}: <strong>{anchor.floorLabel}</strong>
-          {anchor.zone ? ` · ${anchor.zone.slice(0, 30)}` : ''}
+          {anchor.zone.slice(0, 40)}
+          {anchor.note ? ` · ${anchor.note.slice(0, 48)}` : ''}
         </p>
       )}
 
