@@ -749,6 +749,9 @@ export const en: Widen<GermanDictionary> = {
       noPack: 'No map pack installed',
       noPackBody:
         'The map works offline and needs an area stored on the device. You can still find your way back – the compass and the trail work without it.',
+      outsidePack: '“{name}” is somewhere else',
+      outsidePackBody:
+        'Your position is outside the stored map pack. Compass, trail and distance still work – the map only shows areas saved on the device.',
       attribution: '© OpenStreetMap contributors, ODbL',
       offlineNote: 'Map pack on the device · no network, no account',
     },

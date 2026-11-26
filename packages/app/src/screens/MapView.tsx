@@ -96,13 +96,32 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
   /* ---------------- viewport ---------------- */
 
   const here = position ?? target ?? { lat: 48.1374, lng: 11.5755 };
+  /**
+   * Die Kamera liegt zwischen dir und dem Ziel, nicht auf dir.
+   *
+   * Erste Fassung zentrierte auf die eigene Position und ließ `fitToInclude` nur
+   * herauszoomen – bei einem Anker 1 400 km entfernt (Demo-Daten) landete die
+   * Karte damit auf Zoomstufe „ganz Europa" und zeigte nichts.
+   */
+  const camera = useMemo(() => {
+    if (!target) return here;
+    return { lat: (here.lat + target.lat) / 2, lng: (here.lng + target.lng) / 2 };
+  }, [here.lat, here.lng, target?.lat, target?.lng]);
+
   const viewport = useMemo(() => {
-    const base = viewportFor(here.lat, here.lng, size.width, size.height, zoom);
-    // Keep the target on screen: if the car is 300 m away the map zooms out
-    // instead of showing an arrow into empty space.
+    const base = viewportFor(camera.lat, camera.lng, size.width, size.height, zoom);
     if (!target) return base;
-    return fitToInclude(base, project(target.lat, target.lng));
-  }, [here.lat, here.lng, size.width, size.height, zoom, target]);
+    // Beide Punkte müssen sichtbar sein; bei extremer Entfernung begrenzt
+    // `fitToInclude` selbst (MAX_UNITS_PER_PIXEL), die Karte bleibt also lesbar.
+    return fitToInclude(fitToInclude(base, project(target.lat, target.lng)), project(here.lat, here.lng));
+  }, [camera.lat, camera.lng, size.width, size.height, zoom, target, here.lat, here.lng]);
+
+  /** Liegt überhaupt Pack-Gelände im Bild? Sonst ist die Karte leer und sagt das. */
+  const coversArea = useMemo(() => {
+    if (!index) return false;
+    const { south, west, north, east } = index.bounds;
+    return here.lat >= south && here.lat <= north && here.lng >= west && here.lng <= east;
+  }, [index, here.lat, here.lng]);
 
   /* ---------------- tile loading ---------------- */
 
@@ -147,6 +166,7 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
     const paths: Array<{ d: string; className: string }> = [];
     const labels: Array<{ text: string; x: number; y: number }> = [];
 
+    if (!coversArea) return { paths, labels };
     for (const { tile, dx, dy } of visible) {
       const data = tiles.get(`${tile.x}/${tile.y}`);
       if (!data) continue;
@@ -178,7 +198,7 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
     }
 
     return { paths, labels: placeLabels(labels, (text) => ({ width: text.length * 5.4, height: 11 })) };
-  }, [tiles, visible, viewport.unitsPerPixel]);
+  }, [tiles, visible, viewport.unitsPerPixel, coversArea]);
 
   const metersPerPixel = metresPerUnit(here.lat) * viewport.unitsPerPixel;
   const scaleBar = scaleFor(metersPerPixel, locale);
@@ -194,6 +214,15 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
         <div className="map__empty">
           <strong>{t('app.map.noPack')}</strong>
           <span>{t('app.map.noPackBody')}</span>
+        </div>
+      )}
+
+      {/* Ein Pack, das diesen Ort nicht abdeckt, ist kein Fehler – aber es wäre
+          eine Lüge, eine leere Fläche als Karte auszugeben. */}
+      {index && !coversArea && !packError && (
+        <div className="map__empty">
+          <strong>{t('app.map.outsidePack', { name: index.name })}</strong>
+          <span>{t('app.map.outsidePackBody')}</span>
         </div>
       )}
 

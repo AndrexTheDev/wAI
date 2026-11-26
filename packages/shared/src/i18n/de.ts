@@ -747,6 +747,9 @@ export const de = {
       noPack: 'Kein Kartenpaket installiert',
       noPackBody:
         'Die Karte ist offline und braucht ein Gebiet auf dem Gerät. Du kannst trotzdem zurückfinden – Kompass und Spur funktionieren ohne.',
+      outsidePack: '„{name}" liegt woanders',
+      outsidePackBody:
+        'Dein Standort liegt außerhalb des Kartenpakets. Kompass, Spur und Entfernung funktionieren trotzdem – die Karte zeigt nur Gebiete, die auf dem Gerät gespeichert sind.',
       attribution: '© OpenStreetMap-Mitwirkende, ODbL',
       offlineNote: 'Kartenpaket auf dem Gerät · kein Netz, kein Konto',
     },

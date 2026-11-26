@@ -157,8 +157,10 @@ await page.evaluate(() => {
     id: `shot-${Math.random().toString(36).slice(2, 9)}`,
     name: '',
     category: 'other',
-    lat: 40.4168,
-    lng: -3.7038,
+    // Rund um den Demo-Standort (48.1355, 11.5826) – sonst liegt der Anker
+    // 1 400 km entfernt und die Karte zeigt „irgendwo anders".
+    lat: 48.1362 + (Math.random() - 0.5) * 0.002,
+    lng: 11.5831 + (Math.random() - 0.5) * 0.002,
     altitude: 640,
     floorLabel: '',
     createdAt: now,
@@ -192,9 +194,9 @@ await page.evaluate(() => {
       category: 'nature',
       note: 'Nach dem Bach links, an der Bank vorbei.',
       trail: [
-        { lat: 40.4172, lng: -3.7044, at: now - 3 * 3_600_000 - 480_000 },
-        { lat: 40.4176, lng: -3.7039, at: now - 3 * 3_600_000 - 360_000 },
-        { lat: 40.4179, lng: -3.7033, at: now - 3 * 3_600_000 - 240_000 },
+        { lat: 48.1349, lng: 11.5818, at: now - 3 * 3_600_000 - 480_000 },
+        { lat: 48.1352, lng: 11.5822, at: now - 3 * 3_600_000 - 360_000 },
+        { lat: 48.1354, lng: 11.5825, at: now - 3 * 3_600_000 - 240_000 },
       ],
       createdAt: now - 8 * 3_600_000,
     }),
