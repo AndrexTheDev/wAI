@@ -365,3 +365,82 @@ export function mergeImported(existing: readonly Anchor[], incoming: readonly An
   });
   return [...additions, ...existing].sort((a, b) => b.createdAt - a.createdAt);
 }
+
+/**
+ * Step-based dead reckoning for the case this app exists for: you walk into a
+ * car park, GPS dies, and you still want a direction.
+ *
+ * Deliberately not a simulation: it only engages once a *real* fix is older than
+ * `staleAfterMs`, it counts actual detected steps (0.7 m each), and it reports a
+ * growing uncertainty. The UI must label the result as an estimate — pretending
+ * to precision underground is exactly what the marketing promises not to do.
+ */
+export interface WalkerState {
+  /** Estimated position while GPS is silent. */
+  lat: number;
+  lng: number;
+  /** Metres walked since the last real fix. */
+  traveled: number;
+  steps: number;
+  /** Estimated uncertainty of the current position, in metres. */
+  accuracy: number;
+  /** True while the estimate is in charge (fix stale). */
+  estimating: boolean;
+  /** Timestamp of the last real fix used. */
+  basedOn: number;
+}
+
+const STEP_LENGTH_M = 0.72;
+
+export function createWalker(fix: LatLng & { timestamp: number }): WalkerState {
+  return {
+    lat: fix.lat,
+    lng: fix.lng,
+    traveled: 0,
+    steps: 0,
+    accuracy: 8,
+    estimating: false,
+    basedOn: fix.timestamp,
+  };
+}
+
+/**
+ * Advance the estimate. `stepDelta` is the number of steps since the previous
+ * call (can be 0), `heading` the current compass bearing.
+ */
+export function advanceWalker(
+  state: WalkerState,
+  heading: number | null,
+  stepDelta: number,
+  now: number,
+  staleAfterMs = 8000,
+): WalkerState {
+  const estimating = now - state.basedOn > staleAfterMs;
+  if (!estimating || !stepDelta || stepDelta <= 0) {
+    return { ...state, estimating };
+  }
+  const meters = Math.min(stepDelta, 20) * STEP_LENGTH_M;
+  const bearing = heading ?? 0;
+  const rad = (normalizeDeg(bearing) * Math.PI) / 180;
+  const metersPerDegLat = 111132.92;
+  const metersPerDegLng = 111320 * Math.cos((state.lat * Math.PI) / 180);
+  const lat = state.lat + (Math.cos(rad) * meters) / metersPerDegLat;
+  const lng = state.lng + (Math.sin(rad) * meters) / Math.max(1e-6, metersPerDegLng);
+  const traveled = state.traveled + meters;
+  return {
+    lat,
+    lng,
+    traveled,
+    steps: state.steps + stepDelta,
+    // 15 % of the walked distance plus the original fix uncertainty: honest,
+    // and it grows visibly the longer the estimate runs.
+    accuracy: Math.round(Math.max(8, traveled * 0.15 + 5)),
+    estimating: true,
+    basedOn: state.basedOn,
+  };
+}
+
+/** Re-anchor the estimate whenever the OS delivers a real position again. */
+export function rebaseWalker(fix: LatLng & { timestamp: number }, now = Date.now()): WalkerState {
+  return { ...createWalker({ ...fix, timestamp: now }), estimating: false };
+}

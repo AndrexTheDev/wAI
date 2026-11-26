@@ -115,17 +115,51 @@ export function relativeBearing(userHeading: number, targetBearing: number): num
   return angleDelta(userHeading, targetBearing);
 }
 
-/** Human friendly distance text, localised with Intl where available. */
-export function formatDistance(meters: number, locale: 'de' | 'en'): string {
+/**
+ * Distance unit system. Metric is the default; imperial is opt-in in settings
+ * and must actually change the output (it used to be an inert switch).
+ */
+export type DistanceUnits = 'metric' | 'imperial';
+
+const METRES_PER_FOOT = 0.3048;
+const METRES_PER_MILE = 1609.344;
+
+/** Human friendly distance text, localised and unit-aware. */
+export function formatDistance(
+  meters: number,
+  locale: 'de' | 'en',
+  units: DistanceUnits = 'metric',
+): string {
   if (!Number.isFinite(meters)) return '–';
+  const decimal = locale === 'de' ? ',' : '.';
+
+  if (units === 'imperial') {
+    const feet = meters / METRES_PER_FOOT;
+    if (feet < 1000) {
+      const rounded = feet < 10 ? Math.round(feet * 10) / 10 : Math.round(feet);
+      return `${String(rounded).replace('.', decimal)} ft`;
+    }
+    const miles = meters / METRES_PER_MILE;
+    const rounded = miles < 10 ? Math.round(miles * 100) / 100 : Math.round(miles * 10) / 10;
+    return `${rounded.toFixed(miles < 10 ? 2 : 1).replace('.', decimal)} mi`;
+  }
+
   if (meters < 1000) {
     const rounded = meters < 10 ? Math.round(meters * 10) / 10 : Math.round(meters);
-    return locale === 'de' ? `${rounded} m` : `${rounded} m`;
+    return `${rounded} m`;
   }
   const km = meters / 1000;
   const rounded = km < 10 ? Math.round(km * 100) / 100 : Math.round(km * 10) / 10;
-  const text = rounded.toFixed(km < 10 ? 2 : 1).replace('.', locale === 'de' ? ',' : '.');
-  return `${text} km`;
+  return `${rounded.toFixed(km < 10 ? 2 : 1).replace('.', decimal)} km`;
+}
+
+/** Vertical distance in the user's unit system, e.g. for the elevation beam. */
+export function formatHeight(meters: number, locale: 'de' | 'en', units: DistanceUnits = 'metric'): string {
+  if (!Number.isFinite(meters)) return '–';
+  if (units === 'imperial') {
+    return `${Math.round(meters / METRES_PER_FOOT)} ft`;
+  }
+  return `${Math.round(meters)} m`;
 }
 
 /** Format a compass bearing as cardinal + degree text, localised. */

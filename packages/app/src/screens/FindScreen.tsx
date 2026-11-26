@@ -16,10 +16,12 @@ import {
 } from '@wai/shared';
 import { useApp, startTrailRecording, stopTrailRecording } from '../store/AppStore';
 import { useT } from '../i18n/useT';
+import { useUnits } from '../i18n/useUnits';
 import { useToast } from '../ui/Toast';
-import { beep, isDemo, vibrate } from '../platform/native';
+import { beep, isDemo, setTorch, vibrate } from '../platform/native';
 import {
   Camera,
+  Torch,
   ChevronLeft,
   Compass,
   Crown,
@@ -46,18 +48,25 @@ export function FindScreen({
   onBack,
   onChooseAnother,
   onOpenPro,
+  onArchive,
+  onStopParking,
 }: {
   anchor: Anchor | null;
   onBack: () => void;
   onChooseAnother: () => void;
   onOpenPro: (reason: string) => void;
+  /** Arrival actions: park the anchor away, or stop the running timer. */
+  onArchive?: (anchor: Anchor) => void;
+  onStopParking?: (anchor: Anchor) => void;
 }) {
   const { t, locale } = useT();
-  const { fix, sensors, plan, activeAnchors, appendTrail, anchors } = useApp();
+  const { distance: fmtDistance, height: fmtHeight } = useUnits();
+  const { fix, sensors, plan, activeAnchors, appendTrail, anchors, estimated, estimatedSteps } = useApp();
   const toast = useToast();
   const [view, setView] = useState<'compass' | 'trail' | 'media'>('compass');
   const [proximityOn, setProximityOn] = useState(plan === 'pro');
   const [recording, setRecording] = useState(false);
+  const [torchOn, setTorchOn] = useState(false);
   const lastTier = useRef(0);
   const lastPulse = useRef(0);
 
@@ -94,6 +103,13 @@ export function FindScreen({
     startTrailRecording(current.id);
     return () => stopTrailRecording();
   }, [current, recording]);
+
+  /* Leaving guidance must not leave the flashlight burning. */
+  useEffect(() => {
+    return () => {
+      if (torchOn) void setTorch(false);
+    };
+  }, [torchOn]);
 
   if (!current) {
     return (
@@ -139,7 +155,7 @@ export function FindScreen({
   const parking = parkingStatus(current);
   const tier = proximityTier(guidance?.distance ?? Infinity, Math.max(8, (fix.accuracy ?? 10) * 1.5));
   const arrived = guidance?.arrived ?? false;
-  const distanceText = formatDistance(guidance?.distance ?? 0, locale);
+  const distanceText = fmtDistance(guidance?.distance ?? 0);
   const multiView = plan === 'pro';
 
   const elevationText =
@@ -169,6 +185,26 @@ export function FindScreen({
             {t(`app.anchor.categories.${current.category}`)} · {formatBearing(guidance?.bearing ?? 0, locale)}
           </span>
         </div>
+        {/* The torch belongs here and not only in settings: you need it while
+            walking, in a dark car park, without leaving the guidance screen. */}
+        <button
+          type="button"
+          className={`icon-btn ${torchOn ? 'is-active' : ''}`}
+          onClick={async () => {
+            const ok = await setTorch(!torchOn);
+            if (!ok) {
+              toast.show(t('app.errors.torch'), 'warn');
+              return;
+            }
+            setTorchOn(ok ? !torchOn : false);
+            void vibrate('tap');
+          }}
+          aria-pressed={torchOn}
+          aria-label={t('app.find.torch')}
+          title={t('app.find.torch')}
+        >
+          <Torch size={17} />
+        </button>
         <button type="button" className="icon-btn" onClick={onChooseAnother} aria-label={t('app.find.choose')}>
           <Layers size={17} />
         </button>
@@ -176,22 +212,55 @@ export function FindScreen({
 
       <div className="guide">
         {arrived && (
-          <div className="banner banner--ok">
-            <AnchorIcon size={16} />
+          <div className="arrived-card">
+            <div className="arrived-card__head">
+              <span className="arrived-card__icon">
+                <AnchorIcon size={18} />
+              </span>
+              <div>
+                <span className="arrived-card__title">{t('app.find.arrived')}</span>
+                <p className="arrived-card__body">{current.note ?? t('app.find.arriving')}</p>
+              </div>
+            </div>
+            {/* Standing in front of the thing is the only moment where "done"
+                makes sense – offer the follow-up right here, not in a menu. */}
+            <div className="arrived-card__actions">
+              {current.parking && onStopParking && (
+                <button type="button" className="btn btn--sm" onClick={() => onStopParking(current)}>
+                  <Timer size={13} /> {t('app.timer.stop')}
+                </button>
+              )}
+              {onArchive && (
+                <button type="button" className="btn btn--sm btn--ghost" onClick={() => onArchive(current)}>
+                  {t('app.find.markArrived')}
+                </button>
+              )}
+              <button type="button" className="btn btn--sm btn--quiet" onClick={onBack}>
+                {t('app.find.toList')}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {estimated && (
+          <div className="banner banner--warn">
+            <Info size={16} />
             <div className="banner__body">
-              <span className="banner__title">{t('app.find.arrived')}</span>
-              <span>{current.note ?? t('app.find.arriving')}</span>
+              <span className="banner__title">{t('app.find.estimatedTitle')}</span>
+              <span>{t('app.find.estimatedBody', { steps: estimatedSteps, meters: Math.round(guidance?.distance ?? 0) })}</span>
             </div>
           </div>
         )}
 
         {(multiView || view === 'compass') && (
-          <div className="guide__compass">
+          <div className={`guide__compass guide__compass--tier${tier} ${arrived ? 'is-arrived' : ''}`}>
             <span className="guide__compass-cardinal guide__compass-cardinal--n">N</span>
             <span className="guide__compass-cardinal guide__compass-cardinal--e">O/E</span>
             <span className="guide__compass-cardinal guide__compass-cardinal--s">S</span>
             <span className="guide__compass-cardinal guide__compass-cardinal--w">W</span>
-            <div className="guide__rings" />
+            <div className="guide__rings" aria-hidden="true" />
+            <div className="guide__pulse" aria-hidden="true" />
+            <div className="guide__sweep" aria-hidden="true" />
             <div
               className="guide__needle"
               style={{ rotate: `${guidance?.relative ?? 0}deg` }}
@@ -202,7 +271,9 @@ export function FindScreen({
             </div>
             <div className="guide__center">
               <div className="guide__distance">
-                <strong>{distanceText}</strong>
+                <strong key={distanceText} className="guide__distance-value">
+                  {distanceText}
+                </strong>
                 <span>{arrived ? t('app.find.arrived') : t('app.find.distance')}</span>
               </div>
             </div>
@@ -226,7 +297,7 @@ export function FindScreen({
               <span className={`tile__value ${elevation.level === 'same' ? 'tile__value--mint' : 'tile__value--amber'}`}>
                 {elevation.level === 'same'
                   ? t('app.find.elevationSame')
-                  : `${Math.abs(Math.round(elevation.delta))} m ${elevation.level === 'higher' ? '↑' : '↓'}`}
+                  : `${fmtHeight(Math.abs(elevation.delta))} ${elevation.level === 'higher' ? '↑' : '↓'}`}
               </span>
               <span className="tile__sub">
                 {elevation.level === 'same'
@@ -242,7 +313,7 @@ export function FindScreen({
                 <Trail size={11} /> {t('app.find.trail')}
               </span>
               <span className="tile__value tile__value--mint">
-                {trailLength ? formatDistance(trailLength, locale) : '—'}
+                {trailLength ? fmtDistance(trailLength) : '—'}
               </span>
               <span className="tile__sub">{current.trail?.length ?? 0} GPS</span>
             </div>
@@ -255,11 +326,11 @@ export function FindScreen({
               <span className="card__title">
                 <Trail size={14} /> {t('app.find.trail')}
               </span>
-              <span className="muted">{formatDistance(trailLength, locale)}</span>
+              <span className="muted">{fmtDistance(trailLength)}</span>
             </div>
             <TrailCanvas anchor={current} currentLat={fix.lat} currentLng={fix.lng} />
             <p className="muted" style={{ marginTop: 6 }}>
-              {current.trail && current.trail.length > 1 ? t('app.find.trailLength', { distance: formatDistance(trailLength, locale) }) : t('app.find.trailPro')}
+              {current.trail && current.trail.length > 1 ? t('app.find.trailLength', { distance: fmtDistance(trailLength) }) : t('app.find.trailPro')}
             </p>
           </div>
         )}
@@ -357,7 +428,7 @@ export function FindScreen({
               <Elevation size={14} /> {t('app.find.elevation')}
             </span>
             <span className="muted">
-              {typeof current.altitude === 'number' ? `${Math.round(current.altitude)} m` : t('app.find.noElevation')}
+              {typeof current.altitude === 'number' ? fmtHeight(current.altitude) : t('app.find.noElevation')}
             </span>
           </div>
           <p style={{ fontSize: 13 }}>{elevationText}</p>

@@ -10,6 +10,7 @@ import {
   destinationPoint,
   elevationHint,
   formatDistance,
+  formatHeight,
   fromLocal,
   guidanceText,
   normalizeDeg,
@@ -19,16 +20,19 @@ import {
   trailLength,
 } from '../geo.ts';
 import {
+  advanceWalker,
   appendTrailPoint,
   canAddAnchor,
   canAddPhoto,
   canAddNote,
   canAddVoice,
   createAnchor,
+  createWalker,
   mergeImported,
   parkingStatus,
   proximityTier,
   queryAnchors,
+  rebaseWalker,
   trailDistance,
 } from '../engine.ts';
 import { anchorToShare, decodeSharePayload, encodeSharePayload, sanitizeImportedAnchor } from '../codec.ts';
@@ -83,6 +87,12 @@ test('distance and guidance text are localised', () => {
   assert.equal(formatDistance(42.2, 'de'), '42 m');
   assert.equal(formatDistance(1234, 'en'), '1.23 km');
   assert.equal(formatDistance(12_800, 'de'), '12,8 km');
+  // Imperial must really change the output – the settings switch was inert.
+  assert.equal(formatDistance(100, 'de', 'imperial'), '328 ft');
+  assert.equal(formatDistance(1609.344, 'en', 'imperial'), '1.00 mi');
+  assert.equal(formatDistance(100, 'en'), '100 m');
+  assert.equal(formatDistance(8.4, 'en', 'imperial'), '28 ft');
+  assert.equal(formatDistance(2, 'en', 'imperial'), '6.6 ft');
   const text = guidanceText(30, 5, { delta: 6, level: 'higher', floors: 2 }, 'de');
   assert.match(text, /geradeaus/);
   assert.match(text, /höher/);
@@ -259,4 +269,34 @@ test('deep links fall back to the web preview when the app is missing', () => {
   assert.match(intent, /^intent:\/\/anchor\//);
   assert.match(intent, /package=dev\.andrexthedev\.wai/);
   assert.match(intent, /browser_fallback_url=https%3A%2F%2Fwai\.example%2Fa%2F%23/);
+});
+
+test('heights follow the chosen unit system', () => {
+  assert.equal(formatHeight(12, 'de'), '12 m');
+  assert.equal(formatHeight(12, 'de', 'imperial'), '39 ft');
+  assert.equal(formatHeight(3, 'en'), '3 m');
+});
+
+test('step estimation only engages when a real fix goes stale', () => {
+  const fix = { lat: 48.1351, lng: 11.582, timestamp: 1_000_000 };
+  let walker = createWalker(fix);
+
+  // Fresh fix: walking does not move the estimate.
+  const fresh = advanceWalker(walker, 90, 10, fix.timestamp + 2000);
+  assert.equal(fresh.estimating, false);
+  assert.equal(fresh.lat, fix.lat);
+
+  // After 8 s without a fix, 10 steps (≈7.2 m) move the estimate east.
+  walker = advanceWalker(walker, 90, 10, fix.timestamp + 9000);
+  assert.equal(walker.estimating, true);
+  assert.equal(walker.steps, 10);
+  assert.ok(walker.lng > fix.lng, 'heading 90° must move east');
+  assert.equal(walker.lat, fix.lat);
+  assert.ok(walker.accuracy >= 8 && walker.accuracy < 15, `accuracy should be honest, got ${walker.accuracy}`);
+
+  // A new GPS fix resets the estimate and the uncertainty.
+  const rebased = rebaseWalker({ lat: 48.14, lng: 11.59, timestamp: 2_000_000 });
+  assert.equal(rebased.traveled, 0);
+  assert.equal(rebased.accuracy, 8);
+  assert.equal(rebased.estimating, false);
 });

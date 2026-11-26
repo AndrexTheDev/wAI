@@ -257,8 +257,39 @@ export function subscribeSensors(callback: SensorCallback): () => void {
     }
   }
 
+  /**
+   * Step detection from the accelerometer.
+   *
+   * Android's WebView exposes no step counter; the `deviceorientation` stream
+   * carries no motion. A cheap peak detector on `devicemotion` is enough here:
+   * we only need "did the user take a step", and a wrong step is corrected by
+   * the next GPS fix anyway. Reported as a cumulative count.
+   */
+  let lastStepAt = 0;
+  let rising = false;
+  const onMotion = (event: DeviceMotionEvent) => {
+    const acc = event.accelerationIncludingGravity;
+    if (!acc || acc.x == null || acc.y == null || acc.z == null) return;
+    const magnitude = Math.hypot(acc.x, acc.y, acc.z);
+    // ~10.2 m/s² at rest; a step pushes the magnitude above ~11.2.
+    const now = Date.now();
+    if (magnitude > 11.2 && !rising) {
+      rising = true;
+      if (now - lastStepAt > 280) {
+        lastStepAt = now;
+        readings.steps = (readings.steps ?? 0) + 1;
+        emit();
+      }
+    } else if (magnitude < 10.4) {
+      rising = false;
+    }
+  };
+  const motionSupported = 'ondevicemotion' in window;
+  if (motionSupported) window.addEventListener('devicemotion', onMotion);
+
   return () => {
     window.removeEventListener(eventName as 'deviceorientation', onOrientation, true);
+    if (motionSupported) window.removeEventListener('devicemotion', onMotion);
     barometer?.stop();
   };
 }
@@ -579,6 +610,8 @@ export async function scheduleParkingReminder(
             smallIcon: 'ic_stat_anchor',
             iconColor: '#6ee7b7',
             channelId: 'wai-parking',
+            // Lets a tap open the right anchor instead of just the app.
+            extra: { anchorId },
           },
         ],
       });
@@ -596,6 +629,28 @@ export async function cancelParkingReminder(anchorId: string): Promise<void> {
     await LocalNotifications.cancel({ notifications: [{ id: notificationId(anchorId) }] });
   } catch {
     /* ignore */
+  }
+}
+
+/**
+ * Subscribe to taps on a parking reminder.
+ *
+ * A notification that only *shows* the reminder is a dead end: the user opens
+ * the app and still has to find the anchor. The callback receives the anchor id
+ * (encoded in the notification's extra data) so the app can jump straight to it.
+ */
+export async function onParkingNotificationTap(
+  handler: (anchorId: string) => void,
+): Promise<() => void> {
+  if (!isNative) return () => {};
+  try {
+    const listener = await LocalNotifications.addListener('localNotificationActionPerformed', (action) => {
+      const anchorId = action.notification.extra?.anchorId;
+      if (typeof anchorId === 'string' && anchorId) handler(anchorId);
+    });
+    return () => void listener.remove();
+  } catch {
+    return () => {};
   }
 }
 

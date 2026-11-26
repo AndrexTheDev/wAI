@@ -19,6 +19,7 @@ import {
 } from '../platform/native';
 import { openExternal } from '../platform/links';
 import { LegalSheet } from './LegalSheet';
+import { ConfirmDialog } from '../ui/Confirm';
 import {
   Check,
   Copy,
@@ -58,6 +59,7 @@ export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => v
   const toast = useToast();
   const [showSensors, setShowSensors] = useState(false);
   const [torchOn, setTorchOn] = useState(false);
+  const [confirmWipe, setConfirmWipe] = useState(false);
 
   const sensors = sensorAvailability();
 
@@ -274,16 +276,7 @@ export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => v
           <button type="button" className="btn btn--xs" onClick={doImport}>
             {t('app.settings.importData')}
           </button>
-          <button
-            type="button"
-            className="btn btn--xs btn--danger"
-            onClick={() => {
-              if (window.confirm(t('app.settings.deleteAllConfirm'))) {
-                clearAllData();
-                toast.show(t('app.settings.deleteAll'), 'ok');
-              }
-            }}
-          >
+          <button type="button" className="btn btn--xs btn--danger" onClick={() => setConfirmWipe(true)}>
             {t('app.settings.deleteAll')}
           </button>
         </div>
@@ -372,6 +365,20 @@ export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => v
       <LegalSheet slug={legalSlug} open={Boolean(legalSlug)} onClose={() => setLegalSlug(null)} />
 
       {isDemo && <p className="muted" style={{ textAlign: 'center' }}>{t('app.demo.body')}</p>}
+      <ConfirmDialog
+        open={confirmWipe}
+        title={t('app.settings.deleteAll')}
+        body={t('app.settings.deleteAllConfirm')}
+        confirmLabel={t('app.settings.deleteAll')}
+        cancelLabel={t('common.ctaCancel')}
+        danger
+        onCancel={() => setConfirmWipe(false)}
+        onConfirm={() => {
+          setConfirmWipe(false);
+          clearAllData();
+          toast.show(t('app.settings.deleteAll'), 'ok');
+        }}
+      />
     </>
   );
 }

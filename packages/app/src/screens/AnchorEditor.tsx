@@ -10,6 +10,7 @@ import {
 import { useApp, makePhotoRef, makeVoiceRef } from '../store/AppStore';
 import { useT } from '../i18n/useT';
 import { Sheet } from '../ui/Sheet';
+import { ConfirmDialog } from '../ui/Confirm';
 import { useToast } from '../ui/Toast';
 import { capturePhoto, startVoiceRecording, vibrate } from '../platform/native';
 import {
@@ -28,6 +29,9 @@ import {
 } from '../ui/icons';
 
 const CATEGORIES: AnchorCategory[] = ['car', 'tent', 'meeting', 'tool', 'entrance', 'nature', 'other'];
+
+/** Car-park levels, cheapest possible input: one tap. */
+const FLOOR_PRESETS = ['−3', '−2', '−1', 'EG', '1', '2', '3'];
 
 interface DraftState {
   name: string;
@@ -86,6 +90,7 @@ export function AnchorEditor({
   const [recording, setRecording] = useState<ReturnType<typeof startVoiceRecording> extends Promise<infer R> ? R : never>(null);
   const [recordMs, setRecordMs] = useState(0);
   const [playing, setPlaying] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
     if (!anchor) return;
@@ -279,6 +284,34 @@ export function AnchorEditor({
         />
       </label>
 
+      {/* Level input: the elevation beam is useless without it, and in a car
+          park "Ebene 3" is the one fact people actually remember. Presets make
+          it one tap instead of typing a minus sign on a phone keyboard. */}
+      <div className="field">
+        <span className="field__label">{t('app.anchor.floorLabel')}</span>
+        <div className="chips chips--wrap">
+          {FLOOR_PRESETS.map((preset) => (
+            <button
+              key={preset}
+              type="button"
+              className={`chip ${draft.floorLabel === preset ? 'is-active' : ''}`}
+              onClick={() => setDraft({ ...draft, floorLabel: draft.floorLabel === preset ? '' : preset })}
+              aria-pressed={draft.floorLabel === preset}
+            >
+              {preset}
+            </button>
+          ))}
+        </div>
+        <input
+          className="field__input"
+          value={draft.floorLabel}
+          onChange={(event) => setDraft({ ...draft, floorLabel: event.target.value })}
+          placeholder={t('app.anchor.floorPlaceholder')}
+          maxLength={24}
+        />
+        <span className="field__help">{t('app.anchor.floorHelp')}</span>
+      </div>
+
       <div className="field">
         <span className="field__label">
           {t('app.anchor.zone')}
@@ -375,16 +408,7 @@ export function AnchorEditor({
             >
               {t('app.anchor.archive')}
             </button>
-            <button
-              type="button"
-              className="btn btn--sm btn--danger"
-              onClick={() => {
-                if (window.confirm(t('app.anchor.deleteConfirm'))) {
-                  deleteAnchor(anchor.id);
-                  onClose();
-                }
-              }}
-            >
+            <button type="button" className="btn btn--sm btn--danger" onClick={() => setConfirmDelete(true)}>
               <Trash size={14} /> {t('app.anchor.delete')}
             </button>
           </div>
@@ -415,6 +439,21 @@ export function AnchorEditor({
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={confirmDelete}
+        title={t('app.anchor.delete')}
+        body={t('app.anchor.deleteConfirm')}
+        confirmLabel={t('app.anchor.delete')}
+        cancelLabel={t('common.ctaCancel')}
+        danger
+        onCancel={() => setConfirmDelete(false)}
+        onConfirm={() => {
+          setConfirmDelete(false);
+          deleteAnchor(anchor.id);
+          onClose();
+        }}
+      />
     </Sheet>
   );
 }

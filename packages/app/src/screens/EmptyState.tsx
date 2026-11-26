@@ -16,7 +16,7 @@ export function EmptyState({
       <span className="empty__icon">{icon}</span>
       <h3>{title}</h3>
       <p>{body}</p>
-      {action}
+      {action && <div className="empty__action">{action}</div>}
     </div>
   );
 }

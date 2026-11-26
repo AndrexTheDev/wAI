@@ -17,8 +17,11 @@ import {
   type ReactNode,
 } from 'react';
 import {
+  advanceWalker,
   appendTrailPoint,
   canAddAnchor,
+  createWalker,
+  rebaseWalker,
   createAnchor,
   detectLocale,
   DEFAULT_ISSUER_PUBLIC_KEY,
@@ -37,6 +40,7 @@ import {
   type PastePoint,
   type PhotoRef,
   type VoiceRef,
+  type WalkerState,
 } from '@wai/shared';
 import { storage, STORAGE_KEYS } from './storage';
 import {
@@ -217,7 +221,12 @@ interface AppContextValue {
   limits: ReturnType<typeof limitsFor>;
   locale: 'de' | 'en';
   setLocale: (locale: 'de' | 'en') => void;
+  /** The position the UI should use: real fix, or the step estimate when GPS is silent. */
   fix: GeoFix | null;
+  /** True when `fix` is derived from steps, not from the OS. */
+  estimated: boolean;
+  /** Steps walked since the last real fix (0 when GPS is live). */
+  estimatedSteps: number;
   sensors: SensorReadings;
   locationError: string | null;
   demo: boolean;
@@ -272,6 +281,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(true);
   const [fix, setFix] = useState<GeoFix | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
+  /**
+   * Dead reckoning. A real fix always wins; when the OS stops delivering one
+   * (underground), the estimate takes over and the UI labels it as an estimate.
+   */
+  const walker = useRef<WalkerState | null>(null);
+  const lastFixAt = useRef<number>(0);
+  const [estimated, setEstimated] = useState(false);
+  const [estimatedSteps, setEstimatedSteps] = useState(0);
   const [sensors, setSensors] = useState<SensorReadings>({
     heading: null,
     magneticAccuracy: null,
@@ -321,6 +338,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (initial) setFix(initial);
       cancel = await watchLocation({
         onUpdate: (next) => {
+          // A real fix always re-anchors the estimate.
+          walker.current = rebaseWalker(next);
+          lastFixAt.current = Date.now();
+          setEstimated(false);
+          setEstimatedSteps(0);
           setFix(next);
           setLocationError(null);
         },
@@ -329,6 +351,44 @@ export function AppProvider({ children }: { children: ReactNode }) {
     })();
     return () => cancel();
   }, []);
+
+  /**
+   * Turns detected steps into an estimated position while the OS has no fix.
+   * Runs on the step counter only — no timers, no battery drain when idle.
+   */
+  const lastSteps = useRef<number | null>(null);
+  useEffect(() => {
+    const steps = sensors.steps;
+    if (steps == null) return;
+    if (lastSteps.current == null) {
+      lastSteps.current = steps;
+      return;
+    }
+    const delta = steps - lastSteps.current;
+    lastSteps.current = steps;
+    if (delta <= 0) return;
+
+    const now = Date.now();
+    if (!walker.current) {
+      const base = fix ?? { lat: 0, lng: 0, timestamp: now };
+      walker.current = createWalker({ lat: base.lat, lng: base.lng, timestamp: lastFixAt.current || now });
+    }
+    const next = advanceWalker(walker.current, sensors.heading, delta, now);
+    walker.current = next;
+    if (!next.estimating) return;
+
+    // Only replace the live position when the real fix is actually stale.
+    setEstimated(true);
+    setEstimatedSteps(next.steps);
+    setFix((current) => ({
+      lat: next.lat,
+      lng: next.lng,
+      altitude: current?.altitude,
+      accuracy: next.accuracy,
+      source: 'dead-reckoning',
+      timestamp: now,
+    }));
+  }, [sensors.steps, sensors.heading, fix]);
 
   /* ---------------- trail recording ---------------- */
   useEffect(() => {
@@ -420,6 +480,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       locale,
       setLocale: (next) => dispatch({ type: 'update-settings', patch: { locale: next } }),
       fix,
+      estimated,
+      estimatedSteps,
       sensors,
       locationError,
       demo: isDemo,
@@ -465,6 +527,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       limits,
       locale,
       fix,
+      estimated,
+      estimatedSteps,
       sensors,
       locationError,
       setAnchor,

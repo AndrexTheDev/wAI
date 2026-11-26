@@ -11,6 +11,7 @@ import { HomeScreen } from './HomeScreen';
 import { ProScreen } from './ProScreen';
 import { SettingsScreen } from './SettingsScreen';
 import { ShareSheet } from './ShareSheet';
+import { HelpSheet } from './HelpSheet';
 import { ParkingTimerSheet } from './ParkingTimerSheet';
 import { Onboarding } from './Onboarding';
 import {
@@ -26,7 +27,7 @@ import {
   Cross,
   Check,
 } from '../ui/icons';
-import { isNative, vibrate } from '../platform/native';
+import { isNative, onParkingNotificationTap, vibrate } from '../platform/native';
 
 type Tab = 'anchors' | 'find' | 'archive' | 'settings';
 
@@ -36,12 +37,15 @@ export function AppShell() {
     ready,
     settings,
     plan,
+    anchors,
     activeAnchors,
     fix,
+    estimated,
     sensors,
     locationError,
     demo,
     setAnchor,
+    archiveAnchor,
     setLocale,
     updateSettings,
     importAnchors,
@@ -100,6 +104,25 @@ export function AppShell() {
     const incoming = extractShareCode(window.location.hash) ?? extractShareCode(window.location.search);
     if (incoming) handleIncomingShare(incoming);
   }, [ready, handleIncomingShare]);
+
+  /* A tapped parking reminder opens the anchor it belongs to. */
+  useEffect(() => {
+    if (!isNative || !ready) return;
+    let remove: (() => void) | undefined;
+    void onParkingNotificationTap((anchorId) => {
+      const anchor = anchors.find((item) => item.id === anchorId);
+      if (!anchor) return;
+      // The timer notification is about *time*, so show the timer first, then
+      // let the user continue to the compass with one tap.
+      setTimerAnchor(anchor);
+      setSelected(anchor);
+      setTab('find');
+      void vibrate('tap');
+    }).then((dispose) => {
+      remove = dispose;
+    });
+    return () => remove?.();
+  }, [ready, anchors]);
 
   useEffect(() => {
     if (!isNative) return;
@@ -221,9 +244,11 @@ export function AppShell() {
       {/* Status strip */}
       {tab !== 'find' && (
         <div className="status-strip">
-          <span className={`status-chip ${fix ? 'status-chip--ok' : 'status-chip--warn'}`}>
+          <span
+            className={`status-chip ${estimated ? 'status-chip--warn' : fix ? 'status-chip--ok' : 'status-chip--warn'}`}
+          >
             <span className="dot" />
-            {fix ? t('app.home.gpsOk') : t('app.home.noGps')}
+            {estimated ? t('app.home.estimated') : fix ? t('app.home.gpsOk') : t('app.home.noGps')}
           </span>
           {fix?.accuracy !== undefined && (
             <span className="status-chip">{t('app.home.accuracy', { meters: Math.round(fix.accuracy) })}</span>
@@ -245,6 +270,8 @@ export function AppShell() {
             onNewAnchor={createAnchorNow}
             onOpenPro={() => openPro()}
             onFind={startFind}
+            onHelp={() => setHelpOpen(true)}
+            onTimer={(anchor) => setTimerAnchor(anchor)}
           />
         )}
 
@@ -257,14 +284,21 @@ export function AppShell() {
               setTab('anchors');
             }}
             onOpenPro={openPro}
+            onArchive={(anchor) => {
+              archiveAnchor(anchor.id, true);
+              setSelected(null);
+              setTab('anchors');
+              toast.show(t('app.anchor.archive'), 'ok', {
+                label: t('app.home.undo'),
+                onClick: () => archiveAnchor(anchor.id, false),
+              });
+            }}
+            onStopParking={(anchor) => setTimerAnchor(anchor)}
           />
         )}
 
         {tab === 'archive' && (
-          <ArchiveScreen
-            onOpenAnchor={(anchor) => setEditing({ anchor, mode: 'edit' })}
-            onOpenPro={openPro}
-          />
+          <ArchiveScreen onOpenAnchor={(anchor) => setEditing({ anchor, mode: 'edit' })} onOpenPro={openPro} />
         )}
 
         {tab === 'settings' && <SettingsScreen onOpenPro={openPro} />}
@@ -323,61 +357,15 @@ export function AppShell() {
         onUpgrade={openPro}
       />
 
-      {helpOpen && <HelpSheet onClose={() => setHelpOpen(false)} />}
-    </div>
-  );
-}
-
-function HelpSheet({ onClose }: { onClose: () => void }) {
-  const { t, locale } = useT();
-  const steps = [
-    {
-      title: t('landing.how.steps.0.title'),
-      body: t('landing.how.steps.0.body'),
-    },
-    {
-      title: t('landing.how.steps.1.title'),
-      body: t('landing.how.steps.1.body'),
-    },
-    {
-      title: t('landing.how.steps.2.title'),
-      body: t('landing.how.steps.2.body'),
-    },
-  ];
-  return (
-    <div className="sheet-backdrop" onClick={onClose}>
-      <div
-        className="sheet"
-        style={{ gridTemplateRows: 'auto 1fr' }}
-        onClick={(event) => event.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-      >
-        <div className="sheet__head">
-          <h2 className="sheet__title">{t('landing.how.eyebrow')}</h2>
-          <button type="button" className="icon-btn" style={{ marginLeft: 'auto' }} onClick={onClose} aria-label={t('common.ctaClose')}>
-            <Cross size={16} />
-          </button>
-        </div>
-        <div className="sheet__body">
-          {steps.map((step, index) => (
-            <div key={step.title} className="card">
-              <div className="card__head">
-                <span className="card__title">
-                  <Check size={13} /> {`0${index + 1} · ${step.title}`}
-                </span>
-              </div>
-              <p className="muted">{step.body}</p>
-            </div>
-          ))}
-          <p className="muted">{t('app.find.compassHint')}</p>
-          <p className="muted">
-            {locale === 'de'
-              ? 'wAI ist ein Orientierungshelfer und kein Rettungsgerät. In Notfällen gilt immer der Notruf 112.'
-              : 'wAI is an orientation aid, not a rescue device. In an emergency always call 112.'}
-          </p>
-        </div>
-      </div>
+      {helpOpen && (
+        <HelpSheet
+          onClose={() => setHelpOpen(false)}
+          onOpenPro={() => {
+            setHelpOpen(false);
+            openPro();
+          }}
+        />
+      )}
     </div>
   );
 }

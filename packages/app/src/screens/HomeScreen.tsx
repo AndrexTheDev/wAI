@@ -1,6 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
-  formatDistance,
   formatDuration,
   parkingStatus,
   tArray,
@@ -10,6 +9,7 @@ import {
 import { useApp } from '../store/AppStore';
 import { useToast } from '../ui/Toast';
 import { useT } from '../i18n/useT';
+import { useUnits } from '../i18n/useUnits';
 import {
   Anchor as AnchorIcon,
   CATEGORY_ICONS,
@@ -32,11 +32,15 @@ export function HomeScreen({
   onNewAnchor,
   onOpenPro,
   onFind,
+  onHelp,
+  onTimer,
 }: {
   onOpenAnchor: (anchor: Anchor) => void;
   onNewAnchor: () => void;
   onOpenPro: () => void;
   onFind: (anchor: Anchor) => void;
+  onHelp: () => void;
+  onTimer: (anchor: Anchor) => void;
 }) {
   const { t, locale } = useT();
   const { anchors, activeAnchors, plan, limits, fix, search, demo } = useApp();
@@ -45,6 +49,16 @@ export function HomeScreen({
   const [category, setCategory] = useState<AnchorCategory | 'all'>('all');
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const [sort, setSort] = useState<Sort>('newest');
+  /** Short "impact" animation after a successful drop – visible confirmation. */
+  const [impact, setImpact] = useState(false);
+
+  useEffect(() => {
+    if (!impact) return;
+    const timer = window.setTimeout(() => setImpact(false), 640);
+    return () => window.clearTimeout(timer);
+  }, [impact]);
+  /** Newest anchor id lets the list reveal the just-created card. */
+  const newestId = activeAnchors[0]?.id ?? null;
 
   const categories = useMemo(
     () => ['car', 'tent', 'meeting', 'tool', 'entrance', 'nature', 'other'] as AnchorCategory[],
@@ -83,7 +97,15 @@ export function HomeScreen({
   return (
     <>
       <div className="anchor-hero">
-        <button type="button" className="anchor-btn" onClick={doSet} aria-label={t('app.home.setAnchor')}>
+        <button
+          type="button"
+          className={`anchor-btn ${impact ? 'is-impact' : ''}`}
+          onClick={() => {
+            setImpact(true);
+            doSet();
+          }}
+          aria-label={t('app.home.setAnchor')}
+        >
           <span className="anchor-btn__ring" />
           <span className="anchor-btn__ring anchor-btn__ring--2" />
           <span className="anchor-btn__inner">
@@ -197,17 +219,45 @@ export function HomeScreen({
       {visible.length === 0 ? (
         <EmptyState
           icon={<AnchorIcon size={26} />}
-          title={query || category !== 'all' || favoritesOnly ? t('app.home.emptyTitle') : t('app.anchor.untitled')}
-          body={t('app.home.emptyBody')}
+          title={
+            query || category !== 'all' || favoritesOnly
+              ? t('app.home.emptyFiltered')
+              : t('app.home.emptyTitle')
+          }
+          body={query || category !== 'all' || favoritesOnly ? t('app.home.emptyFilteredBody') : t('app.home.emptyBody')}
+          action={
+            query || category !== 'all' || favoritesOnly ? (
+              <button
+                type="button"
+                className="btn btn--sm"
+                onClick={() => {
+                  setQuery('');
+                  setCategory('all');
+                  setFavoritesOnly(false);
+                }}
+              >
+                {t('app.home.clearFilters')}
+              </button>
+            ) : (
+              <div className="empty__stack">
+                <span className="empty__hint">{t('app.home.emptyHint')}</span>
+                <button type="button" className="btn btn--sm" onClick={onHelp}>
+                  {t('app.home.emptyCta')}
+                </button>
+              </div>
+            )
+          }
         />
       ) : (
         <div className="anchor-list">
           {visible.map((anchor) => (
             <AnchorCard
               key={anchor.id}
+              highlight={anchor.id === newestId}
               anchor={anchor}
               onOpen={() => onOpenAnchor(anchor)}
               onFind={() => onFind(anchor)}
+              onTimer={onTimer ? () => onTimer(anchor) : undefined}
               originLat={fix?.lat}
               originLng={fix?.lng}
               locale={locale}
@@ -230,6 +280,8 @@ export function AnchorCard({
   anchor,
   onOpen,
   onFind,
+  onTimer,
+  highlight,
   originLat,
   originLng,
   locale,
@@ -238,20 +290,24 @@ export function AnchorCard({
   anchor: Anchor;
   onOpen: () => void;
   onFind: () => void;
+  /** Present for vehicles: starts or checks the parking timer in one tap. */
+  onTimer?: () => void;
+  /** True for the anchor that was just created – gets a one-off light ring. */
+  highlight?: boolean;
   originLat?: number;
   originLng?: number;
   locale: 'de' | 'en';
   t: ReturnType<typeof useT>['t'];
 }) {
+  const { distance: fmtDistance } = useUnits();
   const Icon = CATEGORY_ICONS[anchor.category] ?? CATEGORY_ICONS.other;
   const distance =
     originLat !== undefined && originLng !== undefined
-      ? formatDistance(
+      ? fmtDistance(
           Math.hypot(
             (anchor.lat - originLat) * 111132,
             (anchor.lng - originLng) * 111320 * Math.cos((originLat * Math.PI) / 180),
           ),
-          locale,
         )
       : null;
   const parking = parkingStatus(anchor);
@@ -259,7 +315,7 @@ export function AnchorCard({
   const trail = (anchor.trail?.length ?? 0) > 1;
 
   return (
-    <div className={`anchor-card ${anchor.archived ? 'is-archived' : ''}`}>
+    <div className={`anchor-card ${anchor.archived ? 'is-archived' : ''} ${highlight ? 'is-new' : ''}`}>
       {/* Main tap target: opens the editor. Kept as a real <button> for a11y, but
           the distance shortcut below is a sibling so we never nest buttons. */}
       <button
@@ -286,6 +342,19 @@ export function AnchorCard({
       </button>
 
       <div className="anchor-card__right">
+        {/* The most common case in a car park: the car. A clock on the card
+            saves opening the editor just to start the parking timer. */}
+        {anchor.category === 'car' && onTimer && (
+          <button
+            type="button"
+            className={`anchor-card__timer ${anchor.parking ? 'is-running' : ''}`}
+            onClick={onTimer}
+            aria-label={`${t('app.timer.title')}: ${anchor.name || t('app.anchor.untitled')}`}
+          >
+            <Timer size={12} />
+            {anchor.parking ? t('app.timer.running') : t('app.timer.startShort')}
+          </button>
+        )}
         {distance && onFind ? (
           <button
             type="button"
