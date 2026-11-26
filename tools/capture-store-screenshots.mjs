@@ -260,7 +260,18 @@ for (const shot of SHOTS) {
   }
   const missing = reached.filter((hit) => hit === null);
   if (missing.length) {
-    console.warn(`  ! ${shot.slug}: ${missing.length} Navigationsschritt(e) nicht gefunden — Bild zeigt ggf. die falsche Ansicht`);
+    // Selbstauskunft: was war überhaupt klickbar? Ohne das ist die Fehlersuche ein
+    // Blindflug über ein Log, das man von hier aus nicht lesen kann.
+    const inventory = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('.anchor-card')).slice(0, 6).map((card) => ({
+        text: (card.textContent ?? '').replace(/\s+/g, ' ').trim().slice(0, 40),
+        buttons: Array.from(card.querySelectorAll('button')).map(
+          (b) => b.className || b.getAttribute('aria-label') || 'button',
+        ),
+      })),
+    );
+    console.warn(`  ! ${shot.slug}: ${missing.length} Navigationsschritt(e) nicht gefunden`);
+    console.warn(`      Karten im DOM: ${JSON.stringify(inventory).slice(0, 500)}`);
   }
   const file = path.join(outDir, `${shot.slug}.png`);
   await page.screenshot({ path: file, fullPage: false });
