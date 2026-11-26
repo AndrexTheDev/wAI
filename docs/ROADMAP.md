@@ -7,7 +7,9 @@
 > phased roadmap. Legend: ✅ vorhanden und geprüft · ⚠️ teilweise / nur behauptet
 > · ❌ fehlt · 🔒 Pro-Gate fehlt oder falsch.
 
-Stand: 2026-11-25 · geprüft gegen `packages/app`, `packages/shared`, `packages/landing`.
+Stand: 2026-11-25 · Phase 1, 2, 3, 4 und 5.1/5.3 sind umgesetzt (PR #6–#9).
+Offen sind nur noch 5.2 (Screenshots) und das Launch-Gate in Phase 6 — beides
+braucht den Nutzer bzw. einen Runner mit Chromium.
 
 ---
 
@@ -137,12 +139,12 @@ Ziel: Nichts Behauptetes bleibt unimplementiert, kein toter Schalter.
 | 4.3 „10 Minuten vorher“-Erinnerung | ✅ zweiter Slot (`slot=1`), damit sich die beiden Erinnerungen nicht gegenseitig löschen; unter 12 Min. automatisch ausgeblendet |
 | 4.4 Etagen-Assistent beim Setzen | ✅ Presets −3 … 3 + Freitext (Phase 1.1) |
 
-### Phase 5 — Außenwirkung angleichen (P2) — 5.1 ✅ (`check:claims`)
+### Phase 5 — Außenwirkung angleichen (P2) — 5.1 ✅, 5.3 ✅
 | Task | Warum |
 |---|---|
 | 5.1 Claims gegen Code prüfen ✅ | `tools/check-claims.mjs`, in `verify` verdrahtet, gegen Fehlalarm getestet |
 | 5.2 Screenshots erzeugen (Runner mit Chromium) | letzte fehlende Store-Zutat |
-| 5.3 Store-Text um Etagen-Assistent + Parkspot-Modus ergänzen | ASO |
+| 5.3 Store-Text um Auto-Kachel + Erinnerung ✅ | Store-Text und Landing-Use-Case nennen Auto-Kachel, 10-Minuten-Erinnerung und Parkschein-Foto |
 
 ### Phase 6 — Launch-Gate (P3, blockiert Veröffentlichung)
 | Task | Status |
@@ -153,6 +155,15 @@ Ziel: Nichts Behauptetes bleibt unimplementiert, kein toter Schalter.
 | 6.4 Gerätetest im Flugmodus | offen |
 
 ---
+
+## 7a. Erledigte Arbeit (Stand nach PR #9)
+
+| PR | Inhalt |
+|---|---|
+| #6 | Etagen-Eingabe, Einheiten, Schrittschätzung, Leerzustand, Confirm-Dialog, Timer auf der Auto-Karte, Tippen auf Erinnerung, Taschenlampe im Suchbildschirm, Hilfe-Center, Ankunft mit Folgeaktion, Fehlertexte mit nächstem Schritt, komplette Optik-Schicht |
+| #7 | `tools/check-claims.mjs` in `verify` — Behauptungen müssen im Code gedeckt sein (gegen Fehlalarm getestet) |
+| #8 | `CarSpotCard` („Wo steht mein Auto?“), zweiter Erinnerungs-Slot 10 Min. vorher, Parkschein-Foto |
+| #9 | Store-Text und Landing nennen die neuen Parkspot-Funktionen; Test-Zähler aus den Testdateien statt README |
 
 ## 8. Definition of Done für „perfekte Parkspot-App“
 
