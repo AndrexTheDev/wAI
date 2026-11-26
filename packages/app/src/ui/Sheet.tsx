@@ -31,8 +31,9 @@ export function Sheet({
     };
     document.addEventListener('keydown', onKey);
     const timer = window.setTimeout(() => {
+      // Kein Klick-Chip als erstes Fokusziel: das sieht aus wie eine Auswahl.
       const focusable = panelRef.current?.querySelector<HTMLElement>(
-        'input, textarea, select, button:not([data-skip-autofocus])',
+        'input, textarea, select, button:not([data-skip-autofocus]):not(.chip)',
       );
       focusable?.focus();
     }, 60);

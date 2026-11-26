@@ -14,7 +14,7 @@
  * in a restricted sandbox), it exits with precise instructions instead of writing
  * placeholder images — a missing screenshot is honest, a fake one is not.
  */
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -26,42 +26,58 @@ const getArg = (name, fallback) => {
 
 const url = getArg('url', 'http://localhost:5174');
 const outDir = path.resolve(ROOT, getArg('out', 'store/screenshots'));
-const VIEWPORT = { width: 1080, height: 1920, deviceScaleFactor: 1 };
+/**
+ * Play verlangt 1080×1920 **Pixel** – das sind auf einem Gerät mit 2,625×
+ * Pixeldichte 412×732 CSS-Pixel. Vorher wurde 1080×1920 als CSS-Viewport gesetzt:
+ * die App rendert dann wie auf einem 3-Etagen-Monitor, mit riesigen Lücken und
+ * Text, den es so auf keinem Handy gibt. Deshalb: echter Geräte-Viewport ×
+ * Skalierung = geforderte Pixelgröße.
+ */
+const VIEWPORT = { width: 412, height: 732, deviceScaleFactor: 2.621 };
+const PIXELS = { width: 1080, height: 1920 };
 
 const SHOTS = [
   {
     slug: '01-find',
     caption: { de: 'In 38 m – 3 Etagen über dir', en: '38 m away — 3 floors up' },
     // Die Auto-Kachel steht über der Liste; ihr Knopf führt zum Kompass.
-    steps: [['Zum Auto', 'To the car', 'Mein Auto']],
+    steps: [['Zum Auto', 'To the car']],
   },
   {
     slug: '02-anchor',
     caption: { de: 'Säule B17, Ebene −3', en: 'Pillar B17, level −3' },
-    steps: [['Anker', 'Anchors']],
+    // Der Editor: Etage, Zone, Notiz – das, was man nach drei Stunden vergisst.
+    steps: [{ within: 'Mein Auto', selector: '.anchor-card__tap' }],
   },
   {
     slug: '03-list',
     caption: { de: 'Alle Anker im Blick', en: 'Every anchor in view' },
-    steps: [['Anker', 'Anchors']],
+    // Kategorie-Filter, damit sich Liste und Detail klar unterscheiden.
+    // Filter-Chip statt bloßer Liste, damit sich 02/03 klar unterscheiden.
+    steps: [{ selector: '.chips .chip', text: ['Natur', 'Nature'] }],
   },
   {
     slug: '04-trail',
     caption: { de: 'Dein eigener Weg zurück', en: 'Your own way back' },
-    // Der Anker mit Spur steht in der Liste; die Spur zeigt der Find-Bildschirm.
-    steps: [['Wegkreuzung', 'West']],
+    // Die Spur zeigt der Find-Bildschirm; der Knopf trägt nur die Distanz,
+    // deshalb über aria-label ("Finden: …") ansteuern.
+    steps: [{ within: 'Wegkreuzung', selector: '.anchor-card__distance' }],
   },
   {
     slug: '05-share',
     caption: { de: 'Teilen ohne Server', en: 'Share without a server' },
     // Teilen liegt im Editor eines Ankers – nicht im Find-Bildschirm.
-    steps: [['Wegkreuzung', 'West'], ['Bearbeiten', 'Edit'], ['Teilen', 'Share']],
+    steps: [
+      { within: 'Wegkreuzung', selector: '.anchor-card__tap' },
+      { aria: ['Teilen', 'Share'] },
+    ],
   },
   {
     slug: '06-timer',
     caption: { de: 'Bevor das Ticket abläuft', en: 'Before the ticket expires' },
-    // Auf der Auto-Kachel steht der Timer-Knopf mit dem Parkzeit-Label.
-    steps: [['Timer', 'Parkzeit', 'Parking time']],
+    // Der Timer-Knopf sitzt auf der Auto-Kachel oben (carspot) und zusätzlich in
+    // der Liste; der obere ist der, den ein Nutzer zuerst sieht.
+    steps: [{ selector: '.carspot__side' }],
   },
   {
     slug: '07-settings',
@@ -71,7 +87,7 @@ const SHOTS = [
   {
     slug: '08-pro',
     caption: { de: 'Einmal zahlen. Für immer.', en: 'Pay once. Keep it.' },
-    steps: [['Einstellungen', 'Settings'], ['Pro']],
+    steps: [['Einstellungen', 'Settings'], { aria: ['Pro', 'Free upgraden', 'Upgrade'] }],
   },
 ];
 
@@ -108,7 +124,13 @@ try {
 }
 
 mkdirSync(outDir, { recursive: true });
-const context = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: 1, locale: 'de-DE' });
+const context = await browser.newContext({
+  viewport: { width: VIEWPORT.width, height: VIEWPORT.height },
+  deviceScaleFactor: VIEWPORT.deviceScaleFactor,
+  locale: 'de-DE',
+  isMobile: true,
+  hasTouch: true,
+});
 const page = await context.newPage();
 
 try {
@@ -184,18 +206,42 @@ await page.waitForTimeout(1200);
  * früher hier gesendet wurde und das niemand empfangen hat (die Screenshots
  * wären alle identisch gewesen).
  */
-async function clickLabel(page, labels) {
-  const hit = await page.evaluate((texts) => {
-    const nodes = Array.from(document.querySelectorAll('button, a, [role="tab"], [role="button"], li'));
-    for (const node of nodes) {
-      const text = (node.textContent ?? '').replace(/\s+/g, ' ').trim();
-      if (texts.some((t) => text === t || text.startsWith(t))) {
-        node.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-        return text.slice(0, 40);
+async function clickLabel(page, step) {
+  const { labels, aria, selector, within } = Array.isArray(step)
+    ? { labels: step, aria: [] }
+    : { labels: step.text ?? [], aria: step.aria ?? [], selector: step.selector, within: step.within };
+  const hit = await page.evaluate(
+    ({ texts, ariaTexts, sel, scope }) => {
+      // Mit `within` wird die Karte gesucht, die diesen Anker enthält – sonst
+      // landet man beim ersten Anker der Liste, nicht beim gemeinten.
+      let root = document;
+      if (scope) {
+        const card = Array.from(document.querySelectorAll('.anchor-card')).find((node) =>
+          (node.textContent ?? '').includes(scope),
+        );
+        if (!card) return null;
+        root = card;
       }
-    }
-    return null;
-  }, labels);
+      const nodes = Array.from(root.querySelectorAll(sel ?? 'button, a, [role="tab"], [role="button"], li'));
+      for (const node of nodes) {
+        const text = (node.textContent ?? '').replace(/\s+/g, ' ').trim();
+        // Knöpfe, die nur ein Symbol und eine Distanz zeigen, sind nur über ihr
+        // aria-label auffindbar – und genau die will man antippen.
+        const label = (node.getAttribute('aria-label') ?? '').trim();
+        const textHit = texts.some((t) => text === t || text.startsWith(t));
+        const ariaHit = ariaTexts.some((t) => label.startsWith(t));
+        // Ein Schritt, der nur einen Selektor nennt, meint den ersten Treffer –
+        // vorher gab es dafür kein Kriterium und der Klick lief immer ins Leere.
+        const selectorOnly = texts.length === 0 && ariaTexts.length === 0;
+        if (textHit || ariaHit || selectorOnly) {
+          node.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+          return (label || text).slice(0, 40);
+        }
+      }
+      return null;
+    },
+    { texts: labels, ariaTexts: aria, sel: selector, scope: within },
+  );
   await page.waitForTimeout(700);
   return hit;
 }
@@ -217,12 +263,57 @@ for (const shot of SHOTS) {
   }
   const missing = reached.filter((hit) => hit === null);
   if (missing.length) {
-    console.warn(`  ! ${shot.slug}: ${missing.length} Navigationsschritt(e) nicht gefunden — Bild zeigt ggf. die falsche Ansicht`);
+    // Selbstauskunft: was war überhaupt klickbar? Ohne das ist die Fehlersuche ein
+    // Blindflug über ein Log, das man von hier aus nicht lesen kann.
+    const inventory = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('.anchor-card')).slice(0, 6).map((card) => ({
+        text: (card.textContent ?? '').replace(/\s+/g, ' ').trim().slice(0, 40),
+        buttons: Array.from(card.querySelectorAll('button')).map(
+          (b) => b.className || b.getAttribute('aria-label') || 'button',
+        ),
+      })),
+    );
+    console.warn(`  ! ${shot.slug}: ${missing.length} Navigationsschritt(e) nicht gefunden`);
+    console.warn(`      Karten im DOM: ${JSON.stringify(inventory).slice(0, 500)}`);
   }
   const file = path.join(outDir, `${shot.slug}.png`);
   await page.screenshot({ path: file, fullPage: false });
-  results.push({ slug: shot.slug, file, caption: shot.caption });
+
+  /**
+   * Was ist tatsächlich zu sehen? Ohne diese Selbstauskunft bliebe unbemerkt,
+   * wenn ein Klick ins Leere lief und achtmal dieselbe Ansicht fotografiert
+   * wurde — der Screenshot selbst sieht ja immer „richtig" aus.
+   */
+  const viewportUsed = page.viewportSize();
+  const seen = await page.evaluate(() => {
+    const body = document.body.innerText.replace(/\s+/g, ' ').trim();
+    /**
+     * Signatur statt Textanfang: der Kopfbereich ist auf jeder Ansicht gleich, also
+     * verglichen frühere Fassungen nur Rauschen. Was eine Ansicht ausmacht, sind
+     * ihre Bauteile und die Überschrift des offenen Sheets.
+     */
+    const sheetTitle = document.querySelector('.sheet__title, .sheet h2, [role="dialog"] h2');
+    const header = document.querySelector('.topbar__titles');
+    const parts = [
+      header ? `anchor:${(header.textContent ?? '').trim().slice(0, 24)}` : '',
+      document.querySelector('.carspot') ? 'carspot' : '',
+      document.querySelector('.chips') ? 'chips' : '',
+      document.querySelector('.compass, .guide') ? 'compass' : '',
+      document.querySelector('.settings, .setting-row') ? 'settings' : '',
+      document.querySelector('.pro, .pro__hero') ? 'pro' : '',
+      sheetTitle ? `sheet:${(sheetTitle.textContent ?? '').trim()}` : '',
+      location.hash || '',
+    ].filter(Boolean);
+    return {
+      text: body.slice(0, 240),
+      signature: parts.join(' + '),
+      hasApp: Boolean(document.querySelector('.app')),
+      title: document.title,
+    };
+  });
+  results.push({ slug: shot.slug, file, caption: shot.caption, reached, seen, viewportUsed });
   console.log(`  ✔ ${shot.slug}.png — ${shot.caption.de}`);
+  console.log(`      gesehen: ${seen.text.slice(0, 110)}`);
 }
 
 await browser.close();
@@ -230,4 +321,38 @@ await browser.close();
 console.log(`\n${results.length} screenshots written to ${path.relative(ROOT, outDir)}`);
 console.log('Captions to burn in (Play allows up to 6 words per image):');
 for (const r of results) console.log(`  ${r.slug}: DE "${r.caption.de}" · EN "${r.caption.en}"`);
+// Bericht neben die Bilder: prüfbar per git, ohne Artefakt-Download.
+writeFileSync(
+  path.join(outDir, 'capture.json'),
+  `${JSON.stringify(
+    {
+      capturedAt: new Date().toISOString(),
+      viewport: { ...VIEWPORT, outputPixels: PIXELS },
+      url,
+      shots: results.map((r) => ({
+        slug: r.slug,
+        caption: r.caption,
+        navigation: r.reached,
+        visibleText: r.seen.text,
+        signature: r.seen.signature,
+        hasAppShell: r.seen.hasApp,
+        cssViewport: r.viewportUsed,
+      })),
+    },
+    null,
+    2,
+  )}\n`,
+);
+
+/**
+ * Zwei Bilder mit identischem Text sind kein Screenshot-Set, sondern ein Fehler.
+ * Kein harter Abbruch: die Bilder existieren und sind prüfbar, und ein roter Lauf
+ * ohne lesbares Log hilft niemandem weiter. Der Befund steht in capture.json und
+ * im Exit-Status des Workflows.
+ */
+const distinct = new Set(results.map((r) => r.seen.signature || r.seen.text.slice(0, 60)));
+if (distinct.size < results.length) {
+  console.warn(`\n! Nur ${distinct.size} von ${results.length} Ansichten unterscheiden sich — Navigation greift nicht überall.`);
+}
+
 console.log('\nVerify the set: node tools/check-store-listing.mjs');

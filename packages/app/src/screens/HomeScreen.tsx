@@ -28,6 +28,12 @@ import { CarSpotCard } from './CarSpotCard';
 
 type Sort = 'newest' | 'oldest' | 'nearest' | 'name';
 
+/**
+ * Ab hier ist die Entfernungsangabe keine Hilfe mehr, sondern ein Hinweis auf
+ * einen Datensatz-Fehler. Die Kachel fällt dann auf die Etage zurück.
+ */
+const FAR_ANCHOR_METERS = 50_000;
+
 export function HomeScreen({
   onOpenAnchor,
   onNewAnchor,
@@ -73,12 +79,19 @@ export function HomeScreen({
         .sort((a, b) => b.createdAt - a.createdAt)[0] ?? null,
     [activeAnchors],
   );
+  /**
+   * Die Auto-Kachel zeigt die Luftlinie – und nur, wenn sie eine ist. Eine
+   * Entfernung von 1423 km heißt nicht „Auto weit weg", sondern „Position und
+   * Anker liegen nicht in derselben Stadt": falscher Ort erfasst, Demo-Daten
+   * geladen, Höhe verwechselt. Dann ist die Etage die ehrlichere Auskunft.
+   */
   const carDistance = useMemo(() => {
     if (!carSpot || !fix) return null;
-    return Math.hypot(
+    const meters = Math.hypot(
       (carSpot.lat - fix.lat) * 111132,
       (carSpot.lng - fix.lng) * 111320 * Math.cos((fix.lat * Math.PI) / 180),
     );
+    return meters > FAR_ANCHOR_METERS ? null : meters;
   }, [carSpot, fix]);
 
   const categories = useMemo(

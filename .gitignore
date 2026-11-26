@@ -43,4 +43,5 @@ tmp/
 # store screenshots are captured from a real device/browser; only committed when
 # deliberately finalised for a store upload
 store/screenshots/*.png
+!store/screenshots/capture.json
 !store/screenshots/.gitkeep

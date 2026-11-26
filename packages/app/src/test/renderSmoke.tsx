@@ -182,14 +182,46 @@ for (const key of placeholderChecks) {
         floorLabel: '−3',
         parking: { startedAt: Date.now() - 1_800_000, limitMinutes: 120, reminderState: 'scheduled' as const },
       },
-      distanceMeters: 240,
+      distanceMeters: null,
       onFind: () => {},
       onTimer: () => {},
     })),
   );
   if (!spotHtml.includes('carspot')) problems.push('car-spot card did not render');
+  // Ohne brauchbare Distanz ist die Etage die große Zahl – und muss beschriftet sein.
   if (!spotHtml.includes('−3')) problems.push('car-spot card lost the level');
-  if (!spotHtml.includes('240')) problems.push('car-spot card lost the distance');
+  if (!spotHtml.includes('>Etage<')) problems.push('car-spot level is unlabelled');
+
+  // Mit plausibler Distanz zeigt die Kachel die Entfernung statt der Etage.
+  const nearHtml = renderToString(
+    createElement(AppProvider, null, createElement(CarSpotCard, {
+      anchor: {
+        id: 'a_near', name: 'Auto', category: 'car', lat: 48.1, lng: 11.5,
+        source: 'demo', createdAt: Date.now(), updatedAt: Date.now(),
+        photos: [], voices: [], favorite: false, archived: false, floorLabel: '−3',
+      },
+      distanceMeters: 240,
+      onFind: () => {},
+      onTimer: () => {},
+    })),
+  );
+  if (!nearHtml.includes('240')) problems.push('car-spot card lost the distance');
+
+  // Ein Anker 1400 km entfernt: die Kachel darf keine Kilometer behaupten,
+  // sondern muss auf die Etage zurückfallen (Screenshot-Befund).
+  const farHtml = renderToString(
+    createElement(AppProvider, null, createElement(CarSpotCard, {
+      anchor: {
+        id: 'a_far', name: 'Auto weit weg', category: 'car', lat: 40.4, lng: -3.7,
+        source: 'demo', createdAt: Date.now(), updatedAt: Date.now(),
+        photos: [], voices: [], favorite: false, archived: false, floorLabel: '−3',
+      },
+      distanceMeters: null,
+      onFind: () => {},
+      onTimer: () => {},
+    })),
+  );
+  if (!farHtml.includes('−3')) problems.push('far anchor: card lost the fallback level');
   if (!/Zum Auto|To the car/.test(spotHtml)) problems.push('car-spot card has no way to the compass');
 
   if (problems.length) {

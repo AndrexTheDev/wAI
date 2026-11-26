@@ -139,7 +139,7 @@ Ziel: Nichts Behauptetes bleibt unimplementiert, kein toter Schalter.
 | 4.3 „10 Minuten vorher“-Erinnerung | ✅ zweiter Slot (`slot=1`), damit sich die beiden Erinnerungen nicht gegenseitig löschen; unter 12 Min. automatisch ausgeblendet |
 | 4.4 Etagen-Assistent beim Setzen | ✅ Presets −3 … 3 + Freitext (Phase 1.1) |
 
-### Phase 5 — Außenwirkung angleichen (P2) — 5.1 ✅, 5.3 ✅, 5.2 ⚙️ vorbereitet
+### Phase 5 — Außenwirkung angleichen (P2) — ✅ 5.1, 5.3 und 5.2
 | Task | Warum |
 |---|---|
 | 5.1 Claims gegen Code prüfen ✅ | `tools/check-claims.mjs`, in `verify` verdrahtet, gegen Fehlalarm getestet |
