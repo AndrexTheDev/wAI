@@ -129,13 +129,13 @@ Ziel: Nichts Behauptetes bleibt unimplementiert, kein toter Schalter.
 | 3.4 Listen-Stagger + Karten-Hover/Press | Karten erscheinen gestaffelt (max. 8) |
 | 3.5 Mikro-Details | Skeletons, Tab-Indikator, Zahlen-Ticker, reduzierte Bewegung überall |
 
-### Phase 4 — Parkspot-Tiefe (P2)
-| Task | Warum |
+### Phase 4 — Parkspot-Tiefe (P2) — ✅ erledigt
+| Task | Zustand |
 |---|---|
-| 4.1 Parkhaus-Modus: „Wo steht mein Auto?“ als Startkachel | der häufigste Fall verdient einen eigenen Einstieg |
-| 4.2 Ticket-Foto + Tarif-Schnellwahl | Zettel unterm Scheibenwischer ersetzen |
-| 4.3 Rückweg-Reminder („noch 10 Min. bis Ablauf“) | zweite Erinnerung, nicht nur eine |
-| 4.4 Etagen-Assistent beim Setzen („Ebene? −3, −2, …“) | Etage ohne Tippen wählen |
+| 4.1 „Wo steht mein Auto?“ als eigene Kachel | ✅ `CarSpotCard` über der Liste: Entfernung/Etage als große Zahl, Parkzeit daneben, ein Tipp zum Kompass. Bei ≤ 15 Min. Restzeit wird sie bernsteinfarben, bei Überziehung rot |
+| 4.2 Ticket-Foto im Timer | ✅ „Parkschein fotografieren“ direkt im Timer-Sheet, Foto hängt am Anker |
+| 4.3 „10 Minuten vorher“-Erinnerung | ✅ zweiter Slot (`slot=1`), damit sich die beiden Erinnerungen nicht gegenseitig löschen; unter 12 Min. automatisch ausgeblendet |
+| 4.4 Etagen-Assistent beim Setzen | ✅ Presets −3 … 3 + Freitext (Phase 1.1) |
 
 ### Phase 5 — Außenwirkung angleichen (P2) — 5.1 ✅ (`check:claims`)
 | Task | Warum |

@@ -590,8 +590,13 @@ export async function scheduleParkingReminder(
   title: string,
   body: string,
   at: Date,
+  /**
+   * Offset used to keep several reminders for the same anchor apart. The 10-minute
+   * heads-up and the expiry reminder must not cancel each other.
+   */
+  slot = 0,
 ): Promise<boolean> {
-  const id = notificationId(anchorId);
+  const id = notificationId(`${anchorId}#${slot}`);
   try {
     if (isNative) {
       const permission = await LocalNotifications.checkPermissions();
@@ -623,10 +628,12 @@ export async function scheduleParkingReminder(
   }
 }
 
-export async function cancelParkingReminder(anchorId: string): Promise<void> {
+export async function cancelParkingReminder(anchorId: string, slots = [0]): Promise<void> {
   if (!isNative) return;
   try {
-    await LocalNotifications.cancel({ notifications: [{ id: notificationId(anchorId) }] });
+    await LocalNotifications.cancel({
+      notifications: slots.map((slot) => ({ id: notificationId(`${anchorId}#${slot}`) })),
+    });
   } catch {
     /* ignore */
   }

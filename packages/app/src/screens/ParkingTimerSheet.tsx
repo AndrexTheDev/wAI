@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { formatDuration, formatTime, parkingStatus, type Anchor } from '@wai/shared';
-import { useApp } from '../store/AppStore';
+import { useApp, makePhotoRef } from '../store/AppStore';
 import { useT } from '../i18n/useT';
 import { useToast } from '../ui/Toast';
 import { Sheet } from '../ui/Sheet';
-import { cancelParkingReminder, scheduleParkingReminder } from '../platform/native';
-import { Check, Crown, Timer, Trash } from '../ui/icons';
+import { cancelParkingReminder, capturePhoto, scheduleParkingReminder, vibrate } from '../platform/native';
+import { Camera, Check, Crown, Timer, Trash } from '../ui/icons';
 
 const PRESETS = [30, 60, 90, 120, 180, 240];
 
@@ -25,10 +25,12 @@ export function ParkingTimerSheet({
   onUpgrade: (reason: string) => void;
 }) {
   const { t, locale } = useT();
-  const { plan, setParking } = useApp();
+  const { plan, setParking, addPhoto, sensors } = useApp();
   const toast = useToast();
   const [minutes, setMinutes] = useState(120);
   const [now, setNow] = useState(Date.now());
+  /** Second, earlier reminder – the one that actually saves you from a ticket. */
+  const [earlyReminder, setEarlyReminder] = useState(true);
 
   useEffect(() => {
     if (!open) return;
@@ -52,15 +54,34 @@ export function ParkingTimerSheet({
       remindAt,
       reminderState: 'scheduled',
     });
+    const name = anchor.name || t('app.anchor.untitled');
     const scheduled = await scheduleParkingReminder(
       anchor.id,
       t('app.timer.notificationTitle'),
       t('app.timer.notificationBody', {
-        name: anchor.name || t('app.anchor.untitled'),
+        name,
         duration: formatDuration(minutes * 60000, locale),
       }),
       new Date(remindAt),
     );
+
+    /**
+     * The reminder that matters is the early one: at the limit the ticket is
+     * already written. Ten minutes ahead is enough to walk back in a car park.
+     * Only scheduled when it still lies in the future and there is room.
+     */
+    if (scheduled && earlyReminder && minutes > 12) {
+      const earlyAt = remindAt - 10 * 60000;
+      await scheduleParkingReminder(
+        anchor.id,
+        t('app.timer.earlyTitle'),
+        t('app.timer.earlyBody', { name }),
+        new Date(earlyAt),
+        1,
+      );
+    } else {
+      await cancelParkingReminder(anchor.id, [1]);
+    }
     toast.show(
       scheduled
         ? t('app.timer.reminderAt', { time: formatTime(remindAt, locale) })
@@ -71,7 +92,7 @@ export function ParkingTimerSheet({
   };
 
   const stop = async () => {
-    await cancelParkingReminder(anchor.id);
+    await cancelParkingReminder(anchor.id, [0, 1]);
     setParking(anchor.id, undefined);
     toast.show(t('app.timer.stop'), 'info');
     onClose();
@@ -148,6 +169,59 @@ export function ParkingTimerSheet({
         <span className="field__help">
           {t('app.timer.reminderAt', { time: formatTime(Date.now() + minutes * 60000, locale) })}
         </span>
+        <div className="row row--between" style={{ marginTop: 10 }}>
+          <div>
+            <div className="setting-row__label">{t('app.timer.remind10')}</div>
+            <div className="setting-row__sub">
+              {minutes > 12
+                ? t('app.timer.earlyAt', { time: formatTime(Date.now() + (minutes - 10) * 60000, locale) })
+                : t('app.timer.earlyTooShort')}
+            </div>
+          </div>
+          <button
+            type="button"
+            className={`switch setting-row__control ${earlyReminder ? 'is-on' : ''}`}
+            role="switch"
+            aria-checked={earlyReminder}
+            onClick={() => setEarlyReminder((value) => !value)}
+            aria-label={t('app.timer.remind10')}
+            data-skip-autofocus
+          />
+        </div>
+      </div>
+
+      {/* The ticket: the thing you never find when a warden is standing there. */}
+      <div className="card">
+        <div className="card__head">
+          <span className="card__title">
+            <Camera size={14} /> {t('app.timer.ticketTitle')}
+          </span>
+        </div>
+        <p className="muted">{t('app.timer.ticketHint')}</p>
+        {anchor.photos.length > 0 && (
+          <div className="photo-strip" style={{ marginTop: 8 }}>
+            {anchor.photos.map((photo) => (
+              <img key={photo.id} className="reference-photo" src={photo.file} alt={t('app.timer.ticketTitle')} />
+            ))}
+          </div>
+        )}
+        <button
+          type="button"
+          className="btn btn--sm btn--block"
+          style={{ marginTop: 8 }}
+          onClick={async () => {
+            const captured = await capturePhoto('camera');
+            if (!captured) {
+              toast.show(t('app.errors.camera'), 'err');
+              return;
+            }
+            addPhoto(anchor.id, makePhotoRef(captured.stored, sensors.heading ?? undefined));
+            void vibrate('tap');
+            toast.show(t('app.timer.ticketSaved'), 'ok');
+          }}
+        >
+          <Camera size={14} /> {t('app.anchor.takePhoto')}
+        </button>
       </div>
 
       {plan !== 'pro' && (

@@ -24,6 +24,7 @@ import {
   Plus,
 } from '../ui/icons';
 import { EmptyState } from './EmptyState';
+import { CarSpotCard } from './CarSpotCard';
 
 type Sort = 'newest' | 'oldest' | 'nearest' | 'name';
 
@@ -59,6 +60,26 @@ export function HomeScreen({
   }, [impact]);
   /** Newest anchor id lets the list reveal the just-created card. */
   const newestId = activeAnchors[0]?.id ?? null;
+
+  /**
+   * "Where is my car?" – the newest vehicle anchor that is still active.
+   * Shown above the list, because after a day in town nobody remembers the name
+   * they gave it.
+   */
+  const carSpot = useMemo(
+    () =>
+      activeAnchors
+        .filter((anchor) => anchor.category === 'car')
+        .sort((a, b) => b.createdAt - a.createdAt)[0] ?? null,
+    [activeAnchors],
+  );
+  const carDistance = useMemo(() => {
+    if (!carSpot || !fix) return null;
+    return Math.hypot(
+      (carSpot.lat - fix.lat) * 111132,
+      (carSpot.lng - fix.lng) * 111320 * Math.cos((fix.lat * Math.PI) / 180),
+    );
+  }, [carSpot, fix]);
 
   const categories = useMemo(
     () => ['car', 'tent', 'meeting', 'tool', 'entrance', 'nature', 'other'] as AnchorCategory[],
@@ -132,6 +153,15 @@ export function HomeScreen({
             </button>
           </div>
         </div>
+      )}
+
+      {carSpot && (
+        <CarSpotCard
+          anchor={carSpot}
+          distanceMeters={carDistance}
+          onFind={() => onFind(carSpot)}
+          onTimer={() => onTimer(carSpot)}
+        />
       )}
 
       <div className="toolbar">

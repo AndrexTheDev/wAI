@@ -17,6 +17,7 @@ import { LegalDocumentView } from '../screens/LegalSheet';
 import { anchorFromShareCode } from '../store/shareImport';
 import { EmptyState } from '../screens/EmptyState';
 import { AnchorCard } from '../screens/HomeScreen';
+import { CarSpotCard } from '../screens/CarSpotCard';
 import { formatDistance, formatHeight } from '@wai/shared';
 import { encodeSharePayload, buildShareLink, buildIntentLink } from '@wai/shared';
 
@@ -161,6 +162,35 @@ for (const key of placeholderChecks) {
     } as never)),
   );
   if (!carHtml.includes('anchor-card__timer')) problems.push('vehicle card has no timer shortcut');
+
+  // "Where is my car?" card: level, distance and a way back to the compass.
+  const spotHtml = renderToString(
+    createElement(AppProvider, null, createElement(CarSpotCard, {
+      anchor: {
+        id: 'a_spot',
+        name: 'Auto Ebene 3',
+        category: 'car',
+        lat: 48.1,
+        lng: 11.5,
+        source: 'demo',
+        createdAt: Date.now() - 3_600_000,
+        updatedAt: Date.now(),
+        photos: [],
+        voices: [],
+        favorite: false,
+        archived: false,
+        floorLabel: '−3',
+        parking: { startedAt: Date.now() - 1_800_000, limitMinutes: 120, reminderState: 'scheduled' as const },
+      },
+      distanceMeters: 240,
+      onFind: () => {},
+      onTimer: () => {},
+    })),
+  );
+  if (!spotHtml.includes('carspot')) problems.push('car-spot card did not render');
+  if (!spotHtml.includes('−3')) problems.push('car-spot card lost the level');
+  if (!spotHtml.includes('240')) problems.push('car-spot card lost the distance');
+  if (!/Zum Auto|To the car/.test(spotHtml)) problems.push('car-spot card has no way to the compass');
 
   if (problems.length) {
     failures++;
