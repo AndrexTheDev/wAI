@@ -837,6 +837,8 @@ export const en: Widen<GermanDictionary> = {
       themeLight: 'Light',
       privacy: 'Privacy',
       privacyBody: 'All data stays on this device. No account, no upload.',
+      offlineTitle: 'Everything offline, no account',
+      offlineBody: '{count} anchors · {bytes} on this device',
       exportData: 'Export data',
       exportDataBody: 'Creates a JSON package with all anchors, notes and metadata.',
       importData: 'Import data',

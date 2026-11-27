@@ -844,6 +844,9 @@ export const de = {
       themeLight: 'Hell',
       privacy: 'Privatsphäre',
       privacyBody: 'Alle Daten bleiben auf diesem Gerät. Kein Konto, kein Upload.',
+      // Zustand, nicht Versprechen: die Zahlen sind gemessen, nicht behauptet.
+      offlineTitle: 'Alles offline, ohne Konto',
+      offlineBody: '{count} Anker · {bytes} auf diesem Gerät',
       exportData: 'Daten exportieren',
       exportDataBody: 'Erstellt ein JSON-Paket mit allen Ankern, Notizen und Metadaten.',
       importData: 'Daten importieren',

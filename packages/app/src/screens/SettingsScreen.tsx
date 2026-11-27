@@ -150,6 +150,31 @@ export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => v
         </div>
       </div>
 
+      {/*
+        Die Aussage, um die es in diesem Bild geht („ohne Konto, ohne Cloud"),
+        stand bisher ganz unten im Bildschirm – unter Sprache, Darstellung,
+        Rückmeldung und Sensoren, also außerhalb jedes Store-Screenshots. Hier
+        steht sie als Zustand des Geräts, mit dem Speicherverbrauch daneben: drei
+        Zeilen, die man auf einem Bild lesen kann.
+      */}
+      <div className="card card--offline">
+        <div className="row" style={{ gap: 8, alignItems: 'flex-start' }}>
+          <Shield size={16} style={{ marginTop: 2, flex: 'none' }} />
+          <div style={{ display: 'grid', gap: 3 }}>
+            <span className="card__title">{t('app.settings.offlineTitle')}</span>
+            <span className="muted" style={{ fontSize: 12 }}>
+              {t('app.settings.offlineBody', {
+                count: anchors.length,
+                bytes: formatBytes(storageBytes, locale),
+              })}
+            </span>
+            <span className="muted" style={{ fontSize: 12 }}>
+              {t('app.settings.privacyBody')}
+            </span>
+          </div>
+        </div>
+      </div>
+
       {/* Appearance */}
       <div className="card">
         <div className="card__head">
@@ -285,9 +310,7 @@ export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => v
             {t('app.settings.deleteAll')}
           </button>
         </div>
-        <p className="muted" style={{ marginTop: 6 }}>
-          {anchors.length} · {t('app.settings.storageBody', { bytes: formatBytes(storageBytes, locale) })}
-        </p>
+        {/* Anzahl und Größe stehen jetzt oben im Offline-Block; hier wären sie doppelt. */}
       </div>
 
       {/* Support */}

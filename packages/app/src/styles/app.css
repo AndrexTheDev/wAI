@@ -2952,3 +2952,13 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* Offline-Karte in den Einstellungen: grün umrandet, weil sie ein Zustand ist. */
+.card--offline {
+  border-color: rgba(110, 231, 183, 0.28);
+  background: linear-gradient(180deg, rgba(110, 231, 183, 0.08), var(--surface));
+}
+
+:root[data-theme='light'] .card--offline {
+  background: linear-gradient(180deg, rgba(16, 122, 87, 0.07), var(--surface));
+}
