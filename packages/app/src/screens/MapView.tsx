@@ -368,7 +368,9 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
         <button
           type="button"
           className="map__zoom"
-          onClick={() => setZoom((value) => Math.min(8, value * 1.6))}
+          // 4 Einheiten/px ≈ 1,6 m/px: darüber hinaus ist der Block, in dem man
+          // steht, nur noch ein Punkt zwischen hunderten Häusern – mehr Paths als Bild.
+          onClick={() => setZoom((value) => Math.min(4, value * 1.6))}
           aria-label={t('app.map.zoomOut')}
         >
           −

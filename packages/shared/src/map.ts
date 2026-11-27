@@ -140,7 +140,7 @@ export interface MapViewport {
  * reads. Below 1 the pack has no more detail to give.
  */
 const MIN_UNITS_PER_PIXEL = 0.5;
-const MAX_UNITS_PER_PIXEL = 8;
+const MAX_UNITS_PER_PIXEL = 4;
 
 /** Centre the viewport on a point. `unitsPerPixel` is clamped to what the pack can show. */
 export function viewportFor(
