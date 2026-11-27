@@ -54,14 +54,14 @@
     {
       "x": 139489,
       "y": 90966,
-      "bytes": 269,
+      "bytes": 273,
       "buildings": 1,
       "roads": 1
     },
     {
       "x": 139490,
       "y": 90966,
-      "bytes": 203,
+      "bytes": 193,
       "buildings": 1,
       "roads": 0
     },
@@ -110,7 +110,7 @@
     {
       "x": 139498,
       "y": 90966,
-      "bytes": 433,
+      "bytes": 461,
       "buildings": 1,
       "roads": 1
     },
@@ -124,21 +124,21 @@
     {
       "x": 139500,
       "y": 90966,
-      "bytes": 565,
+      "bytes": 537,
       "buildings": 1,
       "roads": 3
     },
     {
       "x": 139502,
       "y": 90966,
-      "bytes": 248,
+      "bytes": 278,
       "buildings": 1,
       "roads": 0
     },
     {
       "x": 139503,
       "y": 90966,
-      "bytes": 375,
+      "bytes": 377,
       "buildings": 1,
       "roads": 2
     },
@@ -152,21 +152,21 @@
     {
       "x": 139505,
       "y": 90966,
-      "bytes": 600,
+      "bytes": 630,
       "buildings": 3,
       "roads": 1
     },
     {
       "x": 139506,
       "y": 90966,
-      "bytes": 189,
+      "bytes": 178,
       "buildings": 1,
       "roads": 0
     },
     {
       "x": 139507,
       "y": 90966,
-      "bytes": 756,
+      "bytes": 775,
       "buildings": 1,
       "roads": 0
     },
@@ -194,7 +194,7 @@
     {
       "x": 139513,
       "y": 90966,
-      "bytes": 515,
+      "bytes": 555,
       "buildings": 1,
       "roads": 0
     },
@@ -222,70 +222,70 @@
     {
       "x": 139486,
       "y": 90967,
-      "bytes": 2002,
+      "bytes": 2244,
       "buildings": 9,
       "roads": 7
     },
     {
       "x": 139487,
       "y": 90967,
-      "bytes": 1522,
+      "bytes": 1892,
       "buildings": 7,
       "roads": 5
     },
     {
       "x": 139488,
       "y": 90967,
-      "bytes": 1370,
+      "bytes": 1386,
       "buildings": 5,
       "roads": 6
     },
     {
       "x": 139489,
       "y": 90967,
-      "bytes": 3921,
+      "bytes": 4138,
       "buildings": 14,
       "roads": 18
     },
     {
       "x": 139490,
       "y": 90967,
-      "bytes": 3085,
+      "bytes": 3080,
       "buildings": 9,
       "roads": 18
     },
     {
       "x": 139491,
       "y": 90967,
-      "bytes": 4311,
+      "bytes": 4247,
       "buildings": 12,
       "roads": 32
     },
     {
       "x": 139492,
       "y": 90967,
-      "bytes": 2431,
+      "bytes": 2365,
       "buildings": 6,
       "roads": 15
     },
     {
       "x": 139493,
       "y": 90967,
-      "bytes": 657,
+      "bytes": 654,
       "buildings": 5,
       "roads": 0
     },
     {
       "x": 139494,
       "y": 90967,
-      "bytes": 1219,
+      "bytes": 1195,
       "buildings": 2,
       "roads": 10
     },
     {
       "x": 139495,
       "y": 90967,
-      "bytes": 1980,
+      "bytes": 2067,
       "buildings": 3,
       "roads": 11
     },
@@ -299,14 +299,14 @@
     {
       "x": 139497,
       "y": 90967,
-      "bytes": 3221,
+      "bytes": 3443,
       "buildings": 10,
       "roads": 19
     },
     {
       "x": 139498,
       "y": 90967,
-      "bytes": 1222,
+      "bytes": 1221,
       "buildings": 3,
       "roads": 9
     },
@@ -327,21 +327,21 @@
     {
       "x": 139501,
       "y": 90967,
-      "bytes": 824,
+      "bytes": 825,
       "buildings": 4,
       "roads": 4
     },
     {
       "x": 139502,
       "y": 90967,
-      "bytes": 1568,
+      "bytes": 1618,
       "buildings": 6,
       "roads": 10
     },
     {
       "x": 139503,
       "y": 90967,
-      "bytes": 1928,
+      "bytes": 1865,
       "buildings": 2,
       "roads": 15
     },
@@ -355,14 +355,14 @@
     {
       "x": 139505,
       "y": 90967,
-      "bytes": 1254,
+      "bytes": 1196,
       "buildings": 6,
       "roads": 7
     },
     {
       "x": 139506,
       "y": 90967,
-      "bytes": 4672,
+      "bytes": 4666,
       "buildings": 8,
       "roads": 18
     },
@@ -376,7 +376,7 @@
     {
       "x": 139508,
       "y": 90967,
-      "bytes": 1074,
+      "bytes": 1061,
       "buildings": 1,
       "roads": 5
     },
@@ -404,28 +404,28 @@
     {
       "x": 139512,
       "y": 90967,
-      "bytes": 1857,
+      "bytes": 1833,
       "buildings": 1,
       "roads": 10
     },
     {
       "x": 139513,
       "y": 90967,
-      "bytes": 2047,
+      "bytes": 2073,
       "buildings": 3,
       "roads": 6
     },
     {
       "x": 139514,
       "y": 90967,
-      "bytes": 1720,
+      "bytes": 1771,
       "buildings": 8,
       "roads": 1
     },
     {
       "x": 139515,
       "y": 90967,
-      "bytes": 847,
+      "bytes": 1002,
       "buildings": 7,
       "roads": 0
     },
@@ -446,119 +446,119 @@
     {
       "x": 139487,
       "y": 90968,
-      "bytes": 2610,
+      "bytes": 3475,
       "buildings": 4,
       "roads": 22
     },
     {
       "x": 139488,
       "y": 90968,
-      "bytes": 3820,
+      "bytes": 3805,
       "buildings": 13,
       "roads": 25
     },
     {
       "x": 139489,
       "y": 90968,
-      "bytes": 4429,
+      "bytes": 4318,
       "buildings": 26,
       "roads": 18
     },
     {
       "x": 139490,
       "y": 90968,
-      "bytes": 1998,
+      "bytes": 1995,
       "buildings": 11,
       "roads": 6
     },
     {
       "x": 139491,
       "y": 90968,
-      "bytes": 1809,
+      "bytes": 1736,
       "buildings": 3,
       "roads": 17
     },
     {
       "x": 139492,
       "y": 90968,
-      "bytes": 1817,
+      "bytes": 1944,
       "buildings": 4,
       "roads": 13
     },
     {
       "x": 139493,
       "y": 90968,
-      "bytes": 1184,
+      "bytes": 1267,
       "buildings": 6,
       "roads": 6
     },
     {
       "x": 139494,
       "y": 90968,
-      "bytes": 1016,
+      "bytes": 999,
       "buildings": 5,
       "roads": 5
     },
     {
       "x": 139495,
       "y": 90968,
-      "bytes": 1728,
+      "bytes": 1906,
       "buildings": 11,
       "roads": 3
     },
     {
       "x": 139496,
       "y": 90968,
-      "bytes": 2384,
+      "bytes": 2497,
       "buildings": 12,
       "roads": 8
     },
     {
       "x": 139497,
       "y": 90968,
-      "bytes": 1726,
+      "bytes": 1856,
       "buildings": 11,
       "roads": 5
     },
     {
       "x": 139498,
       "y": 90968,
-      "bytes": 2366,
+      "bytes": 2510,
       "buildings": 7,
       "roads": 12
     },
     {
       "x": 139499,
       "y": 90968,
-      "bytes": 3482,
+      "bytes": 3494,
       "buildings": 1,
       "roads": 33
     },
     {
       "x": 139500,
       "y": 90968,
-      "bytes": 2528,
+      "bytes": 2523,
       "buildings": 7,
       "roads": 21
     },
     {
       "x": 139501,
       "y": 90968,
-      "bytes": 2296,
+      "bytes": 2215,
       "buildings": 3,
       "roads": 16
     },
     {
       "x": 139502,
       "y": 90968,
-      "bytes": 1665,
+      "bytes": 1747,
       "buildings": 1,
       "roads": 8
     },
     {
       "x": 139503,
       "y": 90968,
-      "bytes": 1783,
+      "bytes": 1767,
       "buildings": 3,
       "roads": 15
     },
@@ -572,7 +572,7 @@
     {
       "x": 139505,
       "y": 90968,
-      "bytes": 2014,
+      "bytes": 1933,
       "buildings": 1,
       "roads": 10
     },
@@ -600,7 +600,7 @@
     {
       "x": 139509,
       "y": 90968,
-      "bytes": 1434,
+      "bytes": 1432,
       "buildings": 1,
       "roads": 11
     },
@@ -621,28 +621,28 @@
     {
       "x": 139512,
       "y": 90968,
-      "bytes": 836,
+      "bytes": 867,
       "buildings": 5,
       "roads": 1
     },
     {
       "x": 139513,
       "y": 90968,
-      "bytes": 4451,
+      "bytes": 4537,
       "buildings": 3,
       "roads": 30
     },
     {
       "x": 139514,
       "y": 90968,
-      "bytes": 2093,
+      "bytes": 2442,
       "buildings": 7,
       "roads": 9
     },
     {
       "x": 139515,
       "y": 90968,
-      "bytes": 853,
+      "bytes": 911,
       "buildings": 1,
       "roads": 1
     },
@@ -663,77 +663,77 @@
     {
       "x": 139487,
       "y": 90969,
-      "bytes": 2501,
+      "bytes": 2420,
       "buildings": 13,
       "roads": 8
     },
     {
       "x": 139488,
       "y": 90969,
-      "bytes": 3434,
+      "bytes": 3240,
       "buildings": 26,
       "roads": 4
     },
     {
       "x": 139489,
       "y": 90969,
-      "bytes": 2392,
+      "bytes": 2457,
       "buildings": 10,
       "roads": 10
     },
     {
       "x": 139490,
       "y": 90969,
-      "bytes": 2092,
+      "bytes": 2101,
       "buildings": 10,
       "roads": 7
     },
     {
       "x": 139491,
       "y": 90969,
-      "bytes": 3842,
+      "bytes": 3813,
       "buildings": 8,
       "roads": 20
     },
     {
       "x": 139492,
       "y": 90969,
-      "bytes": 2404,
+      "bytes": 2392,
       "buildings": 1,
       "roads": 10
     },
     {
       "x": 139493,
       "y": 90969,
-      "bytes": 1253,
+      "bytes": 1413,
       "buildings": 6,
       "roads": 5
     },
     {
       "x": 139494,
       "y": 90969,
-      "bytes": 1470,
+      "bytes": 1517,
       "buildings": 5,
       "roads": 11
     },
     {
       "x": 139495,
       "y": 90969,
-      "bytes": 2429,
+      "bytes": 2332,
       "buildings": 4,
       "roads": 15
     },
     {
       "x": 139496,
       "y": 90969,
-      "bytes": 2609,
+      "bytes": 2892,
       "buildings": 7,
       "roads": 13
     },
     {
       "x": 139497,
       "y": 90969,
-      "bytes": 1289,
+      "bytes": 1337,
       "buildings": 4,
       "roads": 8
     },
@@ -747,28 +747,28 @@
     {
       "x": 139499,
       "y": 90969,
-      "bytes": 4203,
+      "bytes": 4283,
       "buildings": 3,
       "roads": 20
     },
     {
       "x": 139500,
       "y": 90969,
-      "bytes": 2892,
+      "bytes": 2898,
       "buildings": 6,
       "roads": 23
     },
     {
       "x": 139501,
       "y": 90969,
-      "bytes": 2592,
+      "bytes": 2851,
       "buildings": 8,
       "roads": 12
     },
     {
       "x": 139502,
       "y": 90969,
-      "bytes": 7107,
+      "bytes": 7087,
       "buildings": 10,
       "roads": 74
     },
@@ -782,56 +782,56 @@
     {
       "x": 139504,
       "y": 90969,
-      "bytes": 3700,
+      "bytes": 3664,
       "buildings": 1,
       "roads": 15
     },
     {
       "x": 139505,
       "y": 90969,
-      "bytes": 2277,
+      "bytes": 2273,
       "buildings": 2,
       "roads": 11
     },
     {
       "x": 139506,
       "y": 90969,
-      "bytes": 1799,
+      "bytes": 1888,
       "buildings": 2,
       "roads": 16
     },
     {
       "x": 139507,
       "y": 90969,
-      "bytes": 1206,
+      "bytes": 1204,
       "buildings": 6,
       "roads": 6
     },
     {
       "x": 139508,
       "y": 90969,
-      "bytes": 1003,
+      "bytes": 1227,
       "buildings": 3,
       "roads": 8
     },
     {
       "x": 139509,
       "y": 90969,
-      "bytes": 2155,
+      "bytes": 2275,
       "buildings": 10,
       "roads": 11
     },
     {
       "x": 139510,
       "y": 90969,
-      "bytes": 1993,
+      "bytes": 2000,
       "buildings": 6,
       "roads": 11
     },
     {
       "x": 139511,
       "y": 90969,
-      "bytes": 2962,
+      "bytes": 2990,
       "buildings": 4,
       "roads": 16
     },
@@ -845,14 +845,14 @@
     {
       "x": 139513,
       "y": 90969,
-      "bytes": 1726,
+      "bytes": 1843,
       "buildings": 6,
       "roads": 7
     },
     {
       "x": 139514,
       "y": 90969,
-      "bytes": 2042,
+      "bytes": 2163,
       "buildings": 7,
       "roads": 5
     },
@@ -866,35 +866,35 @@
     {
       "x": 139486,
       "y": 90970,
-      "bytes": 2926,
+      "bytes": 2923,
       "buildings": 5,
       "roads": 26
     },
     {
       "x": 139487,
       "y": 90970,
-      "bytes": 2561,
+      "bytes": 2518,
       "buildings": 4,
       "roads": 21
     },
     {
       "x": 139488,
       "y": 90970,
-      "bytes": 3773,
+      "bytes": 3647,
       "buildings": 12,
       "roads": 28
     },
     {
       "x": 139489,
       "y": 90970,
-      "bytes": 4598,
+      "bytes": 4633,
       "buildings": 9,
       "roads": 39
     },
     {
       "x": 139490,
       "y": 90970,
-      "bytes": 5629,
+      "bytes": 5658,
       "buildings": 8,
       "roads": 43
     },
@@ -915,28 +915,28 @@
     {
       "x": 139493,
       "y": 90970,
-      "bytes": 2504,
+      "bytes": 2561,
       "buildings": 2,
       "roads": 10
     },
     {
       "x": 139494,
       "y": 90970,
-      "bytes": 2234,
+      "bytes": 2275,
       "buildings": 14,
       "roads": 4
     },
     {
       "x": 139495,
       "y": 90970,
-      "bytes": 2796,
+      "bytes": 2806,
       "buildings": 6,
       "roads": 19
     },
     {
       "x": 139496,
       "y": 90970,
-      "bytes": 2878,
+      "bytes": 2866,
       "buildings": 4,
       "roads": 14
     },
@@ -950,35 +950,35 @@
     {
       "x": 139498,
       "y": 90970,
-      "bytes": 2315,
+      "bytes": 2286,
       "buildings": 7,
       "roads": 14
     },
     {
       "x": 139499,
       "y": 90970,
-      "bytes": 1909,
+      "bytes": 1943,
       "buildings": 7,
       "roads": 8
     },
     {
       "x": 139500,
       "y": 90970,
-      "bytes": 2195,
+      "bytes": 2201,
       "buildings": 6,
       "roads": 11
     },
     {
       "x": 139501,
       "y": 90970,
-      "bytes": 495,
+      "bytes": 523,
       "buildings": 1,
       "roads": 2
     },
     {
       "x": 139502,
       "y": 90970,
-      "bytes": 1667,
+      "bytes": 1672,
       "buildings": 4,
       "roads": 15
     },
@@ -992,7 +992,7 @@
     {
       "x": 139504,
       "y": 90970,
-      "bytes": 3494,
+      "bytes": 3481,
       "buildings": 1,
       "roads": 18
     },
@@ -1013,56 +1013,56 @@
     {
       "x": 139507,
       "y": 90970,
-      "bytes": 1441,
+      "bytes": 1451,
       "buildings": 12,
       "roads": 2
     },
     {
       "x": 139508,
       "y": 90970,
-      "bytes": 2287,
+      "bytes": 2231,
       "buildings": 15,
       "roads": 6
     },
     {
       "x": 139509,
       "y": 90970,
-      "bytes": 1542,
+      "bytes": 1602,
       "buildings": 10,
       "roads": 4
     },
     {
       "x": 139510,
       "y": 90970,
-      "bytes": 2138,
+      "bytes": 2127,
       "buildings": 14,
       "roads": 3
     },
     {
       "x": 139511,
       "y": 90970,
-      "bytes": 2702,
+      "bytes": 2559,
       "buildings": 5,
       "roads": 15
     },
     {
       "x": 139512,
       "y": 90970,
-      "bytes": 2634,
+      "bytes": 2390,
       "buildings": 13,
       "roads": 9
     },
     {
       "x": 139513,
       "y": 90970,
-      "bytes": 2045,
+      "bytes": 1924,
       "buildings": 12,
       "roads": 9
     },
     {
       "x": 139514,
       "y": 90970,
-      "bytes": 2848,
+      "bytes": 2842,
       "buildings": 6,
       "roads": 16
     },
@@ -1076,14 +1076,14 @@
     {
       "x": 139486,
       "y": 90971,
-      "bytes": 161,
+      "bytes": 157,
       "buildings": 1,
       "roads": 0
     },
     {
       "x": 139487,
       "y": 90971,
-      "bytes": 1121,
+      "bytes": 1092,
       "buildings": 6,
       "roads": 4
     },
@@ -1097,14 +1097,14 @@
     {
       "x": 139489,
       "y": 90971,
-      "bytes": 5481,
+      "bytes": 5418,
       "buildings": 3,
       "roads": 73
     },
     {
       "x": 139490,
       "y": 90971,
-      "bytes": 10526,
+      "bytes": 10714,
       "buildings": 2,
       "roads": 122
     },
@@ -1132,154 +1132,154 @@
     {
       "x": 139494,
       "y": 90971,
-      "bytes": 3645,
+      "bytes": 3556,
       "buildings": 2,
       "roads": 29
     },
     {
       "x": 139495,
       "y": 90971,
-      "bytes": 4191,
+      "bytes": 5041,
       "buildings": 7,
       "roads": 36
     },
     {
       "x": 139496,
       "y": 90971,
-      "bytes": 3948,
+      "bytes": 3887,
       "buildings": 3,
       "roads": 32
     },
     {
       "x": 139497,
       "y": 90971,
-      "bytes": 2986,
+      "bytes": 2925,
       "buildings": 14,
       "roads": 9
     },
     {
       "x": 139498,
       "y": 90971,
-      "bytes": 2137,
+      "bytes": 2312,
       "buildings": 14,
       "roads": 2
     },
     {
       "x": 139499,
       "y": 90971,
-      "bytes": 1828,
+      "bytes": 1850,
       "buildings": 12,
       "roads": 0
     },
     {
       "x": 139500,
       "y": 90971,
-      "bytes": 1593,
+      "bytes": 1575,
       "buildings": 9,
       "roads": 3
     },
     {
       "x": 139501,
       "y": 90971,
-      "bytes": 3235,
+      "bytes": 3184,
       "buildings": 10,
       "roads": 10
     },
     {
       "x": 139502,
       "y": 90971,
-      "bytes": 4014,
+      "bytes": 4047,
       "buildings": 15,
       "roads": 17
     },
     {
       "x": 139503,
       "y": 90971,
-      "bytes": 2253,
+      "bytes": 2269,
       "buildings": 2,
       "roads": 18
     },
     {
       "x": 139504,
       "y": 90971,
-      "bytes": 1887,
+      "bytes": 1857,
       "buildings": 1,
       "roads": 22
     },
     {
       "x": 139505,
       "y": 90971,
-      "bytes": 1094,
+      "bytes": 1067,
       "buildings": 2,
       "roads": 9
     },
     {
       "x": 139506,
       "y": 90971,
-      "bytes": 3492,
+      "bytes": 3550,
       "buildings": 2,
       "roads": 27
     },
     {
       "x": 139507,
       "y": 90971,
-      "bytes": 2831,
+      "bytes": 2698,
       "buildings": 20,
       "roads": 6
     },
     {
       "x": 139508,
       "y": 90971,
-      "bytes": 2623,
+      "bytes": 2612,
       "buildings": 11,
       "roads": 10
     },
     {
       "x": 139509,
       "y": 90971,
-      "bytes": 2916,
+      "bytes": 3379,
       "buildings": 13,
       "roads": 11
     },
     {
       "x": 139510,
       "y": 90971,
-      "bytes": 3894,
+      "bytes": 4039,
       "buildings": 20,
       "roads": 14
     },
     {
       "x": 139511,
       "y": 90971,
-      "bytes": 3729,
+      "bytes": 3746,
       "buildings": 12,
       "roads": 13
     },
     {
       "x": 139512,
       "y": 90971,
-      "bytes": 3938,
+      "bytes": 4010,
       "buildings": 16,
       "roads": 18
     },
     {
       "x": 139513,
       "y": 90971,
-      "bytes": 1644,
+      "bytes": 2004,
       "buildings": 15,
       "roads": 0
     },
     {
       "x": 139514,
       "y": 90971,
-      "bytes": 913,
+      "bytes": 894,
       "buildings": 7,
       "roads": 3
     },
     {
       "x": 139486,
       "y": 90972,
-      "bytes": 3250,
+      "bytes": 3381,
       "buildings": 6,
       "roads": 31
     },
@@ -1300,35 +1300,35 @@
     {
       "x": 139489,
       "y": 90972,
-      "bytes": 1249,
+      "bytes": 1218,
       "buildings": 3,
       "roads": 10
     },
     {
       "x": 139490,
       "y": 90972,
-      "bytes": 8633,
+      "bytes": 8774,
       "buildings": 3,
       "roads": 115
     },
     {
       "x": 139491,
       "y": 90972,
-      "bytes": 1865,
+      "bytes": 2064,
       "buildings": 12,
       "roads": 2
     },
     {
       "x": 139492,
       "y": 90972,
-      "bytes": 817,
+      "bytes": 791,
       "buildings": 1,
       "roads": 6
     },
     {
       "x": 139493,
       "y": 90972,
-      "bytes": 9052,
+      "bytes": 9102,
       "buildings": 1,
       "roads": 106
     },
@@ -1342,140 +1342,140 @@
     {
       "x": 139495,
       "y": 90972,
-      "bytes": 1515,
+      "bytes": 1700,
       "buildings": 4,
       "roads": 5
     },
     {
       "x": 139496,
       "y": 90972,
-      "bytes": 1644,
+      "bytes": 1645,
       "buildings": 2,
       "roads": 14
     },
     {
       "x": 139497,
       "y": 90972,
-      "bytes": 1678,
+      "bytes": 1594,
       "buildings": 4,
       "roads": 9
     },
     {
       "x": 139498,
       "y": 90972,
-      "bytes": 1619,
+      "bytes": 1593,
       "buildings": 11,
       "roads": 1
     },
     {
       "x": 139499,
       "y": 90972,
-      "bytes": 2777,
+      "bytes": 2738,
       "buildings": 5,
       "roads": 17
     },
     {
       "x": 139500,
       "y": 90972,
-      "bytes": 3019,
+      "bytes": 3017,
       "buildings": 8,
       "roads": 13
     },
     {
       "x": 139501,
       "y": 90972,
-      "bytes": 3600,
+      "bytes": 3602,
       "buildings": 12,
       "roads": 15
     },
     {
       "x": 139502,
       "y": 90972,
-      "bytes": 6643,
+      "bytes": 6574,
       "buildings": 14,
       "roads": 37
     },
     {
       "x": 139503,
       "y": 90972,
-      "bytes": 1341,
+      "bytes": 1339,
       "buildings": 1,
       "roads": 11
     },
     {
       "x": 139504,
       "y": 90972,
-      "bytes": 959,
+      "bytes": 945,
       "buildings": 3,
       "roads": 3
     },
     {
       "x": 139505,
       "y": 90972,
-      "bytes": 831,
+      "bytes": 832,
       "buildings": 1,
       "roads": 6
     },
     {
       "x": 139506,
       "y": 90972,
-      "bytes": 1975,
+      "bytes": 2097,
       "buildings": 14,
       "roads": 1
     },
     {
       "x": 139507,
       "y": 90972,
-      "bytes": 1313,
+      "bytes": 1371,
       "buildings": 1,
       "roads": 3
     },
     {
       "x": 139508,
       "y": 90972,
-      "bytes": 1968,
+      "bytes": 2301,
       "buildings": 11,
       "roads": 3
     },
     {
       "x": 139509,
       "y": 90972,
-      "bytes": 4432,
+      "bytes": 4538,
       "buildings": 13,
       "roads": 41
     },
     {
       "x": 139510,
       "y": 90972,
-      "bytes": 5028,
+      "bytes": 5045,
       "buildings": 22,
       "roads": 26
     },
     {
       "x": 139511,
       "y": 90972,
-      "bytes": 3120,
+      "bytes": 3288,
       "buildings": 18,
       "roads": 12
     },
     {
       "x": 139512,
       "y": 90972,
-      "bytes": 3501,
+      "bytes": 4302,
       "buildings": 20,
       "roads": 7
     },
     {
       "x": 139513,
       "y": 90972,
-      "bytes": 3034,
+      "bytes": 3201,
       "buildings": 18,
       "roads": 6
     },
     {
       "x": 139514,
       "y": 90972,
-      "bytes": 661,
+      "bytes": 684,
       "buildings": 1,
       "roads": 7
     },
@@ -1489,21 +1489,21 @@
     {
       "x": 139485,
       "y": 90973,
-      "bytes": 570,
+      "bytes": 683,
       "buildings": 1,
       "roads": 2
     },
     {
       "x": 139486,
       "y": 90973,
-      "bytes": 4102,
+      "bytes": 4086,
       "buildings": 4,
       "roads": 35
     },
     {
       "x": 139487,
       "y": 90973,
-      "bytes": 2068,
+      "bytes": 1998,
       "buildings": 6,
       "roads": 14
     },
@@ -1517,175 +1517,175 @@
     {
       "x": 139489,
       "y": 90973,
-      "bytes": 4245,
+      "bytes": 4307,
       "buildings": 9,
       "roads": 43
     },
     {
       "x": 139490,
       "y": 90973,
-      "bytes": 6379,
+      "bytes": 6544,
       "buildings": 8,
       "roads": 74
     },
     {
       "x": 139491,
       "y": 90973,
-      "bytes": 2528,
+      "bytes": 2672,
       "buildings": 15,
       "roads": 4
     },
     {
       "x": 139492,
       "y": 90973,
-      "bytes": 3977,
+      "bytes": 3881,
       "buildings": 8,
       "roads": 17
     },
     {
       "x": 139493,
       "y": 90973,
-      "bytes": 10384,
+      "bytes": 10500,
       "buildings": 4,
       "roads": 87
     },
     {
       "x": 139494,
       "y": 90973,
-      "bytes": 5826,
+      "bytes": 6062,
       "buildings": 11,
       "roads": 44
     },
     {
       "x": 139495,
       "y": 90973,
-      "bytes": 1799,
+      "bytes": 1900,
       "buildings": 2,
       "roads": 12
     },
     {
       "x": 139496,
       "y": 90973,
-      "bytes": 642,
+      "bytes": 732,
       "buildings": 2,
       "roads": 2
     },
     {
       "x": 139497,
       "y": 90973,
-      "bytes": 1361,
+      "bytes": 1287,
       "buildings": 4,
       "roads": 5
     },
     {
       "x": 139498,
       "y": 90973,
-      "bytes": 1221,
+      "bytes": 1193,
       "buildings": 2,
       "roads": 6
     },
     {
       "x": 139499,
       "y": 90973,
-      "bytes": 2045,
+      "bytes": 2069,
       "buildings": 4,
       "roads": 10
     },
     {
       "x": 139500,
       "y": 90973,
-      "bytes": 5803,
+      "bytes": 5644,
       "buildings": 22,
       "roads": 20
     },
     {
       "x": 139501,
       "y": 90973,
-      "bytes": 3615,
+      "bytes": 3438,
       "buildings": 9,
       "roads": 12
     },
     {
       "x": 139502,
       "y": 90973,
-      "bytes": 2343,
+      "bytes": 2493,
       "buildings": 5,
       "roads": 13
     },
     {
       "x": 139503,
       "y": 90973,
-      "bytes": 2031,
+      "bytes": 2002,
       "buildings": 3,
       "roads": 14
     },
     {
       "x": 139504,
       "y": 90973,
-      "bytes": 3235,
+      "bytes": 3175,
       "buildings": 11,
       "roads": 16
     },
     {
       "x": 139505,
       "y": 90973,
-      "bytes": 2315,
+      "bytes": 2307,
       "buildings": 4,
       "roads": 11
     },
     {
       "x": 139506,
       "y": 90973,
-      "bytes": 2507,
+      "bytes": 2420,
       "buildings": 17,
       "roads": 1
     },
     {
       "x": 139507,
       "y": 90973,
-      "bytes": 2143,
+      "bytes": 2126,
       "buildings": 5,
       "roads": 13
     },
     {
       "x": 139508,
       "y": 90973,
-      "bytes": 1529,
+      "bytes": 1630,
       "buildings": 12,
       "roads": 3
     },
     {
       "x": 139509,
       "y": 90973,
-      "bytes": 2819,
+      "bytes": 2833,
       "buildings": 18,
       "roads": 8
     },
     {
       "x": 139510,
       "y": 90973,
-      "bytes": 3508,
+      "bytes": 3536,
       "buildings": 8,
       "roads": 31
     },
     {
       "x": 139511,
       "y": 90973,
-      "bytes": 1322,
+      "bytes": 1392,
       "buildings": 1,
       "roads": 13
     },
     {
       "x": 139512,
       "y": 90973,
-      "bytes": 3853,
+      "bytes": 4028,
       "buildings": 17,
       "roads": 5
     },
     {
       "x": 139513,
       "y": 90973,
-      "bytes": 1933,
+      "bytes": 1853,
       "buildings": 13,
       "roads": 4
     },
@@ -1713,189 +1713,189 @@
     {
       "x": 139486,
       "y": 90974,
-      "bytes": 1514,
+      "bytes": 1575,
       "buildings": 7,
       "roads": 5
     },
     {
       "x": 139487,
       "y": 90974,
-      "bytes": 1197,
+      "bytes": 1185,
       "buildings": 1,
       "roads": 14
     },
     {
       "x": 139488,
       "y": 90974,
-      "bytes": 1876,
+      "bytes": 1801,
       "buildings": 14,
       "roads": 2
     },
     {
       "x": 139489,
       "y": 90974,
-      "bytes": 2072,
+      "bytes": 2300,
       "buildings": 9,
       "roads": 9
     },
     {
       "x": 139490,
       "y": 90974,
-      "bytes": 2626,
+      "bytes": 2563,
       "buildings": 20,
       "roads": 2
     },
     {
       "x": 139491,
       "y": 90974,
-      "bytes": 1818,
+      "bytes": 1760,
       "buildings": 14,
       "roads": 4
     },
     {
       "x": 139492,
       "y": 90974,
-      "bytes": 1603,
+      "bytes": 1846,
       "buildings": 8,
       "roads": 5
     },
     {
       "x": 139493,
       "y": 90974,
-      "bytes": 5742,
+      "bytes": 5903,
       "buildings": 8,
       "roads": 53
     },
     {
       "x": 139494,
       "y": 90974,
-      "bytes": 2436,
+      "bytes": 2521,
       "buildings": 12,
       "roads": 6
     },
     {
       "x": 139495,
       "y": 90974,
-      "bytes": 3324,
+      "bytes": 3398,
       "buildings": 25,
       "roads": 1
     },
     {
       "x": 139496,
       "y": 90974,
-      "bytes": 1426,
+      "bytes": 1376,
       "buildings": 6,
       "roads": 3
     },
     {
       "x": 139497,
       "y": 90974,
-      "bytes": 2986,
+      "bytes": 2990,
       "buildings": 16,
       "roads": 4
     },
     {
       "x": 139498,
       "y": 90974,
-      "bytes": 2410,
+      "bytes": 2421,
       "buildings": 9,
       "roads": 4
     },
     {
       "x": 139499,
       "y": 90974,
-      "bytes": 3166,
+      "bytes": 3083,
       "buildings": 18,
       "roads": 7
     },
     {
       "x": 139500,
       "y": 90974,
-      "bytes": 4399,
+      "bytes": 4299,
       "buildings": 15,
       "roads": 19
     },
     {
       "x": 139501,
       "y": 90974,
-      "bytes": 3900,
+      "bytes": 3869,
       "buildings": 5,
       "roads": 43
     },
     {
       "x": 139502,
       "y": 90974,
-      "bytes": 3649,
+      "bytes": 3681,
       "buildings": 12,
       "roads": 12
     },
     {
       "x": 139503,
       "y": 90974,
-      "bytes": 3044,
+      "bytes": 3134,
       "buildings": 10,
       "roads": 14
     },
     {
       "x": 139504,
       "y": 90974,
-      "bytes": 6182,
+      "bytes": 6025,
       "buildings": 28,
       "roads": 26
     },
     {
       "x": 139505,
       "y": 90974,
-      "bytes": 3354,
+      "bytes": 3263,
       "buildings": 12,
       "roads": 12
     },
     {
       "x": 139506,
       "y": 90974,
-      "bytes": 3027,
+      "bytes": 3236,
       "buildings": 16,
       "roads": 10
     },
     {
       "x": 139507,
       "y": 90974,
-      "bytes": 3857,
+      "bytes": 3868,
       "buildings": 2,
       "roads": 38
     },
     {
       "x": 139508,
       "y": 90974,
-      "bytes": 1231,
+      "bytes": 1178,
       "buildings": 2,
       "roads": 8
     },
     {
       "x": 139509,
       "y": 90974,
-      "bytes": 5328,
+      "bytes": 5404,
       "buildings": 13,
       "roads": 30
     },
     {
       "x": 139510,
       "y": 90974,
-      "bytes": 2939,
+      "bytes": 3230,
       "buildings": 5,
       "roads": 16
     },
     {
       "x": 139511,
       "y": 90974,
-      "bytes": 1454,
+      "bytes": 1517,
       "buildings": 9,
       "roads": 2
     },
     {
       "x": 139512,
       "y": 90974,
-      "bytes": 843,
+      "bytes": 896,
       "buildings": 4,
       "roads": 3
     },
@@ -1909,7 +1909,7 @@
     {
       "x": 139514,
       "y": 90974,
-      "bytes": 1023,
+      "bytes": 927,
       "buildings": 1,
       "roads": 6
     },
@@ -1930,175 +1930,175 @@
     {
       "x": 139486,
       "y": 90975,
-      "bytes": 2165,
+      "bytes": 2080,
       "buildings": 10,
       "roads": 10
     },
     {
       "x": 139487,
       "y": 90975,
-      "bytes": 2321,
+      "bytes": 2461,
       "buildings": 12,
       "roads": 10
     },
     {
       "x": 139488,
       "y": 90975,
-      "bytes": 1957,
+      "bytes": 1797,
       "buildings": 13,
       "roads": 1
     },
     {
       "x": 139489,
       "y": 90975,
-      "bytes": 842,
+      "bytes": 866,
       "buildings": 5,
       "roads": 0
     },
     {
       "x": 139490,
       "y": 90975,
-      "bytes": 2504,
+      "bytes": 2555,
       "buildings": 18,
       "roads": 2
     },
     {
       "x": 139491,
       "y": 90975,
-      "bytes": 2580,
+      "bytes": 2874,
       "buildings": 15,
       "roads": 6
     },
     {
       "x": 139492,
       "y": 90975,
-      "bytes": 2600,
+      "bytes": 2636,
       "buildings": 14,
       "roads": 10
     },
     {
       "x": 139493,
       "y": 90975,
-      "bytes": 1987,
+      "bytes": 2041,
       "buildings": 1,
       "roads": 10
     },
     {
       "x": 139494,
       "y": 90975,
-      "bytes": 2120,
+      "bytes": 1989,
       "buildings": 12,
       "roads": 7
     },
     {
       "x": 139495,
       "y": 90975,
-      "bytes": 3350,
+      "bytes": 3427,
       "buildings": 23,
       "roads": 6
     },
     {
       "x": 139496,
       "y": 90975,
-      "bytes": 3162,
+      "bytes": 3141,
       "buildings": 13,
       "roads": 14
     },
     {
       "x": 139497,
       "y": 90975,
-      "bytes": 4431,
+      "bytes": 4420,
       "buildings": 27,
       "roads": 14
     },
     {
       "x": 139498,
       "y": 90975,
-      "bytes": 2843,
+      "bytes": 2735,
       "buildings": 6,
       "roads": 15
     },
     {
       "x": 139499,
       "y": 90975,
-      "bytes": 4284,
+      "bytes": 4248,
       "buildings": 13,
       "roads": 26
     },
     {
       "x": 139500,
       "y": 90975,
-      "bytes": 8288,
+      "bytes": 8232,
       "buildings": 14,
       "roads": 92
     },
     {
       "x": 139501,
       "y": 90975,
-      "bytes": 7177,
+      "bytes": 7162,
       "buildings": 3,
       "roads": 82
     },
     {
       "x": 139502,
       "y": 90975,
-      "bytes": 2618,
+      "bytes": 2658,
       "buildings": 10,
       "roads": 9
     },
     {
       "x": 139503,
       "y": 90975,
-      "bytes": 5157,
+      "bytes": 5111,
       "buildings": 19,
       "roads": 20
     },
     {
       "x": 139504,
       "y": 90975,
-      "bytes": 4562,
+      "bytes": 4658,
       "buildings": 20,
       "roads": 16
     },
     {
       "x": 139505,
       "y": 90975,
-      "bytes": 1664,
+      "bytes": 1671,
       "buildings": 7,
       "roads": 7
     },
     {
       "x": 139506,
       "y": 90975,
-      "bytes": 1855,
+      "bytes": 1782,
       "buildings": 15,
       "roads": 4
     },
     {
       "x": 139507,
       "y": 90975,
-      "bytes": 4066,
+      "bytes": 4111,
       "buildings": 9,
       "roads": 27
     },
     {
       "x": 139508,
       "y": 90975,
-      "bytes": 1717,
+      "bytes": 1761,
       "buildings": 11,
       "roads": 4
     },
     {
       "x": 139509,
       "y": 90975,
-      "bytes": 3484,
+      "bytes": 3415,
       "buildings": 12,
       "roads": 13
     },
     {
       "x": 139510,
       "y": 90975,
-      "bytes": 5444,
+      "bytes": 5407,
       "buildings": 7,
       "roads": 28
     },
@@ -2112,7 +2112,7 @@
     {
       "x": 139512,
       "y": 90975,
-      "bytes": 1255,
+      "bytes": 1271,
       "buildings": 2,
       "roads": 8
     },
@@ -2140,196 +2140,196 @@
     {
       "x": 139485,
       "y": 90976,
-      "bytes": 386,
+      "bytes": 444,
       "buildings": 1,
       "roads": 1
     },
     {
       "x": 139486,
       "y": 90976,
-      "bytes": 1738,
+      "bytes": 1829,
       "buildings": 8,
       "roads": 6
     },
     {
       "x": 139487,
       "y": 90976,
-      "bytes": 3896,
+      "bytes": 3915,
       "buildings": 24,
       "roads": 18
     },
     {
       "x": 139488,
       "y": 90976,
-      "bytes": 2941,
+      "bytes": 2769,
       "buildings": 18,
       "roads": 8
     },
     {
       "x": 139489,
       "y": 90976,
-      "bytes": 2227,
+      "bytes": 2215,
       "buildings": 20,
       "roads": 0
     },
     {
       "x": 139490,
       "y": 90976,
-      "bytes": 1890,
+      "bytes": 1933,
       "buildings": 15,
       "roads": 1
     },
     {
       "x": 139491,
       "y": 90976,
-      "bytes": 3647,
+      "bytes": 3674,
       "buildings": 23,
       "roads": 16
     },
     {
       "x": 139492,
       "y": 90976,
-      "bytes": 4068,
+      "bytes": 4048,
       "buildings": 22,
       "roads": 12
     },
     {
       "x": 139493,
       "y": 90976,
-      "bytes": 2451,
+      "bytes": 2433,
       "buildings": 2,
       "roads": 20
     },
     {
       "x": 139494,
       "y": 90976,
-      "bytes": 2407,
+      "bytes": 2466,
       "buildings": 4,
       "roads": 18
     },
     {
       "x": 139495,
       "y": 90976,
-      "bytes": 3234,
+      "bytes": 3446,
       "buildings": 23,
       "roads": 1
     },
     {
       "x": 139496,
       "y": 90976,
-      "bytes": 3021,
+      "bytes": 3432,
       "buildings": 17,
       "roads": 5
     },
     {
       "x": 139497,
       "y": 90976,
-      "bytes": 3618,
+      "bytes": 3800,
       "buildings": 16,
       "roads": 14
     },
     {
       "x": 139498,
       "y": 90976,
-      "bytes": 2825,
+      "bytes": 2805,
       "buildings": 10,
       "roads": 12
     },
     {
       "x": 139499,
       "y": 90976,
-      "bytes": 5632,
+      "bytes": 5646,
       "buildings": 10,
       "roads": 17
     },
     {
       "x": 139500,
       "y": 90976,
-      "bytes": 4964,
+      "bytes": 4806,
       "buildings": 13,
       "roads": 29
     },
     {
       "x": 139501,
       "y": 90976,
-      "bytes": 3957,
+      "bytes": 4068,
       "buildings": 11,
       "roads": 14
     },
     {
       "x": 139502,
       "y": 90976,
-      "bytes": 4286,
+      "bytes": 4095,
       "buildings": 10,
       "roads": 19
     },
     {
       "x": 139503,
       "y": 90976,
-      "bytes": 3222,
+      "bytes": 3340,
       "buildings": 13,
       "roads": 18
     },
     {
       "x": 139504,
       "y": 90976,
-      "bytes": 3896,
+      "bytes": 3820,
       "buildings": 21,
       "roads": 9
     },
     {
       "x": 139505,
       "y": 90976,
-      "bytes": 2282,
+      "bytes": 2151,
       "buildings": 8,
       "roads": 13
     },
     {
       "x": 139506,
       "y": 90976,
-      "bytes": 3628,
+      "bytes": 3516,
       "buildings": 15,
       "roads": 19
     },
     {
       "x": 139507,
       "y": 90976,
-      "bytes": 4263,
+      "bytes": 4524,
       "buildings": 12,
       "roads": 22
     },
     {
       "x": 139508,
       "y": 90976,
-      "bytes": 1848,
+      "bytes": 1783,
       "buildings": 12,
       "roads": 7
     },
     {
       "x": 139509,
       "y": 90976,
-      "bytes": 1985,
+      "bytes": 1917,
       "buildings": 19,
       "roads": 0
     },
     {
       "x": 139510,
       "y": 90976,
-      "bytes": 1455,
+      "bytes": 1451,
       "buildings": 11,
       "roads": 4
     },
     {
       "x": 139511,
       "y": 90976,
-      "bytes": 927,
+      "bytes": 929,
       "buildings": 3,
       "roads": 5
     },
     {
       "x": 139512,
       "y": 90976,
-      "bytes": 1092,
+      "bytes": 1116,
       "buildings": 5,
       "roads": 8
     },
@@ -2343,14 +2343,14 @@
     {
       "x": 139514,
       "y": 90976,
-      "bytes": 956,
+      "bytes": 1565,
       "buildings": 1,
       "roads": 3
     },
     {
       "x": 139515,
       "y": 90976,
-      "bytes": 382,
+      "bytes": 357,
       "buildings": 1,
       "roads": 2
     },
@@ -2371,182 +2371,182 @@
     {
       "x": 139486,
       "y": 90977,
-      "bytes": 2540,
+      "bytes": 2643,
       "buildings": 5,
       "roads": 12
     },
     {
       "x": 139487,
       "y": 90977,
-      "bytes": 2042,
+      "bytes": 2195,
       "buildings": 6,
       "roads": 16
     },
     {
       "x": 139488,
       "y": 90977,
-      "bytes": 3063,
+      "bytes": 3040,
       "buildings": 14,
       "roads": 15
     },
     {
       "x": 139489,
       "y": 90977,
-      "bytes": 980,
+      "bytes": 1016,
       "buildings": 4,
       "roads": 7
     },
     {
       "x": 139490,
       "y": 90977,
-      "bytes": 2271,
+      "bytes": 2040,
       "buildings": 13,
       "roads": 10
     },
     {
       "x": 139491,
       "y": 90977,
-      "bytes": 972,
+      "bytes": 1533,
       "buildings": 3,
       "roads": 4
     },
     {
       "x": 139492,
       "y": 90977,
-      "bytes": 1599,
+      "bytes": 1653,
       "buildings": 5,
       "roads": 12
     },
     {
       "x": 139493,
       "y": 90977,
-      "bytes": 1568,
+      "bytes": 1603,
       "buildings": 4,
       "roads": 11
     },
     {
       "x": 139494,
       "y": 90977,
-      "bytes": 2558,
+      "bytes": 2596,
       "buildings": 6,
       "roads": 19
     },
     {
       "x": 139495,
       "y": 90977,
-      "bytes": 5100,
+      "bytes": 4982,
       "buildings": 31,
       "roads": 18
     },
     {
       "x": 139496,
       "y": 90977,
-      "bytes": 3309,
+      "bytes": 3121,
       "buildings": 17,
       "roads": 10
     },
     {
       "x": 139497,
       "y": 90977,
-      "bytes": 4558,
+      "bytes": 4543,
       "buildings": 20,
       "roads": 15
     },
     {
       "x": 139498,
       "y": 90977,
-      "bytes": 3696,
+      "bytes": 3675,
       "buildings": 6,
       "roads": 24
     },
     {
       "x": 139499,
       "y": 90977,
-      "bytes": 2543,
+      "bytes": 2354,
       "buildings": 2,
       "roads": 21
     },
     {
       "x": 139500,
       "y": 90977,
-      "bytes": 4462,
+      "bytes": 4430,
       "buildings": 16,
       "roads": 21
     },
     {
       "x": 139501,
       "y": 90977,
-      "bytes": 3942,
+      "bytes": 3924,
       "buildings": 22,
       "roads": 8
     },
     {
       "x": 139502,
       "y": 90977,
-      "bytes": 4782,
+      "bytes": 4718,
       "buildings": 27,
       "roads": 11
     },
     {
       "x": 139503,
       "y": 90977,
-      "bytes": 3639,
+      "bytes": 3664,
       "buildings": 21,
       "roads": 11
     },
     {
       "x": 139504,
       "y": 90977,
-      "bytes": 4800,
+      "bytes": 4658,
       "buildings": 26,
       "roads": 11
     },
     {
       "x": 139505,
       "y": 90977,
-      "bytes": 5151,
+      "bytes": 5207,
       "buildings": 12,
       "roads": 43
     },
     {
       "x": 139506,
       "y": 90977,
-      "bytes": 3677,
+      "bytes": 3700,
       "buildings": 7,
       "roads": 29
     },
     {
       "x": 139507,
       "y": 90977,
-      "bytes": 2496,
+      "bytes": 2587,
       "buildings": 14,
       "roads": 6
     },
     {
       "x": 139508,
       "y": 90977,
-      "bytes": 2415,
+      "bytes": 2464,
       "buildings": 13,
       "roads": 5
     },
     {
       "x": 139509,
       "y": 90977,
-      "bytes": 3268,
+      "bytes": 4280,
       "buildings": 2,
       "roads": 24
     },
     {
       "x": 139510,
       "y": 90977,
-      "bytes": 1973,
+      "bytes": 1943,
       "buildings": 4,
       "roads": 7
     },
     {
       "x": 139511,
       "y": 90977,
-      "bytes": 1258,
+      "bytes": 1236,
       "buildings": 3,
       "roads": 2
     },
@@ -2567,182 +2567,182 @@
     {
       "x": 139514,
       "y": 90977,
-      "bytes": 2300,
+      "bytes": 2252,
       "buildings": 5,
       "roads": 11
     },
     {
       "x": 139515,
       "y": 90977,
-      "bytes": 303,
+      "bytes": 301,
       "buildings": 1,
       "roads": 2
     },
     {
       "x": 139486,
       "y": 90978,
-      "bytes": 1789,
+      "bytes": 1782,
       "buildings": 7,
       "roads": 8
     },
     {
       "x": 139487,
       "y": 90978,
-      "bytes": 1679,
+      "bytes": 1688,
       "buildings": 8,
       "roads": 7
     },
     {
       "x": 139488,
       "y": 90978,
-      "bytes": 1519,
+      "bytes": 1435,
       "buildings": 6,
       "roads": 3
     },
     {
       "x": 139489,
       "y": 90978,
-      "bytes": 1319,
+      "bytes": 1297,
       "buildings": 5,
       "roads": 5
     },
     {
       "x": 139490,
       "y": 90978,
-      "bytes": 1828,
+      "bytes": 1826,
       "buildings": 10,
       "roads": 8
     },
     {
       "x": 139491,
       "y": 90978,
-      "bytes": 433,
+      "bytes": 393,
       "buildings": 1,
       "roads": 2
     },
     {
       "x": 139492,
       "y": 90978,
-      "bytes": 1744,
+      "bytes": 1717,
       "buildings": 8,
       "roads": 4
     },
     {
       "x": 139493,
       "y": 90978,
-      "bytes": 1672,
+      "bytes": 1707,
       "buildings": 7,
       "roads": 7
     },
     {
       "x": 139494,
       "y": 90978,
-      "bytes": 2782,
+      "bytes": 2871,
       "buildings": 6,
       "roads": 12
     },
     {
       "x": 139495,
       "y": 90978,
-      "bytes": 5813,
+      "bytes": 5865,
       "buildings": 19,
       "roads": 22
     },
     {
       "x": 139496,
       "y": 90978,
-      "bytes": 3053,
+      "bytes": 3114,
       "buildings": 10,
       "roads": 13
     },
     {
       "x": 139497,
       "y": 90978,
-      "bytes": 2776,
+      "bytes": 2883,
       "buildings": 4,
       "roads": 17
     },
     {
       "x": 139498,
       "y": 90978,
-      "bytes": 1173,
+      "bytes": 1203,
       "buildings": 3,
       "roads": 6
     },
     {
       "x": 139499,
       "y": 90978,
-      "bytes": 4056,
+      "bytes": 4151,
       "buildings": 12,
       "roads": 23
     },
     {
       "x": 139500,
       "y": 90978,
-      "bytes": 4073,
+      "bytes": 4039,
       "buildings": 15,
       "roads": 16
     },
     {
       "x": 139501,
       "y": 90978,
-      "bytes": 4590,
+      "bytes": 4730,
       "buildings": 23,
       "roads": 13
     },
     {
       "x": 139502,
       "y": 90978,
-      "bytes": 3828,
+      "bytes": 4064,
       "buildings": 29,
       "roads": 3
     },
     {
       "x": 139503,
       "y": 90978,
-      "bytes": 3810,
+      "bytes": 3906,
       "buildings": 23,
       "roads": 6
     },
     {
       "x": 139504,
       "y": 90978,
-      "bytes": 4621,
+      "bytes": 4667,
       "buildings": 11,
       "roads": 19
     },
     {
       "x": 139505,
       "y": 90978,
-      "bytes": 4466,
+      "bytes": 4465,
       "buildings": 1,
       "roads": 53
     },
     {
       "x": 139506,
       "y": 90978,
-      "bytes": 4349,
+      "bytes": 4476,
       "buildings": 5,
       "roads": 36
     },
     {
       "x": 139507,
       "y": 90978,
-      "bytes": 3393,
+      "bytes": 3640,
       "buildings": 20,
       "roads": 8
     },
     {
       "x": 139508,
       "y": 90978,
-      "bytes": 2851,
+      "bytes": 2721,
       "buildings": 14,
       "roads": 7
     },
     {
       "x": 139509,
       "y": 90978,
-      "bytes": 1761,
+      "bytes": 1846,
       "buildings": 7,
       "roads": 4
     },
@@ -2770,21 +2770,21 @@
     {
       "x": 139513,
       "y": 90978,
-      "bytes": 380,
+      "bytes": 384,
       "buildings": 2,
       "roads": 1
     },
     {
       "x": 139514,
       "y": 90978,
-      "bytes": 1558,
+      "bytes": 1537,
       "buildings": 4,
       "roads": 9
     },
     {
       "x": 139515,
       "y": 90978,
-      "bytes": 1097,
+      "bytes": 1184,
       "buildings": 2,
       "roads": 5
     },
@@ -2798,161 +2798,161 @@
     {
       "x": 139486,
       "y": 90979,
-      "bytes": 1594,
+      "bytes": 1559,
       "buildings": 13,
       "roads": 1
     },
     {
       "x": 139487,
       "y": 90979,
-      "bytes": 1210,
+      "bytes": 1223,
       "buildings": 12,
       "roads": 0
     },
     {
       "x": 139488,
       "y": 90979,
-      "bytes": 1929,
+      "bytes": 1980,
       "buildings": 9,
       "roads": 7
     },
     {
       "x": 139489,
       "y": 90979,
-      "bytes": 1733,
+      "bytes": 2108,
       "buildings": 12,
       "roads": 2
     },
     {
       "x": 139490,
       "y": 90979,
-      "bytes": 1981,
+      "bytes": 2199,
       "buildings": 5,
       "roads": 12
     },
     {
       "x": 139491,
       "y": 90979,
-      "bytes": 1002,
+      "bytes": 1004,
       "buildings": 3,
       "roads": 7
     },
     {
       "x": 139492,
       "y": 90979,
-      "bytes": 2126,
+      "bytes": 2086,
       "buildings": 12,
       "roads": 2
     },
     {
       "x": 139493,
       "y": 90979,
-      "bytes": 6646,
+      "bytes": 6599,
       "buildings": 9,
       "roads": 22
     },
     {
       "x": 139494,
       "y": 90979,
-      "bytes": 13424,
+      "bytes": 13417,
       "buildings": 4,
       "roads": 152
     },
     {
       "x": 139495,
       "y": 90979,
-      "bytes": 4251,
+      "bytes": 4355,
       "buildings": 3,
       "roads": 45
     },
     {
       "x": 139496,
       "y": 90979,
-      "bytes": 2948,
+      "bytes": 3072,
       "buildings": 12,
       "roads": 13
     },
     {
       "x": 139497,
       "y": 90979,
-      "bytes": 2667,
+      "bytes": 2937,
       "buildings": 15,
       "roads": 6
     },
     {
       "x": 139498,
       "y": 90979,
-      "bytes": 593,
+      "bytes": 605,
       "buildings": 3,
       "roads": 1
     },
     {
       "x": 139499,
       "y": 90979,
-      "bytes": 2363,
+      "bytes": 2326,
       "buildings": 2,
       "roads": 17
     },
     {
       "x": 139500,
       "y": 90979,
-      "bytes": 4543,
+      "bytes": 4482,
       "buildings": 28,
       "roads": 13
     },
     {
       "x": 139501,
       "y": 90979,
-      "bytes": 3706,
+      "bytes": 3687,
       "buildings": 15,
       "roads": 13
     },
     {
       "x": 139502,
       "y": 90979,
-      "bytes": 3312,
+      "bytes": 3290,
       "buildings": 27,
       "roads": 6
     },
     {
       "x": 139503,
       "y": 90979,
-      "bytes": 3107,
+      "bytes": 3005,
       "buildings": 19,
       "roads": 8
     },
     {
       "x": 139504,
       "y": 90979,
-      "bytes": 2665,
+      "bytes": 2612,
       "buildings": 17,
       "roads": 5
     },
     {
       "x": 139505,
       "y": 90979,
-      "bytes": 2351,
+      "bytes": 2448,
       "buildings": 11,
       "roads": 6
     },
     {
       "x": 139506,
       "y": 90979,
-      "bytes": 4673,
+      "bytes": 4681,
       "buildings": 12,
       "roads": 28
     },
     {
       "x": 139507,
       "y": 90979,
-      "bytes": 2915,
+      "bytes": 2928,
       "buildings": 14,
       "roads": 17
     },
     {
       "x": 139508,
       "y": 90979,
-      "bytes": 1917,
+      "bytes": 2093,
       "buildings": 11,
       "roads": 5
     },
@@ -2973,77 +2973,77 @@
     {
       "x": 139511,
       "y": 90979,
-      "bytes": 627,
+      "bytes": 628,
       "buildings": 2,
       "roads": 5
     },
     {
       "x": 139512,
       "y": 90979,
-      "bytes": 916,
+      "bytes": 890,
       "buildings": 1,
       "roads": 7
     },
     {
       "x": 139513,
       "y": 90979,
-      "bytes": 3026,
+      "bytes": 3071,
       "buildings": 8,
       "roads": 13
     },
     {
       "x": 139514,
       "y": 90979,
-      "bytes": 3294,
+      "bytes": 3272,
       "buildings": 16,
       "roads": 16
     },
     {
       "x": 139515,
       "y": 90979,
-      "bytes": 752,
+      "bytes": 778,
       "buildings": 5,
       "roads": 2
     },
     {
       "x": 139485,
       "y": 90980,
-      "bytes": 319,
+      "bytes": 347,
       "buildings": 1,
       "roads": 1
     },
     {
       "x": 139486,
       "y": 90980,
-      "bytes": 3446,
+      "bytes": 3491,
       "buildings": 4,
       "roads": 16
     },
     {
       "x": 139487,
       "y": 90980,
-      "bytes": 1961,
+      "bytes": 2017,
       "buildings": 10,
       "roads": 6
     },
     {
       "x": 139488,
       "y": 90980,
-      "bytes": 3177,
+      "bytes": 3477,
       "buildings": 6,
       "roads": 15
     },
     {
       "x": 139489,
       "y": 90980,
-      "bytes": 1788,
+      "bytes": 2010,
       "buildings": 4,
       "roads": 8
     },
     {
       "x": 139490,
       "y": 90980,
-      "bytes": 995,
+      "bytes": 965,
       "buildings": 2,
       "roads": 6
     },
@@ -3064,112 +3064,112 @@
     {
       "x": 139493,
       "y": 90980,
-      "bytes": 2626,
+      "bytes": 2544,
       "buildings": 9,
       "roads": 12
     },
     {
       "x": 139494,
       "y": 90980,
-      "bytes": 4427,
+      "bytes": 4404,
       "buildings": 7,
       "roads": 25
     },
     {
       "x": 139495,
       "y": 90980,
-      "bytes": 4651,
+      "bytes": 4610,
       "buildings": 8,
       "roads": 33
     },
     {
       "x": 139496,
       "y": 90980,
-      "bytes": 2164,
+      "bytes": 2222,
       "buildings": 3,
       "roads": 12
     },
     {
       "x": 139497,
       "y": 90980,
-      "bytes": 1210,
+      "bytes": 1071,
       "buildings": 7,
       "roads": 2
     },
     {
       "x": 139498,
       "y": 90980,
-      "bytes": 788,
+      "bytes": 816,
       "buildings": 4,
       "roads": 2
     },
     {
       "x": 139499,
       "y": 90980,
-      "bytes": 2709,
+      "bytes": 2775,
       "buildings": 14,
       "roads": 7
     },
     {
       "x": 139500,
       "y": 90980,
-      "bytes": 4193,
+      "bytes": 3996,
       "buildings": 24,
       "roads": 14
     },
     {
       "x": 139501,
       "y": 90980,
-      "bytes": 3746,
+      "bytes": 3568,
       "buildings": 29,
       "roads": 2
     },
     {
       "x": 139502,
       "y": 90980,
-      "bytes": 3067,
+      "bytes": 3026,
       "buildings": 17,
       "roads": 11
     },
     {
       "x": 139503,
       "y": 90980,
-      "bytes": 3204,
+      "bytes": 3363,
       "buildings": 21,
       "roads": 9
     },
     {
       "x": 139504,
       "y": 90980,
-      "bytes": 2475,
+      "bytes": 2480,
       "buildings": 13,
       "roads": 7
     },
     {
       "x": 139505,
       "y": 90980,
-      "bytes": 1759,
+      "bytes": 1628,
       "buildings": 17,
       "roads": 0
     },
     {
       "x": 139506,
       "y": 90980,
-      "bytes": 2007,
+      "bytes": 2143,
       "buildings": 9,
       "roads": 9
     },
     {
       "x": 139507,
       "y": 90980,
-      "bytes": 3290,
+      "bytes": 3302,
       "buildings": 12,
       "roads": 15
     },
     {
       "x": 139508,
       "y": 90980,
-      "bytes": 1908,
+      "bytes": 1982,
       "buildings": 3,
       "roads": 22
     },
@@ -3183,7 +3183,7 @@
     {
       "x": 139510,
       "y": 90980,
-      "bytes": 2030,
+      "bytes": 1999,
       "buildings": 7,
       "roads": 15
     },
@@ -3197,28 +3197,28 @@
     {
       "x": 139512,
       "y": 90980,
-      "bytes": 3773,
+      "bytes": 3893,
       "buildings": 11,
       "roads": 25
     },
     {
       "x": 139513,
       "y": 90980,
-      "bytes": 2229,
+      "bytes": 2351,
       "buildings": 12,
       "roads": 10
     },
     {
       "x": 139514,
       "y": 90980,
-      "bytes": 3057,
+      "bytes": 3254,
       "buildings": 11,
       "roads": 19
     },
     {
       "x": 139515,
       "y": 90980,
-      "bytes": 665,
+      "bytes": 636,
       "buildings": 4,
       "roads": 2
     },
@@ -3232,140 +3232,140 @@
     {
       "x": 139486,
       "y": 90981,
-      "bytes": 970,
+      "bytes": 1030,
       "buildings": 3,
       "roads": 2
     },
     {
       "x": 139487,
       "y": 90981,
-      "bytes": 1710,
+      "bytes": 1937,
       "buildings": 5,
       "roads": 14
     },
     {
       "x": 139488,
       "y": 90981,
-      "bytes": 1322,
+      "bytes": 1496,
       "buildings": 6,
       "roads": 7
     },
     {
       "x": 139489,
       "y": 90981,
-      "bytes": 2197,
+      "bytes": 2488,
       "buildings": 5,
       "roads": 10
     },
     {
       "x": 139490,
       "y": 90981,
-      "bytes": 1367,
+      "bytes": 1352,
       "buildings": 7,
       "roads": 3
     },
     {
       "x": 139491,
       "y": 90981,
-      "bytes": 1364,
+      "bytes": 1377,
       "buildings": 3,
       "roads": 12
     },
     {
       "x": 139492,
       "y": 90981,
-      "bytes": 3158,
+      "bytes": 3142,
       "buildings": 18,
       "roads": 10
     },
     {
       "x": 139493,
       "y": 90981,
-      "bytes": 2823,
+      "bytes": 2794,
       "buildings": 23,
       "roads": 5
     },
     {
       "x": 139494,
       "y": 90981,
-      "bytes": 3474,
+      "bytes": 3217,
       "buildings": 25,
       "roads": 4
     },
     {
       "x": 139495,
       "y": 90981,
-      "bytes": 4789,
+      "bytes": 4675,
       "buildings": 18,
       "roads": 18
     },
     {
       "x": 139496,
       "y": 90981,
-      "bytes": 1794,
+      "bytes": 1924,
       "buildings": 13,
       "roads": 5
     },
     {
       "x": 139497,
       "y": 90981,
-      "bytes": 3008,
+      "bytes": 3065,
       "buildings": 6,
       "roads": 19
     },
     {
       "x": 139498,
       "y": 90981,
-      "bytes": 3023,
+      "bytes": 3012,
       "buildings": 17,
       "roads": 12
     },
     {
       "x": 139499,
       "y": 90981,
-      "bytes": 1467,
+      "bytes": 1509,
       "buildings": 4,
       "roads": 4
     },
     {
       "x": 139500,
       "y": 90981,
-      "bytes": 2368,
+      "bytes": 2626,
       "buildings": 19,
       "roads": 2
     },
     {
       "x": 139501,
       "y": 90981,
-      "bytes": 7583,
+      "bytes": 7597,
       "buildings": 4,
       "roads": 28
     },
     {
       "x": 139502,
       "y": 90981,
-      "bytes": 2759,
+      "bytes": 2736,
       "buildings": 17,
       "roads": 11
     },
     {
       "x": 139503,
       "y": 90981,
-      "bytes": 2856,
+      "bytes": 3040,
       "buildings": 25,
       "roads": 0
     },
     {
       "x": 139504,
       "y": 90981,
-      "bytes": 3017,
+      "bytes": 3080,
       "buildings": 18,
       "roads": 9
     },
     {
       "x": 139505,
       "y": 90981,
-      "bytes": 2552,
+      "bytes": 2402,
       "buildings": 17,
       "roads": 12
     },
@@ -3400,182 +3400,182 @@
     {
       "x": 139510,
       "y": 90981,
-      "bytes": 2497,
+      "bytes": 2539,
       "buildings": 7,
       "roads": 12
     },
     {
       "x": 139511,
       "y": 90981,
-      "bytes": 3752,
+      "bytes": 3778,
       "buildings": 1,
       "roads": 45
     },
     {
       "x": 139512,
       "y": 90981,
-      "bytes": 1987,
+      "bytes": 2024,
       "buildings": 4,
       "roads": 21
     },
     {
       "x": 139513,
       "y": 90981,
-      "bytes": 2456,
+      "bytes": 2811,
       "buildings": 11,
       "roads": 15
     },
     {
       "x": 139514,
       "y": 90981,
-      "bytes": 3883,
+      "bytes": 3911,
       "buildings": 24,
       "roads": 15
     },
     {
       "x": 139515,
       "y": 90981,
-      "bytes": 1379,
+      "bytes": 1280,
       "buildings": 12,
       "roads": 2
     },
     {
       "x": 139485,
       "y": 90982,
-      "bytes": 491,
+      "bytes": 655,
       "buildings": 1,
       "roads": 1
     },
     {
       "x": 139486,
       "y": 90982,
-      "bytes": 1641,
+      "bytes": 1628,
       "buildings": 11,
       "roads": 3
     },
     {
       "x": 139487,
       "y": 90982,
-      "bytes": 1250,
+      "bytes": 1338,
       "buildings": 7,
       "roads": 3
     },
     {
       "x": 139488,
       "y": 90982,
-      "bytes": 2588,
+      "bytes": 2556,
       "buildings": 6,
       "roads": 23
     },
     {
       "x": 139489,
       "y": 90982,
-      "bytes": 1870,
+      "bytes": 2365,
       "buildings": 4,
       "roads": 16
     },
     {
       "x": 139490,
       "y": 90982,
-      "bytes": 1888,
+      "bytes": 1733,
       "buildings": 9,
       "roads": 9
     },
     {
       "x": 139491,
       "y": 90982,
-      "bytes": 3828,
+      "bytes": 3685,
       "buildings": 26,
       "roads": 9
     },
     {
       "x": 139492,
       "y": 90982,
-      "bytes": 1853,
+      "bytes": 1866,
       "buildings": 14,
       "roads": 3
     },
     {
       "x": 139493,
       "y": 90982,
-      "bytes": 1952,
+      "bytes": 1762,
       "buildings": 15,
       "roads": 2
     },
     {
       "x": 139494,
       "y": 90982,
-      "bytes": 3322,
+      "bytes": 3354,
       "buildings": 11,
       "roads": 14
     },
     {
       "x": 139495,
       "y": 90982,
-      "bytes": 3171,
+      "bytes": 3024,
       "buildings": 24,
       "roads": 6
     },
     {
       "x": 139496,
       "y": 90982,
-      "bytes": 2830,
+      "bytes": 2950,
       "buildings": 18,
       "roads": 5
     },
     {
       "x": 139497,
       "y": 90982,
-      "bytes": 3633,
+      "bytes": 3690,
       "buildings": 10,
       "roads": 16
     },
     {
       "x": 139498,
       "y": 90982,
-      "bytes": 2702,
+      "bytes": 2542,
       "buildings": 17,
       "roads": 4
     },
     {
       "x": 139499,
       "y": 90982,
-      "bytes": 2374,
+      "bytes": 2223,
       "buildings": 17,
       "roads": 3
     },
     {
       "x": 139500,
       "y": 90982,
-      "bytes": 2079,
+      "bytes": 2006,
       "buildings": 14,
       "roads": 4
     },
     {
       "x": 139501,
       "y": 90982,
-      "bytes": 2748,
+      "bytes": 2706,
       "buildings": 18,
       "roads": 1
     },
     {
       "x": 139502,
       "y": 90982,
-      "bytes": 3488,
+      "bytes": 3313,
       "buildings": 28,
       "roads": 5
     },
     {
       "x": 139503,
       "y": 90982,
-      "bytes": 2509,
+      "bytes": 2445,
       "buildings": 20,
       "roads": 3
     },
     {
       "x": 139504,
       "y": 90982,
-      "bytes": 1056,
+      "bytes": 1005,
       "buildings": 5,
       "roads": 6
     },
@@ -3596,63 +3596,63 @@
     {
       "x": 139507,
       "y": 90982,
-      "bytes": 702,
+      "bytes": 750,
       "buildings": 1,
       "roads": 7
     },
     {
       "x": 139508,
       "y": 90982,
-      "bytes": 400,
+      "bytes": 374,
       "buildings": 1,
       "roads": 1
     },
     {
       "x": 139509,
       "y": 90982,
-      "bytes": 1998,
+      "bytes": 2038,
       "buildings": 9,
       "roads": 9
     },
     {
       "x": 139510,
       "y": 90982,
-      "bytes": 3512,
+      "bytes": 3672,
       "buildings": 20,
       "roads": 16
     },
     {
       "x": 139511,
       "y": 90982,
-      "bytes": 2203,
+      "bytes": 2141,
       "buildings": 6,
       "roads": 17
     },
     {
       "x": 139512,
       "y": 90982,
-      "bytes": 2244,
+      "bytes": 2259,
       "buildings": 3,
       "roads": 24
     },
     {
       "x": 139513,
       "y": 90982,
-      "bytes": 1807,
+      "bytes": 1881,
       "buildings": 1,
       "roads": 11
     },
     {
       "x": 139514,
       "y": 90982,
-      "bytes": 3105,
+      "bytes": 3158,
       "buildings": 9,
       "roads": 18
     },
     {
       "x": 139515,
       "y": 90982,
-      "bytes": 1142,
+      "bytes": 1108,
       "buildings": 5,
       "roads": 5
     },
@@ -3666,126 +3666,126 @@
     {
       "x": 139486,
       "y": 90983,
-      "bytes": 1725,
+      "bytes": 1785,
       "buildings": 11,
       "roads": 4
     },
     {
       "x": 139487,
       "y": 90983,
-      "bytes": 2774,
+      "bytes": 2731,
       "buildings": 16,
       "roads": 9
     },
     {
       "x": 139488,
       "y": 90983,
-      "bytes": 5583,
+      "bytes": 5353,
       "buildings": 8,
       "roads": 54
     },
     {
       "x": 139489,
       "y": 90983,
-      "bytes": 1900,
+      "bytes": 2113,
       "buildings": 11,
       "roads": 8
     },
     {
       "x": 139490,
       "y": 90983,
-      "bytes": 2474,
+      "bytes": 2477,
       "buildings": 19,
       "roads": 3
     },
     {
       "x": 139491,
       "y": 90983,
-      "bytes": 3300,
+      "bytes": 3561,
       "buildings": 17,
       "roads": 11
     },
     {
       "x": 139492,
       "y": 90983,
-      "bytes": 2352,
+      "bytes": 3133,
       "buildings": 4,
       "roads": 16
     },
     {
       "x": 139493,
       "y": 90983,
-      "bytes": 1020,
+      "bytes": 1100,
       "buildings": 6,
       "roads": 2
     },
     {
       "x": 139494,
       "y": 90983,
-      "bytes": 1715,
+      "bytes": 1767,
       "buildings": 13,
       "roads": 3
     },
     {
       "x": 139495,
       "y": 90983,
-      "bytes": 4886,
+      "bytes": 4617,
       "buildings": 23,
       "roads": 18
     },
     {
       "x": 139496,
       "y": 90983,
-      "bytes": 3084,
+      "bytes": 3134,
       "buildings": 17,
       "roads": 12
     },
     {
       "x": 139497,
       "y": 90983,
-      "bytes": 1824,
+      "bytes": 1823,
       "buildings": 12,
       "roads": 1
     },
     {
       "x": 139498,
       "y": 90983,
-      "bytes": 1718,
+      "bytes": 1694,
       "buildings": 12,
       "roads": 5
     },
     {
       "x": 139499,
       "y": 90983,
-      "bytes": 4245,
+      "bytes": 4057,
       "buildings": 16,
       "roads": 31
     },
     {
       "x": 139500,
       "y": 90983,
-      "bytes": 2228,
+      "bytes": 2103,
       "buildings": 19,
       "roads": 4
     },
     {
       "x": 139501,
       "y": 90983,
-      "bytes": 2522,
+      "bytes": 2508,
       "buildings": 17,
       "roads": 2
     },
     {
       "x": 139502,
       "y": 90983,
-      "bytes": 3022,
+      "bytes": 2943,
       "buildings": 25,
       "roads": 5
     },
     {
       "x": 139503,
       "y": 90983,
-      "bytes": 3741,
+      "bytes": 3712,
       "buildings": 9,
       "roads": 12
     },
@@ -3799,7 +3799,7 @@
     {
       "x": 139505,
       "y": 90983,
-      "bytes": 755,
+      "bytes": 767,
       "buildings": 1,
       "roads": 4
     },
@@ -3820,56 +3820,56 @@
     {
       "x": 139508,
       "y": 90983,
-      "bytes": 1326,
+      "bytes": 1411,
       "buildings": 6,
       "roads": 8
     },
     {
       "x": 139509,
       "y": 90983,
-      "bytes": 8325,
+      "bytes": 8290,
       "buildings": 15,
       "roads": 14
     },
     {
       "x": 139510,
       "y": 90983,
-      "bytes": 3433,
+      "bytes": 3420,
       "buildings": 5,
       "roads": 21
     },
     {
       "x": 139511,
       "y": 90983,
-      "bytes": 1313,
+      "bytes": 1398,
       "buildings": 7,
       "roads": 8
     },
     {
       "x": 139512,
       "y": 90983,
-      "bytes": 3420,
+      "bytes": 3846,
       "buildings": 9,
       "roads": 31
     },
     {
       "x": 139513,
       "y": 90983,
-      "bytes": 1963,
+      "bytes": 2089,
       "buildings": 1,
       "roads": 21
     },
     {
       "x": 139514,
       "y": 90983,
-      "bytes": 1862,
+      "bytes": 1821,
       "buildings": 6,
       "roads": 11
     },
     {
       "x": 139515,
       "y": 90983,
-      "bytes": 1114,
+      "bytes": 1167,
       "buildings": 5,
       "roads": 7
     },
@@ -3883,49 +3883,49 @@
     {
       "x": 139486,
       "y": 90984,
-      "bytes": 2323,
+      "bytes": 2407,
       "buildings": 17,
       "roads": 3
     },
     {
       "x": 139487,
       "y": 90984,
-      "bytes": 4045,
+      "bytes": 4070,
       "buildings": 12,
       "roads": 31
     },
     {
       "x": 139488,
       "y": 90984,
-      "bytes": 3877,
+      "bytes": 3834,
       "buildings": 14,
       "roads": 26
     },
     {
       "x": 139489,
       "y": 90984,
-      "bytes": 2863,
+      "bytes": 2952,
       "buildings": 17,
       "roads": 9
     },
     {
       "x": 139490,
       "y": 90984,
-      "bytes": 2197,
+      "bytes": 2231,
       "buildings": 15,
       "roads": 5
     },
     {
       "x": 139491,
       "y": 90984,
-      "bytes": 2990,
+      "bytes": 3050,
       "buildings": 20,
       "roads": 9
     },
     {
       "x": 139492,
       "y": 90984,
-      "bytes": 1404,
+      "bytes": 1809,
       "buildings": 5,
       "roads": 5
     },
@@ -3939,196 +3939,196 @@
     {
       "x": 139494,
       "y": 90984,
-      "bytes": 1441,
+      "bytes": 2008,
       "buildings": 4,
       "roads": 4
     },
     {
       "x": 139495,
       "y": 90984,
-      "bytes": 3155,
+      "bytes": 3294,
       "buildings": 15,
       "roads": 10
     },
     {
       "x": 139496,
       "y": 90984,
-      "bytes": 3422,
+      "bytes": 3398,
       "buildings": 23,
       "roads": 6
     },
     {
       "x": 139497,
       "y": 90984,
-      "bytes": 3357,
+      "bytes": 3253,
       "buildings": 27,
       "roads": 8
     },
     {
       "x": 139498,
       "y": 90984,
-      "bytes": 2688,
+      "bytes": 2621,
       "buildings": 19,
       "roads": 8
     },
     {
       "x": 139499,
       "y": 90984,
-      "bytes": 2031,
+      "bytes": 2128,
       "buildings": 13,
       "roads": 8
     },
     {
       "x": 139500,
       "y": 90984,
-      "bytes": 3494,
+      "bytes": 3633,
       "buildings": 16,
       "roads": 22
     },
     {
       "x": 139501,
       "y": 90984,
-      "bytes": 3170,
+      "bytes": 3175,
       "buildings": 21,
       "roads": 5
     },
     {
       "x": 139502,
       "y": 90984,
-      "bytes": 2842,
+      "bytes": 3260,
       "buildings": 20,
       "roads": 5
     },
     {
       "x": 139503,
       "y": 90984,
-      "bytes": 1681,
+      "bytes": 1660,
       "buildings": 4,
       "roads": 10
     },
     {
       "x": 139504,
       "y": 90984,
-      "bytes": 1597,
+      "bytes": 1566,
       "buildings": 2,
       "roads": 10
     },
     {
       "x": 139505,
       "y": 90984,
-      "bytes": 567,
+      "bytes": 530,
       "buildings": 1,
       "roads": 3
     },
     {
       "x": 139507,
       "y": 90984,
-      "bytes": 1009,
+      "bytes": 928,
       "buildings": 5,
       "roads": 5
     },
     {
       "x": 139508,
       "y": 90984,
-      "bytes": 2550,
+      "bytes": 2552,
       "buildings": 16,
       "roads": 9
     },
     {
       "x": 139509,
       "y": 90984,
-      "bytes": 2988,
+      "bytes": 3066,
       "buildings": 13,
       "roads": 14
     },
     {
       "x": 139510,
       "y": 90984,
-      "bytes": 1129,
+      "bytes": 1128,
       "buildings": 7,
       "roads": 4
     },
     {
       "x": 139511,
       "y": 90984,
-      "bytes": 753,
+      "bytes": 800,
       "buildings": 3,
       "roads": 4
     },
     {
       "x": 139512,
       "y": 90984,
-      "bytes": 1502,
+      "bytes": 1508,
       "buildings": 10,
       "roads": 7
     },
     {
       "x": 139513,
       "y": 90984,
-      "bytes": 2815,
+      "bytes": 3057,
       "buildings": 11,
       "roads": 10
     },
     {
       "x": 139514,
       "y": 90984,
-      "bytes": 7067,
+      "bytes": 7062,
       "buildings": 5,
       "roads": 88
     },
     {
       "x": 139515,
       "y": 90984,
-      "bytes": 1813,
+      "bytes": 1705,
       "buildings": 10,
       "roads": 4
     },
     {
       "x": 139486,
       "y": 90985,
-      "bytes": 3189,
+      "bytes": 3256,
       "buildings": 9,
       "roads": 16
     },
     {
       "x": 139487,
       "y": 90985,
-      "bytes": 3668,
+      "bytes": 3611,
       "buildings": 15,
       "roads": 23
     },
     {
       "x": 139488,
       "y": 90985,
-      "bytes": 1767,
+      "bytes": 1894,
       "buildings": 8,
       "roads": 9
     },
     {
       "x": 139489,
       "y": 90985,
-      "bytes": 1496,
+      "bytes": 1567,
       "buildings": 9,
       "roads": 5
     },
     {
       "x": 139490,
       "y": 90985,
-      "bytes": 1332,
+      "bytes": 1437,
       "buildings": 8,
       "roads": 2
     },
     {
       "x": 139491,
       "y": 90985,
-      "bytes": 1589,
+      "bytes": 1618,
       "buildings": 4,
       "roads": 14
     },
     {
       "x": 139492,
       "y": 90985,
-      "bytes": 540,
+      "bytes": 530,
       "buildings": 1,
       "roads": 3
     },
@@ -4142,63 +4142,63 @@
     {
       "x": 139494,
       "y": 90985,
-      "bytes": 964,
+      "bytes": 1098,
       "buildings": 4,
       "roads": 3
     },
     {
       "x": 139495,
       "y": 90985,
-      "bytes": 2178,
+      "bytes": 2187,
       "buildings": 6,
       "roads": 7
     },
     {
       "x": 139496,
       "y": 90985,
-      "bytes": 2595,
+      "bytes": 2459,
       "buildings": 19,
       "roads": 4
     },
     {
       "x": 139497,
       "y": 90985,
-      "bytes": 1725,
+      "bytes": 1720,
       "buildings": 10,
       "roads": 2
     },
     {
       "x": 139498,
       "y": 90985,
-      "bytes": 1329,
+      "bytes": 1410,
       "buildings": 9,
       "roads": 4
     },
     {
       "x": 139499,
       "y": 90985,
-      "bytes": 1733,
+      "bytes": 1629,
       "buildings": 12,
       "roads": 5
     },
     {
       "x": 139500,
       "y": 90985,
-      "bytes": 2261,
+      "bytes": 2284,
       "buildings": 9,
       "roads": 13
     },
     {
       "x": 139501,
       "y": 90985,
-      "bytes": 3624,
+      "bytes": 3585,
       "buildings": 11,
       "roads": 28
     },
     {
       "x": 139502,
       "y": 90985,
-      "bytes": 387,
+      "bytes": 388,
       "buildings": 1,
       "roads": 0
     },
@@ -4226,28 +4226,28 @@
     {
       "x": 139507,
       "y": 90985,
-      "bytes": 1479,
+      "bytes": 1505,
       "buildings": 9,
       "roads": 5
     },
     {
       "x": 139508,
       "y": 90985,
-      "bytes": 1588,
+      "bytes": 1511,
       "buildings": 8,
       "roads": 7
     },
     {
       "x": 139509,
       "y": 90985,
-      "bytes": 3270,
+      "bytes": 3211,
       "buildings": 5,
       "roads": 10
     },
     {
       "x": 139510,
       "y": 90985,
-      "bytes": 1117,
+      "bytes": 1102,
       "buildings": 2,
       "roads": 5
     },
@@ -4261,35 +4261,35 @@
     {
       "x": 139512,
       "y": 90985,
-      "bytes": 1220,
+      "bytes": 1238,
       "buildings": 6,
       "roads": 6
     },
     {
       "x": 139513,
       "y": 90985,
-      "bytes": 1637,
+      "bytes": 1583,
       "buildings": 7,
       "roads": 8
     },
     {
       "x": 139514,
       "y": 90985,
-      "bytes": 3489,
+      "bytes": 3539,
       "buildings": 12,
       "roads": 23
     },
     {
       "x": 139515,
       "y": 90985,
-      "bytes": 982,
+      "bytes": 990,
       "buildings": 4,
       "roads": 2
     },
     {
       "x": 139487,
       "y": 90986,
-      "bytes": 246,
+      "bytes": 241,
       "buildings": 1,
       "roads": 0
     },
@@ -4310,7 +4310,7 @@
     {
       "x": 139490,
       "y": 90986,
-      "bytes": 225,
+      "bytes": 331,
       "buildings": 1,
       "roads": 0
     },
@@ -4331,14 +4331,14 @@
     {
       "x": 139498,
       "y": 90986,
-      "bytes": 427,
+      "bytes": 506,
       "buildings": 1,
       "roads": 1
     },
     {
       "x": 139510,
       "y": 90986,
-      "bytes": 272,
+      "bytes": 344,
       "buildings": 1,
       "roads": 0
     },
@@ -4366,5 +4366,5 @@
   ],
   "source": "© OpenStreetMap-Mitwirkende, ODbL 1.0 – openstreetmap.org/copyright",
   "synthetic": false,
-  "generatedAt": "2026-11-27T07:29:14.379Z"
+  "generatedAt": "2026-11-27T07:45:20.144Z"
 }
