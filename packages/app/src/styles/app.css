@@ -2550,6 +2550,10 @@ a {
 .map__svg {
   display: block;
   width: 100%;
+  /* Ohne eigenes Clipping malt SVG über die abgerundeten Ecken des Containers
+     hinaus – auf der echten Karte ragten Häuser in die Kartenfläche hinein. */
+  border-radius: inherit;
+  overflow: hidden;
 }
 
 .map__ground {
@@ -2725,6 +2729,12 @@ a {
   bottom: 24px;
   display: grid;
   gap: 2px;
+  padding: 2px 5px;
+  /* Ein Maßstab auf einem Straßennetz ist nicht lesbar: die Straßenlinien laufen
+     durch die Zahlen. */
+  border-radius: 5px;
+  background: rgba(8, 14, 22, 0.72);
+  backdrop-filter: blur(2px);
   pointer-events: none;
 }
 
@@ -2747,8 +2757,11 @@ a {
   right: 8px;
   bottom: 4px;
   margin: 0;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: rgba(8, 14, 22, 0.6);
   font-size: 8px;
-  color: rgba(214, 226, 245, 0.45);
+  color: rgba(214, 226, 245, 0.6);
   letter-spacing: 0.02em;
 }
 
