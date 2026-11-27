@@ -39,7 +39,12 @@ const PIXELS = { width: 1080, height: 1920 };
 const SHOTS = [
   {
     slug: '01-find',
-    caption: { de: 'In 38 m – 3 Etagen über dir', en: '38 m away — 3 floors up' },
+    /**
+     * Keine Zahl in der Bildunterschrift: die Demo-Position driftet, die Distanz
+     * im Bild ist also 30–40 m. Eine feste Zahl („38 m") wäre eine Behauptung,
+     * die das Bild daneben widerlegt.
+     */
+    caption: { de: 'Wenige Schritte – drei Ebenen tiefer', en: 'A few steps — three levels down' },
     // Die Auto-Kachel steht über der Liste; ihr Knopf führt zum Kompass.
     steps: [['Zum Auto', 'To the car']],
   },
@@ -161,7 +166,13 @@ await page.evaluate(() => {
     // 1 400 km entfernt und die Karte zeigt „irgendwo anders".
     lat: 48.1362 + (Math.random() - 0.5) * 0.002,
     lng: 11.5831 + (Math.random() - 0.5) * 0.002,
-    altitude: 640,
+    /**
+     * Die Demo-Position der App liegt bei 411 m (simulierte Sensoren). Anker mit
+     * 640 m ergaben im Fund-Screen „Höhe unklar – 228 m Unterschied, das ist kein
+     * Gebäude" direkt über „Etage: −3" – zwei Angaben, die sich widersprechen.
+     * Ein Parkhaus-Anker muss auf derselben Höhenreferenz liegen wie das Gerät.
+     */
+    altitude: 411,
     floorLabel: '',
     createdAt: now,
     updatedAt: now,
@@ -179,6 +190,9 @@ await page.evaluate(() => {
       name: 'Mein Auto · Säule B17',
       category: 'car',
       floorLabel: '−3',
+      // Drei Ebenen unter dem Gerät (3 m je Ebene) – daraus rechnet die App
+      // „Ziel liegt tiefer … ca. 3 Etage(n)", passend zur Bildunterschrift.
+      altitude: 402,
       zone: 'Zone B · 2,50 €/h',
       note: 'Rechts neben dem blauen Pfeiler, Ausgang Ost.',
       parking: { startedAt: now - 95 * 60_000, limitMinutes: 120, reminderState: 'scheduled' },
@@ -311,6 +325,50 @@ for (const shot of SHOTS) {
     console.warn(`      Karte: ${JSON.stringify(drawn)}`);
     if (drawn.houses < 5) throw new Error(`Karte zeigt nur ${drawn.houses} Häuser – Layer kaputt?`);
   }
+  /**
+   * Layout-Selbstauskunft. Ein Bild „sieht" immer richtig aus – man merkt nicht,
+   * dass der letzte Absatz unterhalb des Viewports liegt. Genau das war der Fall:
+   * `.app` ist ein Grid mit vier Zeilen, der Fund-Screen rendert nur zwei Kinder,
+   * und `main` landete in der `auto`-Zeile. Ergebnis: Die App ragte über den
+   * Viewport hinaus, `overflow: hidden` schnitt sie ab, gescrollt wurde nie.
+   * Deshalb wird hier gemessen statt geschätzt.
+   */
+  const layout = await page.evaluate(() => {
+    const rect = (selector) => {
+      const node = document.querySelector(selector);
+      if (!node) return null;
+      const box = node.getBoundingClientRect();
+      return {
+        top: Math.round(box.top),
+        bottom: Math.round(box.bottom),
+        height: Math.round(box.height),
+        scrollHeight: node.scrollHeight,
+        clientHeight: node.clientHeight,
+      };
+    };
+    return {
+      viewportHeight: window.innerHeight,
+      app: rect('.app'),
+      body: rect('.app__body'),
+      tabbar: rect('.tabbar'),
+    };
+  });
+  const problems = [];
+  if (layout.app && layout.app.bottom > layout.viewportHeight + 1) {
+    problems.push(`.app ragt ${layout.app.bottom - layout.viewportHeight} px unter den Viewport`);
+  }
+  if (layout.body && layout.body.bottom > layout.viewportHeight + 1) {
+    problems.push(`.app__body endet ${layout.body.bottom - layout.viewportHeight} px unter dem Viewport`);
+  }
+  const scrolls = layout.body ? layout.body.scrollHeight > layout.body.clientHeight + 1 : false;
+  if (layout.body && layout.tabbar && !scrolls && layout.body.bottom > layout.tabbar.top + 1) {
+    problems.push('.app__body reicht in die Tab-Leiste, scrollt aber nicht');
+  }
+  if (problems.length) {
+    console.warn(`  ! ${shot.slug}: ${problems.join(' · ')}`);
+    throw new Error(`Layout kaputt auf ${shot.slug}: ${problems.join(' · ')}`);
+  }
+
   const viewportUsed = page.viewportSize();
   const seen = await page.evaluate(() => {
     const body = document.body.innerText.replace(/\s+/g, ' ').trim();
@@ -338,7 +396,7 @@ for (const shot of SHOTS) {
       title: document.title,
     };
   });
-  results.push({ slug: shot.slug, file, caption: shot.caption, reached, seen, viewportUsed });
+  results.push({ slug: shot.slug, file, caption: shot.caption, reached, seen, viewportUsed, layout });
   console.log(`  ✔ ${shot.slug}.png — ${shot.caption.de}`);
   console.log(`      gesehen: ${seen.text.slice(0, 110)}`);
 }

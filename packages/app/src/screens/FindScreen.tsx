@@ -227,6 +227,20 @@ export function FindScreen({
       </div>
 
       <div className="guide">
+        {isDemo && (
+          /**
+           * Der Demo-Hinweis erklärt den Zustand, in dem der ganze Bildschirm
+           * steht – simulierte Sensoren, keine echte Position. Als Fließtext am
+           * Ende lag er unter allem anderen und war auf einem 732-px-Viewport
+           * schlicht außerhalb des Bildes; als Zustandsangabe gehört er nach oben,
+           * direkt unter die Kopfzeile. Das violette Feld hebt ihn von echten
+           * Messwerten ab.
+           */
+          <div className="demo-hint">
+            <span className="demo-hint__tag">{t('app.demo.simulated')}</span>
+            <span className="demo-hint__text">{t('app.demo.hint')}</span>
+          </div>
+        )}
         {arrived && (
           <div className="arrived-card">
             <div className="arrived-card__head">
@@ -541,19 +555,6 @@ export function FindScreen({
             >
               <ArrowUpRight size={14} /> {t('app.find.openMap')}
             </a>
-          </div>
-        )}
-
-        {isDemo && (
-          /**
-           * Die Demo-Angabe ist eine Einladung, kein Fließtext: sie erklärt, was
-           * gerade passiert (simulierte Sensoren) und was man tun kann (tippen).
-           * Vorher lief sie als eine Zeile über den Rand hinaus – auf dem
-           * Screenshot endete sie mitten im Wort.
-           */
-          <div className="demo-hint">
-            <span className="demo-hint__tag">{t('app.demo.simulated')}</span>
-            <span className="demo-hint__text">{t('app.demo.hint')}</span>
           </div>
         )}
 
