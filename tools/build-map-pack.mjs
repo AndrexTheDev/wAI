@@ -31,14 +31,17 @@ const arg = (name, fallback) => {
   return index >= 0 && args[index + 1] !== undefined ? args[index + 1] : fallback;
 };
 
-/* Die Projektion muss identisch zur App sein – deshalb wird sie importiert und
-   nicht abgeschrieben. Zwei Kopien derselben Formel driften garantiert. */
-const { project, MAP_ZOOM, TILE_SIZE, MAP_PACK_VERSION } = await import(
-  path.join(ROOT, 'packages/shared/dist/map.js')
-).catch(async () => {
-  // Fallback für den Fall, dass shared noch nicht gebaut wurde: tsx direkt.
-  return import(path.join(ROOT, 'packages/shared/src/map.ts'));
-});
+/**
+ * Die Projektion muss identisch zur App sein – deshalb wird die Quelle importiert
+ * und nicht abgeschrieben. Zwei Kopien derselben Formel driften garantiert.
+ *
+ * `@wai/shared` hat kein Build-Skript (es wird über einen Vite-Alias direkt aus
+ * dem Quelltext konsumiert). Ein früherer Versuch, `dist/map.js` zu laden, ist auf
+ * dem Runner gescheitert – deshalb geht es hier direkt über tsx.
+ */
+const { project, MAP_ZOOM, TILE_SIZE, MAP_PACK_VERSION } = await import('tsx/esm/api').then(
+  ({ tsImport }) => tsImport(path.join(ROOT, 'packages/shared/src/map.ts'), import.meta.url),
+);
 
 const bbox = {
   south: Number(arg('south', '48.1280')),

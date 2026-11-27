@@ -55,9 +55,6 @@ jobs:
 
       - run: npm ci
 
-      - name: Build shared (the generator imports the projection from it)
-        run: npm run build -w @wai/shared
-
       - name: Generate
         env:
           SOUTH: ${{ inputs.south || '48.1280' }}
