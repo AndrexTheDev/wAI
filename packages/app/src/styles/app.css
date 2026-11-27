@@ -1099,7 +1099,8 @@ a {
 }
 
 .field__textarea {
-  min-height: 76px;
+  /* Zwei Zeilen als Grundmaß; gewachsen wird beim Tippen, nicht per leerem Kasten. */
+  min-height: 62px;
   resize: vertical;
 }
 
