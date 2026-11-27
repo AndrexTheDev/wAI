@@ -31,7 +31,8 @@ Android SDK, keystore, issuer key, gh auth) and then a concrete "next step".
 | Cut a release | `bash tools/release.sh patch` | gh auth | 5 min |
 | Create the upload key | `npm run keystore` | JDK (keytool) | 1 min |
 | Check the Play listing | `npm run check:store` | nothing | 1 s |
-| Regenerate store images | `bash tools/make-store-assets.sh` | ImageMagick | 5 s |
+| Regenerate icons (all sizes) | `node tools/make-icons.mjs` | ImageMagick | 12 s |
+| Regenerate store graphics | `bash tools/make-store-assets.sh` | ImageMagick + DejaVu | 2 s |
 | Capture store screenshots | `npm run screenshots` | Playwright + Chromium or a device | 1 min |
 | Issue a Pro licence | `npm run license:issue -- --sub …` | issuer key | instant |
 
@@ -55,7 +56,8 @@ tools/
   check-store-listing.mjs ← Play limits + DE/EN parity + product consistency
   check-claims.mjs        ← jeder Marketing-Claim muss im Code gedeckt sein (docs/ROADMAP.md)
   build-map-pack.mjs      ← OpenStreetMap → Offline-Kartenkacheln (public/map/<slug>)
-  make-store-assets.sh    ← icon-512 + feature graphic, reproduced from the real icon
+  make-icons.mjs          ← App-Zeichen: Launcher (5 Dichten), Store-Icon, Splash, Favicon aus einer Geometrie
+  make-store-assets.sh    ← Feature-Grafik aus dem erzeugten Icon
   capture-store-screenshots.mjs ← real screenshots, refuses to fake them
   keys/                   ← issuer key pair (private key is git-ignored)
 .github/workflows/
