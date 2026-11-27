@@ -178,6 +178,13 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
     const pois: Array<{ x: number; y: number; kind: string }> = [];
 
     if (!coversArea) return { paths, labels, pois };
+    /**
+     * `dx`/`dy` kommen in Welteinheiten. Der Ursprung der Kachel auf dem Schirm ist
+     * die Bildmitte plus dieser Versatz – erst dividiert, dann addiert, sonst
+     * verschiebt sich jede Kachel um den Zoomfaktor.
+     */
+    const halfWidth = viewport.width / 2;
+    const halfHeight = viewport.height / 2;
     for (const { tile, dx, dy } of visible) {
       const data = tiles.get(`${tile.x}/${tile.y}`);
       if (!data) continue;
@@ -192,27 +199,28 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
         // erscheinen erst, wenn man wirklich hineinzoomt.
         if (road.class === 'footway' && viewport.unitsPerPixel > 1.6) continue;
         paths.push({
-          d: polygonPath(road.points, dx, dy, viewport.unitsPerPixel, false),
+          d: polygonPath(road.points, dx, dy, viewport.unitsPerPixel, halfWidth, halfHeight, false),
           layer: ROAD_LAYER[road.class] ?? 3,
           className: `map__road map__road--${road.class}`,
         });
       }
       for (const area of data.areas) {
         paths.push({
-          d: polygonPath(area.points, dx, dy, viewport.unitsPerPixel, true),
+          d: polygonPath(area.points, dx, dy, viewport.unitsPerPixel, halfWidth, halfHeight, true),
           layer: 1,
           className: `map__area map__area--${area.kind}`,
         });
       }
       for (const building of data.buildings) {
         paths.push({
-          d: polygonPath(building.points, dx, dy, viewport.unitsPerPixel, true),
+          d: polygonPath(building.points, dx, dy, viewport.unitsPerPixel, halfWidth, halfHeight, true),
           layer: 2,
           className: `map__building ${building.kind === 'parking' ? 'is-parking' : ''}`,
         });
       }
       for (const poi of data.pois ?? []) {
-        const point = toScreen(viewport, { x: poi.x + dx + tile.x * 256, y: poi.y + dy + tile.y * 256 });
+        // poi.x/y sind schon kachel-lokal, dx/dy der Kachelversatz in Welteinheiten.
+        const point = toScreen(viewport, { x: poi.x + tile.x * 256, y: poi.y + tile.y * 256 });
         if (poi.kind === 'parking' || poi.kind === 'shop') {
           pois.push({ x: point.x, y: point.y, kind: poi.kind });
         }
@@ -223,8 +231,8 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
         // Fleck und verdeckten genau die Straßen, die man braucht.
         labels.push({
           text: label.text,
-          x: (label.x + dx) / viewport.unitsPerPixel,
-          y: (label.y + dy) / viewport.unitsPerPixel,
+          x: (label.x + dx) / viewport.unitsPerPixel + halfWidth,
+          y: (label.y + dy) / viewport.unitsPerPixel + halfHeight,
           priority: label.kind === 'street' ? 0 : 1,
         });
       }
@@ -391,13 +399,17 @@ function polygonPath(
   dx: number,
   dy: number,
   scale: number,
+  halfWidth: number,
+  halfHeight: number,
   close: boolean,
 ): string {
   let d = '';
   let previous: { x: number; y: number } | null = null;
   for (const [px, py] of points) {
-    const x = (px + dx) / scale;
-    const y = (py + dy) / scale;
+    // Kachel-lokale Einheiten → Welteinheiten (dx/dy) → Bildpixel. Der Versatz
+    // gehört **vor** die Division, die Bildmitte danach.
+    const x = (px + dx) / scale + halfWidth;
+    const y = (py + dy) / scale + halfHeight;
     // Doppelte Punkte erzeugen Null-Linien, die SVG je nach Renderer als
     // Kringel zeichnet – auf dem Handy sieht das wie ein Knoten aus.
     if (previous && Math.abs(previous.x - x) < 0.05 && Math.abs(previous.y - y) < 0.05) continue;

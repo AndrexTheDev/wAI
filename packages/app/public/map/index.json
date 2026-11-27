@@ -376,8 +376,8 @@
     {
       "x": 139508,
       "y": 90967,
-      "bytes": 1061,
-      "buildings": 1,
+      "bytes": 689,
+      "buildings": 0,
       "roads": 5
     },
     {
@@ -446,8 +446,8 @@
     {
       "x": 139487,
       "y": 90968,
-      "bytes": 3475,
-      "buildings": 4,
+      "bytes": 2335,
+      "buildings": 3,
       "roads": 22
     },
     {
@@ -572,8 +572,8 @@
     {
       "x": 139505,
       "y": 90968,
-      "bytes": 1933,
-      "buildings": 1,
+      "bytes": 1765,
+      "buildings": 0,
       "roads": 10
     },
     {
@@ -796,8 +796,8 @@
     {
       "x": 139506,
       "y": 90969,
-      "bytes": 1888,
-      "buildings": 2,
+      "bytes": 1536,
+      "buildings": 1,
       "roads": 16
     },
     {
@@ -1083,8 +1083,8 @@
     {
       "x": 139487,
       "y": 90971,
-      "bytes": 1092,
-      "buildings": 6,
+      "bytes": 831,
+      "buildings": 5,
       "roads": 4
     },
     {
@@ -1279,8 +1279,8 @@
     {
       "x": 139486,
       "y": 90972,
-      "bytes": 3381,
-      "buildings": 6,
+      "bytes": 3183,
+      "buildings": 5,
       "roads": 31
     },
     {
@@ -3708,8 +3708,8 @@
     {
       "x": 139492,
       "y": 90983,
-      "bytes": 3133,
-      "buildings": 4,
+      "bytes": 2093,
+      "buildings": 3,
       "roads": 16
     },
     {
@@ -4366,5 +4366,5 @@
   ],
   "source": "© OpenStreetMap-Mitwirkende, ODbL 1.0 – openstreetmap.org/copyright",
   "synthetic": false,
-  "generatedAt": "2026-11-27T07:45:20.144Z"
+  "generatedAt": "2026-11-27T08:15:14.909Z"
 }

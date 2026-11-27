@@ -174,7 +174,17 @@ export function toWorld(viewport: MapViewport, screen: { x: number; y: number })
   };
 }
 
-/** Tiles that intersect the viewport, with their screen offset. */
+/**
+ * Tiles that intersect the viewport, with their offset in **world units** relative
+ * to the tile's own top-left corner.
+ *
+ * The unit matters and was wrong: this returned *screen pixels*, and the renderer
+ * added them to the raw geometry before dividing by `unitsPerPixel`. That is only
+ * correct when the scale happens to be exactly the default 2.4 — at every other
+ * zoom level each tile was drawn off by the zoom factor, so neighbouring tiles
+ * overlapped and cut each other into the visual knot seen on the first real map.
+ */
+
 export function visibleTiles(viewport: MapViewport): Array<{ tile: MapTileRef; dx: number; dy: number }> {
   const halfW = (viewport.width / 2) * viewport.unitsPerPixel;
   const halfH = (viewport.height / 2) * viewport.unitsPerPixel;
@@ -191,9 +201,13 @@ export function visibleTiles(viewport: MapViewport): Array<{ tile: MapTileRef; d
   const out: Array<{ tile: MapTileRef; dx: number; dy: number }> = [];
   for (let ty = fromY; ty <= toY; ty++) {
     for (let tx = fromX; tx <= toX; tx++) {
-      const origin = { x: tx * TILE_SIZE, y: ty * TILE_SIZE };
-      const screen = toScreen(viewport, origin);
-      out.push({ tile: { z: MAP_ZOOM, x: tx, y: ty }, dx: screen.x, dy: screen.y });
+      // Ursprung der Kachel in Weltkoordinaten; dx/dy ist der Versatz der Kachel
+      // gegen den Bildmittelpunkt, **in Welteinheiten**.
+      out.push({
+        tile: { z: MAP_ZOOM, x: tx, y: ty },
+        dx: tx * TILE_SIZE - viewport.centre.x,
+        dy: ty * TILE_SIZE - viewport.centre.y,
+      });
     }
   }
   return out;
