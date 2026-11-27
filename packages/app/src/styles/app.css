@@ -2908,3 +2908,21 @@ a {
   line-height: 1.35;
   color: var(--text-muted, rgba(214, 226, 245, 0.72));
 }
+
+/* ============================================================
+   Teilen: Code und Link als Schlüssel, nicht als Fließtext
+   ============================================================ */
+
+.share__code {
+  display: block;
+  margin-top: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-2);
+  font-size: 11px;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
