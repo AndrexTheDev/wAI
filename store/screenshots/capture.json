@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-27T18:55:00.451Z",
+  "capturedAt": "2026-11-27T19:33:02.865Z",
   "viewport": {
     "width": 412,
     "height": 732,
@@ -20,7 +20,7 @@
       "navigation": [
         "Zum Auto"
       ],
-      "visibleText": "Mein Auto · Säule B17 AUTO · NO 24° SIMULIERTE SENSOREN Tippe irgendwo auf die Karte, um deine Position zu verschieben. Kompass Karte Spur Foto N O/E S W 80 m LUFTLINIE NÄHER-DRAN-SIGNAL 1/4 PRO PARK-TIMER 1 Std. 35 Min. Verbleibend Höhe 40",
+      "visibleText": "Mein Auto · Säule B17 AUTO · NO 24° SIMULIERTE SENSOREN Im Reiter „Karte\" kannst du deine Position antippen und verschieben. Kompass Karte Spur Foto N O/E S W 80 m LUFTLINIE NÄHER-DRAN-SIGNAL 1/4 PRO PARK-TIMER 1 Std. 35 Min. Verbleibend Hö",
       "signature": "anchor:Mein Auto · Säule B17Aut + compass + view:kompass",
       "hasAppShell": true,
       "cssViewport": {
@@ -104,7 +104,7 @@
       "navigation": [
         "Natur2"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 70° Demo Anker setzen TIPPEN SPEICHERT DIESEN ORT Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachnotizen und den",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 72° Demo Anker setzen TIPPEN SPEICHERT DIESEN ORT Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachnotizen und den",
       "signature": "anchor:wAIUmgebungs-Gedächtnisa + carspot + chips",
       "hasAppShell": true,
       "cssViewport": {
@@ -153,7 +153,7 @@
         "Zurückfinden: Wegkreuzung West",
         "Spur"
       ],
-      "visibleText": "Wegkreuzung West NATUR · SW 224° SIMULIERTE SENSOREN Tippe irgendwo auf die Karte, um deine Position zu verschieben. Kompass Karte Spur Foto Brotkrumen-Spur 76 m Spur: 76 m NÄHER-DRAN-SIGNAL — PRO PARKZEIT FESTHALTEN — nicht gestartet Höhe ",
+      "visibleText": "Wegkreuzung West NATUR · SW 224° SIMULIERTE SENSOREN Im Reiter „Karte\" kannst du deine Position antippen und verschieben. Kompass Karte Spur Foto Brotkrumen-Spur 76 m Spur: 76 m NÄHER-DRAN-SIGNAL — PRO PARKZEIT FESTHALTEN — nicht gestartet ",
       "signature": "anchor:Wegkreuzung WestNatur ·  + compass + view:spur + trailmap",
       "hasAppShell": true,
       "cssViewport": {
@@ -185,7 +185,7 @@
         },
         "cut": [
           {
-            "label": "Simulierte SensorenTippe irgendwo auf di",
+            "label": "Simulierte SensorenIm Reiter „Karte\" kan",
             "height": 658,
             "visible": 616
           },
@@ -250,7 +250,7 @@
         "Wegkreuzung West – Bearbeiten",
         "Teilen"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±8 m 86° Demo Anker setzen TIPPEN SPEICHERT DIESEN ORT Genauigkeit ±8 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachnotizen und den",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±8 m 88° Demo Anker setzen TIPPEN SPEICHERT DIESEN ORT Genauigkeit ±8 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachnotizen und den",
       "signature": "anchor:wAIUmgebungs-Gedächtnisa + carspot + chips + sheet:Anker teilen",
       "hasAppShell": true,
       "cssViewport": {
@@ -334,7 +334,7 @@
       "navigation": [
         "Einstellungen"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 70° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Alles offline, ohne Konto 3 Anker · 4,1 KB auf diesem Gerät Alle Daten bleiben auf ",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 72° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Alles offline, ohne Konto 3 Anker · 4,1 KB auf diesem Gerät Alle Daten bleiben auf ",
       "signature": "anchor:wAIUmgebungs-Gedächtnisa + view:deutsch + settings",
       "hasAppShell": true,
       "cssViewport": {
@@ -383,7 +383,7 @@
         "Einstellungen",
         "Pro freischalten"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±8 m 86° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Alles offline, ohne Konto 3 Anker · 4,1 KB auf diesem Gerät Alle Daten bleiben auf ",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±8 m 88° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Alles offline, ohne Konto 3 Anker · 4,1 KB auf diesem Gerät Alle Daten bleiben auf ",
       "signature": "anchor:wAIUmgebungs-Gedächtnisa + view:deutsch + settings + sheet:Pro freischalten",
       "hasAppShell": true,
       "cssViewport": {
