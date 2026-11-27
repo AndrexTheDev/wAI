@@ -299,8 +299,21 @@ export function AppShell() {
             anchor={selected}
             onBack={() => setTab('anchors')}
             onChooseAnother={() => {
+              /**
+               * „Wähle einen Anker" (Knopf oben rechts in der Rückführung) führte
+               * zurück in die Ankerliste – dort ist aber gar nicht die Auswahl,
+               * sondern die Verwaltung. Jetzt bleibt der Reiter „Finden" aktiv
+               * und zeigt seine eigene Auswahl. Ein Ziel wechseln kostet damit
+               * einen Tipp statt zwei und einen Tabwechsel.
+               */
               setSelected(null);
-              setTab('anchors');
+            }}
+            onChoose={(anchor) => {
+              /* Auswahl aus der Liste im Reiter „Finden": dort bleiben, nur das
+                 Ziel wechseln. Vorher führte jeder dieser Knöpfe zurück zur
+                 Ankerliste – zwei Tipps für einen. */
+              setSelected(anchor);
+              void vibrate('tap');
             }}
             onOpenPro={openPro}
             onArchive={(anchor) => {
@@ -330,6 +343,14 @@ export function AppShell() {
             type="button"
             className={`tab ${tab === item.id ? 'is-active' : ''}`}
             onClick={() => {
+              /**
+               * Tippt jemand unten auf „Finden", während eine Rückführung läuft,
+               * gilt jetzt seine Wahl: der Reiter zeigt seine Auswahl statt
+               * weiter ein Ziel, das er vorhin von der Startseite aus geöffnet
+               * hat. Vorher blieb das alte Ziel stehen, und „Wähle einen Anker"
+               * im selben Bildschirm wirkte, als sei der Tipp verschluckt worden.
+               */
+              if (item.id === 'find' && tab !== 'find') setSelected(null);
               setTab(item.id);
               void vibrate('tap');
             }}

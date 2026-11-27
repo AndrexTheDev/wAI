@@ -312,6 +312,27 @@ a {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  /**
+   * Auf 412 px reicht die Zeile für „UMGEBUNGS-GEDÄCHTNISANKER" nicht, in
+   * Englisch stand dort „ENVIRONMENTAL MEMORY ANC…" – ein abgeschnittener Satz
+   * als Untertitel der App. Die Sperrung war der Grund: 0,12 em × 30 Zeichen.
+   * Etwas enger gesetzt passt der deutsche Satz, und der englische wird
+   * weiterhin gekürzt, aber erst nach „ANCHOR".
+   */
+  letter-spacing: 0.08em;
+  max-width: 100%;
+}
+
+/**
+ * Kleine Geräte (360 dp sind noch immer verbreitet): dort reicht auch 0,08 em
+ * nicht für „UMGEBUNGS-GEDÄCHTNISANKER". Statt den Satz abzuschneiden wird er
+ * enger gesetzt – er ist der einzige Ort, an dem die App sagt, was sie ist.
+ */
+@media (max-width: 380px) {
+  .topbar__sub {
+    font-size: 8.5px;
+    letter-spacing: 0;
+  }
 }
 
 .topbar__actions {
@@ -532,6 +553,18 @@ a {
   color: var(--text-3);
 }
 
+/**
+ * Chrome/Safari malen in `<input type="search">` ein eigenes Kreuz, sobald Text
+ * drinsteht. Daneben saß unser eigener Löschknopf – im Bild waren zwei Kreuze
+ * zu sehen. Das native wird ausgeblendet, unseres bleibt (es hat ein Label und
+ * eine Trefferfläche).
+ */
+.search input::-webkit-search-cancel-button,
+.search input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 .chips {
   display: flex;
   gap: 6px;
@@ -677,9 +710,17 @@ a {
 .anchor-card__title {
   font-size: 14px;
   font-weight: 700;
+  /**
+   * Zwei Zeilen statt einer. Anfangsbuchstaben wie „Mein Auto · Säule B…" sind
+   * keine Hilfe – gerade der hintere Teil („Säule B17") ist die Information,
+   * wegen der jemand den Anker angelegt hat. Die Karte wächst mit, der
+   * Abstandshalter darunter bleibt eine Zeile hoch.
+   */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .anchor-card__meta {
@@ -1746,6 +1787,49 @@ a {
 .switch.is-on::after {
   transform: translateX(19px);
   background: var(--mint);
+}
+
+/**
+ * Der Schalter ist kein `<button class="switch">` mehr, sondern ein Knopf mit
+ * Schalter *und* Beschriftung darin – ein Schalter ohne Text war nicht zu
+ * deuten. `data-on` macht den Zustand am inneren Element sichtbar.
+ */
+.switch[data-on='1'] {
+  background: rgba(110, 231, 183, 0.25);
+  border-color: rgba(110, 231, 183, 0.45);
+}
+
+.switch[data-on='1']::after {
+  transform: translateX(19px);
+  background: var(--mint);
+}
+
+.share__toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: var(--text-2);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0;
+  cursor: pointer;
+  text-align: right;
+}
+
+/**
+ * Der Fokusrahmen lag als Rechteck um Schalter *und* Text und sah aus wie ein
+ * Eingabefeld. Er bleibt sichtbar (Tastaturbedienung), aber rund und am Inhalt.
+ */
+.share__toggle:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 3px;
+  border-radius: 999px;
+}
+
+.share__toggle .switch {
+  flex: none;
 }
 
 .progress {
