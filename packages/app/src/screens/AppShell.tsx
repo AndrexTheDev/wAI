@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { extractShareCode, type Anchor } from '@wai/shared';
 import { useApp } from '../store/AppStore';
 import { anchorFromShareCode } from '../store/shareImport';
@@ -144,6 +144,17 @@ export function AppShell() {
     return () => remove?.();
   }, [handleIncomingShare]);
 
+  /**
+   * Jeder Tab ist ein eigener Bildschirm mit eigenem Scrollstand. Vorher behielt
+   * der Scrollbereich seine Position beim Wechsel: wer in den Einstellungen weit
+   * unten war und dann auf „Anker" tippte, landete mitten in der Ankerliste –
+   * ohne den Kopf, der sagt, wo man ist. Beim Wechsel geht es deshalb nach oben.
+   */
+  const bodyRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    bodyRef.current?.scrollTo({ top: 0 });
+  }, [tab]);
+
   const openPro = (reason = '') => {
     setProReason(reason || undefined);
     setProOpen(true);
@@ -264,7 +275,7 @@ export function AppShell() {
         </div>
       )}
 
-      <main className="app__body">
+      <main className="app__body" ref={bodyRef}>
         {tab === 'anchors' && (
           <HomeScreen
             onOpenAnchor={(anchor) => setEditing({ anchor, mode: 'edit' })}
