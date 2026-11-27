@@ -54,6 +54,7 @@ export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => v
     storageBytes,
     importAnchors,
     anchors,
+    activeAnchors,
     setLocale,
   } = useApp();
   const toast = useToast();
@@ -163,8 +164,13 @@ export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => v
           <div style={{ display: 'grid', gap: 3 }}>
             <span className="card__title">{t('app.settings.offlineTitle')}</span>
             <span className="muted" style={{ fontSize: 12 }}>
+              {/*
+                Aktive Anker, nicht alle: der Reiter unten zeigt dieselbe Zahl.
+                Mit `anchors.length` stand hier „6 Anker" über einem Zähler mit 3 –
+                die drei archivierten sind keine Anker mehr, die man sucht.
+              */}
               {t('app.settings.offlineBody', {
-                count: anchors.length,
+                count: activeAnchors.length,
                 bytes: formatBytes(storageBytes, locale),
               })}
             </span>
