@@ -273,8 +273,13 @@ async function step(page, view, { expect = [], note = '', shot = true, ignoreCas
  */
 const stable = (text) =>
   text
+    // Peilung: „NO 27°" → „NO NN°"
     .replace(/\b[NSOW]{1,2}\s+\d{1,3}°/g, (match) => `${match.replace(/\d{1,3}/, 'NN')}`)
-    .replace(/±\s*\d+\s*m/g, '±N m')
+    .replace(/±\s*\d+([.,]\d+)?\s*m/g, '±N m')
+    /** Entfernungen: die Demo-Position wandert, „2,4 m" ist keine Aussage. */
+    .replace(/\b\d+([.,]\d+)?\s*(m|km|ft|mi)\b/g, 'N $2')
+    /** Laufende Zeiten: „24 Min.", „1 Std. 35 Min.", „12 s". */
+    .replace(/\b\d+\s*(Min\.|Std\.|h|s)\b/g, 'N $1')
     .replace(/\b\d{1,3}°/g, 'NN°');
 
 /**
@@ -727,7 +732,7 @@ for (const result of results) {
     '',
     `- Erste Zeile: „${stable(firstLine).slice(0, 90)}"`,
     `- Sichtbar: ${stable(summary).slice(0, 300)}`,
-    `- Bedienelemente: ${result.controls.filter((c) => c.text).map((c) => c.text.slice(0, 28)).join(' | ') || '—'}`,
+    `- Bedienelemente: ${stable(result.controls.filter((c) => c.text).map((c) => c.text.slice(0, 28)).join(' | ')) || '—'}`,
     `- Scroll: ${scrollBucket === 0 ? 'passt ohne Scrollen' : `rund ${scrollBucket} px unterhalb des Viewports`}`,
     '',
   );
@@ -740,7 +745,7 @@ for (const result of results) {
   lines.push(`**${result.view}**`, '');
   for (const control of list) {
     const state = control.disabled ? ' (deaktiviert)' : control.pressed ? ` (aktiv: ${control.pressed})` : '';
-    lines.push(`- ${control.role || control.tag}: ${control.text || control.aria}${state}`);
+    lines.push(`- ${control.role || control.tag}: ${stable(control.text || control.aria)}${state}`);
   }
   lines.push('');
 }
