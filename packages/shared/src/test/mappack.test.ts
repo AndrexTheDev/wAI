@@ -377,3 +377,15 @@ test('a building the size of a station hall is left out, not drawn as a blob', (
     rmSync(fixturePath, { force: true });
   }
 });
+
+test('a failed download is retried, then reported as a download problem', () => {
+  /**
+   * Overpass ist ein Freiwilligendienst und antwortet unter Last mit 502 oder 429.
+   * Zwei Dinge müssen stimmen: ein einzelner Aussetzer darf keinen Lauf kosten,
+   * und wenn alle Versuche scheitern, muss die Meldung den Grund nennen – sonst
+   * sucht man den Fehler im Generator statt beim Dienst.
+   */
+  const source = readFileSync(path.join(ROOT, 'tools/build-map-pack.mjs'), 'utf8');
+  assert.match(source, /for \(let attempt = 1; attempt <= 3/, 'download must retry');
+  assert.match(source, /Overpass ist ausgelastet/, 'the failure must name Overpass');
+});
