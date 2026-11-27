@@ -1048,6 +1048,12 @@ a {
   display: grid;
   gap: 12px;
   align-content: start;
+  /**
+   * Ein Sheet ist länger als der Bildschirm, also endet es irgendwo mitten im
+   * Inhalt – und ein halber Satz hinter dem „Aktivieren"-Knopf sieht aus wie ein
+   * Fehler, nicht wie „es geht weiter". Der weiche Auslauf unten sagt genau das.
+   */
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 22px), transparent 100%);
 }
 
 .sheet__foot {
@@ -1450,6 +1456,11 @@ a {
   line-height: 1.25;
   color: var(--text-2);
   min-height: 44px;
+}
+
+/* Bei ungerader Anzahl füllt der letzte Punkt die Zeile – sonst bleibt eine Lücke. */
+.pro-feature:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
 }
 
 /* Icon bleibt oben, wenn der Text zweizeilig umbricht. */
