@@ -168,14 +168,6 @@ try {
   await page.goto(url, { waitUntil: 'networkidle', timeout: 30_000 });
 } catch (error) {
   await browser.close();
-
-/**
- * Erst hier abbrechen, mit vollständiger Liste. Die Bilder liegen bereits auf der
- * Platte, der Bericht ist also auch im Fehlerfall brauchbar.
- */
-if (layoutProblems.length) {
-  throw new Error(`Screenshot-Prüfung fehlgeschlagen:\n  - ${layoutProblems.join('\n  - ')}`);
-}
   bail(`The app is not reachable at ${url}.`, `  start it with: npm run dev:app\n  ${String(error).split('\n')[0]}`);
 }
 
@@ -435,11 +427,30 @@ for (const shot of SHOTS) {
         clientHeight: node.clientHeight,
       };
     };
+    const bar = document.querySelector('.tabbar');
+    const limit = bar ? bar.getBoundingClientRect().top : window.innerHeight;
+    const openSheet = document.querySelector('.sheet, [role="dialog"]');
+    const cut = [];
+    if (!openSheet) {
+      const scroller = document.querySelector('.app__body');
+      for (const node of Array.from(document.querySelectorAll('.app__body > * > *, .app__body > *'))) {
+        const box = node.getBoundingClientRect();
+        if (box.height < 24) continue;
+        if (box.top < limit && box.bottom > limit) {
+          cut.push({
+            label: (node.textContent ?? '').replace(/\s+/g, ' ').trim().slice(0, 40) || node.className || node.tagName,
+            height: Math.round(box.height),
+            visible: Math.round(limit - box.top),
+          });
+        }
+      }
+    }
     return {
       viewportHeight: window.innerHeight,
       app: rect('.app'),
       body: rect('.app__body'),
       tabbar: rect('.tabbar'),
+      cut,
     };
   });
   const problems = [];
@@ -454,15 +465,16 @@ for (const shot of SHOTS) {
     problems.push('.app__body reicht in die Tab-Leiste, scrollt aber nicht');
   }
   /**
-   * Ein Store-Screenshot zeigt eine Seite, keine Scroll-Stelle: was unten
-   * abgeschnitten ist, sieht aus wie ein Layoutfehler. Ein Überschuss von bis zu
-   * 24 px wird toleriert (der nächste Block ist bewusst nur angeschnitten, damit
-   * man sieht, dass es weitergeht) – alles darüber ist ein echter Abschnitt.
+   * Ein scrollbarer Bildschirm ist kein Fehler – die Einstellungen sind länger als
+   * jedes Telefon. Ein Fehler ist ein *angeschnittener* Block: eine Karte, die zur
+   * Hälfte hinter der Tab-Leiste endet, sieht aus wie ein Renderfehler. Ein schmaler
+   * Streifen am unteren Rand ist dagegen die übliche Andeutung, dass es weitergeht.
+   * Offene Sheets sind ausgenommen, sie liegen über dem Inhalt.
    */
-  if (scrolls) {
-    const hidden = layout.body.scrollHeight - layout.body.clientHeight;
-    if (hidden > 24) {
-      problems.push(`${hidden} px Inhalt liegen unterhalb des Viewports`);
+  for (const cut of layout.cut ?? []) {
+    const visible = Math.min(1, Math.max(0, cut.visible / cut.height));
+    if (visible > 0.1 && visible < 0.9) {
+      problems.push(`"${cut.label}" ist zu ${Math.round(visible * 100)} % sichtbar und dann abgeschnitten`);
     }
   }
   if (problems.length) {
@@ -529,6 +541,16 @@ for (const shot of SHOTS) {
 }
 
 await browser.close();
+
+/**
+ * Erst hier abbrechen, mit vollständiger Liste: die Bilder liegen bereits auf der
+ * Platte, und der Bericht nennt jedes betroffene Bild statt nur das erste.
+ */
+if (layoutProblems.length) {
+  console.error(`\n\x1b[31m✖ Screenshot-Prüfung fehlgeschlagen\x1b[0m`);
+  for (const problem of layoutProblems) console.error(`  - ${problem}`);
+  process.exitCode = 1;
+}
 
 console.log(`\n${results.length} screenshots written to ${path.relative(ROOT, outDir)}`);
 console.log('Captions to burn in (Play allows up to 6 words per image):');
