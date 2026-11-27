@@ -918,6 +918,7 @@ export const en: Widen<GermanDictionary> = {
       timerBanner: 'The parking timer with reminders is included in Pro.',
       proximityBanner: 'Getting-closer feedback is included in Pro.',
       activateTitle: 'Activate licence',
+      haveLicense: 'I already have a licence',
       activateBody: 'Paste the licence key or scan the QR code.',
       activateCta: 'Activate',
       successTitle: 'Pro is active',

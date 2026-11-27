@@ -939,6 +939,8 @@ export const de = {
       timerBanner: 'Park-Timer mit Erinnerungen ist in Pro enthalten.',
       proximityBanner: 'Näher-dran-Feedback ist in Pro enthalten.',
       activateTitle: 'Lizenz aktivieren',
+      /** Ehrlicher Knopftext: er führt zum Lizenzfeld, mehr nicht. */
+      haveLicense: 'Ich habe schon eine Lizenz',
       activateBody: 'Lizenzschlüssel einfügen oder QR-Code scannen.',
       activateCta: 'Aktivieren',
       successTitle: 'Pro ist aktiv',

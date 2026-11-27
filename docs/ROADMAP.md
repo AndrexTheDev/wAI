@@ -115,7 +115,8 @@ Bisher wurde die App **gelesen** und **fotografiert**. Diese Runde wurde sie
 **bedient**: `tools/walkthrough.mjs` startet einen echten Chromium, setzt
 `localStorage`, klickt acht Wege (Erststart, Anker setzen, Wiederfinden,
 Pro-Gates, Teilen, Suche, alle Reiter, Englisch) und liest jeden Bildschirm aus.
-Bericht: `docs/WALKTHROUGH.md`, 30 Ansichten, 0 Befunde nach den Korrekturen.
+Bericht: `docs/WALKTHROUGH.md`, 32 Ansichten (inkl. 360-dp-Telefon), 0 Befunde
+nach den Korrekturen.
 
 | Fund | Was passierte | Beleg |
 |---|---|---|
@@ -134,6 +135,10 @@ Bericht: `docs/WALKTHROUGH.md`, 30 Ansichten, 0 Befunde nach den Korrekturen.
 | „2.4 m" in der deutschen App | `${rounded}` ohne Dezimalzeichen | `formatDistance`, Test korrigiert (`8,4 m`) |
 | „O/E" auf dem Kompass | Krücke für beide Sprachen | `locale === 'de' ? 'O' : 'E'` |
 | Zwei Kreuze im Suchfeld | Chromes eigenes plus unser Knopf | `::-webkit-search-cancel-button` aus |
+| Sheet öffnete mitten im Inhalt | Autofokus sprang auf den ersten FAQ-Knopf | `Sheet`: `.sheet__body` bekommt den Fokus, `scrollTop = 0` |
+| Zwei Knöpfe „Aktivieren", einer ohne Wirkung | unterer Knopf wechselte nur den Reiter | unten: „Ich habe schon eine Lizenz" (rechts: prüft) |
+| Englischer Untertitel „ENVIRONMENTAL MEMORY ANC…" | 0,12 em Sperrung auf 412 px | 0,08 em; unter 380 px 8,5 px ohne Sperrung |
+| Ankertitel endeten nach 20 Zeichen | einzeilig mit Ellipse | zwei Zeilen (`line-clamp`) |
 | Schalter „Mit Notiz & Medien" ohne sichtbare Beschriftung | Erklärung stand erst unter dem Code | Knopf mit Schalter **und** Text |
 
 Der Lauf scheitert jetzt auch an Laufzeitfehlern, leeren Bildschirmen und rohen

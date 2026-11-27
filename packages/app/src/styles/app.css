@@ -1097,6 +1097,11 @@ a {
   mask-image: linear-gradient(to bottom, #000 calc(100% - 22px), transparent 100%);
 }
 
+/** Fokus beim Öffnen liegt auf dem Inhalt selbst – kein Rahmen nötig. */
+.sheet__body:focus {
+  outline: none;
+}
+
 .sheet__foot {
   display: flex;
   gap: 8px;

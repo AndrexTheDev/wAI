@@ -581,12 +581,42 @@ async function journeyTabs() {
   await tap(page, ['Anker', 'Anchors']);
   await tap(page, ['Pro', 'Freischalten']);
   await step(page, 'Pro-Sheet', { expect: ['14,99'] });
+  /**
+   * Zwei Knöpfe mit demselben Text hintereinander sind ein Klassiker: unten ein
+   * „Aktivieren", das nur den Reiter wechselt, und im Inhalt noch einmal einer,
+   * der wirklich prüft. Hier wird nachgesehen, ob der untere Knopf nach dem
+   * Tippen etwas anderes ist als vorher.
+   */
+  const before = await page.evaluate(() => document.querySelector('.sheet__foot')?.innerText.trim() ?? '');
+  await tap(page, ['Aktivieren', 'Activate']).catch(() => {});
+  await page.waitForTimeout(500);
+  const after = await page.evaluate(() => document.querySelector('.sheet__foot')?.innerText.trim() ?? '');
+  if (before && after && before === after && /Aktivieren|Activate/.test(before)) {
+    issues.push({
+      view: 'Pro-Sheet',
+      findings: [`der Knopf „${before}" tut sichtbar nichts – danach steht er unverändert da`],
+      text: after,
+    });
+  }
   await page.keyboard.press('Escape');
   await page.waitForTimeout(400);
 
   const help = await tap(page, ['Hilfe', 'Help', 'So funktioniert']);
-  if (help) await step(page, 'Hilfe', { expect: [] });
-  else issues.push({ view: 'Hilfe', findings: ['kein Hilfe-Einstieg auffindbar'], text: '' });
+  if (help) {
+    await step(page, 'Hilfe', { expect: [] });
+    /**
+     * Ein Sheet, das mitten im Inhalt aufgeht, ist ein Fehler: oben fehlt die
+     * Überschrift. „Hilfe & Fragen" sprang zur ersten FAQ, weil der Fokus auf
+     * dem ersten Knopf lag.
+     */
+    const scrolled = await page.evaluate(() => {
+      const body = document.querySelector('.sheet__body');
+      return body ? body.scrollTop : 0;
+    });
+    if (scrolled > 2) {
+      issues.push({ view: 'Hilfe', findings: [`Sheet öffnet ${scrolled} px unterhalb des Anfangs`], text: '' });
+    }
+  } else issues.push({ view: 'Hilfe', findings: ['kein Hilfe-Einstieg auffindbar'], text: '' });
   await context.close();
 }
 

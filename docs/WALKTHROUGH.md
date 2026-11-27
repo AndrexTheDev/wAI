@@ -1,6 +1,6 @@
 # Nutzer-Workflow — automatisch geprüft
 
-> Erzeugt von `tools/walkthrough.mjs` gegen die laufende App am 2026-11-27 20:12 (UTC).
+> Erzeugt von `tools/walkthrough.mjs` gegen die laufende App am 2026-11-27 20:33 (UTC).
 > Nicht von Hand geschrieben: das Skript klickt den Weg wie ein Erstnutzer und
 > liest jeden Bildschirm aus. Ein neuer Lauf überschreibt die Datei.
 
@@ -196,7 +196,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±8 m
-- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Pro freischalten | 2 Anker | Finden | Archiv | Einstellungen | Schließen | Wallets & Anleitung | Lizenz aktivieren | Widerrufsbelehrung & AGB | Aktivieren
+- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Pro freischalten | 2 Anker | Finden | Archiv | Einstellungen | Schließen | Wallets & Anleitung | Lizenz aktivieren | Widerrufsbelehrung & AGB | Ich habe schon eine Lizenz
 - Scroll: 0 px unterhalb des Viewports
 
 ### Hilfe
@@ -809,7 +809,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - tab: Wallets & Anleitung
 - tab: Lizenz aktivieren
 - button: Widerrufsbelehrung & AGB
-- button: Aktivieren
+- button: Ich habe schon eine Lizenz
 
 **Hilfe**
 
