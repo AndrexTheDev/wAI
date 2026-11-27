@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-27T17:45:36.037Z",
+  "capturedAt": "2026-11-27T17:57:36.659Z",
   "viewport": {
     "width": 412,
     "height": 732,
@@ -49,7 +49,19 @@
           "height": 64,
           "scrollHeight": 63,
           "clientHeight": 63
-        }
+        },
+        "cut": [
+          {
+            "label": "Simulierte SensorenTippe irgendwo auf di",
+            "height": 641,
+            "visible": 616
+          },
+          {
+            "label": "Multi-Ansicht ist im Pro-Tarif verfügbar",
+            "height": 78,
+            "visible": 53
+          }
+        ]
       }
     },
     {
@@ -61,7 +73,7 @@
       "navigation": [
         "Mein Auto · Säule B17 – Bearbeiten"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 72° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 68° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
       "signature": "anchor:wAIUmgebungs-Gedächtnisa + carspot + chips + sheet:Bearbeiten",
       "hasAppShell": true,
       "cssViewport": {
@@ -90,7 +102,8 @@
           "height": 64,
           "scrollHeight": 63,
           "clientHeight": 63
-        }
+        },
+        "cut": []
       }
     },
     {
@@ -102,7 +115,7 @@
       "navigation": [
         "Natur2"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 72° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 68° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
       "signature": "anchor:wAIUmgebungs-Gedächtnisa + carspot + chips",
       "hasAppShell": true,
       "cssViewport": {
@@ -131,7 +144,19 @@
           "height": 64,
           "scrollHeight": 63,
           "clientHeight": 63
-        }
+        },
+        "cut": [
+          {
+            "label": "Mein AutoMein Auto · Säule B1780 mentfer",
+            "height": 228,
+            "visible": 192
+          },
+          {
+            "label": "Zum Auto Park-Timer",
+            "height": 36,
+            "visible": 15
+          }
+        ]
       }
     },
     {
@@ -144,7 +169,7 @@
         "Zurückfinden: Wegkreuzung West",
         "Spur"
       ],
-      "visibleText": "Wegkreuzung West NATUR · SW 224° SIMULIERTE SENSOREN Tippe irgendwo auf die Karte, um deine Position zu verschieben. Kompass Karte Spur Foto Brotkrumen-Spur 76 m Spur: 76 m NÄHER-DRAN-SIGNAL — PRO PARKZEIT FESTHALTEN — nicht gestartet Höhe ",
+      "visibleText": "Wegkreuzung West NATUR · SW 225° SIMULIERTE SENSOREN Tippe irgendwo auf die Karte, um deine Position zu verschieben. Kompass Karte Spur Foto Brotkrumen-Spur 76 m Spur: 76 m NÄHER-DRAN-SIGNAL — PRO PARKZEIT FESTHALTEN — nicht gestartet Höhe ",
       "signature": "anchor:Wegkreuzung WestNatur ·  + compass + view:spur + trailmap",
       "hasAppShell": true,
       "cssViewport": {
@@ -173,7 +198,19 @@
           "height": 64,
           "scrollHeight": 63,
           "clientHeight": 63
-        }
+        },
+        "cut": [
+          {
+            "label": "Simulierte SensorenTippe irgendwo auf di",
+            "height": 748,
+            "visible": 616
+          },
+          {
+            "label": "Höhe411 mGleiche Ebene",
+            "height": 77,
+            "visible": 35
+          }
+        ]
       }
     },
     {
@@ -186,7 +223,7 @@
         "Zurückfinden: Mein Auto · Säule B17",
         "Karte"
       ],
-      "visibleText": "Mein Auto · Säule B17 AUTO · NO 25° SIMULIERTE SENSOREN Tippe irgendwo auf die Karte, um deine Position zu verschieben. Kompass Karte Spur Foto Hochbrückenstraße Marienstraße Herrnstraße Stollbergstraße Thomas-Wimmer-Ring Knöbelstraße Kanal",
+      "visibleText": "Mein Auto · Säule B17 AUTO · NO 24° SIMULIERTE SENSOREN Tippe irgendwo auf die Karte, um deine Position zu verschieben. Kompass Karte Spur Foto Marienstraße Herrnstraße Stollbergstraße Thomas-Wimmer-Ring Knöbelstraße Kanalstraße Tal Isartor",
       "signature": "anchor:Mein Auto · Säule B17Aut + compass + view:karte + map",
       "hasAppShell": true,
       "cssViewport": {
@@ -215,7 +252,19 @@
           "height": 64,
           "scrollHeight": 63,
           "clientHeight": 63
-        }
+        },
+        "cut": [
+          {
+            "label": "Simulierte SensorenTippe irgendwo auf di",
+            "height": 755,
+            "visible": 616
+          },
+          {
+            "label": "Höhe402 mZiel liegt 3 Etagen tiefer (10 ",
+            "height": 95,
+            "visible": 46
+          }
+        ]
       }
     },
     {
@@ -228,7 +277,7 @@
         "Wegkreuzung West – Bearbeiten",
         "Teilen"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±8 m 88° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±8 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±8 m 83° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±8 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
       "signature": "anchor:wAIUmgebungs-Gedächtnisa + carspot + chips + sheet:Anker teilen",
       "hasAppShell": true,
       "cssViewport": {
@@ -257,7 +306,8 @@
           "height": 64,
           "scrollHeight": 63,
           "clientHeight": 63
-        }
+        },
+        "cut": []
       }
     },
     {
@@ -269,7 +319,7 @@
       "navigation": [
         "24 Min.Verbleibend"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 72° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 68° Demo Anker setzen TIPPE, UM DEN AKTUELLEN ORT ZU SPEICHERN Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachno",
       "signature": "anchor:wAIUmgebungs-Gedächtnisa + carspot + chips + sheet:Park-Timer",
       "hasAppShell": true,
       "cssViewport": {
@@ -298,7 +348,8 @@
           "height": 64,
           "scrollHeight": 63,
           "clientHeight": 63
-        }
+        },
+        "cut": []
       }
     },
     {
@@ -310,7 +361,7 @@
       "navigation": [
         "Einstellungen"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 72° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nacht Rückmeldung Näher-dran-Signal Näher-dran-Feedb",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 68° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nacht Rückmeldung Näher-dran-Signal Näher-dran-Feedb",
       "signature": "anchor:wAIUmgebungs-Gedächtnisa + view:deutsch + settings",
       "hasAppShell": true,
       "cssViewport": {
@@ -339,7 +390,14 @@
           "height": 64,
           "scrollHeight": 63,
           "clientHeight": 63
-        }
+        },
+        "cut": [
+          {
+            "label": "LizenzFree-VersionLizenz aktivieren",
+            "height": 102,
+            "visible": 22
+          }
+        ]
       }
     },
     {
@@ -352,7 +410,7 @@
         "Einstellungen",
         "Pro freischalten"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±8 m 88° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nacht Rückmeldung Näher-dran-Signal Näher-dran-Feedb",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±8 m 83° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nacht Rückmeldung Näher-dran-Signal Näher-dran-Feedb",
       "signature": "anchor:wAIUmgebungs-Gedächtnisa + view:deutsch + settings + sheet:Pro freischalten",
       "hasAppShell": true,
       "cssViewport": {
@@ -381,7 +439,8 @@
           "height": 64,
           "scrollHeight": 63,
           "clientHeight": 63
-        }
+        },
+        "cut": []
       }
     }
   ]
