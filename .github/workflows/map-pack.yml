@@ -59,6 +59,7 @@ jobs:
       - run: npm ci
 
       - name: Generate
+        id: generate
         env:
           SOUTH: ${{ inputs.south || '48.1280' }}
           WEST: ${{ inputs.west || '11.5550' }}
@@ -83,7 +84,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           {
-            echo "### Kartenpaket"
+            # Ehrlich benennen, was passiert ist: ein gescheiterter Lauf, dessen
+            # Report die Zahlen vom Datenträger druckt, liest sich wie ein Erfolg.
+            if [ "${{ steps.generate.outcome }}" = "success" ]; then
+              echo "### Kartenpaket — neu erzeugt"
+            else
+              echo "### Kartenpaket — **fehlgeschlagen**, ausgelieferte Pakete unverändert"
+            fi
             echo '```'
             tail -12 pack.log 2>/dev/null || echo 'kein Log'
             if [ -f packages/app/public/map/packs.json ]; then

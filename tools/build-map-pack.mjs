@@ -126,15 +126,34 @@ async function loadElements() {
     return raw;
   }
   console.log(`· Overpass-Abfrage für ${bbox.south},${bbox.west} → ${bbox.north},${bbox.east}`);
-  const response = await fetch(OVERPASS, {
-    method: 'POST',
-    headers: { 'content-type': 'application/x-www-form-urlencoded', 'user-agent': 'wAI-map-pack/1.0 (+https://andrexthedev.github.io/wAI)' },
-    body: new URLSearchParams({ data: query() }),
-  });
-  if (!response.ok) throw new Error(`Overpass antwortete ${response.status}`);
-  const json = await response.json();
-  console.log(`· ${json.elements.length} Elemente erhalten`);
-  return json;
+  /**
+   * Overpass ist ein von Freiwilligen bezahlter Dienst und antwortet unter Last
+   * regelmäßig mit 429 oder 502. Ein einzelner Fehlschlag ist kein Grund, den Lauf
+   * aufzugeben – aber auch kein Grund, beliebig oft zu klopfen: drei Versuche mit
+   * wachsender Pause, dann ehrlich scheitern.
+   */
+  let lastError = null;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const response = await fetch(OVERPASS, {
+        method: 'POST',
+        headers: { 'content-type': 'application/x-www-form-urlencoded', 'user-agent': 'wAI-map-pack/1.0 (+https://andrexthedev.github.io/wAI)' },
+        body: new URLSearchParams({ data: query() }),
+      });
+      if (!response.ok) throw new Error(`Overpass antwortete ${response.status}`);
+      const json = await response.json();
+      console.log(`· ${json.elements.length} Elemente erhalten`);
+      return json;
+    } catch (error) {
+      lastError = error;
+      if (attempt < 3) {
+        const wait = attempt * 20_000;
+        console.log(`· Versuch ${attempt} fehlgeschlagen (${error.message}) – ${wait / 1000}s Pause`);
+        await new Promise((resolve) => setTimeout(resolve, wait));
+      }
+    }
+  }
+  throw new Error(`${lastError?.message} – Overpass ist ausgelastet, bitte in einigen Minuten erneut starten`);
 }
 
 /* ------------------------------------------------------------------ */
