@@ -93,16 +93,43 @@ test('a building 300 m away is not drawn', () => {
 });
 
 test('only the tiles that intersect the screen are requested', () => {
-  // 360×520 screen pixels at 1 unit per pixel covers 360×520 units, so at most
-  // 3×4 tiles of 256 units each.
-  const viewport = viewportFor(MARIENPLATZ.lat, MARIENPLATZ.lng, 360, 520, 1);
-  const tiles = visibleTiles(viewport);
-  assert.ok(tiles.length >= 1 && tiles.length <= 6, `got ${tiles.length} tiles`);
-  for (const { tile, dx, dy } of tiles) {
-    // Every tile that is returned must actually touch the viewport.
-    assert.ok(dx < viewport.width && dx + TILE_SIZE / viewport.unitsPerPixel > 0);
-    assert.ok(dy < viewport.height && dy + TILE_SIZE / 0.5 > 0);
-    assert.equal(tile.z, MAP_ZOOM);
+  /**
+   * Bei grobem Zoom deckt das Bild viele Kacheln ab — 54 bei 4 Einheiten/Pixel ist
+   * korrekt, nicht üppig. Wichtig ist nur: nichts wird angefragt, was außerhalb
+   * liegt, und nichts fehlt, was hineinragt.
+   */
+  for (const unitsPerPixel of [0.8, 1, 2.4, 4]) {
+    const viewport = viewportFor(MARIENPLATZ.lat, MARIENPLATZ.lng, 360, 520, unitsPerPixel);
+    const tiles = visibleTiles(viewport);
+    assert.ok(tiles.length >= 1, `got ${tiles.length} tiles`);
+    for (const { tile, dx, dy } of tiles) {
+      assert.equal(tile.z, MAP_ZOOM);
+      // Jede gelieferte Kachel muss das Bild wirklich berühren.
+      const left = dx / unitsPerPixel + viewport.width / 2;
+      const top = dy / unitsPerPixel + viewport.height / 2;
+      assert.ok(left < viewport.width && left + TILE_SIZE / unitsPerPixel > 0, `x off screen: ${left}`);
+      assert.ok(top < viewport.height && top + TILE_SIZE / unitsPerPixel > 0, `y off screen: ${top}`);
+    }
+  }
+});
+
+test('the tile offset is in world units, not screen pixels', () => {
+  /**
+   * Der Fehler, der die erste echte Karte zum Knoten machte: `visibleTiles`
+   * lieferte den Versatz in **Bildpixeln**, der Renderer addierte ihn zu Rohdaten
+   * in Welteinheiten und teilte erst danach. Bei jedem Zoomfaktor außer dem
+   * Standard 2,4 lag damit jede Kachel um den Faktor daneben – Nachbarkacheln
+   * überlappten und schnitten sich gegenseitig in Stücke.
+   *
+   * Der Vertrag: Ursprung der Kachel = Bildmitte + dx / unitsPerPixel.
+   */
+  for (const unitsPerPixel of [0.6, 1, 2.4, 5]) {
+    const viewport = viewportFor(MARIENPLATZ.lat, MARIENPLATZ.lng, 360, 520, unitsPerPixel);
+    for (const { tile, dx, dy } of visibleTiles(viewport)) {
+      const screen = toScreen(viewport, { x: tile.x * TILE_SIZE, y: tile.y * TILE_SIZE });
+      assert.ok(Math.abs(screen.x - (dx / unitsPerPixel + viewport.width / 2)) < 1e-6);
+      assert.ok(Math.abs(screen.y - (dy / unitsPerPixel + viewport.height / 2)) < 1e-6);
+    }
   }
 });
 
