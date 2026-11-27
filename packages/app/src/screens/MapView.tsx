@@ -289,7 +289,7 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
     const placed = placeLabels(
       labels,
       (text) => ({ width: text.length * 5.2, height: 10 }),
-      { repeatDistance: 90 / viewport.unitsPerPixel },
+      { repeatDistance: 90 / viewport.unitsPerPixel, bounds: { width: size.width, height: size.height } },
     );
     return { paths, labels: placed, pois };
   }, [tiles, visible, viewport.unitsPerPixel, coversArea]);
