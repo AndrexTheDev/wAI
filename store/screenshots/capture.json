@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-27T19:33:02.865Z",
+  "capturedAt": "2026-11-27T21:40:34.157Z",
   "viewport": {
     "width": 412,
     "height": 732,
@@ -20,7 +20,7 @@
       "navigation": [
         "Zum Auto"
       ],
-      "visibleText": "Mein Auto · Säule B17 AUTO · NO 24° SIMULIERTE SENSOREN Im Reiter „Karte\" kannst du deine Position antippen und verschieben. Kompass Karte Spur Foto N O/E S W 80 m LUFTLINIE NÄHER-DRAN-SIGNAL 1/4 PRO PARK-TIMER 1 Std. 35 Min. Verbleibend Hö",
+      "visibleText": "Mein Auto · Säule B17 AUTO · NO 24° SIMULIERTE SENSOREN Im Reiter „Karte\" kannst du deine Position antippen und verschieben. Kompass Karte Spur Foto N O S W 80 m LUFTLINIE NÄHER-DRAN-SIGNAL 1/4 PRO PARK-TIMER 1 Std. 35 Min. Verbleibend Höhe",
       "signature": "anchor:Mein Auto · Säule B17Aut + compass + view:kompass",
       "hasAppShell": true,
       "cssViewport": {
@@ -250,7 +250,7 @@
         "Wegkreuzung West – Bearbeiten",
         "Teilen"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±8 m 88° Demo Anker setzen TIPPEN SPEICHERT DIESEN ORT Genauigkeit ±8 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachnotizen und den",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±8 m 90° Demo Anker setzen TIPPEN SPEICHERT DIESEN ORT Genauigkeit ±8 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachnotizen und den",
       "signature": "anchor:wAIUmgebungs-Gedächtnisa + carspot + chips + sheet:Anker teilen",
       "hasAppShell": true,
       "cssViewport": {
