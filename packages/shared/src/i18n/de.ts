@@ -750,6 +750,7 @@ export const de = {
       outsidePack: '„{name}" liegt woanders',
       outsidePackBody:
         'Dein Standort liegt außerhalb des Kartenpakets. Kompass, Spur und Entfernung funktionieren trotzdem – die Karte zeigt nur Gebiete, die auf dem Gerät gespeichert sind.',
+      demoPack: 'Demo-Gebiet · synthetische Häuser, keine echten Daten',
       attribution: '© OpenStreetMap-Mitwirkende, ODbL',
       offlineNote: 'Kartenpaket auf dem Gerät · kein Netz, kein Konto',
     },

@@ -50,6 +50,12 @@ const name = arg('name', 'München Mitte');
 const outDir = path.resolve(ROOT, arg('out', 'packages/app/public/map'));
 const fixture = arg('fixture');
 const force = args.includes('--force');
+/**
+ * Fixture-Daten sind synthetisch. Sie dürfen **nicht** als OpenStreetMap-Werk
+ * ausgewiesen werden, sonst behauptet die App eine Urheberschaft, die es nicht
+ * gibt – dieselbe Sorte Lüge, die dieses Projekt sonst überall entfernt.
+ */
+const synthetic = Boolean(fixture);
 
 if (!(bbox.south < bbox.north && bbox.west < bbox.east)) {
   console.error('✖ --south/--west/--north/--east ergeben kein Rechteck');
@@ -290,7 +296,10 @@ const index = {
   zoom: MAP_ZOOM,
   bounds: bbox,
   tiles: [],
-  source: '© OpenStreetMap-Mitwirkende, ODbL 1.0 – openstreetmap.org/copyright',
+  source: synthetic
+    ? 'Synthetische Demodaten – kein OpenStreetMap-Material'
+    : '© OpenStreetMap-Mitwirkende, ODbL 1.0 – openstreetmap.org/copyright',
+  synthetic,
   generatedAt: new Date().toISOString(),
 };
 

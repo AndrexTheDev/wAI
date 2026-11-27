@@ -1,0 +1,109 @@
+# Ein echtes Kartenpaket bauen – auf einem Runner, weil Overpass von der
+# Bauumgebung aus gesperrt ist.
+#
+# Zwei Betriebsarten:
+#   • Standard: kleines Gebiet um München Mitte, damit die App im Repo ein
+#     *echtes* Paket hat statt synthetischer Rechtecke.
+#   • Manuell: eigene Koordinaten, Ausgabe als Artefakt zum Herunterladen.
+name: Map pack
+
+on:
+  workflow_dispatch:
+    inputs:
+      south:
+        description: 'Süd'
+        default: '48.1280'
+      west:
+        description: 'West'
+        default: '11.5550'
+      north:
+        description: 'Nord'
+        default: '48.1450'
+      east:
+        description: 'Ost'
+        default: '11.5950'
+      name:
+        description: 'Gebietsname'
+        default: 'München Mitte'
+      commit:
+        description: 'Ergebnis in den Branch schreiben'
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths:
+      - 'tools/build-map-pack.mjs'
+      - 'packages/shared/src/map.ts'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build map pack
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build shared (the generator imports the projection from it)
+        run: npm run build -w @wai/shared
+
+      - name: Generate
+        env:
+          SOUTH: ${{ inputs.south || '48.1280' }}
+          WEST: ${{ inputs.west || '11.5550' }}
+          NORTH: ${{ inputs.north || '48.1450' }}
+          EAST: ${{ inputs.east || '11.5950' }}
+          AREA: ${{ inputs.name || 'München Mitte' }}
+        run: |
+          node tools/build-map-pack.mjs \
+            --south "$SOUTH" --west "$WEST" --north "$NORTH" --east "$EAST" \
+            --name "$AREA" --out packages/app/public/map --force | tee pack.log
+
+      # Selbstauskunft über die API lesbar, statt in einem Artefakt zu verschwinden.
+      - name: Report
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          {
+            echo "### Kartenpaket"
+            echo '```'
+            tail -12 pack.log 2>/dev/null || echo 'kein Log'
+            if [ -f packages/app/public/map/index.json ]; then
+              node -e '
+                const i = require("./packages/app/public/map/index.json");
+                const b = i.tiles.reduce((n,t)=>n+t.buildings,0);
+                console.log(`Index: ${i.tiles.length} Kacheln, ${b} Gebäude, Quelle: ${i.source}`);
+              '
+            fi
+            echo '```'
+          } > report.md
+          gh api -X POST "repos/${{ github.repository }}/commits/${{ github.sha }}/comments" \
+            -f body="$(cat report.md)" >/dev/null 2>&1 || echo 'Kommentar nicht möglich'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: map-pack
+          path: packages/app/public/map
+          retention-days: 30
+
+      - name: Commit back
+        if: ${{ inputs.commit }}
+        run: |
+          git config user.name 'wAI map bot'
+          git config user.email 'bot@andrexthedev.dev'
+          git add packages/app/public/map
+          if git diff --cached --quiet; then echo 'unverändert'; exit 0; fi
+          git commit -m "chore: rebuild map pack (${AREA:-München Mitte})"
+          git push origin HEAD:${{ github.head_ref || github.ref_name }}

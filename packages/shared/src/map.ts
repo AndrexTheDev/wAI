@@ -78,6 +78,11 @@ export interface MapPackIndex {
   tiles: Array<{ x: number; y: number; bytes: number; buildings: number; roads: number }>;
   /** Where the data came from and when – required by ODbL attribution. */
   source: string;
+  /**
+   * True when the geometry is synthetic (demo/test). The map must not claim
+   * OpenStreetMap attribution for shapes that nobody surveyed.
+   */
+  synthetic?: boolean;
   generatedAt: string;
 }
 
