@@ -171,7 +171,7 @@ wrong — check for a stray font or map import.
 
 ## 8. Release checklist
 
-- [ ] `npm run verify` green (typecheck, 52 unit tests, 2 render smoke tests)
+- [ ] `npm run verify` green (typecheck, 72 unit tests, 2 render smoke tests)
 - [ ] `cap:sync` run after the last source change
 - [ ] versionCode/versionName bumped
 - [ ] `apksigner verify` shows exactly one signer and v2/v3

@@ -517,6 +517,18 @@ table.clean th.is-centered {
   }
 }
 
+@media (max-width: 420px) {
+  /**
+   * Knopfbeschriftungen wie „Zum Release (APK) (1.0.0)" sind länger als ein
+   * 320-dp-Bildschirm. Mit `white-space: nowrap` sprengten sie die Spalte,
+   * statt umzubrechen – hier darf der Text zweizeilig werden.
+   */
+  .btn {
+    white-space: normal;
+    text-align: center;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .skeleton {
     animation: none;

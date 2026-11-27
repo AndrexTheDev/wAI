@@ -71,6 +71,13 @@ h4 {
   font-weight: 750;
   letter-spacing: -0.022em;
   text-wrap: balance;
+  /**
+   * Deutsche Komposita sind lang: „Datenschutzhinweis" ist bei 320 dp breiter
+   * als der Bildschirm. Ohne diese Zeile schiebt ein einziges zu langes Wort
+   * die ganze Seite nach rechts – man kann sie seitlich wegziehen.
+   */
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 p {

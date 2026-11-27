@@ -66,6 +66,35 @@ counters and distances so they do not jitter.
   highlight on cards.
 - Tap targets ≥ 44×44 px; icon-only buttons get a 44 px hit area via padding.
 
+## 4b. Breakpoints
+
+The website is measured, not estimated: `tools/check-responsive.mjs` loads every
+route at fifteen widths from 320 to 1440 px and fails if any page is wider than
+the screen. Three ranges are special because the header has to fit six nav links,
+the language switch and the Pro button:
+
+| Range | What changes | Why |
+|---|---|---|
+| ≤ 600 px | The header drops the subtitle "Environmental Memory Anchor" | Brand with subtitle + language switch + Pro button + menu = 368 px, more than a 360 dp phone |
+| ≤ 420 px | The Pro button moves into the mobile menu only | Even without the subtitle the row needs 8 px more than 320–412 dp offers; the button is in the menu anyway |
+| 941–1179 px | Nav links get tighter padding and 0.82 rem, Pro button gets smaller | Content needs 1175 px; on a 1024 px tablet the page could be dragged 127 px sideways |
+| ≥ 1180 px | Everything at full size | The header's natural width |
+
+Two rules that came out of measuring:
+
+- **`1fr` is not a fix for a wide child.** `grid-template-columns: 1fr` means
+  `minmax(auto, 1fr)`, so the column grows to the widest child — one `1fr` in
+  `.download__panel` pushed the page 70 px wider than a 320 dp screen. Use
+  `minmax(0, 1fr)` and let the content wrap.
+- **`overflow-x: hidden` on `body` hides the symptom, not the cause.** It removes
+  the scrollbar, but the page still moves sideways and a blank strip appears.
+  Decoration that leaves its box (`translate3d`, `rotate`, `inset: -10%`) needs a
+  clipping parent with `overflow-x: clip` on the *section*, not on the body.
+
+Long German compounds must fit even without hyphenation: `hyphens: auto` only
+works where a dictionary is installed (not every Linux Chromium has one), so
+headings are sized to fit at 320 px without breaking.
+
 ## 5. Components
 
 ### Buttons
@@ -157,6 +186,11 @@ fades only. The compass needle uses `transform` only (composited, no layout).
 - No exclamation marks in error messages; state what happened and what to do.
 
 ## English summary
+
+Responsive: every route is measured at fifteen widths from 320 to 1440 px
+(`tools/check-responsive.mjs`); the header sheds its subtitle below 600 px and the
+Pro button below 420 px, tightens between 941 and 1179 px, and long German words
+are sized to fit without relying on hyphenation dictionaries.
 
 Dark-first, honest, thumb-friendly design across app and website. Identical tokens:
 aurora gradient (`#6ee7b7 → #38bdf8 → #a78bfa`) reserved for the single primary

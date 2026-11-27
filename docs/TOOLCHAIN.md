@@ -34,11 +34,14 @@ Android SDK, keystore, issuer key, gh auth) and then a concrete "next step".
 | Regenerate icons (all sizes) | `node tools/make-icons.mjs` | ImageMagick | 12 s |
 | Regenerate store graphics | `bash tools/make-store-assets.sh` | ImageMagick + DejaVu | 2 s |
 | Capture store screenshots | `npm run screenshots` | Playwright + Chromium or a device | 1 min |
+| Check the site fits every screen | `npm run check:responsive -- --url http://127.0.0.1:4173` | Playwright + Chromium, `npm run preview` running | 2 min |
 | Issue a Pro licence | `npm run license:issue -- --sub …` | issuer key | instant |
 
-`npm run verify` = typecheck (3 packages) → 52 unit tests → render smoke test
+`npm run verify` = typecheck (3 packages) → 72 unit tests → render smoke test
 (both locales, every route) → Android asset checks. It is the gate before any
-commit and the only thing needed for 95 % of changes.
+commit and the only thing needed for 95 % of changes. It does **not** look at
+layout on a real screen – that is `npm run check:responsive`, which needs a
+browser and a running server, so it lives in CI (`responsive.yml`).
 
 ## 3. What lives where
 
@@ -59,11 +62,13 @@ tools/
   make-icons.mjs          ← App-Zeichen: Launcher (5 Dichten), Store-Icon, Splash, Favicon aus einer Geometrie
   make-store-assets.sh    ← Feature-Grafik aus dem erzeugten Icon
   capture-store-screenshots.mjs ← real screenshots, refuses to fake them
+  check-responsive.mjs    ← misst jede Route bei 15 Breiten auf seitlichen Überlauf
   keys/                   ← issuer key pair (private key is git-ignored)
 .github/workflows/
   ci.yml                  ← every push/PR: verify + web build
   android.yml             ← main/arena/**/tags: signed APK + AAB + release
   pages.yml               ← main: website deploy (skips until Pages is enabled)
+  responsive.yml          ← landing changes: no route may be wider than its screen
 ```
 
 ## 4. When to build the APK (important)
@@ -116,6 +121,13 @@ Never attempt to install a JDK here — it is not persisted between sessions.
   Android `Bridge` has **no** `getWebChromeClient()`.
 - `--` inside an XML comment breaks the Android manifest merger. Caught by
   `npm run check:android`.
+- **`python3 -m http.server` is not a suitable server for the landing page:** it
+  answers `/legal/privacy` with 404, so an SPA deep link looks broken. Use
+  `npm run preview -w @wai/landing` (port 4173); that is also what
+  `check-responsive.mjs` needs.
+- **Chromium in this sandbox has no German hyphenation dictionary**
+  (`hyphens: auto` does nothing). Layouts must therefore work without word
+  breaking; long German compounds were the cause of two overflows.
 
 ## 8. Adding a new tool
 

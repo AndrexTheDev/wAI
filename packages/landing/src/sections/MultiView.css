@@ -8,6 +8,13 @@
 .multiview__visual {
   display: grid;
   place-items: center;
+  /**
+   * Der obere Kartenstapel ist um 14 px nach rechts verschoben und leicht
+   * gedreht. Auf einem 412-px-Telefon ragt er damit 3 px über den Rand und die
+   * ganze Seite bekommt eine waagrechte Scrollleiste – man kann die Website
+   * seitlich wegziehen, und rechts blitzt ein leerer Streifen auf.
+   */
+  overflow-x: clip;
 }
 
 .multiview__stack {
