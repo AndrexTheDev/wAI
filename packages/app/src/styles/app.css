@@ -235,8 +235,14 @@ a {
   display: none;
 }
 
+/**
+ * In der Vollansicht (Fund-Screen mit gewähltem Anker) liegt die Tab-Leiste über dem
+ * Inhalt. Vorher war das Padding hier 16 px – der letzte Absatz, der Demo-Hinweis,
+ * verschwand dahinter. Ein eigener Scrollbereich braucht den Platz, den die Leiste
+ * tatsächlich einnimmt.
+ */
 .app--full .app__body {
-  padding-bottom: 16px;
+  padding-bottom: calc(24px + var(--tabbar-h) + var(--safe-bottom));
 }
 
 /* ---------------- header ---------------- */
@@ -2760,17 +2766,27 @@ a {
   letter-spacing: 0.04em;
 }
 
+/**
+ * ODbL verlangt die Nennung sichtbar – also muss sie auch **passen**. Vorher lief
+ * die Zeile über die Kartenkante hinaus und endete hinter der Tab-Leiste: eine
+ * Attribution, die man nicht lesen kann, erfüllt die Lizenz nicht.
+ */
 .map__attribution {
   position: absolute;
-  right: 8px;
+  left: 10px;
+  right: auto;
   bottom: 4px;
+  max-width: calc(100% - 20px);
   margin: 0;
-  padding: 1px 4px;
+  padding: 2px 5px;
   border-radius: 4px;
-  background: rgba(8, 14, 22, 0.6);
+  background: rgba(8, 14, 22, 0.72);
   font-size: 8px;
-  color: rgba(214, 226, 245, 0.6);
+  line-height: 1.3;
+  color: rgba(214, 226, 245, 0.65);
   letter-spacing: 0.02em;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .map__empty {
