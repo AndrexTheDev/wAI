@@ -9,6 +9,8 @@ import {
   placeLabels,
   project,
   toScreen,
+  toWorld,
+  unproject,
   viewportFor,
   visibleTiles,
   type MapPackIndex,
@@ -50,11 +52,26 @@ interface Props {
   trail?: Array<{ lat: number; lng: number }>;
   height?: number;
   onSelectAnchor?: (id: string) => void;
+  /**
+   * Nur in der Demo: ein Tipp auf die Karte setzt die simulierte Position dorthin.
+   * Im Browser gibt es kein GPS, und der Hinweis „tippe irgendwo auf die Karte, um
+   * deine Position zu verschieben" stand dort ohne Funktion – ein Versprechen ohne
+   * Deckung, direkt auf dem ersten Bildschirm.
+   */
+  onPickPosition?: (point: { lat: number; lng: number }) => void;
 }
 
 const TILE_CACHE_LIMIT = 120;
 
-export function MapView({ position, target, anchors = [], trail = [], height = 320, onSelectAnchor }: Props) {
+export function MapView({
+  position,
+  target,
+  anchors = [],
+  trail = [],
+  height = 320,
+  onSelectAnchor,
+  onPickPosition,
+}: Props) {
   const { t, locale } = useT();
   const [index, setIndex] = useState<MapPackIndex | null>(null);
   const [packs, setPacks] = useState<MapPackRegistry['packs']>([]);
@@ -297,6 +314,19 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
   const metersPerPixel = metresPerUnit(here.lat) * viewport.unitsPerPixel;
   const scaleBar = scaleFor(metersPerPixel, locale);
   const userPoint = position ? toScreen(viewport, project(position.lat, position.lng)) : null;
+  /**
+   * Bildpixel → Weltkoordinate → Grad. `toWorld` rechnet in metrische Welteinheiten
+   * (0,4 m bei Zoom 18), `unproject` macht daraus wieder Breite/Länge. Ohne die
+   * Rückrechnung hätte ein Tipp eine Meterzahl gesetzt, die wie ein Koordinatenpaar
+   * aussieht – und die Demo-Position wäre um Faktoren daneben gelandet.
+   */
+  const pickAt = (event: React.MouseEvent<SVGRectElement>) => {
+    if (!onPickPosition) return;
+    const box = event.currentTarget.getBoundingClientRect();
+    const world = toWorld(viewport, { x: event.clientX - box.left, y: event.clientY - box.top });
+    onPickPosition(unproject(world.x, world.y, MAP_ZOOM));
+  };
+
   const targetPoint = target ? toScreen(viewport, project(target.lat, target.lng)) : null;
   const trailPoints = trail.map((point) => toScreen(viewport, project(point.lat, point.lng)));
 
@@ -340,7 +370,16 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
         role="img"
         aria-label={t('app.map.title')}
       >
-        <rect className="map__ground" x={0} y={0} width={size.width} height={size.height} />
+        <rect
+          className={`map__ground ${onPickPosition ? 'is-pickable' : ''}`}
+          x={0}
+          y={0}
+          width={size.width}
+          height={size.height}
+          onClick={pickAt}
+          role={onPickPosition ? 'button' : undefined}
+          aria-label={onPickPosition ? t('app.demo.hint') : undefined}
+        />
 
         {[...drawn.paths]
           .sort((a, b) => a.layer - b.layer)

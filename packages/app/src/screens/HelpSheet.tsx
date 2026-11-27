@@ -25,7 +25,7 @@ export function HelpSheet({ onClose, onOpenPro }: { onClose: () => void; onOpenP
   const faq = tArray<FaqItem>(locale, 'landing.faq.items');
 
   return (
-    <Sheet open onClose={onClose} title={t('app.help.title')} footer={<button type="button" className="btn btn--primary btn--block" onClick={onClose}>{t('common.ctaClose')}</button>}>
+    <Sheet open onClose={onClose} title={t('app.help.title')} closeLabel={t('common.ctaClose')} footer={<button type="button" className="btn btn--primary btn--block" onClick={onClose}>{t('common.ctaClose')}</button>}>
       <p className="muted">{t('app.help.intro')}</p>
 
       {/* The three-step path – what to do, in order. */}

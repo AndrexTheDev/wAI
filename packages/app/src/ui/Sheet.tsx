@@ -12,6 +12,7 @@ export function Sheet({
   children,
   footer,
   labelledBy = 'sheet-title',
+  closeLabel = 'Schließen',
 }: {
   open: boolean;
   onClose: () => void;
@@ -19,6 +20,8 @@ export function Sheet({
   children: ReactNode;
   footer?: ReactNode;
   labelledBy?: string;
+  /** Screenreader-Label des Schließen-Knopfs – war fest auf Englisch. */
+  closeLabel?: string;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const restoreFocus = useRef<HTMLElement | null>(null);
@@ -26,8 +29,40 @@ export function Sheet({
   useEffect(() => {
     if (!open) return;
     restoreFocus.current = document.activeElement as HTMLElement | null;
+    /**
+     * Escape schließt, Tab bleibt im Sheet.
+     *
+     * Die Fokus-Falle fehlte hier, obwohl das Confirm-Overlay sie hatte: im Sheet
+     * (Editor, Teilen, Timer, Pro) wanderte der Fokus mit Tab in die Seite
+     * dahinter, während `aria-modal="true"` das Gegenteil behauptet. Ein
+     * Screenreader-Nutzer landete damit in Inhalten, die verdeckt sind.
+     */
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
+      if (event.key === 'Escape') {
+        onClose();
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      const nodes = panelRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (!nodes || nodes.length === 0) return;
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      // Fokus außerhalb (z. B. nach Klick auf den Hintergrund): zurück ins Sheet.
+      if (!active || !panelRef.current?.contains(active)) {
+        event.preventDefault();
+        first.focus();
+        return;
+      }
+      if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener('keydown', onKey);
     const timer = window.setTimeout(() => {
@@ -65,7 +100,7 @@ export function Sheet({
             type="button"
             className="icon-btn"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={closeLabel}
             data-skip-autofocus
             style={{ marginLeft: 'auto' }}
           >

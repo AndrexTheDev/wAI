@@ -103,6 +103,7 @@ export function ParkingTimerSheet({
       open={open}
       onClose={onClose}
       title={t('app.timer.title')}
+      closeLabel={t('common.ctaClose')}
       footer={
         plan === 'pro' ? (
           <>

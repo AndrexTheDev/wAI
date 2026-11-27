@@ -5,6 +5,7 @@ import {
   elevationHint,
   formatBearing,
   formatDistance,
+  photoHeadingHint,
   formatDuration,
   guidanceFor,
   parkingStatus,
@@ -34,6 +35,7 @@ import {
   Timer,
   Trail,
   Vibrate,
+  RotateCw,
   ArrowUpRight,
   Anchor as AnchorIcon,
   Map as MapIcon,
@@ -63,7 +65,8 @@ export function FindScreen({
 }) {
   const { t, locale } = useT();
   const { distance: fmtDistance, height: fmtHeight } = useUnits();
-  const { fix, sensors, plan, activeAnchors, appendTrail, anchors, estimated, estimatedSteps } = useApp();
+  const { fix, sensors, plan, activeAnchors, appendTrail, anchors, estimated, estimatedSteps, demo, moveDemoPosition } =
+    useApp();
   const toast = useToast();
   const [view, setView] = useState<'compass' | 'map' | 'trail' | 'media'>('compass');
   const [proximityOn, setProximityOn] = useState(plan === 'pro');
@@ -238,7 +241,13 @@ export function FindScreen({
            */
           <div className="demo-hint">
             <span className="demo-hint__tag">{t('app.demo.simulated')}</span>
-            <span className="demo-hint__text">{t('app.demo.hint')}</span>
+            {/*
+              Der Hinweis darf nur eine Karte versprechen, wo eine ist: über dem
+              Kompass stand „tippe irgendwo auf die Karte" ohne Karte im Bild.
+            */}
+            <span className="demo-hint__text">
+              {view === 'map' ? t('app.demo.hint') : t('app.demo.hintElsewhere')}
+            </span>
           </div>
         )}
         {arrived && (
@@ -417,6 +426,9 @@ export function FindScreen({
                 category: anchor.category,
               }))}
             trail={current.trail ?? []}
+            /* Nur im Browser: ohne GPS gibt es keine Position, die man verschieben
+               könnte – dort ist der Hinweis oben die einzige Interaktion. */
+            onPickPosition={demo ? moveDemoPosition : undefined}
             /**
              * 330 px ließen unter der Höhenkarte nur noch 45 px Platz, sodass der
              * Store-Screenshot sie mitten in der Überschrift abschnitt. 260 px
@@ -451,9 +463,26 @@ export function FindScreen({
             </div>
             {current.photos.length ? (
               <div className="photo-strip">
-                {current.photos.map((photo) => (
-                  <img key={photo.id} className="reference-photo" src={photo.file} alt={t('app.find.photoRef')} />
-                ))}
+                {current.photos.map((photo) => {
+                  /**
+                   * Die Blickrichtung stand im Datenmodell, aber nirgends auf dem
+                   * Schirm: ein Foto aus der falschen Richtung ist ein Suchbild.
+                   * Jetzt mit Pfeil und Drehanweisung – ohne Kompasskurs nur die
+                   * Himmelsrichtung, nie eine erfundene Drehung.
+                   */
+                  const hint = photoHeadingHint(photo.heading, sensors.heading, locale);
+                  return (
+                    <figure key={photo.id} className="photo-ref">
+                      <img className="reference-photo" src={photo.file} alt={t('app.find.photoRef')} />
+                      {hint && (
+                        <figcaption className="photo-ref__hint">
+                          <RotateCw size={11} className={hint.turn === 'left' ? 'is-left' : ''} />
+                          {hint.text}
+                        </figcaption>
+                      )}
+                    </figure>
+                  );
+                })}
               </div>
             ) : (
               <p className="muted">{t('app.find.noPhoto')}</p>

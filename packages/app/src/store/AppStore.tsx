@@ -48,6 +48,7 @@ import {
   getCurrentFix,
   isDemo,
   requestMotionPermission,
+  setDemoPosition,
   subscribeSensors,
   watchLocation,
   type SensorReadings,
@@ -233,6 +234,8 @@ interface AppContextValue {
   demo: boolean;
   // anchors
   setAnchor: (args: CreateAnchorArgs) => { ok: boolean; anchor?: Anchor; reason?: string };
+  /** Nur in der Demo: die simulierte Position auf einen Kartenpunkt legen. */
+  moveDemoPosition: (point: { lat: number; lng: number }) => void;
   /** Returns the merged anchor (optimistic) so callers can chain actions. */
   updateAnchor: (id: string, patch: Partial<Anchor>) => Anchor | null;
   deleteAnchor: (id: string) => void;
@@ -439,6 +442,28 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [state.anchors, plan],
   );
 
+  /**
+   * Demo-Position verschieben. `setDemoPosition` ändert nur den Ursprung der
+   * Simulation; damit die Oberfläche sofort reagiert, wird der Fix hier direkt
+   * gesetzt. In der echten App ist das ein No-op – dort kommt die Position vom OS.
+   */
+  const moveDemoPosition = useCallback((point: { lat: number; lng: number }) => {
+    if (!isDemo) return;
+    setDemoPosition(point);
+    walker.current = null;
+    lastFixAt.current = Date.now();
+    setEstimated(false);
+    setEstimatedSteps(0);
+    setFix((current) => ({
+      lat: point.lat,
+      lng: point.lng,
+      altitude: current?.altitude,
+      accuracy: 6,
+      source: 'demo',
+      timestamp: Date.now(),
+    }));
+  }, []);
+
   const activateLicense = useCallback(async (token: string) => {
     const result = await verifyLicense(token);
     if (!result.ok || !result.payload) {
@@ -491,6 +516,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       locationError,
       demo: isDemo,
       setAnchor,
+      moveDemoPosition,
       updateAnchor: (id, patch) => {
         dispatch({ type: 'update-anchor', id, patch });
         const current = state.anchors.find((item) => item.id === id);
@@ -537,6 +563,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       sensors,
       locationError,
       setAnchor,
+      moveDemoPosition,
       activeAnchors,
       archivedAnchors,
       activateLicense,

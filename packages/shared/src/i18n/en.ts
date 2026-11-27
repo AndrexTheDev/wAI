@@ -942,6 +942,7 @@ export const en: Widen<GermanDictionary> = {
       simulated: 'Simulated sensors',
       exit: 'Exit demo',
       hint: 'Tap anywhere on the map to move your position.',
+      hintElsewhere: 'In the "Map" tab you can tap the map to move your position.',
     },
   },
 };

@@ -954,6 +954,8 @@ export const de = {
       simulated: 'Simulierte Sensoren',
       exit: 'Demo beenden',
       hint: 'Tippe irgendwo auf die Karte, um deine Position zu verschieben.',
+      // Derselbe Hinweis, aber dort, wo es keine Karte im Bild gibt.
+      hintElsewhere: 'Im Reiter „Karte" kannst du deine Position antippen und verschieben.',
     },
   },
 } as const;

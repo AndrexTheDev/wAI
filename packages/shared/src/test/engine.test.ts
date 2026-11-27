@@ -11,6 +11,7 @@ import {
   elevationHint,
   formatDistance,
   formatHeight,
+  photoHeadingHint,
   fromLocal,
   guidanceText,
   normalizeDeg,
@@ -37,6 +38,7 @@ import {
   reminderTransition,
 } from '../engine.ts';
 import { createTranslator, formatDuration } from '../i18n/index.ts';
+import { MAP_ZOOM, project, toWorld, unproject, viewportFor } from '../map.ts';
 import { anchorToShare, decodeSharePayload, encodeSharePayload, sanitizeImportedAnchor } from '../codec.ts';
 import { buildIntentLink, buildShareLink, extractShareCode } from '../deeplink.ts';
 import { base64urlDecode, base64urlEncode, canonicalJson, licenseFingerprint, verifyLicense } from '../license.ts';
@@ -421,4 +423,58 @@ test('floor plurals are words, not placeholders', () => {
   ]) {
     assert.doesNotMatch(text, /\(n\)|\(s\)/);
   }
+});
+
+test('a tap on the map becomes a real coordinate', () => {
+  /**
+   * Die Demo behauptet „tippe irgendwo auf die Karte, um deine Position zu
+   * verschieben". Dafür muss aus Bildpixeln eine echte Breite/Länge werden:
+   * erst `toWorld` (Pixel → Welteinheiten), dann `unproject` (→ Grad). Beide
+   * Richtungen zusammen müssen den Ausgangspunkt wieder treffen, sonst landet
+   * die Position beim Antippen irgendwo anders.
+   */
+  const view = viewportFor(48.1374, 11.5755, 400, 260, 2.4);
+  const centreWorld = project(48.1374, 11.5755);
+  const back = unproject(centreWorld.x, centreWorld.y, MAP_ZOOM);
+  assert.ok(Math.abs(back.lat - 48.1374) < 1e-9);
+  assert.ok(Math.abs(back.lng - 11.5755) < 1e-9);
+
+  // Ein Tipp exakt in die Mitte ist derselbe Punkt.
+  const middle = toWorld(view, { x: 200, y: 130 });
+  const atMiddle = unproject(middle.x, middle.y, MAP_ZOOM);
+  assert.ok(Math.abs(atMiddle.lat - 48.1374) < 1e-6, `lat ${atMiddle.lat}`);
+  assert.ok(Math.abs(atMiddle.lng - 11.5755) < 1e-6, `lng ${atMiddle.lng}`);
+
+  // 100 px nach rechts sind bei 2,4 Einheiten/px rund 240 Einheiten = ~106 m Ost.
+  const right = unproject(toWorld(view, { x: 300, y: 130 }).x, project(48.1374, 11.5755).y, MAP_ZOOM);
+  const metres = distanceMeters({ lat: 48.1374, lng: 11.5755 }, { lat: 48.1374, lng: right.lng });
+  assert.ok(metres > 90 && metres < 125, `erwartet ~106 m, war ${Math.round(metres)} m`);
+});
+
+test('a reference photo says which way it was taken', () => {
+  /**
+   * Die Blickrichtung wurde gespeichert und nie angezeigt – ein Foto aus der
+   * falschen Richtung ist im Parkhaus ein Suchbild. Die Anweisung darf nur dann
+   * eine Drehung nennen, wenn der aktuelle Kurs bekannt ist; sonst bleibt es bei
+   * der Himmelsrichtung statt einer erfundenen Zahl.
+   */
+  assert.equal(photoHeadingHint(undefined, 90, 'de'), null);
+  assert.deepEqual(photoHeadingHint(225, null, 'de'), {
+    text: 'Aufgenommen aus SW 225°',
+    turn: 'none',
+  });
+  // Kurs 180°, Foto aus 225° → 45° nach rechts.
+  const right = photoHeadingHint(225, 180, 'de');
+  assert.equal(right?.turn, 'right');
+  assert.match(right!.text, /45° nach rechts/);
+  // Kurs 270°, Foto aus 225° → 45° nach links.
+  const left = photoHeadingHint(225, 270, 'de');
+  assert.equal(left?.turn, 'left');
+  assert.match(left!.text, /45° nach links/);
+  // Fast davor: keine Drehanweisung, sondern Bestätigung.
+  const there = photoHeadingHint(225, 230, 'de');
+  assert.equal(there?.turn, 'none');
+  assert.match(there!.text, /du schaust hin/);
+  // Englisch mit anderer Himmelsrichtungs-Tabelle (SE statt SO).
+  assert.equal(photoHeadingHint(135, null, 'en')?.text, 'Taken facing SE 135°');
 });

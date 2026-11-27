@@ -202,6 +202,7 @@ export function AnchorEditor({
       open={open}
       onClose={() => commit(true)}
       title={mode === 'create' ? t('app.anchor.newAnchor') : t('app.anchor.edit')}
+      closeLabel={t('common.ctaClose')}
       footer={
         <>
           <button

@@ -45,6 +45,7 @@ export function LegalSheet({
       open={open && Boolean(doc)}
       onClose={onClose}
       title={doc ? doc[locale].title : ''}
+      closeLabel={t('common.ctaClose')}
       footer={
         <button type="button" className="btn btn--primary btn--block" onClick={onClose}>
           {t('common.ctaClose')}

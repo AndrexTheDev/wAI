@@ -134,6 +134,7 @@ export function ShareSheet({
       open={open}
       onClose={onClose}
       title={t('app.share.title')}
+      closeLabel={t('common.ctaClose')}
       footer={
         <>
           <button type="button" className="btn btn--ghost" onClick={() => setShowQr((value) => !value)}>
