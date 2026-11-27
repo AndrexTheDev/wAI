@@ -605,7 +605,7 @@ export const en: Widen<GermanDictionary> = {
       title: 'Your anchors',
       subtitle: 'Every point stays local on this device.',
       setAnchor: 'Drop anchor',
-      setAnchorHint: 'Tap to save your current location',
+      setAnchorHint: 'Tap saves this spot',
       emptyTitle: 'No anchors yet',
       emptyBody:
         'Stand next to your car, tent or meeting point and tap the big button once. wAI remembers the spot – add a title and photo afterwards if you like.',

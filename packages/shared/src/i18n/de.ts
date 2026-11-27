@@ -603,7 +603,7 @@ export const de = {
       title: 'Deine Anker',
       subtitle: 'Alle Punkte bleiben lokal auf diesem Gerät.',
       setAnchor: 'Anker setzen',
-      setAnchorHint: 'Tippe, um den aktuellen Ort zu speichern',
+      setAnchorHint: 'Tippen speichert diesen Ort',
       emptyTitle: 'Noch kein Anker',
       emptyBody:
         'Stell dich neben dein Auto, dein Zelt oder deinen Treffpunkt und tippe einmal auf den großen Knopf. wAI merkt sich die Stelle – Titel und Foto kannst du danach ergänzen.',

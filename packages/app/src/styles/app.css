@@ -419,7 +419,12 @@ a {
   position: relative;
   display: grid;
   place-items: center;
-  width: min(58vw, 196px);
+  /**
+   * 196 px reichten nicht für Symbol, Titel und zweizeiligen Hinweis: der Hinweis
+   * endete unten außerhalb des Kreises und ragte als Text über den Rand. Der Ring
+   * ist der größte Gegenstand des Bildschirms und darf das auch sein.
+   */
+  width: min(64vw, 216px);
   aspect-ratio: 1;
   border-radius: 50%;
   color: #04121a;

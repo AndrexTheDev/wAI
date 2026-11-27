@@ -417,7 +417,13 @@ export function FindScreen({
                 category: anchor.category,
               }))}
             trail={current.trail ?? []}
-            height={330}
+            /**
+             * 330 px ließen unter der Höhenkarte nur noch 45 px Platz, sodass der
+             * Store-Screenshot sie mitten in der Überschrift abschnitt. 260 px
+             * zeigen denselben Kartenausschnitt – die Karte ist Kontext, die
+             * Zahlen sind die Aussage – und der Bildschirm endet sauber.
+             */
+            height={260}
           />
         )}
 
