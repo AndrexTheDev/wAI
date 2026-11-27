@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "packs": [
+    {
+      "slug": "muenchen-mitte",
+      "name": "M\u00fcnchen Mitte",
+      "bounds": {
+        "south": 48.128,
+        "west": 11.555,
+        "north": 48.145,
+        "east": 11.595
+      },
+      "buildings": 4903,
+      "synthetic": false
+    }
+  ]
+}

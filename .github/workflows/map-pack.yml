@@ -25,6 +25,9 @@ on:
       name:
         description: 'Gebietsname'
         default: 'München Mitte'
+      slug:
+        description: 'Ordner-Slug (leer = aus dem Namen)'
+        default: ''
       commit:
         description: 'Ergebnis in den Branch schreiben'
         type: boolean
@@ -62,12 +65,15 @@ jobs:
           NORTH: ${{ inputs.north || '48.1450' }}
           EAST: ${{ inputs.east || '11.5950' }}
           AREA: ${{ inputs.name || 'München Mitte' }}
+          SLUG: ${{ inputs.slug }}
         run: |
           # tee ist hier falsch: es verschluckt den Exit-Code des Generators, und
           # ein gescheiterter Lauf committet dann das alte Paket als „neu".
+          SLUG_ARG=""
+          if [ -n "$SLUG" ]; then SLUG_ARG="--slug $SLUG"; fi
           node tools/build-map-pack.mjs \
             --south "$SOUTH" --west "$WEST" --north "$NORTH" --east "$EAST" \
-            --name "$AREA" --out packages/app/public/map --force 2>&1 | tee pack.log
+            --name "$AREA" $SLUG_ARG --out packages/app/public/map --force 2>&1 | tee pack.log
           test "${PIPESTATUS[0]}" -eq 0
 
       # Selbstauskunft über die API lesbar, statt in einem Artefakt zu verschwinden.
@@ -80,11 +86,14 @@ jobs:
             echo "### Kartenpaket"
             echo '```'
             tail -12 pack.log 2>/dev/null || echo 'kein Log'
-            if [ -f packages/app/public/map/index.json ]; then
+            if [ -f packages/app/public/map/packs.json ]; then
               node -e '
-                const i = require("./packages/app/public/map/index.json");
-                const b = i.tiles.reduce((n,t)=>n+t.buildings,0);
-                console.log(`Index: ${i.tiles.length} Kacheln, ${b} Gebäude, Quelle: ${i.source}`);
+                const r = require("./packages/app/public/map/packs.json");
+                for (const p of r.packs) {
+                  const i = require(`./packages/app/public/map/${p.slug}/index.json`);
+                  const b = i.tiles.reduce((n,t)=>n+t.buildings,0);
+                  console.log(`${p.slug}: ${i.tiles.length} Kacheln, ${b} Gebäude, Quelle: ${i.source}`);
+                }
               '
             fi
             echo '```'
@@ -106,11 +115,14 @@ jobs:
           # Selbstprüfung: ein Paket ohne POIs wäre ein alter Generator.
           node -e '
             const fs = require("fs");
-            const idx = JSON.parse(fs.readFileSync("packages/app/public/map/index.json", "utf8"));
-            const t = idx.tiles[0];
-            const tile = JSON.parse(fs.readFileSync(`packages/app/public/map/18/${t.x}/${t.y}.json`, "utf8"));
-            if (!("pois" in tile)) { console.error("Pack hat keine pois – Generator zu alt?"); process.exit(1); }
-            console.log(`Pack geprüft: ${idx.tiles.length} Kacheln`);
+            const reg = JSON.parse(fs.readFileSync("packages/app/public/map/packs.json", "utf8"));
+            for (const p of reg.packs) {
+              const idx = JSON.parse(fs.readFileSync(`packages/app/public/map/${p.slug}/index.json`, "utf8"));
+              const t = idx.tiles[0];
+              const tile = JSON.parse(fs.readFileSync(`packages/app/public/map/${p.slug}/18/${t.x}/${t.y}.json`, "utf8"));
+              if (!("pois" in tile)) { console.error(`${p.slug}: keine pois – Generator zu alt?`); process.exit(1); }
+              console.log(`Pack geprüft: ${p.slug}, ${idx.tiles.length} Kacheln`);
+            }
           '
           git add packages/app/public/map
           if git diff --cached --quiet; then echo 'unverändert'; exit 0; fi

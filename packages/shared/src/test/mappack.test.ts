@@ -25,7 +25,9 @@ function buildInto(dir: string, extra: string[] = []): string {
     ['tools/build-map-pack.mjs', '--out', dir, '--force', ...chosen],
     { cwd: ROOT, encoding: 'utf8' },
   );
-  return readFileSync(path.join(dir, 'index.json'), 'utf8');
+  // Der Generator schreibt in einen Paketordner; der Slug kommt aus --name
+  // („München Mitte" → „muenchen-mitte"), damit ein Test nicht raten muss.
+  return readFileSync(path.join(dir, 'muenchen-mitte', 'index.json'), 'utf8');
 }
 
 test('the generator turns an OSM answer into a usable pack', () => {
@@ -51,7 +53,7 @@ test('the generator turns an OSM answer into a usable pack', () => {
 
     // Jede Kachel liegt als Datei dort, wo der Index sie verspricht.
     for (const tile of index.tiles) {
-      const file = path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`);
+      const file = path.join(dir, 'muenchen-mitte', String(index.zoom), String(tile.x), `${tile.y}.json`);
       assert.ok(existsSync(file), `missing tile file ${file}`);
       const content = JSON.parse(readFileSync(file, 'utf8'));
       assert.equal(content.x, tile.x);
@@ -73,7 +75,7 @@ test('a building that crosses a tile edge survives whole', () => {
     let rings = 0;
     for (const tile of index.tiles) {
       const content = JSON.parse(
-        readFileSync(path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
+        readFileSync(path.join(dir, 'muenchen-mitte', String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
       );
       for (const building of content.buildings as Array<{ points: Array<[number, number]> }>) {
         assert.ok(building.points.length >= 4, `building with ${building.points.length} points`);
@@ -94,7 +96,7 @@ test('roads keep their class and only named ones get a label', () => {
     const labels: string[] = [];
     for (const tile of index.tiles) {
       const content = JSON.parse(
-        readFileSync(path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
+        readFileSync(path.join(dir, 'muenchen-mitte', String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
       );
       for (const road of content.roads as Array<{ class: string }>) classes.add(road.class);
       for (const label of content.labels as Array<{ text: string }>) labels.push(label.text);
@@ -127,7 +129,7 @@ test('a building across a tile edge keeps one coordinate origin', () => {
     let houses = 0;
     for (const tile of index.tiles) {
       const content = JSON.parse(
-        readFileSync(path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
+        readFileSync(path.join(dir, 'muenchen-mitte', String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
       );
       for (const building of content.buildings as Array<{ points: Array<[number, number]> }>) {
         const xs = building.points.map(([x]) => x);
@@ -163,7 +165,7 @@ test('a road is stored whole, not cut at every tile edge', () => {
     let threePoint = 0;
     for (const tile of index.tiles) {
       const content = JSON.parse(
-        readFileSync(path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
+        readFileSync(path.join(dir, 'muenchen-mitte', String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
       );
       for (const road of content.roads as Array<{ class: string; points: unknown[] }>) {
         if (road.points.length >= 3) threePoint++;
@@ -185,7 +187,7 @@ test('a shop becomes a dot, never a label', () => {
     let shops = 0;
     for (const tile of index.tiles) {
       const content = JSON.parse(
-        readFileSync(path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
+        readFileSync(path.join(dir, 'muenchen-mitte', String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
       );
       for (const poi of content.pois ?? []) if (poi.kind === 'shop') shops++;
       for (const label of content.labels as Array<{ text: string }>) {
@@ -211,9 +213,9 @@ test('a building with a courtyard becomes one clean outline', () => {
       ['tools/build-map-pack.mjs', '--fixture', 'tools/fixtures/courtyard.json', '--out', dir, '--force'],
       { cwd: ROOT, encoding: 'utf8', stdio: 'pipe' },
     );
-    const files = readdirSync(path.join(dir, '18'), { recursive: true })
+    const files = readdirSync(path.join(dir, 'muenchen-mitte', '18'), { recursive: true })
       .filter((entry) => String(entry).endsWith('.json'))
-      .map((entry) => path.join(dir, '18', String(entry)));
+      .map((entry) => path.join(dir, 'muenchen-mitte', '18', String(entry)));
     let checked = 0;
     for (const file of files) {
       const content = JSON.parse(readFileSync(file, 'utf8'));
@@ -240,7 +242,7 @@ test('the shipped demo pack does not claim to be OpenStreetMap', () => {
   // Das Paket im Repo ist das, was Nutzer sehen: es muss dieselbe Ehrlichkeit
   // tragen wie der Generator.
   const shipped = JSON.parse(
-    readFileSync(path.join(ROOT, 'packages/app/public/map/index.json'), 'utf8'),
+    readFileSync(path.join(ROOT, 'packages/app/public/map/muenchen-mitte/index.json'), 'utf8'),
   );
   if (!shipped.synthetic) return; // Ein echtes Paket ist der bessere Zustand.
   assert.doesNotMatch(shipped.source, /ODbL|OpenStreetMap-Mitwirkende/);
@@ -280,7 +282,7 @@ test('the pack lands on the grid the app expects', () => {
       ((11.5755 + 180) / 360) * 256 * Math.pow(2, 18),
     ) / 256;
     assert.ok(Math.abs(139501 - expectedX) < 2, `tile x ${139501} vs expected ~${expectedX}`);
-    const dirs = readdirSync(path.join(dir, '18'));
+    const dirs = readdirSync(path.join(dir, 'muenchen-mitte', '18'));
     assert.ok(dirs.length > 0);
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -299,7 +301,7 @@ test('a relation is drawn as its outline, not as one line through all its parts'
     const index = JSON.parse(buildInto(dir, ['--fixture', 'tools/fixtures/courtyard.json']));
     for (const tile of index.tiles) {
       const content = JSON.parse(
-        readFileSync(path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
+        readFileSync(path.join(dir, 'muenchen-mitte', String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
       );
       for (const building of content.buildings as Array<{ points: Array<[number, number]> }>) {
         const ring = building.points;
@@ -315,7 +317,7 @@ test('a relation is drawn as its outline, not as one line through all its parts'
     let houses = 0;
     for (const tile of index.tiles) {
       const content = JSON.parse(
-        readFileSync(path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
+        readFileSync(path.join(dir, 'muenchen-mitte', String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
       );
       houses += (content.buildings as unknown[]).length;
     }
@@ -365,7 +367,7 @@ test('a building the size of a station hall is left out, not drawn as a blob', (
     let houses = 0;
     for (const tile of index.tiles) {
       const content = JSON.parse(
-        readFileSync(path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
+        readFileSync(path.join(dir, 'muenchen-mitte', String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
       );
       houses += (content.buildings as unknown[]).length;
     }

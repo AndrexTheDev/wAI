@@ -24,6 +24,8 @@ import {
   viewportFor,
   visiblePolygons,
   visibleTiles,
+  pickPack,
+  packContains,
 } from '../map.ts';
 
 /** München Marienplatz – a point with a known, well-tested position. */
@@ -207,4 +209,28 @@ test('priority decides who gets the scarce space', () => {
     (text) => ({ width: text.length * 6, height: 10 }),
   );
   assert.deepEqual(placed.map((label) => label.text), ['Straße']);
+});
+
+test('the app picks the pack that contains you, not whatever loaded first', () => {
+  const packs = [
+    { slug: 'muenchen-mitte', name: 'München Mitte', bounds: { south: 48.128, west: 11.555, north: 48.145, east: 11.595 }, buildings: 4903 },
+    { slug: 'koeln-dom', name: 'Köln Dom', bounds: { south: 50.93, west: 6.94, north: 50.95, east: 6.97 }, buildings: 900 },
+  ];
+  const inMunich = pickPack(packs, { lat: 48.1374, lng: 11.5755 });
+  assert.equal(inMunich?.slug, 'muenchen-mitte');
+  const inCologne = pickPack(packs, { lat: 50.9413, lng: 6.9583 });
+  assert.equal(inCologne?.slug, 'koeln-dom');
+  // Außerhalb alles Bekannten: das nächstgelegene Paket, nicht das erste der Liste.
+  const inDachau = pickPack(packs, { lat: 48.26, lng: 11.43 });
+  assert.equal(inDachau?.slug, 'muenchen-mitte');
+  assert.equal(pickPack([], { lat: 48.1, lng: 11.5 }), null);
+});
+
+test('a position outside every pack is recognised as such', () => {
+  const pack = { bounds: { south: 48.128, west: 11.555, north: 48.145, east: 11.595 } };
+  assert.equal(packContains(pack, { lat: 48.137, lng: 11.575 }), true);
+  assert.equal(packContains(pack, { lat: 48.137, lng: 11.40 }), false);
+  assert.equal(packContains(pack, { lat: 48.30, lng: 11.575 }), false);
+  // Die Kante gehört dazu – sonst ist der Rand der Karte ein Fehler.
+  assert.equal(packContains(pack, { lat: 48.128, lng: 11.555 }), true);
 });

@@ -72,6 +72,11 @@ export interface MapTile {
 
 export interface MapPackIndex {
   version: number;
+  /**
+   * Ordner-Slug des Pakets, z. B. "muenchen-mitte". Fehlt bei Paketen aus der
+   * ersten Fassung; der Renderer benutzt dann "münchen-mitte".
+   */
+  slug?: string;
   /** Human name, e.g. "München Mitte". */
   name: string;
   zoom: number;
@@ -86,6 +91,73 @@ export interface MapPackIndex {
    */
   synthetic?: boolean;
   generatedAt: string;
+}
+
+/**
+ * Übersicht aller Kartenpakete, die die App kennt (`map/packs.json`).
+ *
+ * Ein Paket deckt ein Gebiet ab, nicht die Welt. Bis hierhin konnte die App genau
+ * ein Paket lesen; für „offline pro Stadt" muss sie wissen, **welche** Gebiete sie
+ * hat, noch bevor sie eines lädt – sonst zeigt sie außerhalb Münchens eine leere
+ * Fläche und behauptet, es gäbe keine Karte.
+ */
+export interface MapPackSummary {
+  slug: string;
+  name: string;
+  bounds: { south: number; west: number; north: number; east: number };
+  buildings: number;
+  synthetic?: boolean;
+}
+
+export interface MapPackRegistry {
+  version: number;
+  packs: MapPackSummary[];
+}
+
+/** Liegt der Punkt im Gebiet dieses Pakets? */
+export function packContains(
+  pack: { bounds: { south: number; west: number; north: number; east: number } },
+  position: { lat: number; lng: number },
+): boolean {
+  return (
+    position.lat >= pack.bounds.south &&
+    position.lat <= pack.bounds.north &&
+    position.lng >= pack.bounds.west &&
+    position.lng <= pack.bounds.east
+  );
+}
+
+/**
+ * Welches Paket soll angezeigt werden?
+ *
+ * Reihenfolge: das Gebiet, in dem der Standort liegt; sonst das Paket, dessen Mitte
+ * am nächsten liegt (man läuft aus dem Gebiet heraus, die Kacheln sollen bleiben);
+ * sonst das erste überhaupt, damit die Karte nicht leer startet.
+ */
+export function pickPack(
+  packs: ReadonlyArray<MapPackSummary>,
+  position: { lat: number; lng: number },
+): MapPackSummary | null {
+  if (packs.length === 0) return null;
+  const inside = packs.find((pack) => packContains(pack, position));
+  if (inside) return inside;
+  let best = packs[0];
+  let bestDistance = Infinity;
+  for (const pack of packs) {
+    const centreLat = (pack.bounds.south + pack.bounds.north) / 2;
+    const centreLng = (pack.bounds.west + pack.bounds.east) / 2;
+    const distance = Math.hypot(centreLat - position.lat, centreLng - position.lng);
+    if (distance < bestDistance) {
+      best = pack;
+      bestDistance = distance;
+    }
+  }
+  return best;
+}
+
+/** Ortsname für die Anzeige, wenn der Standort in keinem Paket liegt. */
+export function describePacks(packs: ReadonlyArray<MapPackSummary>): string {
+  return packs.map((pack) => pack.name).join(' · ');
 }
 
 /* ------------------------------------------------------------------ */
