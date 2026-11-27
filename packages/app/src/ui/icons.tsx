@@ -16,10 +16,30 @@ const s = ({ size = 20, ...rest }: P) => ({
   ...rest,
 });
 
+/**
+ * Die Marke: Pin mit Pfeil nach oben.
+ *
+ * Sie ist das App-Zeichen (`tools/make-icons.mjs`) und erscheint als Linienfassung
+ * dort, wo die Marke selbst steht – Kopfzeile, Startfläche. Vorher war hier ein
+ * Anker: das Zeichen sagte „Boot", und auf dem Homescreen stand inzwischen etwas
+ * anderes. Zwei Symbole für ein Produkt sind ein Fehler, kein Detail.
+ */
+export const Brand = (p: P) => (
+  <svg {...s(p)}>
+    <path d="M12 21.6c3.8-3.9 5.6-6.1 5.6-8.6a5.6 5.6 0 1 0-11.2 0c0 2.5 1.8 4.7 5.6 8.6Z" />
+    <path d="M12 6.6l2.7 3.3h-1.7v2.3h-2V9.9H9.3z" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+/**
+ * Ein gesetzter Anker als Zeichen in Listen und Karten – bewusst **nicht** die
+ * Marke: der Pin mit Pfeil bedeutet „hier entlang", ein Anker-Symbol in einer Liste
+ * bedeutet „dieser Punkt". Sonst wären Marke und Inhalt nicht unterscheidbar.
+ */
 export const Anchor = (p: P) => (
   <svg {...s(p)}>
-    <circle cx="12" cy="5" r="2.3" />
-    <path d="M12 7.3V21M8 11h8M4 15a8 8 0 0 0 16 0M4 15h3M17 15h3" />
+    <path d="M12 21s6.5-5.9 6.5-10.5a6.5 6.5 0 1 0-13 0C5.5 15.1 12 21 12 21Z" />
+    <circle cx="12" cy="10.4" r="2.3" />
   </svg>
 );
 

@@ -34,7 +34,7 @@ import {
   Torch,
   WALLET_ICONS,
   ChevronRight,
-  Anchor as AnchorIcon,
+  Compass,
 } from '../ui/icons';
 
 const SITE = import.meta.env.VITE_WEBSITE_URL ?? PRODUCT.website;
@@ -216,7 +216,7 @@ export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => v
       <div className="card">
         <div className="card__head">
           <span className="card__title">
-            <AnchorIcon size={14} /> {t('app.settings.sensorsTitle')}
+            <Compass size={14} /> {t('app.settings.sensorsTitle')}
           </span>
           <button type="button" className="btn btn--xs" onClick={() => setShowSensors((value) => !value)}>
             {showSensors ? t('common.ctaClose') : t('app.settings.sensorsCheck')}

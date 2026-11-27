@@ -12,6 +12,7 @@ import { useT } from '../i18n/useT';
 import { useUnits } from '../i18n/useUnits';
 import {
   Anchor as AnchorIcon,
+  Brand as BrandIcon,
   CATEGORY_ICONS,
   ChevronRight,
   Crown,
@@ -143,7 +144,7 @@ export function HomeScreen({
           <span className="anchor-btn__ring" />
           <span className="anchor-btn__ring anchor-btn__ring--2" />
           <span className="anchor-btn__inner">
-            <AnchorIcon size={40} />
+            <BrandIcon size={40} />
             <span className="anchor-btn__label">{t('app.home.setAnchor')}</span>
             <span className="anchor-btn__hint">{t('app.home.setAnchorHint')}</span>
           </span>
