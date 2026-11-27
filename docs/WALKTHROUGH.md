@@ -1,6 +1,6 @@
 # Nutzer-Workflow — automatisch geprüft
 
-> Erzeugt von `tools/walkthrough.mjs` gegen die laufende App am 2026-11-27 20:33 (UTC).
+> Erzeugt von `tools/walkthrough.mjs` gegen die laufende App am 2026-11-27 20:41 (UTC).
 > Nicht von Hand geschrieben: das Skript klickt den Weg wie ein Erstnutzer und
 > liest jeden Bildschirm aus. Ein neuer Lauf überschreibt die Datei.
 
@@ -97,16 +97,16 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 ### Finden: Karte
 
 - Erste Zeile: „Mein Auto · Säule B17"
-- Sichtbar: Mein Auto · Säule B17 · AUTO · NO 27° · SIMULIERTE SENSOREN · Tippe irgendwo auf die Karte, um deine Position zu verschieben.
+- Sichtbar: Mein Auto · Säule B17 · AUTO · NO 26° · SIMULIERTE SENSOREN · Tippe irgendwo auf die Karte, um deine Position zu verschieben.
 - Bedienelemente: Zurück | Taschenlampe | Wähle einen Anker | Kompass | Karte | Spur | Foto | Tippe irgendwo auf die Karte | + | − | PRO | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: 15 px unterhalb des Viewports
+- Scroll: 0 px unterhalb des Viewports
 
 ### Finden: Spur
 
 - Erste Zeile: „Mein Auto · Säule B17"
 - Sichtbar: Mein Auto · Säule B17 · AUTO · NO 27° · SIMULIERTE SENSOREN · Im Reiter „Karte" kannst du deine Position antippen und verschieben.
 - Bedienelemente: Zurück | Taschenlampe | Wähle einen Anker | Kompass | Karte | Spur | Foto | PRO | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: 112 px unterhalb des Viewports
+- Scroll: 80 px unterhalb des Viewports
 
 ### Finden: Foto
 
@@ -169,21 +169,21 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±7 m
 - Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Taschenlampe | Automatisch (Gerätesprache) | Deutsch | English | System | Hell | Dunkel | Nacht | Näher-dran-Signal | m | ft | Sensoren testen | Lizenz aktivieren | Daten exportieren | Daten importieren | Alle Daten löschen | SOL | BTC | ETH | Haftungsausschluss | AGB | Widerrufsbelehrung | Datenschutz | Impressum | Krypto-Kaufanleitung | Impressum auf der Website | hippie.highho@gmail.com | Einführung erneut zeigen | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: 1226 px unterhalb des Viewports
+- Scroll: 1152 px unterhalb des Viewports
 
 ### Einstellungen: unten
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±7 m
 - Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Taschenlampe | Automatisch (Gerätesprache) | Deutsch | English | System | Hell | Dunkel | Nacht | Näher-dran-Signal | m | ft | Sensoren testen | Lizenz aktivieren | Daten exportieren | Daten importieren | Alle Daten löschen | SOL | BTC | ETH | Haftungsausschluss | AGB | Widerrufsbelehrung | Datenschutz | Impressum | Krypto-Kaufanleitung | Impressum auf der Website | hippie.highho@gmail.com | Einführung erneut zeigen | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: 1226 px unterhalb des Viewports
+- Scroll: 1152 px unterhalb des Viewports
 
 ### Einstellungen: Ende der Seite
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±7 m
 - Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Taschenlampe | Automatisch (Gerätesprache) | Deutsch | English | System | Hell | Dunkel | Nacht | Näher-dran-Signal | m | ft | Sensoren testen | Lizenz aktivieren | Daten exportieren | Daten importieren | Alle Daten löschen | SOL | BTC | ETH | Haftungsausschluss | AGB | Widerrufsbelehrung | Datenschutz | Impressum | Krypto-Kaufanleitung | Impressum auf der Website | hippie.highho@gmail.com | Einführung erneut zeigen | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: 1226 px unterhalb des Viewports
+- Scroll: 1152 px unterhalb des Viewports
 
 ### Archiv
 
@@ -211,7 +211,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±7 m
 - Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | 82 m ENTFERNT | 24 Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | 82 m | Wegkreuzung West Natur | 99 m | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: 460 px unterhalb des Viewports
+- Scroll: 442 px unterhalb des Viewports
 
 ### Kleines Telefon: Einstellungen
 
@@ -232,7 +232,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · ENVIRONMENTAL MEMORY ANCHOR · GPS active · Accuracy ±7 m
 - Bedienelemente: Language | Unlock Pro | How it works | Flashlight | Automatic (device language) | Deutsch | English | System | Light | Dark | Night | Getting-closer signal | m | ft | Test sensors | Activate licence | Export data | Import data | Delete all data | SOL | BTC | ETH | Disclaimer | Terms | Withdrawal notice | Privacy | Imprint | Crypto guide | Imprint on the website | hippie.highho@gmail.com | Show introduction again | 2 Anchors | Find | Archive | Settings
-- Scroll: 1152 px unterhalb des Viewports
+- Scroll: 1114 px unterhalb des Viewports
 
 ## Bedienelemente je Ansicht
 
