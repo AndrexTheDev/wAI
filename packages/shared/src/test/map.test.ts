@@ -100,15 +100,16 @@ test('only the tiles that intersect the screen are requested', () => {
    */
   for (const unitsPerPixel of [0.8, 1, 2.4, 4]) {
     const viewport = viewportFor(MARIENPLATZ.lat, MARIENPLATZ.lng, 360, 520, unitsPerPixel);
+    const scale = viewport.unitsPerPixel;
     const tiles = visibleTiles(viewport);
     assert.ok(tiles.length >= 1, `got ${tiles.length} tiles`);
     for (const { tile, dx, dy } of tiles) {
       assert.equal(tile.z, MAP_ZOOM);
       // Jede gelieferte Kachel muss das Bild wirklich berühren.
-      const left = dx / unitsPerPixel + viewport.width / 2;
-      const top = dy / unitsPerPixel + viewport.height / 2;
-      assert.ok(left < viewport.width && left + TILE_SIZE / unitsPerPixel > 0, `x off screen: ${left}`);
-      assert.ok(top < viewport.height && top + TILE_SIZE / unitsPerPixel > 0, `y off screen: ${top}`);
+      const left = dx / scale + viewport.width / 2;
+      const top = dy / scale + viewport.height / 2;
+      assert.ok(left < viewport.width && left + TILE_SIZE / scale > 0, `x off screen: ${left}`);
+      assert.ok(top < viewport.height && top + TILE_SIZE / scale > 0, `y off screen: ${top}`);
     }
   }
 });
@@ -123,12 +124,15 @@ test('the tile offset is in world units, not screen pixels', () => {
    *
    * Der Vertrag: Ursprung der Kachel = Bildmitte + dx / unitsPerPixel.
    */
-  for (const unitsPerPixel of [0.6, 1, 2.4, 5]) {
-    const viewport = viewportFor(MARIENPLATZ.lat, MARIENPLATZ.lng, 360, 520, unitsPerPixel);
+  for (const requested of [0.6, 1, 2.4, 5]) {
+    const viewport = viewportFor(MARIENPLATZ.lat, MARIENPLATZ.lng, 360, 520, requested);
+    // Der Viewport begrenzt den Maßstab selbst (0,5 … 4) – gerechnet wird mit dem
+    // Wert, der wirklich gilt, nicht mit dem gewünschten.
+    const scale = viewport.unitsPerPixel;
     for (const { tile, dx, dy } of visibleTiles(viewport)) {
       const screen = toScreen(viewport, { x: tile.x * TILE_SIZE, y: tile.y * TILE_SIZE });
-      assert.ok(Math.abs(screen.x - (dx / unitsPerPixel + viewport.width / 2)) < 1e-6);
-      assert.ok(Math.abs(screen.y - (dy / unitsPerPixel + viewport.height / 2)) < 1e-6);
+      assert.ok(Math.abs(screen.x - (dx / scale + viewport.width / 2)) < 1e-6);
+      assert.ok(Math.abs(screen.y - (dy / scale + viewport.height / 2)) < 1e-6);
     }
   }
 });
