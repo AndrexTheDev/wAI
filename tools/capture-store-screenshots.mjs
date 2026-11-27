@@ -168,6 +168,14 @@ try {
   await page.goto(url, { waitUntil: 'networkidle', timeout: 30_000 });
 } catch (error) {
   await browser.close();
+
+/**
+ * Erst hier abbrechen, mit vollständiger Liste. Die Bilder liegen bereits auf der
+ * Platte, der Bericht ist also auch im Fehlerfall brauchbar.
+ */
+if (layoutProblems.length) {
+  throw new Error(`Screenshot-Prüfung fehlgeschlagen:\n  - ${layoutProblems.join('\n  - ')}`);
+}
   bail(`The app is not reachable at ${url}.`, `  start it with: npm run dev:app\n  ${String(error).split('\n')[0]}`);
 }
 
@@ -344,6 +352,7 @@ await clickLabel(page, ['Überspringen', 'Skip', 'Los geht', 'Los geht’s', 'Ge
 await page.waitForTimeout(400);
 
 const results = [];
+const layoutProblems = [];
 for (const shot of SHOTS) {
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForSelector('.app', { timeout: 15_000 }).catch(() => {});
@@ -457,8 +466,10 @@ for (const shot of SHOTS) {
     }
   }
   if (problems.length) {
+    // Sammeln statt abbrechen: ein Lauf soll *alle* betroffenen Bilder melden,
+    // nicht nur das erste. Sonst kostet jede Korrektur einen weiteren Lauf.
     console.warn(`  ! ${shot.slug}: ${problems.join(' · ')}`);
-    throw new Error(`Layout kaputt auf ${shot.slug}: ${problems.join(' · ')}`);
+    layoutProblems.push(`${shot.slug}: ${problems.join(' · ')}`);
   }
 
   const viewportUsed = page.viewportSize();
@@ -507,8 +518,8 @@ for (const shot of SHOTS) {
    */
   const missingMarks = (shot.mustSee ?? []).filter((mark) => !seen.signature.includes(mark));
   if (missingMarks.length) {
-    throw new Error(
-      `${shot.slug} zeigt nicht, was der Titel verspricht: erwartet ${missingMarks.join(', ')} · gesehen "${seen.signature}"`,
+    layoutProblems.push(
+      `${shot.slug}: zeigt nicht, was der Titel verspricht – erwartet ${missingMarks.join(', ')} · gesehen "${seen.signature}"`,
     );
   }
 

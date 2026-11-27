@@ -1143,11 +1143,11 @@ a {
   aspect-ratio: 1;
   /**
    * 300 px waren auf einem 412×732-Gerät zu hoch: mit Demo-Hinweis, Reiterleiste,
-   * Kacheln und Höhenkarte war der Bildschirm über 40 px länger als das Display,
-   * sodass der Store-Screenshot den letzten Block halb abschnitt. Bei 252 px passt
-   * die ganze Ansicht – und der Kompass bleibt groß genug, um die Richtung zu lesen.
+   * Kacheln und Höhenkarte lag der letzte Block außerhalb des Displays. 252 px
+   * reichten nicht (der Capture meldete 81 px Überschuss), 216 px passen – und der
+   * Kompass bleibt groß genug, um die Richtung zu lesen.
    */
-  max-height: 252px;
+  max-height: 216px;
   margin-inline: auto;
   width: 100%;
   border-radius: 50%;
@@ -1201,21 +1201,23 @@ a {
 }
 
 /**
- * Spitze: Basis genau in der Mitte, Apex 96 px darüber. Vorher 112 px hoch bei
- * 32 px Breite – ein 16°-Winkel, der auf dem Screenshot wie ein Splitter aussah.
- * 52 px breit auf 96 px Höhe liest als Pfeil, ohne die Zahl zu erdrücken.
+ * Die Nadel misst in Prozent der Kompassfläche, nicht in Pixeln. Vorher standen
+ * hier feste 96 px; als der Kompass für die Store-Screenshots kleiner wurde,
+ * ragte die Nadel fast bis zum Rand. Prozent heißt: die Form bleibt im Verhältnis.
+ *
+ * Basis in der Mitte, Spitze 44 % darüber, Breite 24 % – bei 216 px Kompass sind
+ * das 95 px Höhe auf 52 px Breite, ein Winkel von 61°.
  */
 .guide__needle-arrow {
   position: absolute;
   left: 50%;
   bottom: 50%;
   translate: -50% 0;
-  width: 0;
-  height: 0;
-  border-left: 26px solid transparent;
-  border-right: 26px solid transparent;
-  border-bottom: 96px solid var(--mint);
-  filter: drop-shadow(0 0 12px rgba(110, 231, 183, 0.5));
+  width: 24%;
+  height: 44%;
+  background: var(--mint);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  filter: drop-shadow(0 0 10px rgba(110, 231, 183, 0.5));
 }
 
 /* Schwanz: gleiche Länge nach unten, aber zurückgenommen – ein Objekt, das zeigt. */
@@ -1224,9 +1226,9 @@ a {
   left: 50%;
   top: 50%;
   translate: -50% 0;
-  width: 9px;
-  height: 96px;
-  border-radius: 0 0 5px 5px;
+  width: 4%;
+  height: 44%;
+  border-radius: 0 0 3px 3px;
   background: linear-gradient(rgba(110, 231, 183, 0.45), rgba(110, 231, 183, 0.03));
 }
 
