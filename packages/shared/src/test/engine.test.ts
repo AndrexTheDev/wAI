@@ -36,7 +36,7 @@ import {
   trailDistance,
   reminderTransition,
 } from '../engine.ts';
-import { createTranslator } from '../i18n/index.ts';
+import { createTranslator, formatDuration } from '../i18n/index.ts';
 import { anchorToShare, decodeSharePayload, encodeSharePayload, sanitizeImportedAnchor } from '../codec.ts';
 import { buildIntentLink, buildShareLink, extractShareCode } from '../deeplink.ts';
 import { base64urlDecode, base64urlEncode, canonicalJson, licenseFingerprint, verifyLicense } from '../license.ts';
@@ -382,17 +382,28 @@ test('a fabricated floor count is worse than none', () => {
   assert.match(guidanceText(30, 0, elevationHint(415, 412), 'de'), / · 1 Etage tiefer| · 1 Etage höher/);
 });
 
+test('whole durations drop the zero', () => {
+  // Der Screenshot zeigte „8 Std. 0 Min." – eine Null, die wie eine Messung
+  // aussah. Acht volle Stunden sind „8 Std.".
+  assert.equal(formatDuration(8 * 3_600_000, 'de'), '8 Std.');
+  assert.equal(formatDuration(8 * 3_600_000, 'en'), '8 h');
+  assert.equal(formatDuration(95 * 60_000, 'de'), '1 Std. 35 Min.');
+  assert.equal(formatDuration(2 * 24 * 3_600_000, 'de'), '2 T');
+  assert.equal(formatDuration(50 * 3_600_000, 'de'), '2 T 2 Std.');
+  assert.equal(formatDuration(41_000, 'de'), '0 Min.');
+});
+
 test('floor plurals are words, not placeholders', () => {
   // Quelle des Fehlers: der Store-Screenshot zeigte „ca. 3 Etage(n)".
   const de = createTranslator('de');
   const en = createTranslator('en');
   assert.equal(
     de('app.find.elevationLower', { meters: 10, floors: 3 }),
-    'Ziel liegt tiefer (10 m, ca. 3 Etagen)',
+    'Ziel liegt 3 Etagen tiefer (10 m)',
   );
   assert.equal(
     de('app.find.elevationHigher', { meters: 3, floors: 1 }),
-    'Ziel liegt höher (3 m, ca. 1 Etage)',
+    'Ziel liegt 1 Etage höher (3 m)',
   );
   assert.equal(
     en('app.find.elevationHigher', { meters: 3, floors: 1 }),

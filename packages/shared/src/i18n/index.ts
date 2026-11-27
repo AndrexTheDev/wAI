@@ -186,7 +186,13 @@ export function formatTime(epochMs: number, locale: Locale): string {
   }).format(new Date(epochMs));
 }
 
-/** Short duration: "2 T 4 Std." / "2 d 4 h". */
+/**
+ * Short duration: "2 T 4 Std." / "2 d 4 h".
+ *
+ * Genau volle Einheiten lassen die kleinere Einheit weg. Vorher stand auf dem
+ * Screenshot „8 Std. 0 Min." für einen Anker, der nur acht Stunden alt war –
+ * die Null war Rauschen, das wie eine Messung aussah.
+ */
 export function formatDuration(ms: number, locale: Locale): string {
   const totalMinutes = Math.max(0, Math.floor(ms / 60000));
   const days = Math.floor(totalMinutes / 1440);
@@ -195,8 +201,8 @@ export function formatDuration(ms: number, locale: Locale): string {
   const d = locale === 'de' ? 'T' : 'd';
   const h = locale === 'de' ? 'Std.' : 'h';
   const m = locale === 'de' ? 'Min.' : 'min';
-  if (days > 0) return `${days} ${d} ${hours} ${h}`;
-  if (hours > 0) return `${hours} ${h} ${minutes} ${m}`;
+  if (days > 0) return hours > 0 ? `${days} ${d} ${hours} ${h}` : `${days} ${d}`;
+  if (hours > 0) return minutes > 0 ? `${hours} ${h} ${minutes} ${m}` : `${hours} ${h}`;
   return `${minutes} ${m}`;
 }
 

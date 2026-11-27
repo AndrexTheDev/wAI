@@ -44,15 +44,18 @@ const SHOTS = [
      * im Bild ist also 30–40 m. Eine feste Zahl („38 m") wäre eine Behauptung,
      * die das Bild daneben widerlegt.
      */
-    caption: { de: 'Wenige Schritte – drei Ebenen tiefer', en: 'A few steps — three levels down' },
+    caption: { de: 'Drei Ebenen unter dir', en: 'Three levels below you' },
     // Die Auto-Kachel steht über der Liste; ihr Knopf führt zum Kompass.
     steps: [['Zum Auto', 'To the car']],
+    // Was muss zu sehen sein? Sonst ist „Screenshot sieht gut aus" kein Kriterium.
+    mustSee: ['compass'],
   },
   {
     slug: '02-anchor',
     caption: { de: 'Säule B17, Ebene −3', en: 'Pillar B17, level −3' },
     // Der Editor: Etage, Zone, Notiz – das, was man nach drei Stunden vergisst.
     steps: [{ within: 'Mein Auto', selector: '.anchor-card__tap' }],
+    mustSee: ['sheet:Bearbeiten'],
   },
   {
     slug: '03-list',
@@ -60,13 +63,22 @@ const SHOTS = [
     // Kategorie-Filter, damit sich Liste und Detail klar unterscheiden.
     // Filter-Chip statt bloßer Liste, damit sich 02/03 klar unterscheiden.
     steps: [{ selector: '.chips .chip', text: ['Natur', 'Nature'] }],
+    mustSee: ['chips'],
   },
   {
     slug: '04-trail',
     caption: { de: 'Dein eigener Weg zurück', en: 'Your own way back' },
-    // Die Spur zeigt der Find-Bildschirm; der Knopf trägt nur die Distanz,
-    // deshalb über aria-label ("Finden: …") ansteuern.
-    steps: [{ within: 'Wegkreuzung', selector: '.anchor-card__distance' }],
+    /**
+     * Die Spur ist ein Reiter im Find-Bildschirm – der Distanz-Knopf öffnet nur
+     * den Kompass. Das alte Bild hieß „Spur", zeigte aber den Kompass, weil der
+     * zweite Schritt fehlte. Jetzt: Anker öffnen, dann auf „Spur" wechseln.
+     */
+    steps: [
+      { within: 'Wegkreuzung', selector: '.anchor-card__distance' },
+      { selector: '.segmented button', text: ['Spur', 'Trail'] },
+    ],
+    // Die Spur ist keine Ansicht des Kompasses: das Bild muss die Trail-Karte zeigen.
+    mustSee: ['trailmap'],
   },
   {
     slug: '04b-map',
@@ -76,6 +88,7 @@ const SHOTS = [
       { within: 'Mein Auto', selector: '.anchor-card__distance' },
       { selector: '.segmented button', text: ['Karte', 'Map'] },
     ],
+    mustSee: ['map'],
   },
   {
     slug: '05-share',
@@ -85,6 +98,7 @@ const SHOTS = [
       { within: 'Wegkreuzung', selector: '.anchor-card__tap' },
       { aria: ['Teilen', 'Share'] },
     ],
+    mustSee: ['sheet:Anker teilen'],
   },
   {
     slug: '06-timer',
@@ -92,16 +106,19 @@ const SHOTS = [
     // Der Timer-Knopf sitzt auf der Auto-Kachel oben (carspot) und zusätzlich in
     // der Liste; der obere ist der, den ein Nutzer zuerst sieht.
     steps: [{ selector: '.carspot__side' }],
+    mustSee: ['sheet:Park-Timer'],
   },
   {
     slug: '07-settings',
     caption: { de: 'Ohne Konto. Ohne Cloud.', en: 'No account. No cloud.' },
     steps: [['Einstellungen', 'Settings']],
+    mustSee: ['settings'],
   },
   {
     slug: '08-pro',
     caption: { de: 'Einmal zahlen. Für immer.', en: 'Pay once. Keep it.' },
     steps: [['Einstellungen', 'Settings'], { aria: ['Pro', 'Free upgraden', 'Upgrade'] }],
+    mustSee: ['sheet:Pro freischalten'],
   },
 ];
 
@@ -195,6 +212,14 @@ await page.evaluate(() => {
   });
   // Kategorien und Feldnamen müssen exakt dem Domain-Modell entsprechen
   // (packages/shared/src/types.ts) – erfundenes „vehicle" hätte leere Icons gezeigt.
+  /**
+   * Sechs Anker, aber das Free-Limit liegt bei drei (FREE_LIMITS.activeAnchors).
+   * Deshalb steht im Bild „Free-Limit erreicht … Du hast 3 aktive Anker" und
+   * trotzdem eine Liste mit fünf Einträgen – ein Widerspruch, den ein Käufer
+   * sofort sieht. Für die Liste werden die beiden ältesten deshalb archiviert:
+   * sie bleiben als Daten da (das Bild zeigt die Liste ja mit), zählen aber nicht
+   * gegen das Limit. Das ist derselbe Zustand, den eine echte Free-Nutzung hätte.
+   */
   const anchors = [
     anchor({
       name: 'Mein Auto · Säule B17',
@@ -248,7 +273,16 @@ await page.evaluate(() => {
       lng: 11.5818,
     }),
   ];
-  window.localStorage.setItem('wai.v1.anchors', JSON.stringify(anchors));
+  /**
+   * Genau die drei Anker, die in keinem Bild angesteuert werden, wandern ins
+   * Archiv: die aktive Liste füllt damit exakt das Free-Limit von 3. Nach Alter
+   * zu sortieren wäre falsch – „Wegkreuzung" ist alt und wird in den Bildern für
+   * Spur und Teilen gebraucht.
+   */
+  const ARCHIVED = ['Werkzeugkasten', 'Wasserstelle am Bach', 'Zelt – blaue Kuppel'];
+  const archived = new Set(anchors.filter((item) => ARCHIVED.includes(item.name)).map((item) => item.id));
+  const seeded = anchors.map((item) => (archived.has(item.id) ? { ...item, archived: true } : item));
+  window.localStorage.setItem('wai.v1.anchors', JSON.stringify(seeded));
   window.localStorage.setItem(
     'wai.v1.settings',
     JSON.stringify({ locale: 'de', theme: 'dark', proximity: true, units: 'metric', onboardingDone: true }),
@@ -334,6 +368,30 @@ for (const shot of SHOTS) {
     console.warn(`  ! ${shot.slug}: ${missing.length} Navigationsschritt(e) nicht gefunden`);
     console.warn(`      Karten im DOM: ${JSON.stringify(inventory).slice(0, 500)}`);
   }
+  /**
+   * Keine halben Zeilen im Bild. Ein Screenshot schneidet immer irgendwo ab; wenn
+   * er aber mitten durch eine Textzeile schneidet, sieht das nach kaputtem Layout
+   * aus (so wie „Etage: −3", das halb hinter der Tab-Leiste lag). Hier wird der
+   * Scrollbereich so weitergescrollt, dass der erste angeschnittene Block genau
+   * an der Kante der Tab-Leiste endet – der Schnitt fällt damit in die Lücke.
+   */
+  await page.evaluate(() => {
+    const scroller = document.querySelector('.app__body');
+    if (!scroller) return;
+    const bar = document.querySelector('.tabbar');
+    const limit = bar ? bar.getBoundingClientRect().top : window.innerHeight;
+    if (scroller.scrollHeight <= scroller.clientHeight + 1) return;
+    const blocks = Array.from(scroller.querySelectorAll(':scope > * > *, :scope > *'));
+    const clipped = blocks
+      .map((node) => ({ node, box: node.getBoundingClientRect() }))
+      .filter(({ box }) => box.height > 6 && box.top < limit && box.bottom > limit + 1)
+      .sort((a, b) => a.box.bottom - b.box.bottom)[0];
+    if (!clipped) return;
+    const overflow = clipped.box.bottom - limit;
+    scroller.scrollTop += overflow;
+  });
+  await page.waitForTimeout(200);
+
   const file = path.join(outDir, `${shot.slug}.png`);
   await page.screenshot({ path: file, fullPage: false });
 
@@ -417,6 +475,18 @@ for (const shot of SHOTS) {
       document.querySelector('.carspot') ? 'carspot' : '',
       document.querySelector('.chips') ? 'chips' : '',
       document.querySelector('.compass, .guide') ? 'compass' : '',
+      /**
+       * Die drei Ansichten des Fund-Screens sahen in der Signatur identisch aus
+       * („compass"), deshalb blieb unbemerkt, dass 04-trail den Kompass zeigte
+       * statt der Spur. Der aktive Reiter und der jeweilige Inhalt machen den
+       * Unterschied sichtbar.
+       */
+      (() => {
+        const active = document.querySelector('.segmented .is-active');
+        return active ? `view:${(active.textContent ?? '').trim().toLowerCase()}` : '';
+      })(),
+      document.querySelector('.trail-map') ? 'trailmap' : '',
+      document.querySelector('.map__svg') ? 'map' : '',
       document.querySelector('.settings, .setting-row') ? 'settings' : '',
       document.querySelector('.pro, .pro__hero') ? 'pro' : '',
       sheetTitle ? `sheet:${(sheetTitle.textContent ?? '').trim()}` : '',
@@ -429,6 +499,18 @@ for (const shot of SHOTS) {
       title: document.title,
     };
   });
+  /**
+   * Zeigt das Bild, was draufsteht? Ein Screenshot einer falschen Ansicht sieht
+   * für sich genommen immer in Ordnung aus – nur der Vergleich mit dem Titel
+   * verrät ihn.
+   */
+  const missingMarks = (shot.mustSee ?? []).filter((mark) => !seen.signature.includes(mark));
+  if (missingMarks.length) {
+    throw new Error(
+      `${shot.slug} zeigt nicht, was der Titel verspricht: erwartet ${missingMarks.join(', ')} · gesehen "${seen.signature}"`,
+    );
+  }
+
   results.push({ slug: shot.slug, file, caption: shot.caption, reached, seen, viewportUsed, layout });
   console.log(`  ✔ ${shot.slug}.png — ${shot.caption.de}`);
   console.log(`      gesehen: ${seen.text.slice(0, 110)}`);

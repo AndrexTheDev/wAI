@@ -710,8 +710,8 @@ export const de = {
        * nicht aus dem Text. Vorher stand hier „Etage(n)", ein Platzhalter, der im
        * Store-Screenshot als solcher zu sehen war.
        */
-      elevationHigher: 'Ziel liegt höher ({meters} m, ca. {floors} {floorWord})',
-      elevationLower: 'Ziel liegt tiefer ({meters} m, ca. {floors} {floorWord})',
+      elevationHigher: 'Ziel liegt {floors} {floorWord} höher ({meters} m)',
+      elevationLower: 'Ziel liegt {floors} {floorWord} tiefer ({meters} m)',
       noElevation: 'Keine Höhendaten',
       trail: 'Brotkrumen-Spur',
       trailLength: 'Spur: {distance}',
