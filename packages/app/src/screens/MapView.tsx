@@ -173,7 +173,7 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
   /* ---------------- geometry ---------------- */
 
   const drawn = useMemo(() => {
-    const paths: Array<{ d: string; className: string }> = [];
+    const paths: Array<{ d: string; className: string; layer: number }> = [];
     const labels: Array<{ text: string; x: number; y: number; priority: number }> = [];
     const pois: Array<{ x: number; y: number; kind: string }> = [];
 
@@ -181,21 +181,33 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
     for (const { tile, dx, dy } of visible) {
       const data = tiles.get(`${tile.x}/${tile.y}`);
       if (!data) continue;
+      /**
+       * Reihenfolge ist Kartografie, nicht Geschmack: ein Gebäude ist ein massiver
+       * Block, eine Straße führt daran vorbei. Wird das Haus zuletzt gemalt, liegen
+       * seine Flächen über dem Straßenzug und die Karte wirkt wie ein Knäuel aus
+       * Linien, die einander durchkreuzen. Die erste echte Karte hatte genau das.
+       */
       for (const road of data.roads) {
+        // Fußwege sind bei ~1 m/px ein Fadengewirr ohne Orientierungswert; sie
+        // erscheinen erst, wenn man wirklich hineinzoomt.
+        if (road.class === 'footway' && viewport.unitsPerPixel > 1.6) continue;
         paths.push({
           d: polygonPath(road.points, dx, dy, viewport.unitsPerPixel, false),
+          layer: ROAD_LAYER[road.class] ?? 3,
           className: `map__road map__road--${road.class}`,
         });
       }
       for (const area of data.areas) {
         paths.push({
           d: polygonPath(area.points, dx, dy, viewport.unitsPerPixel, true),
+          layer: 1,
           className: `map__area map__area--${area.kind}`,
         });
       }
       for (const building of data.buildings) {
         paths.push({
           d: polygonPath(building.points, dx, dy, viewport.unitsPerPixel, true),
+          layer: 2,
           className: `map__building ${building.kind === 'parking' ? 'is-parking' : ''}`,
         });
       }
@@ -267,9 +279,9 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
       >
         <rect className="map__ground" x={0} y={0} width={size.width} height={size.height} />
 
-        {drawn.paths.map((path, i) =>
-          path.d ? <path key={i} d={path.d} className={path.className} /> : null,
-        )}
+        {[...drawn.paths]
+          .sort((a, b) => a.layer - b.layer)
+          .map((path, i) => (path.d ? <path key={i} d={path.d} className={path.className} /> : null))}
 
         {trailPoints.length > 1 && (
           <polyline
@@ -370,6 +382,9 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
 /* ------------------------------------------------------------------ */
 /* Helpers                                                             */
 /* ------------------------------------------------------------------ */
+
+/** Zeichenreihenfolge: Flächen unten, dann Häuser, dann das Straßennetz obenauf. */
+const ROAD_LAYER: Record<string, number> = { service: 3, footway: 3, residential: 4, primary: 5, motorway: 6 };
 
 function polygonPath(
   points: ReadonlyArray<readonly [number, number]>,
