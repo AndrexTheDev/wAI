@@ -265,7 +265,17 @@ async function step(page, view, { expect = [], note = '', shot = true, ignoreCas
   return { text, controls, layout, findings };
 }
 
-const joinDate = new Date().toISOString().replace('T', ' ').slice(0, 16);
+/**
+ * Der Bericht wird committet – deshalb darf er sich nicht bei jedem Lauf ändern.
+ * Zwei Dinge schwanken von Natur aus: der Kompasskurs (das Gerät dreht sich
+ * minimal) und die Scrollhöhe (eine Animation war noch nicht fertig). Beides
+ * wird für den Bericht geglättet, damit ein Diff nur echte Änderungen zeigt.
+ */
+const stable = (text) =>
+  text
+    .replace(/\b[NSOW]{1,2}\s+\d{1,3}°/g, (match) => `${match.replace(/\d{1,3}/, 'NN')}`)
+    .replace(/±\s*\d+\s*m/g, '±N m')
+    .replace(/\b\d{1,3}°/g, 'NN°');
 
 /**
  * Sitzung starten. `onboarding: false` überspringt die Einführung, weil die
@@ -683,9 +693,13 @@ try {
 const lines = [
   '# Nutzer-Workflow — automatisch geprüft',
   '',
-  `> Erzeugt von ` + '`tools/walkthrough.mjs`' + ` gegen die laufende App am ${joinDate} (UTC).`,
+  '> Erzeugt von ' + '`tools/walkthrough.mjs`' + ' gegen die laufende App.',
   '> Nicht von Hand geschrieben: das Skript klickt den Weg wie ein Erstnutzer und',
   '> liest jeden Bildschirm aus. Ein neuer Lauf überschreibt die Datei.',
+  '>',
+  '> Das Datum steht nicht hier, sondern in der Git-Historie dieser Datei – sonst',
+  '> wäre jeder Lauf ein Diff, auch wenn sich nichts geändert hat. Kurs,',
+  '> Genauigkeit und Scrollhöhe sind geglättet, aus demselben Grund.',
   '',
   `**Ansichten:** ${results.length} · **Befunde:** ${issues.length}`,
   '',
@@ -706,13 +720,15 @@ lines.push('## Weg und Inhalt', '');
 for (const result of results) {
   const firstLine = result.text.split('\n').map((l) => l.trim()).find((l) => l.length > 0) ?? '';
   const summary = result.text.split('\n').map((l) => l.trim()).filter(Boolean).slice(0, 4).join(' · ');
+  /** Scrollhöhe in 100-px-Stufen: „0", „100", „1.200" statt jeder Messung. */
+  const scrollBucket = Math.round(result.layout.scroll / 100) * 100;
   lines.push(
     `### ${result.view}`,
     '',
-    `- Erste Zeile: „${firstLine.slice(0, 90)}"`,
-    `- Sichtbar: ${summary.slice(0, 300)}`,
+    `- Erste Zeile: „${stable(firstLine).slice(0, 90)}"`,
+    `- Sichtbar: ${stable(summary).slice(0, 300)}`,
     `- Bedienelemente: ${result.controls.filter((c) => c.text).map((c) => c.text.slice(0, 28)).join(' | ') || '—'}`,
-    `- Scroll: ${result.layout.scroll} px unterhalb des Viewports`,
+    `- Scroll: ${scrollBucket === 0 ? 'passt ohne Scrollen' : `rund ${scrollBucket} px unterhalb des Viewports`}`,
     '',
   );
 }
