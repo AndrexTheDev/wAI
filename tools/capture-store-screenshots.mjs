@@ -444,6 +444,18 @@ for (const shot of SHOTS) {
   if (layout.body && layout.tabbar && !scrolls && layout.body.bottom > layout.tabbar.top + 1) {
     problems.push('.app__body reicht in die Tab-Leiste, scrollt aber nicht');
   }
+  /**
+   * Ein Store-Screenshot zeigt eine Seite, keine Scroll-Stelle: was unten
+   * abgeschnitten ist, sieht aus wie ein Layoutfehler. Ein Überschuss von bis zu
+   * 24 px wird toleriert (der nächste Block ist bewusst nur angeschnitten, damit
+   * man sieht, dass es weitergeht) – alles darüber ist ein echter Abschnitt.
+   */
+  if (scrolls) {
+    const hidden = layout.body.scrollHeight - layout.body.clientHeight;
+    if (hidden > 24) {
+      problems.push(`${hidden} px Inhalt liegen unterhalb des Viewports`);
+    }
+  }
   if (problems.length) {
     console.warn(`  ! ${shot.slug}: ${problems.join(' · ')}`);
     throw new Error(`Layout kaputt auf ${shot.slug}: ${problems.join(' · ')}`);
@@ -526,6 +538,8 @@ writeFileSync(
         signature: r.seen.signature,
         hasAppShell: r.seen.hasApp,
         cssViewport: r.viewportUsed,
+        // Messwerte statt Augenmaß: so lässt sich „das passt doch" nachprüfen.
+        layout: r.layout,
       })),
     },
     null,

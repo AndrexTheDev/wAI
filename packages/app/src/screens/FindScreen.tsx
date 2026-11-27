@@ -512,7 +512,7 @@ export function FindScreen({
 
           <div className="tile">
             <span className="tile__label">
-              <Timer size={11} /> {t('app.timer.title')}
+              <Timer size={11} /> {current.parking ? t('app.timer.title') : t('app.timer.trackTitle')}
             </span>
             {current.parking ? (
               <>

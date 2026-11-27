@@ -767,6 +767,8 @@ export const de = {
       remaining: 'Verbleibend',
       // Ohne laufenden Parkvorgang gibt es keine Zeit zu zeigen – nur den Hinweis.
       notStarted: 'nicht gestartet',
+      // Überschrift der Kachel, wenn noch keine Parkzeit läuft (start = Aktion im Sheet).
+      trackTitle: 'Parkzeit festhalten',
       noLimit: 'ohne Limit',
       over: 'Überzogen',
       setReminder: 'Erinnerung setzen',
@@ -835,7 +837,10 @@ export const de = {
       theme: 'Darstellung',
       themeSystem: 'System',
       themeDark: 'Dunkel',
-      themeNight: 'Nachtmodus (kontrastarm)',
+      // Kurz, weil der Umschalter vier Optionen in einer Zeile trägt: der lange
+      // Text „Nachtmodus (kontrastarm)" brach dort zweizeilig um.
+      themeNight: 'Nacht',
+      feedback: 'Rückmeldung',
       themeLight: 'Hell',
       privacy: 'Privatsphäre',
       privacyBody: 'Alle Daten bleiben auf diesem Gerät. Kein Konto, kein Upload.',

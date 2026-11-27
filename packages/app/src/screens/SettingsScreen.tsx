@@ -177,10 +177,15 @@ export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => v
         </div>
       </div>
 
-      {/* Feedback */}
+      {/*
+        „Näher-dran-Signal" stand hier zweimal: einmal als Kartenkopf, einmal als
+        Zeilenlabel direkt darunter. Auf dem Store-Screenshot liest sich das wie
+        ein Renderfehler. Der Kartenkopf trägt jetzt den Gruppennamen (wie
+        „Sprache" und „Darstellung" oben), die Zeile die Einstellung.
+      */}
       <div className="card">
         <div className="card__head">
-          <span className="card__title">{t('app.find.proximity')}</span>
+          <span className="card__title">{t('app.settings.feedback')}</span>
         </div>
         <div className="setting-row">
           <div>
