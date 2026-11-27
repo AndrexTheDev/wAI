@@ -879,6 +879,12 @@ export const en: Widen<GermanDictionary> = {
       denied: 'Permission denied. You can grant it in the Android settings.',
       openSettings: 'Open settings',
       noLocation: 'Location currently unavailable. The anchor will be created from sensor data.',
+      noFixToFind:
+        'Without a position no anchor can be set. The find screen shows what the compass and the step estimate can still do.',
+      noFixTitle: 'No position yet',
+      retry: 'Try again',
+      noFixBody:
+        'Step outside for a moment and wait until the dot appears on the compass. Without a network the device compass still works - the map does not need it.',
     },
     pro: {
       title: 'wAI Pro',
@@ -895,6 +901,7 @@ export const en: Widen<GermanDictionary> = {
       listTimer: 'Parking timer with reminder',
       listProximity: 'Getting-closer feedback',
       listFavorite: 'Favourites',
+      listArchive: 'Archive for old anchors',
       listShareFull: 'Share with notes and photos',
       mediaBanner: 'Multiple photos and voice notes are included in Pro.',
       voiceBanner: 'Voice notes are included in Pro.',
@@ -942,6 +949,7 @@ export const en: Widen<GermanDictionary> = {
       simulated: 'Simulated sensors',
       exit: 'Exit demo',
       hint: 'Tap anywhere on the map to move your position.',
+      hintElsewhere: 'In the "Map" tab you can tap the map to move your position.',
     },
   },
 };

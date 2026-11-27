@@ -48,6 +48,7 @@ import {
   getCurrentFix,
   isDemo,
   requestMotionPermission,
+  setDemoPosition,
   subscribeSensors,
   watchLocation,
   type SensorReadings,
@@ -233,11 +234,17 @@ interface AppContextValue {
   demo: boolean;
   // anchors
   setAnchor: (args: CreateAnchorArgs) => { ok: boolean; anchor?: Anchor; reason?: string };
+  /** Nur in der Demo: die simulierte Position auf einen Kartenpunkt legen. */
+  moveDemoPosition: (point: { lat: number; lng: number }) => void;
   /** Returns the merged anchor (optimistic) so callers can chain actions. */
   updateAnchor: (id: string, patch: Partial<Anchor>) => Anchor | null;
   deleteAnchor: (id: string) => void;
   archiveAnchor: (id: string, archived: boolean) => void;
-  toggleFavorite: (id: string) => void;
+  /**
+   * Favorit setzen. Pro-Funktion (`FREE_LIMITS.favorites`): im Free-Tarif gibt
+   * `ok: false` zurück, statt still zu speichern – der Aufrufer öffnet dann Pro.
+   */
+  toggleFavorite: (id: string) => { ok: boolean };
   addPhoto: (id: string, photo: PhotoRef) => void;
   removePhoto: (id: string, photoId: string) => void;
   addVoice: (id: string, voice: VoiceRef) => void;
@@ -439,6 +446,28 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [state.anchors, plan],
   );
 
+  /**
+   * Demo-Position verschieben. `setDemoPosition` ändert nur den Ursprung der
+   * Simulation; damit die Oberfläche sofort reagiert, wird der Fix hier direkt
+   * gesetzt. In der echten App ist das ein No-op – dort kommt die Position vom OS.
+   */
+  const moveDemoPosition = useCallback((point: { lat: number; lng: number }) => {
+    if (!isDemo) return;
+    setDemoPosition(point);
+    walker.current = null;
+    lastFixAt.current = Date.now();
+    setEstimated(false);
+    setEstimatedSteps(0);
+    setFix((current) => ({
+      lat: point.lat,
+      lng: point.lng,
+      altitude: current?.altitude,
+      accuracy: 6,
+      source: 'demo',
+      timestamp: Date.now(),
+    }));
+  }, []);
+
   const activateLicense = useCallback(async (token: string) => {
     const result = await verifyLicense(token);
     if (!result.ok || !result.payload) {
@@ -491,6 +520,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       locationError,
       demo: isDemo,
       setAnchor,
+      moveDemoPosition,
       updateAnchor: (id, patch) => {
         dispatch({ type: 'update-anchor', id, patch });
         const current = state.anchors.find((item) => item.id === id);
@@ -498,7 +528,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
       },
       deleteAnchor: (id) => dispatch({ type: 'delete-anchor', id }),
       archiveAnchor: (id, archived) => dispatch({ type: 'archive-anchor', id, archived }),
-      toggleFavorite: (id) => dispatch({ type: 'toggle-favorite', id }),
+      toggleFavorite: (id) => {
+        /**
+         * Vorher war der Stern im Free-Tarif frei klickbar, obwohl
+         * `FREE_LIMITS.favorites` false ist: ein Pro-Gate ohne Wirkung. Entweder
+         * das Gate oder das Gate im Store-Text – hier: das Gate.
+         */
+        if (!limits.favorites) return { ok: false };
+        dispatch({ type: 'toggle-favorite', id });
+        return { ok: true };
+      },
       addPhoto: (id, photo) => dispatch({ type: 'add-photo', id, photo }),
       removePhoto: (id, photoId) => dispatch({ type: 'remove-photo', id, photoId }),
       addVoice: (id, voice) => dispatch({ type: 'add-voice', id, voice }),
@@ -537,6 +576,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       sensors,
       locationError,
       setAnchor,
+      moveDemoPosition,
       activeAnchors,
       archivedAnchors,
       activateLicense,

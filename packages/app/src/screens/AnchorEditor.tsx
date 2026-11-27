@@ -202,6 +202,7 @@ export function AnchorEditor({
       open={open}
       onClose={() => commit(true)}
       title={mode === 'create' ? t('app.anchor.newAnchor') : t('app.anchor.edit')}
+      closeLabel={t('common.ctaClose')}
       footer={
         <>
           <button
@@ -401,13 +402,33 @@ export function AnchorEditor({
         <>
           <hr className="divider" />
           <div className="row" style={{ flexWrap: 'wrap', gap: 6 }}>
-            <button type="button" className="btn btn--sm" onClick={() => toggleFavorite(anchor.id)}>
+            <button
+              type="button"
+              className={`btn btn--sm ${anchor.favorite ? 'btn--primary' : ''}`}
+              aria-pressed={anchor.favorite}
+              onClick={() => {
+                // Pro-Funktion: der Stern ist kein toter Knopf, sondern öffnet Pro.
+                if (!toggleFavorite(anchor.id).ok) {
+                  onUpgrade(t('app.pro.listFavorite'));
+                  return;
+                }
+                void vibrate('tap');
+              }}
+            >
               ★ {t('app.anchor.favorite')}
             </button>
             <button
               type="button"
               className="btn btn--sm"
               onClick={() => {
+                /**
+                 * Archivieren ist ebenfalls Pro. Vorher stand daneben ein Knopf,
+                 * der im Free-Tarif wirkungslos blieb – jetzt erklärt er sich.
+                 */
+                if (plan !== 'pro') {
+                  onUpgrade(t('app.pro.listArchive'));
+                  return;
+                }
                 archiveAnchor(anchor.id, !anchor.archived);
                 onClose();
               }}

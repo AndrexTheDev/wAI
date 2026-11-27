@@ -1407,6 +1407,40 @@ a {
   background: var(--bg-2);
 }
 
+/* Bild plus Blickrichtung: das Foto allein sagt nicht, wo man stehen muss. */
+.photo-ref {
+  margin: 0;
+  display: grid;
+  gap: 4px;
+  flex: none;
+  width: 132px;
+}
+
+.photo-ref .reference-photo {
+  width: 132px;
+  height: 96px;
+}
+
+.photo-ref__hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  font-size: 10px;
+  line-height: 1.25;
+  color: var(--text-3);
+}
+
+.photo-ref__hint svg {
+  flex: none;
+  margin-top: 1px;
+  color: var(--mint);
+}
+
+/* Linksdrehung spiegeln, damit der Pfeil die Richtung zeigt statt nur zu drehen. */
+.photo-ref__hint svg.is-left {
+  scale: -1 1;
+}
+
 /* ---------------- pro / paywall ---------------- */
 
 .pro-hero {
@@ -2653,6 +2687,11 @@ a {
 
 .map__ground {
   fill: #0b131c;
+}
+
+/* Nur in der Demo klickbar: der Boden ist dort die Fläche, auf die man tippt. */
+.map__ground.is-pickable {
+  cursor: crosshair;
 }
 
 /* Buildings are the point of this map: "where is the pillar" is answered by

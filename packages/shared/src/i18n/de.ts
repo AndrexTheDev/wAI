@@ -887,6 +887,15 @@ export const de = {
       denied: 'Berechtigung abgelehnt. Du kannst sie in den Android-Einstellungen erteilen.',
       openSettings: 'Einstellungen öffnen',
       noLocation: 'Standort derzeit nicht verfügbar. Anker wird mit Sensordaten gesetzt.',
+      // Ehrlich: ohne Position gibt es keinen Anker. Der Text sagt, warum, und
+      // wohin der Tipp führt, statt nur „nicht verfügbar".
+      noFixToFind:
+        'Ohne Position lässt sich kein Anker setzen. Auf dem Fund-Bildschirm siehst du, was Kompass und Schätzung trotzdem können.',
+      // Für den Suchbildschirm: dort ist „Anker setzen" keine Option, es geht ums Finden.
+      noFixTitle: 'Noch keine Position',
+      retry: 'Erneut versuchen',
+      noFixBody:
+        'Geh ein paar Schritte ins Freie und warte, bis der Punkt im Kompass erscheint. Ohne Netz hilft der Gerätekompass – die Karte braucht ihn nicht.',
     },
     pro: {
       title: 'wAI Pro',
@@ -907,6 +916,7 @@ export const de = {
       listTimer: 'Park-Timer mit Erinnerung',
       listProximity: 'Näher-dran-Feedback',
       listFavorite: 'Favoriten',
+      listArchive: 'Archiv für alte Anker',
       listShareFull: 'Teilen mit Notizen und Fotos',
       mediaBanner: 'Mehrere Fotos und Sprachnotizen sind in Pro enthalten.',
       voiceBanner: 'Sprachnotizen sind in Pro enthalten.',
@@ -954,6 +964,8 @@ export const de = {
       simulated: 'Simulierte Sensoren',
       exit: 'Demo beenden',
       hint: 'Tippe irgendwo auf die Karte, um deine Position zu verschieben.',
+      // Derselbe Hinweis, aber dort, wo es keine Karte im Bild gibt.
+      hintElsewhere: 'Im Reiter „Karte" kannst du deine Position antippen und verschieben.',
     },
   },
 } as const;

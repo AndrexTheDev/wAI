@@ -176,6 +176,41 @@ export function formatBearing(deg: number, locale: 'de' | 'en'): string {
 }
 
 /**
+ * Where was the photo taken from, as a sentence?
+ *
+ * Ein Referenzfoto hilft nur, wenn man weiß, aus welcher Richtung es aufgenommen
+ * wurde: „aufgenommen aus Südwest – dreh dich nach links" beantwortet die Frage,
+ * die man im Parkhaus tatsächlich hat. Die Richtung wurde bisher gespeichert
+ * (`PhotoRef.heading`) und nie angezeigt.
+ *
+ * Ohne Kompasskurs des Geräts (oder ohne gespeicherte Richtung) bleibt nur die
+ * Aufnahmerichtung als Himmelsrichtung – geraten wird nichts.
+ */
+export function photoHeadingHint(
+  photoHeading: number | undefined,
+  currentHeading: number | null,
+  locale: 'de' | 'en',
+): { text: string; turn: 'left' | 'right' | 'none' } | null {
+  if (typeof photoHeading !== 'number' || !Number.isFinite(photoHeading)) return null;
+  const from = formatBearing(photoHeading, locale);
+  if (typeof currentHeading !== 'number' || !Number.isFinite(currentHeading)) {
+    return { text: locale === 'de' ? `Aufgenommen aus ${from}` : `Taken facing ${from}`, turn: 'none' };
+  }
+  const delta = angleDelta(currentHeading, photoHeading);
+  const degrees = Math.round(Math.abs(delta));
+  // Unter 25° ist „dreh dich" keine Hilfe mehr, sondern Rauschen.
+  if (degrees < 25) {
+    return { text: locale === 'de' ? `Aufgenommen aus ${from} – du schaust hin` : `Taken facing ${from} – you are facing it`, turn: 'none' };
+  }
+  const turn = delta > 0 ? 'right' : 'left';
+  const text =
+    locale === 'de'
+      ? `Aufgenommen aus ${from} – dreh dich ${degrees}° nach ${turn === 'right' ? 'rechts' : 'links'}`
+      : `Taken facing ${from} – turn ${degrees}° ${turn}`;
+  return { text, turn };
+}
+
+/**
  * Rough vertical guidance when barometric / GPS altitude is available.
  * Returns a human readable layer hint plus the numeric delta.
  */

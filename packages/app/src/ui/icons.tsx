@@ -50,6 +50,14 @@ export const Compass = (p: P) => (
   </svg>
 );
 
+/** „Dreh dich nach links/rechts" – Pfeil um einen Punkt. */
+export const RotateCw = (p: P) => (
+  <svg {...s(p)}>
+    <path d="M20 11a8 8 0 1 0-2.3 5.7" />
+    <path d="M20 5v6h-6" />
+  </svg>
+);
+
 export const Elevation = (p: P) => (
   <svg {...s(p)}>
     <path d="M3 19h18M12 4v10M8.5 7.5 12 4l3.5 3.5M8 19v-3M16 19v-6" />

@@ -150,6 +150,21 @@ async function simulatedFix(): Promise<GeoFix> {
   return { ...demoOrigin, timestamp: Date.now() };
 }
 
+/**
+ * Demo: die simulierte Position verschieben.
+ *
+ * Der Hinweis im Fund-Screen sagt „tippe irgendwo auf die Karte, um deine Position
+ * zu verschieben" – ohne diese Funktion war das eine Behauptung ohne Deckung. Sie
+ * bewegt nur den Ursprung der Simulation; der nächste Tick läuft von dort weiter.
+ * In der echten App gibt es nichts zu verschieben, deshalb tut sie dort nichts.
+ */
+export function setDemoPosition(point: { lat: number; lng: number } | null): void {
+  if (!isDemo) return;
+  demoOrigin = point
+    ? { ...point, altitude: demoOrigin?.altitude ?? 411, accuracy: 6, source: 'demo', timestamp: Date.now() }
+    : null;
+}
+
 function startSimulatedFix(onUpdate: (fix: GeoFix) => void): number {
   let angle = 0;
   const tick = async () => {

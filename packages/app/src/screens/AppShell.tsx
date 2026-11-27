@@ -161,8 +161,15 @@ export function AppShell() {
   };
 
   const createAnchorNow = () => {
+    /**
+     * Ohne Position lässt sich kein Anker setzen – aber der Knopf darf nicht
+     * stumm bleiben („Standort derzeit nicht verfügbar" ohne nächsten Schritt).
+     * Er nennt jetzt den Grund und führt dorthin, wo es weitergeht: Suche mit
+     * Sensoren, oder Einstellungen für die Berechtigung.
+     */
     if (!fix) {
-      toast.show(t('app.permissions.noLocation'), 'warn');
+      toast.show(t('app.permissions.noFixToFind'), 'warn');
+      setTab('find');
       return;
     }
     const result = setAnchor({ fix });

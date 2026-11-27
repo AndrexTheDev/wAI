@@ -131,6 +131,7 @@ export function ProScreen({
       open={open}
       onClose={onClose}
       title={plan === 'pro' ? t('app.pro.title') : t('common.ctaPro')}
+      closeLabel={t('common.ctaClose')}
       footer={
         plan === 'pro' ? (
           <button type="button" className="btn" onClick={onClose}>
