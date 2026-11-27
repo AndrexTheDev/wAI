@@ -240,7 +240,11 @@ interface AppContextValue {
   updateAnchor: (id: string, patch: Partial<Anchor>) => Anchor | null;
   deleteAnchor: (id: string) => void;
   archiveAnchor: (id: string, archived: boolean) => void;
-  toggleFavorite: (id: string) => void;
+  /**
+   * Favorit setzen. Pro-Funktion (`FREE_LIMITS.favorites`): im Free-Tarif gibt
+   * `ok: false` zurück, statt still zu speichern – der Aufrufer öffnet dann Pro.
+   */
+  toggleFavorite: (id: string) => { ok: boolean };
   addPhoto: (id: string, photo: PhotoRef) => void;
   removePhoto: (id: string, photoId: string) => void;
   addVoice: (id: string, voice: VoiceRef) => void;
@@ -524,7 +528,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
       },
       deleteAnchor: (id) => dispatch({ type: 'delete-anchor', id }),
       archiveAnchor: (id, archived) => dispatch({ type: 'archive-anchor', id, archived }),
-      toggleFavorite: (id) => dispatch({ type: 'toggle-favorite', id }),
+      toggleFavorite: (id) => {
+        /**
+         * Vorher war der Stern im Free-Tarif frei klickbar, obwohl
+         * `FREE_LIMITS.favorites` false ist: ein Pro-Gate ohne Wirkung. Entweder
+         * das Gate oder das Gate im Store-Text – hier: das Gate.
+         */
+        if (!limits.favorites) return { ok: false };
+        dispatch({ type: 'toggle-favorite', id });
+        return { ok: true };
+      },
       addPhoto: (id, photo) => dispatch({ type: 'add-photo', id, photo }),
       removePhoto: (id, photoId) => dispatch({ type: 'remove-photo', id, photoId }),
       addVoice: (id, voice) => dispatch({ type: 'add-voice', id, voice }),

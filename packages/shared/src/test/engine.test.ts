@@ -39,6 +39,7 @@ import {
 } from '../engine.ts';
 import { createTranslator, formatDuration } from '../i18n/index.ts';
 import { MAP_ZOOM, project, toWorld, unproject, viewportFor } from '../map.ts';
+import { FREE_LIMITS } from '../product.ts';
 import { anchorToShare, decodeSharePayload, encodeSharePayload, sanitizeImportedAnchor } from '../codec.ts';
 import { buildIntentLink, buildShareLink, extractShareCode } from '../deeplink.ts';
 import { base64urlDecode, base64urlEncode, canonicalJson, licenseFingerprint, verifyLicense } from '../license.ts';
@@ -477,4 +478,18 @@ test('a reference photo says which way it was taken', () => {
   assert.match(there!.text, /du schaust hin/);
   // Englisch mit anderer Himmelsrichtungs-Tabelle (SE statt SO).
   assert.equal(photoHeadingHint(135, null, 'en')?.text, 'Taken facing SE 135°');
+});
+
+test('a favourite is a Pro feature, and the limit says so', () => {
+  /**
+   * `FREE_LIMITS.favorites` war false, der Stern im Free-UI aber frei klickbar:
+   * ein Pro-Gate ohne Wirkung. Der Test hält beide Seiten zusammen – wenn jemand
+   * das Gate im Store entfernt oder die Grenze umdreht, fällt es hier auf.
+   */
+  assert.equal(FREE_LIMITS.favorites, false);
+  assert.equal(FREE_LIMITS.archive, false);
+  // Und die Liste im Pro-Sheet nennt beides, sonst fehlt die Erklärung.
+  const de = createTranslator('de');
+  assert.match(de('app.pro.listFavorite'), /Favoriten/);
+  assert.match(de('app.pro.listArchive'), /Archiv/);
 });

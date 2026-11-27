@@ -907,6 +907,7 @@ export const de = {
       listTimer: 'Park-Timer mit Erinnerung',
       listProximity: 'Näher-dran-Feedback',
       listFavorite: 'Favoriten',
+      listArchive: 'Archiv für alte Anker',
       listShareFull: 'Teilen mit Notizen und Fotos',
       mediaBanner: 'Mehrere Fotos und Sprachnotizen sind in Pro enthalten.',
       voiceBanner: 'Sprachnotizen sind in Pro enthalten.',

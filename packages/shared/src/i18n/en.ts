@@ -895,6 +895,7 @@ export const en: Widen<GermanDictionary> = {
       listTimer: 'Parking timer with reminder',
       listProximity: 'Getting-closer feedback',
       listFavorite: 'Favourites',
+      listArchive: 'Archive for old anchors',
       listShareFull: 'Share with notes and photos',
       mediaBanner: 'Multiple photos and voice notes are included in Pro.',
       voiceBanner: 'Voice notes are included in Pro.',
