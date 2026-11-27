@@ -891,6 +891,20 @@ export const de = {
       what: 'Das schaltet Pro frei',
       limitBanner: 'Free-Limit: {limit} aktive Anker',
       limitBannerBody: 'Archiviere einen Anker oder hol dir Pro für unbegrenzte Anker.',
+      /**
+       * Kurzform für die Merkmalsliste im Pro-Sheet. Die langen `…Banner`-Texte
+       * sind Sätze für einen Hinweis an einer Stelle, keine Listenpunkte: sie
+       * standen zu siebt untereinander und endeten alle mit „in Pro enthalten".
+       */
+      listAnchors: 'Unbegrenzte Anker',
+      listMedia: 'Mehrere Fotos je Anker',
+      listVoice: 'Sprachnotizen',
+      listMultiView: 'Multi-Ansicht',
+      listTrail: 'Brotkrumen-Spur',
+      listTimer: 'Park-Timer mit Erinnerung',
+      listProximity: 'Näher-dran-Feedback',
+      listFavorite: 'Favoriten',
+      listShareFull: 'Teilen mit Notizen und Fotos',
       mediaBanner: 'Mehrere Fotos und Sprachnotizen sind in Pro enthalten.',
       voiceBanner: 'Sprachnotizen sind in Pro enthalten.',
       multViewBanner: 'Multi-Ansicht ist in Pro enthalten.',

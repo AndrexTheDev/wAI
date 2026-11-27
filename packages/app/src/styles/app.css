@@ -1424,14 +1424,19 @@ a {
 
 .pro-features {
   display: grid;
-  gap: 7px;
+  gap: 8px;
 }
 
 .pro-feature {
   display: flex;
   gap: 8px;
-  align-items: flex-start;
-  padding: 10px 11px;
+  align-items: center;
+  /**
+   * 7 px Abstand und 10 px Innenabstand ergaben sieben fast identische Balken,
+   * von denen der letzte hinter dem „Aktivieren"-Knopf verschwand. Mit etwas mehr
+   * Luft bleibt jeder Punkt ein eigener Satz – und die Liste endet sichtbar.
+   */
+  padding: 11px 12px;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--surface);
