@@ -9,7 +9,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, existsSync, readdirSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, existsSync, readdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -322,5 +322,56 @@ test('a relation is drawn as its outline, not as one line through all its parts'
     assert.equal(houses, 2, `expected the block and the house, got ${houses}`);
   } finally {
     rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('a building the size of a station hall is left out, not drawn as a blob', () => {
+  /**
+   * Manche OSM-Gebäude sind zusammengefasste Komplexe von 150–240 m Kantenlänge.
+   * Vereinfacht zu einem Umriss ergeben sie ein Zickzack über zwei Kacheln, das die
+   * halbe Nachbarschaft verdeckt und nichts aussagt.
+   */
+  const quarter = 0.0007; // ~50 m
+  const ring = [
+    { lat: 48.137, lon: 11.575 },
+    { lat: 48.137, lon: 11.575 + quarter },
+    { lat: 48.137 - quarter, lon: 11.575 + quarter },
+    { lat: 48.137 - quarter, lon: 11.575 },
+    { lat: 48.137, lon: 11.575 },
+  ];
+  const big = {
+    version: 0.6,
+    elements: [
+      {
+        type: 'way',
+        id: 90,
+        tags: { building: 'yes' },
+        geometry: [
+          { lat: 48.1372, lon: 11.5745 },
+          { lat: 48.1372, lon: 11.5777 },
+          { lat: 48.1342, lon: 11.5777 },
+          { lat: 48.1342, lon: 11.5745 },
+          { lat: 48.1372, lon: 11.5745 },
+        ],
+      },
+      { type: 'way', id: 91, tags: { building: 'yes' }, geometry: ring },
+    ],
+  };
+  const fixturePath = path.join(tmpdir(), `wai-oversized-${process.pid}.json`);
+  writeFileSync(fixturePath, JSON.stringify(big));
+  const dir = mkdtempSync(path.join(tmpdir(), 'wai-map-'));
+  try {
+    const index = JSON.parse(buildInto(dir, ['--fixture', fixturePath]));
+    let houses = 0;
+    for (const tile of index.tiles) {
+      const content = JSON.parse(
+        readFileSync(path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
+      );
+      houses += (content.buildings as unknown[]).length;
+    }
+    assert.equal(houses, 1, 'only the ordinary house may remain');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+    rmSync(fixturePath, { force: true });
   }
 });
