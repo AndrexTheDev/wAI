@@ -154,7 +154,7 @@ function tileFor(x, y) {
   const key = `${x}/${y}`;
   let tile = tiles.get(key);
   if (!tile) {
-    tile = { x, y, roads: [], buildings: [], areas: [], labels: [] };
+    tile = { x, y, roads: [], buildings: [], areas: [], labels: [], pois: [] };
     tiles.set(key, tile);
   }
   return tile;
@@ -193,10 +193,15 @@ for (const element of (await loadElements()).elements) {
     const spot = locate(element.lat, element.lon);
     const tile = tileFor(spot.x, spot.y);
     if (tags.amenity === 'parking') {
-      tile.areas.push({ kind: 'parking', points: [spot.local, spot.local] });
+      tile.pois.push({ kind: 'parking', x: spot.local[0], y: spot.local[1] });
       if (tags.name) tile.labels.push({ text: tags.name.slice(0, 28), x: spot.local[0], y: spot.local[1], kind: 'parking' });
-    } else if (tags.shop && tags.name) {
-      tile.labels.push({ text: tags.name.slice(0, 24), x: spot.local[0], y: spot.local[1], kind: 'place' });
+    } else if (tags.shop) {
+      /**
+       * Läden sind Wegmarken, keine Werbung. Erste Fassung schrieb jeden Namen als
+       * Beschriftung in die Kachel – auf dem Screenshot standen 15 Ladennamen über
+       * einem Fleck und verdeckten die Straßen. Jetzt ein Punkt ohne Text.
+       */
+      tile.pois.push({ kind: 'shop', x: spot.local[0], y: spot.local[1] });
     }
     continue;
   }
@@ -216,13 +221,24 @@ for (const element of (await loadElements()).elements) {
     }
     const tile = tileFor(run.x, run.y);
     if (tags.building) {
+      /**
+       * Ein Gebäude mit Innenhof hat in OSM einen Außen- und mehrere Innenringe;
+       * `out geom` liefert sie als eine Punktfolge. Naiv gezeichnet zieht der Pfad
+       * eine Linie quer durch den Block – auf dem ersten echten Paket war genau das
+       * der Grund, warum die Karte wie ein Knoten aussah.
+       *
+       * Ohne Multipolygon-Auswertung wird daraus der Umriss: konvexe Hülle,
+       * vereinfacht. Ehrlicher als ein durchkreuzter Ring, und für „neben welchem
+       * Haus stehe ich" genau genug.
+       */
+      const outline = simplifyRing(hull(run.points), 0.6);
       tile.buildings.push({
-        points: run.points,
+        points: outline,
         ...(tags.building === 'garage' || tags.building === 'parking' ? { kind: 'parking' } : {}),
       });
       if (tags.name) {
         const [cx, cy] = centroid(run.points);
-        tile.labels.push({ text: tags.name.slice(0, 26), x: cx, y: cy, kind: 'place' });
+        tile.labels.push({ text: tags.name.slice(0, 22), x: cx, y: cy, kind: 'place' });
       }
     } else {
       tile.areas.push({
@@ -253,6 +269,66 @@ for (const element of (await loadElements()).elements) {
   }
 
   skippedUnknown++;
+}
+
+/** Konvexe Hülle (Monotone Chain) – macht aus mehreren Ringen einen Umriss. */
+function hull(points) {
+  // Dedupe first: a closed ring repeats its first point, and duplicates make the
+  // monotone chain emit a second, overlapping ring (seen as a 'knot' on screen).
+  const unique = [];
+  for (const point of points) {
+    if (!unique.some((p) => p[0] === point[0] && p[1] === point[1])) unique.push(point);
+  }
+  const pts = unique.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  if (pts.length < 3) return pts;
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const lower = [];
+  for (const p of pts) {
+    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop();
+    lower.push(p);
+  }
+  const upper = [];
+  for (let i = pts.length - 1; i >= 0; i--) {
+    const p = pts[i];
+    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop();
+    upper.push(p);
+  }
+  lower.pop();
+  upper.pop();
+  return [...lower, ...upper];
+}
+
+/**
+ * Douglas–Peucker in Weltpixeln. Bei 0,4 m pro Einheit ist 0,6 Einheiten (≈25 cm)
+ * unterhalb jeder Darstellungsgenauigkeit, spart aber die Hälfte der Punkte.
+ */
+function simplifyRing(points, tolerance) {
+  if (points.length <= 4) return [...points, points[0]];
+  let maxDistance = 0;
+  let index = 0;
+  const [ax, ay] = points[0];
+  const [bx, by] = points[points.length - 1];
+  for (let i = 1; i < points.length - 1; i++) {
+    const d = perpendicular(points[i], [ax, ay], [bx, by]);
+    if (d > maxDistance) {
+      maxDistance = d;
+      index = i;
+    }
+  }
+  if (maxDistance > tolerance) {
+    const left = simplifyRing(points.slice(0, index + 1), tolerance).slice(0, -1);
+    const right = simplifyRing(points.slice(index), tolerance);
+    return [...left, ...right];
+  }
+  return [...points, points[0]];
+}
+
+function perpendicular([px, py], [ax, ay], [bx, by]) {
+  const dx = bx - ax;
+  const dy = by - ay;
+  const length = Math.hypot(dx, dy);
+  if (length === 0) return Math.hypot(px - ax, py - ay);
+  return Math.abs(dy * (px - ax) - dx * (py - ay)) / length;
 }
 
 function centroid(points) {
@@ -311,7 +387,16 @@ for (const tile of [...tiles.values()].sort((a, b) => a.y - b.y || a.x - b.x)) {
   // Leere Kacheln (nur Wasser, kein Gebäude) sind trotzdem nützlich: sie zeigen,
   // dass dort nichts ist. Ganz leere dagegen nicht.
   if (tile.buildings.length === 0 && tile.roads.length === 0 && tile.areas.length === 0) continue;
-  const json = JSON.stringify({ z: MAP_ZOOM, x: tile.x, y: tile.y, roads: tile.roads, buildings: tile.buildings, areas: tile.areas, labels: tile.labels });
+  const json = JSON.stringify({
+    z: MAP_ZOOM,
+    x: tile.x,
+    y: tile.y,
+    roads: tile.roads,
+    buildings: tile.buildings,
+    areas: tile.areas,
+    labels: tile.labels,
+    pois: tile.pois,
+  });
   const dir = path.join(outDir, String(MAP_ZOOM), String(tile.x));
   mkdirSync(dir, { recursive: true });
   writeFileSync(path.join(dir, `${tile.y}.json`), json);

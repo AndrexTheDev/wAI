@@ -106,6 +106,44 @@ test('roads keep their class and only named ones get a label', () => {
   }
 });
 
+test('a building with a courtyard becomes one clean outline', () => {
+  /**
+   * OSM liefert Außen- und Innenring als eine Punktfolge. Unbehandelt zeichnet der
+   * Pfad quer durch den Block – auf dem ersten echten Paket sah die Karte deshalb
+   * aus wie ein Knoten. Erwartet: ein geschlossener Ring ohne Überkreuzungen.
+   */
+  const dir = mkdtempSync(path.join(tmpdir(), 'wai-map-'));
+  try {
+    execFileSync(
+      process.execPath,
+      ['tools/build-map-pack.mjs', '--fixture', 'tools/fixtures/courtyard.json', '--out', dir, '--force'],
+      { cwd: ROOT, encoding: 'utf8', stdio: 'pipe' },
+    );
+    const files = readdirSync(path.join(dir, '18'), { recursive: true })
+      .filter((entry) => String(entry).endsWith('.json'))
+      .map((entry) => path.join(dir, '18', String(entry)));
+    let checked = 0;
+    for (const file of files) {
+      const content = JSON.parse(readFileSync(file, 'utf8'));
+      for (const building of content.buildings as Array<{ points: Array<[number, number]> }>) {
+        const ring = building.points;
+        // Geschlossen …
+        assert.deepEqual(ring[0], ring[ring.length - 1], `not closed: ${JSON.stringify(ring)}`);
+        // … ohne doppelte Punkte in Folge …
+        for (let i = 1; i < ring.length; i++) {
+          assert.notDeepEqual(ring[i], ring[i - 1], 'duplicate consecutive point');
+        }
+        // … und deutlich weniger Punkte als die 10 des Fixtures: die Hülle räumt auf.
+        assert.ok(ring.length <= 6, `expected a simplified outline, got ${ring.length} points`);
+        checked++;
+      }
+    }
+    assert.ok(checked >= 2, `expected both buildings, checked ${checked}`);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test('the shipped demo pack does not claim to be OpenStreetMap', () => {
   // Das Paket im Repo ist das, was Nutzer sehen: es muss dieselbe Ehrlichkeit
   // tragen wie der Generator.

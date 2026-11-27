@@ -2768,3 +2768,14 @@ a {
 .map__empty strong {
   color: var(--text);
 }
+
+/* Points of interest: shops are waymarks, not advertising. */
+.map__poi--shop {
+  fill: rgba(167, 139, 250, 0.45);
+}
+
+.map__poi--parking {
+  fill: rgba(251, 191, 36, 0.9);
+  stroke: rgba(10, 17, 25, 0.8);
+  stroke-width: 1;
+}

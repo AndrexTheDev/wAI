@@ -64,6 +64,8 @@ export interface MapTile {
   buildings: MapBuilding[];
   /** Water and green areas for orientation – a park is a landmark too. */
   areas: Array<{ kind: 'water' | 'green'; points: Array<[number, number]> }>;
+  /** Points of interest without text: shops, entrances, parking. */
+  pois?: Array<{ kind: 'shop' | 'parking' | 'entrance'; x: number; y: number }>;
   /** Feature names that fit the tile (street names, car parks). */
   labels: Array<{ text: string; x: number; y: number; kind: 'street' | 'place' | 'parking' }>;
 }
