@@ -65,12 +65,29 @@ export function Sheet({
       }
     };
     document.addEventListener('keydown', onKey);
+    /**
+     * Beim Öffnen gehört der Blick (und der Fokus) an den Anfang des Sheets –
+     * nicht auf das erste Bedienelement darin. In „Hilfe & Fragen" war das der
+     * erste FAQ-Knopf: das Sheet sprang mitten in die Liste, die Überschrift und
+     * der erste Absatz lagen darüber und waren weg. Ein Nutzer liest von oben.
+     *
+     * `preventScroll` ist Absicht: das Sheet soll mit `scrollTop = 0` starten,
+     * nicht dorthin scrollen, wo irgendein Element gerade steht.
+     */
+    panelRef.current?.scrollTo?.({ top: 0 });
+    const body = panelRef.current?.querySelector<HTMLElement>('.sheet__body');
+    if (body) {
+      body.scrollTop = 0;
+      body.setAttribute('tabindex', '-1');
+      body.focus({ preventScroll: true });
+    }
     const timer = window.setTimeout(() => {
-      // Kein Klick-Chip als erstes Fokusziel: das sieht aus wie eine Auswahl.
+      // Nur wenn der Inhalt keinen eigenen Fokuspunkt hat, etwas darin fokussieren.
+      if (body && document.activeElement === body) return;
       const focusable = panelRef.current?.querySelector<HTMLElement>(
         'input, textarea, select, button:not([data-skip-autofocus]):not(.chip)',
       );
-      focusable?.focus();
+      focusable?.focus({ preventScroll: true });
     }, 60);
     return () => {
       document.removeEventListener('keydown', onKey);

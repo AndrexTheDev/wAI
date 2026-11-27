@@ -33,6 +33,7 @@
     "check:store": "node tools/check-store-listing.mjs",
     "check:claims": "node tools/check-claims.mjs",
     "screenshots": "node tools/capture-store-screenshots.mjs",
+    "walkthrough": "node tools/walkthrough.mjs",
     "build:map": "node tools/build-map-pack.mjs",
     "check:brand": "node tools/check-brand.mjs",
     "icons": "node tools/make-icons.mjs"

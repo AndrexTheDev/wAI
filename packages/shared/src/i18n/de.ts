@@ -589,6 +589,12 @@ export const de = {
         'Standort wird nur für Anker und Rückführung genutzt – lokal. Kamera und Mikrofon nur, wenn du Foto oder Sprachnotiz nutzt.',
       permissionAllow: 'Berechtigungen erteilen',
       permissionLater: 'Später',
+      permissionDenied:
+        'Es wurde nichts erlaubt. Ohne Standort lässt sich kein Anker setzen; du kannst es später in den Systemeinstellungen nachholen. Kompass und Karte funktionieren weiterhin.',
+      permissionContinue: 'Ohne Berechtigungen weiter',
+      stateDenied: 'abgelehnt',
+      stateGranted: 'erlaubt',
+      stateNotAsked: 'wird beim ersten Gebrauch gefragt',
       languageTitle: 'Sprache wählen',
       languageBody: 'Du kannst die Sprache jederzeit in den Einstellungen ändern.',
     },
@@ -796,6 +802,7 @@ export const de = {
       title: 'Anker teilen',
       subtitle: 'Kein Server beteiligt – der Anker verlässt das Gerät nur über deine App.',
       asText: 'Als Text',
+      codeHint: 'Der Code steckt auch im Link – er ist nur die kurze Form.',
       asLink: 'Als Link',
       asQr: 'Als QR-Code',
       copyLink: 'Link kopieren',
@@ -841,6 +848,7 @@ export const de = {
       // Text „Nachtmodus (kontrastarm)" brach dort zweizeilig um.
       themeNight: 'Nacht',
       feedback: 'Rückmeldung',
+      feedbackSubPro: 'Vibration und Ton werden schneller, je näher du dem Anker kommst.',
       themeLight: 'Hell',
       privacy: 'Privatsphäre',
       privacyBody: 'Alle Daten bleiben auf diesem Gerät. Kein Konto, kein Upload.',
@@ -902,7 +910,13 @@ export const de = {
       subtitle: 'Einmal zahlen. Dauerhaft nutzen. Ohne Abo.',
       what: 'Das schaltet Pro frei',
       limitBanner: 'Free-Limit: {limit} aktive Anker',
-      limitBannerBody: 'Archiviere einen Anker oder hol dir Pro für unbegrenzte Anker.',
+      /**
+       * Vorher: „Archiviere einen Anker oder hol dir Pro für unbegrenzte Anker."
+       * Archiviere ist aber selbst Pro. Der Satz schickte Free-Nutzer zu einer
+       * Funktion, die sie nicht haben. Jetzt nennt er den echten Ausweg: löschen
+       * oder Pro.
+       */
+      limitBannerBody: 'Lösche einen alten Anker oder hol dir Pro für unbegrenzte Anker.',
       /**
        * Kurzform für die Merkmalsliste im Pro-Sheet. Die langen `…Banner`-Texte
        * sind Sätze für einen Hinweis an einer Stelle, keine Listenpunkte: sie
@@ -925,6 +939,8 @@ export const de = {
       timerBanner: 'Park-Timer mit Erinnerungen ist in Pro enthalten.',
       proximityBanner: 'Näher-dran-Feedback ist in Pro enthalten.',
       activateTitle: 'Lizenz aktivieren',
+      /** Ehrlicher Knopftext: er führt zum Lizenzfeld, mehr nicht. */
+      haveLicense: 'Ich habe schon eine Lizenz',
       activateBody: 'Lizenzschlüssel einfügen oder QR-Code scannen.',
       activateCta: 'Aktivieren',
       successTitle: 'Pro ist aktiv',

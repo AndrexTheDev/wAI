@@ -7,7 +7,8 @@
 > phased roadmap. Legend: ✅ vorhanden und geprüft · ⚠️ teilweise / nur behauptet
 > · ❌ fehlt · 🔒 Pro-Gate fehlt oder falsch.
 
-Stand: 2026-11-25 · Phase 1, 2, 3, 4 und 5.1/5.3 sind umgesetzt (PR #6–#9).
+Stand: 2026-11-25 · Phase 1, 2, 3, 4 und 5.1/5.3 sind umgesetzt (PR #6–#9);
+§5b dokumentiert die Browser-Runde (PR #39).
 Offen sind nur noch 5.2 (Screenshots) und das Launch-Gate in Phase 6 — beides
 braucht den Nutzer bzw. einen Runner mit Chromium.
 
@@ -107,6 +108,41 @@ Der Capture-Lauf prüft sich selbst: Pflicht-Merkmale pro Bild, Messung von
 `.app`/`.app__body`/Tab-Leiste, Exit-Code 1 bei Inhalt hinter der Leiste. Beim
 ersten Einsatz meldete er 81 px Überstand — die Zahl, mit der 216 px als
 Kompasshöhe bestimmt wurde.
+
+## 5b. Stand nach der Browser-Runde (PR #39)
+
+Bisher wurde die App **gelesen** und **fotografiert**. Diese Runde wurde sie
+**bedient**: `tools/walkthrough.mjs` startet einen echten Chromium, setzt
+`localStorage`, klickt acht Wege (Erststart, Anker setzen, Wiederfinden,
+Pro-Gates, Teilen, Suche, alle Reiter, Englisch) und liest jeden Bildschirm aus.
+Bericht: `docs/WALKTHROUGH.md`, 32 Ansichten (inkl. 360-dp-Telefon), 0 Befunde
+nach den Korrekturen.
+
+| Fund | Was passierte | Beleg |
+|---|---|---|
+| `app.features.night` im Einstellungs-Kopf | Schlüssel existierte nie; die Lampe zeigte den rohen Text als ARIA-Label | `SettingsScreen` → `app.find.torch` |
+| Keine Prüfung „benutzter Schlüssel existiert" | Der Render-Smoke verglich nur DE gegen EN – beide dürfen denselben Schlüssel *nicht* haben | `renderSmoke.tsx` 1b: liest jedes statische `t('…')` und löst es in beiden Sprachen auf (409 Stellen) |
+| **Absturz im Reiter „Finden"** | `mapTarget` war ein `useMemo` *hinter* zwei frühen `return`s – „Rendered more hooks than during the previous render" | Hook über alle Ausstiege gezogen |
+| Auswahl im Reiter „Finden" führte zurück zur Liste | alle Knöpfe riefen `onChooseAnother` | `onChoose` + `AppShell`: bleibt im Reiter, Ziel wechselt |
+| „Wähle einen Anker" war unerreichbar | ohne Auswahl fiel der Screen still auf `activeAnchors[0]` zurück | Auswahl nötig, außer bei genau einem Anker |
+| „Wähle einen Anker" (Knopf oben) sprang in die Ankerliste | `onChooseAnother` setzte den Tab um | bleibt im Fund-Reiter |
+| Näher-dran-Signal: zwei Schalter, einer ohne Wirkung | Fund-Screen hielt lokalen State, Einstellungen schrieben `settings` | eine Quelle: `settings.proximityFeedback`; im Free-Tarif aus, Knopf öffnet Pro |
+| Free-Schalter stand auf „an", obwohl Pro | `settings.proximityFeedback` default `true` | `aria-checked={plan === 'pro' && …}` |
+| „Archiviere einen Anker…" für Free-Nutzer | Archivieren *ist* Pro | `limitBannerBody`: „Lösche einen alten Anker…" |
+| „Wallets & Anleitung" im Anker-Editor | Knopf öffnet das Pro-Sheet, nicht eine Krypto-Anleitung | `app.pro.what` |
+| Onboarding schloss auch bei „Ablehnen" | `void finish()` ohne Blick auf das Ergebnis | Zustand wird gelesen, bei 0 Rechten bleibt der Schirm und erklärt |
+| Vier Häkchen vor der ersten Frage | Deko als Zusage | Häkchen nur ohne Ablehnung, sonst echter Zustand |
+| „2.4 m" in der deutschen App | `${rounded}` ohne Dezimalzeichen | `formatDistance`, Test korrigiert (`8,4 m`) |
+| „O/E" auf dem Kompass | Krücke für beide Sprachen | `locale === 'de' ? 'O' : 'E'` |
+| Zwei Kreuze im Suchfeld | Chromes eigenes plus unser Knopf | `::-webkit-search-cancel-button` aus |
+| Sheet öffnete mitten im Inhalt | Autofokus sprang auf den ersten FAQ-Knopf | `Sheet`: `.sheet__body` bekommt den Fokus, `scrollTop = 0` |
+| Zwei Knöpfe „Aktivieren", einer ohne Wirkung | unterer Knopf wechselte nur den Reiter | unten: „Ich habe schon eine Lizenz" (rechts: prüft) |
+| Englischer Untertitel „ENVIRONMENTAL MEMORY ANC…" | 0,12 em Sperrung auf 412 px | 0,08 em; unter 380 px 8,5 px ohne Sperrung |
+| Ankertitel endeten nach 20 Zeichen | einzeilig mit Ellipse | zwei Zeilen (`line-clamp`) |
+| Schalter „Mit Notiz & Medien" ohne sichtbare Beschriftung | Erklärung stand erst unter dem Code | Knopf mit Schalter **und** Text |
+
+Der Lauf scheitert jetzt auch an Laufzeitfehlern, leeren Bildschirmen und rohen
+Übersetzungsschlüsseln – nicht nur an fehlendem Text.
 
 ## 6. Die drei teuersten Funde
 

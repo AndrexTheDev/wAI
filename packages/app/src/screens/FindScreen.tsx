@@ -51,6 +51,7 @@ export function FindScreen({
   anchor,
   onBack,
   onChooseAnother,
+  onChoose,
   onOpenPro,
   onArchive,
   onStopParking,
@@ -58,6 +59,8 @@ export function FindScreen({
   anchor: Anchor | null;
   onBack: () => void;
   onChooseAnother: () => void;
+  /** Starts guidance for the anchor the user just tapped in the pick list. */
+  onChoose: (anchor: Anchor) => void;
   onOpenPro: (reason: string) => void;
   /** Arrival actions: park the anchor away, or stop the running timer. */
   onArchive?: (anchor: Anchor) => void;
@@ -77,16 +80,56 @@ export function FindScreen({
     demo,
     moveDemoPosition,
     requestPermissions,
+    settings,
+    updateSettings,
   } = useApp();
   const toast = useToast();
   const [view, setView] = useState<'compass' | 'map' | 'trail' | 'media'>('compass');
-  const [proximityOn, setProximityOn] = useState(plan === 'pro');
+  /**
+   * Das Näher-dran-Signal stand als Schalter in den Einstellungen und als
+   * zweiter Schalter auf diesem Bildschirm – der eine schrieb `settings`,
+   * der andere einen lokalen State. Wer es in den Einstellungen ausschaltete,
+   * bekam trotzdem Vibration, und umgekehrt. Jetzt gibt es eine Quelle:
+   * `settings.proximityFeedback`. Im Free-Tarif bleibt der Zustand aus und der
+   * Knopf erklärt, warum.
+   */
+  const proximityOn = plan === 'pro' && settings.proximityFeedback;
+  const setProximityOn = (value: boolean) => updateSettings({ proximityFeedback: value });
   const [recording, setRecording] = useState(false);
   const [torchOn, setTorchOn] = useState(false);
   const lastTier = useRef(0);
   const lastPulse = useRef(0);
 
-  const current = anchor ?? activeAnchors[0] ?? null;
+  /**
+   * Ziel der Rückführung. Vorher fiel die Auswahl stillschweigend auf
+   * `activeAnchors[0]` zurück – der Reiter „Finden" führte also beim ersten
+   * Tippen direkt zum *ältesten* Anker, ohne dass jemand ihn gewählt hatte, und
+   * der Auswahlbildschirm darunter („Wähle einen Anker") war unerreichbar, weil
+   * `current` nie leer war.
+   *
+   * Jetzt gilt: gewählt ist gewählt. Ohne Wahl zeigt der Reiter die Liste –
+   * außer es gibt genau einen Anker, dann wäre die Frage sinnlos.
+   */
+  const current = anchor ?? (activeAnchors.length === 1 ? activeAnchors[0] : null);
+
+  /**
+   * Stabil über Renders – ein neues Literal hier hätte die Karte dauerhaft neu
+   * geladen. Der Hook steht bewusst *vor* den frühen Ausstiegen darunter:
+   * zuvor lag er hinter `if (!current)` und `if (!fix)`, und seit der Reiter
+   * „Finden" ohne Auswahl die Liste zeigt, traf ein Render mal mit und mal ohne
+   * diesen Hook ein – „Rendered more hooks than during the previous render",
+   * die App stürzte ab. Hooks gehören immer über jeden `return`.
+   */
+  const mapTarget = useMemo(
+    () => ({
+      id: current?.id ?? '',
+      name: current?.name ?? '',
+      lat: current?.lat ?? 0,
+      lng: current?.lng ?? 0,
+      category: current?.category ?? 'other',
+    }),
+    [current?.id, current?.name, current?.lat, current?.lng, current?.category],
+  );
 
   const guidance = useMemo(() => {
     if (!current || !fix) return null;
@@ -140,9 +183,21 @@ export function FindScreen({
         />
         {anchors.length > 0 && (
           <div className="anchor-list" style={{ marginTop: 12 }}>
-            {anchors.slice(0, 4).map((item) => (
-              <button key={item.id} type="button" className="btn btn--block" onClick={onChooseAnother}>
-                {item.name || t('app.anchor.untitled')}
+            {/**
+              * Hier stand auf jedem Knopf `onChooseAnother` – der Sprung zurück
+              * in die Ankerliste. Wer im Reiter „Finden" auf „Mein Auto" tippte,
+              * landete also wieder in der Liste und musste ein zweites Mal
+              * tippen. Genau das Gegenteil dessen, was der Knopf verspricht.
+              *
+              * Die Entfernung steht jetzt daneben: bei mehreren Ankern ist
+              * „welcher ist der richtige" oft die Frage nach der Nähe.
+              */}
+            {anchors.slice(0, 6).map((item) => (
+              <button key={item.id} type="button" className="btn btn--block" onClick={() => onChoose(item)}>
+                <AnchorIcon size={14} /> {item.name || t('app.anchor.untitled')}
+                <span className="muted" style={{ marginLeft: 'auto', fontSize: 11 }}>
+                  {t(`app.anchor.categories.${item.category}`)}
+                </span>
               </button>
             ))}
           </div>
@@ -183,17 +238,6 @@ export function FindScreen({
     );
   }
 
-  /** Stabil über Renders – ein neues Literal hier hätte die Karte dauerhaft neu geladen. */
-  const mapTarget = useMemo(
-    () => ({
-      id: current.id,
-      name: current.name,
-      lat: current.lat,
-      lng: current.lng,
-      category: current.category,
-    }),
-    [current.id, current.name, current.lat, current.lng, current.category],
-  );
   const trailLength = trailDistance(current.trail);
   const elevation = elevationHint(current.altitude, fix.altitude);
   const parking = parkingStatus(current);
@@ -366,7 +410,11 @@ export function FindScreen({
             }`}
           >
             <span className="guide__compass-cardinal guide__compass-cardinal--n">N</span>
-            <span className="guide__compass-cardinal guide__compass-cardinal--e">O/E</span>
+            {/* „O/E" stand in beiden Sprachen da – eine Ausrede statt einer
+                Übersetzung. Deutsch: Osten, Englisch: East. */}
+            <span className="guide__compass-cardinal guide__compass-cardinal--e">
+              {locale === 'de' ? 'O' : 'E'}
+            </span>
             <span className="guide__compass-cardinal guide__compass-cardinal--s">S</span>
             <span className="guide__compass-cardinal guide__compass-cardinal--w">W</span>
             <div className="guide__rings" aria-hidden="true" />
@@ -565,7 +613,7 @@ export function FindScreen({
                   onOpenPro(t('app.pro.proximityBanner'));
                   return;
                 }
-                setProximityOn((value) => !value);
+                setProximityOn(!proximityOn);
                 void vibrate('tap');
               }}
             >

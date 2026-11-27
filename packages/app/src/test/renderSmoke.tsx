@@ -21,6 +21,26 @@ import { CarSpotCard } from '../screens/CarSpotCard';
 import { MapView } from '../screens/MapView';
 import { formatDistance, formatHeight } from '@wai/shared';
 import { encodeSharePayload, buildShareLink, buildIntentLink } from '@wai/shared';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import path from 'node:path';
+
+const ROOT = path.resolve(import.meta.dirname, '../..');
+
+/** Every source file that can call `t('…')` – with tests excluded on purpose. */
+function collectSources(dir: string, out: string[] = []): string[] {
+  for (const entry of readdirSync(dir)) {
+    const full = path.join(dir, entry);
+    if (statSync(full).isDirectory()) {
+      if (entry === 'test' || entry === 'node_modules') continue;
+      collectSources(full, out);
+    } else if (/\.tsx?$/.test(entry) && !entry.endsWith('.d.ts')) {
+      out.push(full);
+    }
+  }
+  return out;
+}
+
+const sourceFiles = collectSources(path.resolve(ROOT, 'src'));
 
 let failures = 0;
 
@@ -45,6 +65,42 @@ if (missingInEn.length) {
   console.log(`✖ EN dictionary incomplete: ${missingInEn.slice(0, 10).join(', ')}${missingInEn.length > 10 ? ` (+${missingInEn.length - 10})` : ''}`);
 } else {
   console.log(`✔ dictionaries complete (${dePaths.length} keys in DE and EN)`);
+}
+
+/**
+ * 1b. Every key the screens ask for must exist.
+ *
+ * The dictionary check above proves DE and EN have the *same* keys – both can
+ * be missing the same one. That is exactly what happened: `SettingsScreen`
+ * asked for `app.features.night`, which never existed, and the translator
+ * returned the key itself. The screen showed the raw string, the dictionary
+ * check was happy, and nobody noticed until a browser opened the page. So:
+ * read every static `t('…')` out of the source and resolve it in both
+ * dictionaries.
+ */
+{
+  const keyPattern = /\bt\(\s*'([a-zA-Z0-9_.]+)'/g;
+  const missing: string[] = [];
+  let checked = 0;
+  for (const file of sourceFiles) {
+    const source = readFileSync(file, 'utf8');
+    for (const match of source.matchAll(keyPattern)) {
+      const key = match[1];
+      checked += 1;
+      for (const dictionary of [de, en]) {
+        if (typeof resolvePath(dictionary, key) !== 'string') {
+          missing.push(`${path.relative(ROOT, file)} → ${key}`);
+        }
+      }
+    }
+  }
+  const unique = [...new Set(missing)];
+  if (unique.length) {
+    failures++;
+    console.log(`✖ ${unique.length} translation key(s) used in code but missing:\n  ${unique.join('\n  ')}`);
+  } else {
+    console.log(`✔ every static t() key resolves (${checked} uses)`);
+  }
 }
 
 /** 2. Spot-check placeholders survive translation. */

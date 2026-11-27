@@ -1,0 +1,106 @@
+# Den Nutzer-Workflow wirklich durchklicken.
+#
+# Die anderen Prüfungen lesen Dateien: `check-store-listing` zählt Bilder,
+# `check-claims` hält Behauptungen gegen den Code, `capture-store-screenshots`
+# macht neun Fotos. Keine davon geht den *Weg*: Erststart → Anker setzen →
+# wiederfinden → teilen. Genau dort stecken die Fehler, die ein Nutzer merkt und
+# ein Test nicht: ein Knopf, der woanders hinführt als sein Text sagt, ein
+# Platzhalter in der Überschrift, eine englische Beschriftung in der deutschen
+# Oberfläche.
+#
+# Dieser Lauf startet die App in Chromium, klickt den Weg ab und schreibt einen
+# Bericht nach `docs/WALKTHROUGH.md` zurück. Der Bericht braucht keinen
+# Artefakt-Download – er ist per git lesbar, auch für mich.
+name: Nutzer-Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: 'Bericht in den Branch zurückschreiben'
+        type: boolean
+        default: true
+  push:
+    branches: [main]
+    paths:
+      - 'packages/app/src/screens/**'
+      - 'packages/app/src/ui/**'
+      - 'packages/shared/src/i18n/**'
+      - 'tools/walkthrough.mjs'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: walkthrough-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  walk:
+    name: Walk the user journey
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium --only-shell
+
+      - name: Build the app
+        run: npm run build -w @wai/app
+
+      - name: Serve the build
+        run: |
+          cd packages/app/dist
+          python3 -m http.server 5174 --bind 127.0.0.1 &
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:5174/ >/dev/null && break
+            sleep 1
+          done
+
+      - name: Walk through
+        run: |
+          set -o pipefail
+          npm run walkthrough -- --url http://127.0.0.1:5174 --out docs/WALKTHROUGH.md 2>&1 | tee walkthrough.log
+
+      # Die Logs liegen für den Agenten hinter einem gesperrten CDN; ein
+      # Commit-Kommentar ist über die API lesbar. Deshalb hier die Kurzfassung.
+      - name: Report
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          {
+            echo "### Nutzer-Workflow"
+            echo '```'
+            grep -E '✔|!|✖|Ansichten' walkthrough.log | head -60 || tail -30 walkthrough.log
+            echo '```'
+          } > report.md
+          gh api -X POST "repos/${{ github.repository }}/commits/${{ github.sha }}/comments" \
+            -f body="$(cat report.md)" >/dev/null 2>&1 || echo 'Kommentar nicht möglich'
+
+      # `inputs` gibt es nur bei workflow_dispatch; auf main (push) ist der
+      # Bericht ebenfalls erwünscht, damit er nicht veraltet.
+      - name: Commit report back
+        if: ${{ always() && (github.event_name == 'push' || inputs.commit) }}
+        run: |
+          git config user.name 'wAI walkthrough bot'
+          git config user.email 'bot@andrexthedev.dev'
+          git add docs/WALKTHROUGH.md || true
+          if git diff --cached --quiet; then
+            echo 'Bericht unverändert.'
+            exit 0
+          fi
+          git commit -m "docs: refresh the user journey report"
+          git push origin HEAD:${{ github.head_ref || github.ref_name }}

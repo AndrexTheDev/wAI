@@ -107,11 +107,12 @@ export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => v
           className={`icon-btn ${torchOn ? 'is-active' : ''}`}
           onClick={async () => {
             const ok = await setTorch(!torchOn);
-            if (!ok) toast.show(t('app.errors.generic'), 'warn');
+            if (!ok) toast.show(t('app.errors.torch'), 'warn');
             setTorchOn(ok ? !torchOn : false);
           }}
-          aria-label={t('app.features.night')}
-          title={t('common.ctaPrimary')}
+          aria-label={t('app.find.torch')}
+          title={t('app.find.torch')}
+          aria-pressed={torchOn}
         >
           <Torch size={18} />
         </button>
@@ -221,14 +222,28 @@ export function SettingsScreen({ onOpenPro }: { onOpenPro: (reason: string) => v
         <div className="setting-row">
           <div>
             <div className="setting-row__label">{t('app.find.proximity')}</div>
-            <div className="setting-row__sub">{t('app.pro.proximityBanner')}</div>
+            {/**
+              * Der Untertitel las sich wie eine Produktbeschreibung („ist in Pro
+              * enthalten"), auch wenn man längst Pro hatte. Jetzt sagt er, was
+              * der Schalter in welchem Tarif tut.
+              */}
+            <div className="setting-row__sub">
+              {plan === 'pro' ? t('app.settings.feedbackSubPro') : t('app.pro.proximityBanner')}
+            </div>
           </div>
           <button
             type="button"
-            className={`switch setting-row__control ${settings.proximityFeedback ? 'is-on' : ''}`}
+            className={`switch setting-row__control ${plan === 'pro' && settings.proximityFeedback ? 'is-on' : ''}`}
             role="switch"
-            aria-checked={settings.proximityFeedback}
-            onClick={() => set('proximityFeedback', !settings.proximityFeedback)}
+            aria-checked={plan === 'pro' && settings.proximityFeedback}
+            aria-disabled={plan !== 'pro'}
+            onClick={() => {
+              if (plan !== 'pro') {
+                onOpenPro(t('app.pro.proximityBanner'));
+                return;
+              }
+              set('proximityFeedback', !settings.proximityFeedback);
+            }}
             aria-label={t('app.find.proximity')}
           />
         </div>

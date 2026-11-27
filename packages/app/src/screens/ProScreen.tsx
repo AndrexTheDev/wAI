@@ -138,9 +138,27 @@ export function ProScreen({
             {t('common.ctaClose')}
           </button>
         ) : (
-          <button type="button" className="btn btn--primary" onClick={() => setTab('activate')}>
-            <Lock size={15} /> {t('app.pro.activateCta')}
-          </button>
+          /**
+           * Der Knopf unten hieß „Aktivieren", schaltete aber nur auf den Reiter
+           * „Lizenz aktivieren" – danach stand derselbe Knopf noch einmal im
+           * Inhalt, diesmal mit Wirkung. Zwei Knöpfe, gleicher Text, einer ohne
+           * Funktion. Jetzt tut der untere Knopf, was draufsteht: auf dem
+           * Wallet-Reiter führt er zum Lizenzfeld, auf dem Lizenz-Reiter prüft er.
+           */
+          tab === 'upgrade' ? (
+            <button type="button" className="btn btn--primary" onClick={() => setTab('activate')}>
+              <Lock size={15} /> {t('app.pro.haveLicense')}
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="btn btn--primary"
+              disabled={!token.trim() || checking}
+              onClick={() => void activate()}
+            >
+              <Check size={15} /> {checking ? t('common.loading') : t('app.pro.activateCta')}
+            </button>
+          )
         )
       }
     >
@@ -351,14 +369,6 @@ export function ProScreen({
                 />
                 <span className="field__help">{t('landing.crypto.licenseBody')}</span>
               </label>
-              <button
-                type="button"
-                className="btn btn--primary btn--block"
-                disabled={!token.trim() || checking}
-                onClick={() => void activate()}
-              >
-                <Check size={15} /> {checking ? t('common.loading') : t('app.pro.activateCta')}
-              </button>
               {token.trim() && (
                 <p className="muted">
                   {t('landing.crypto.licenseFingerprint')}:{' '}

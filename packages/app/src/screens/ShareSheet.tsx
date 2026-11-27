@@ -151,14 +151,25 @@ export function ShareSheet({
       <div className="card">
         <div className="row row--between">
           <span className="field__label">{t('app.share.asText')}</span>
+          {/**
+            * Der Schalter stand ohne sichtbare Beschriftung neben der
+            * Überschrift „Als Text" – man musste raten, was er schaltet, und die
+            * Erklärung erschien erst unter dem Code. Jetzt steht sie daneben,
+            * der Zustand ist ablesbar, und die Zeile darunter wiederholt ihn
+            * nicht mehr.
+            */}
           <button
             type="button"
-            className={`switch ${includeNote ? 'is-on' : ''}`}
+            className="share__toggle"
             role="switch"
             aria-checked={includeNote}
             onClick={() => setIncludeNote((value) => !value)}
-            aria-label={t('app.anchor.shareFull')}
-          />
+          >
+            <span className="switch" aria-hidden="true" data-on={includeNote ? '1' : '0'} />
+            <span>
+              {includeNote ? t('app.anchor.shareFull') : t('app.anchor.sharePositionOnly')}
+            </span>
+          </button>
         </div>
         {/*
           Der Code ist ein Schlüssel, kein Lesetext: er stand als vierzeiliger
@@ -181,7 +192,7 @@ export function ShareSheet({
           >
             <Copy size={12} /> {t('common.ctaCopy')}
           </button>
-          <span className="muted">{includeNote ? t('app.anchor.shareFull') : t('app.anchor.sharePositionOnly')}</span>
+          <span className="muted">{t('app.share.codeHint')}</span>
         </div>
       </div>
 

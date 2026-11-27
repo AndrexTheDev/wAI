@@ -88,7 +88,8 @@ test('elevation hint estimates floors', () => {
 });
 
 test('distance and guidance text are localised', () => {
-  assert.equal(formatDistance(8.4, 'de'), '8.4 m');
+  assert.equal(formatDistance(8.4, 'de'), '8,4 m');
+  assert.equal(formatDistance(2.4, 'de'), '2,4 m');
   assert.equal(formatDistance(42.2, 'de'), '42 m');
   assert.equal(formatDistance(1234, 'en'), '1.23 km');
   assert.equal(formatDistance(12_800, 'de'), '12,8 km');
@@ -97,6 +98,7 @@ test('distance and guidance text are localised', () => {
   assert.equal(formatDistance(1609.344, 'en', 'imperial'), '1.00 mi');
   assert.equal(formatDistance(100, 'en'), '100 m');
   assert.equal(formatDistance(8.4, 'en', 'imperial'), '28 ft');
+  assert.equal(formatDistance(3, 'de', 'imperial'), '9,8 ft');
   assert.equal(formatDistance(2, 'en', 'imperial'), '6.6 ft');
   const text = guidanceText(30, 5, { delta: 6, level: 'higher', floors: 2 }, 'de');
   assert.match(text, /geradeaus/);

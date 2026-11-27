@@ -26,6 +26,7 @@ import {
   Copy,
   Share,
   Timer,
+  ChevronRight,
 } from '../ui/icons';
 
 const CATEGORIES: AnchorCategory[] = ['car', 'tent', 'meeting', 'tool', 'entrance', 'nature', 'other'];
@@ -461,7 +462,13 @@ export function AnchorEditor({
           <div className="banner__body">
             <span>{t('app.pro.mediaBanner')}</span>
             <button type="button" className="btn btn--xs" style={{ justifySelf: 'start' }} onClick={() => onUpgrade(t('app.pro.mediaBanner'))}>
-              {t('app.pro.seeWallets')}
+              {/**
+                * Hier stand „Wallets & Anleitung" – ein Knopf, der nach einer
+                * Anleitung für Krypto klingt, aber das Pro-Sheet öffnet. Im
+                * Anker-Editor will man wissen, was Pro hier freischaltet, nicht
+                * wie man in SOL zahlt. Der Knopf heißt jetzt, was er tut.
+                */}
+              {t('app.pro.what')} <ChevronRight size={12} />
             </button>
           </div>
         </div>

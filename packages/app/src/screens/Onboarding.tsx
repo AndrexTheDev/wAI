@@ -12,6 +12,8 @@ export function Onboarding({ onDone }: { onDone: () => void }) {
   const { updateSettings, setLocale, requestPermissions } = useApp();
   const [step, setStep] = useState(0);
   const [asking, setAsking] = useState(false);
+  /** Gesetzt, wenn nach dem Antrag kein einziges Recht erteilt wurde. */
+  const [denied, setDenied] = useState<Record<'location' | 'camera' | 'microphone', string> | null>(null);
   const slides = tArray<{ title: string; body: string }>(locale, 'app.onboarding.slides');
 
   const finish = async () => {
@@ -19,12 +21,28 @@ export function Onboarding({ onDone }: { onDone: () => void }) {
     onDone();
   };
 
+  /**
+   * Berechtigungen anfragen – und danach ehrlich berichten.
+   *
+   * Vorher fragte diese Funktion dreimal hintereinander, schloss die Einführung
+   * in jedem Fall und zeigte danach dieselbe App wie vorher. Auf einem Gerät, auf
+   * dem der Nutzer „Ablehnen" tippte, war das Ergebnis nicht unterscheidbar von
+   * „Erlauben". Jetzt bleibt der Bildschirm stehen, wenn nichts erteilt wurde,
+   * und sagt welches Recht fehlt und was ohne es trotzdem geht.
+   */
   const grantPermissions = async () => {
     setAsking(true);
     await requestMotionPermission();
-    await getPermissions();
     await requestPermissions();
+    const state = await getPermissions();
     setAsking(false);
+    const granted = (['location', 'camera', 'microphone'] as const).filter(
+      (key) => state[key] === 'granted',
+    );
+    if (granted.length === 0) {
+      setDenied({ location: state.location, camera: state.camera, microphone: state.microphone });
+      return;
+    }
     void finish();
   };
 
@@ -99,6 +117,12 @@ export function Onboarding({ onDone }: { onDone: () => void }) {
             </span>
             <h1 style={{ fontSize: 24 }}>{t('app.onboarding.permissionTitle')}</h1>
             <p style={{ color: 'var(--text-2)', fontSize: 14, lineHeight: 1.6 }}>{t('app.onboarding.permissionBody')}</p>
+            {/**
+              * Vorher standen hier vier Häkchen, bevor irgendetwas gefragt wurde –
+              * ein Versprechen, kein Zustand. Solange nichts erteilt ist, sagt die
+              * Liste, was die Sensoren *können* (nicht: was schon erlaubt ist), und
+              * nach einer Ablehnung steht der echte Zustand da.
+              */}
             <div className="card" style={{ display: 'grid', gap: 6 }}>
               {[
                 t('app.settings.gpsStatus'),
@@ -108,10 +132,23 @@ export function Onboarding({ onDone }: { onDone: () => void }) {
               ].map((label) => (
                 <div key={label} className="row row--between">
                   <span className="muted">{label}</span>
-                  <Check size={14} style={{ color: 'var(--mint)' }} />
+                  {denied ? (
+                    <span className="muted" style={{ fontSize: 11 }}>
+                      {label === t('app.settings.gpsStatus')
+                        ? denied.location === 'denied'
+                          ? t('app.onboarding.stateDenied')
+                          : denied.location === 'granted'
+                            ? t('app.onboarding.stateGranted')
+                            : t('app.onboarding.stateNotAsked')
+                        : t('app.onboarding.stateNotAsked')}
+                    </span>
+                  ) : (
+                    <Check size={14} style={{ color: 'var(--mint)' }} />
+                  )}
                 </div>
               ))}
             </div>
+            {denied && <p className="muted">{t('app.onboarding.permissionDenied')}</p>}
           </div>
         )}
       </div>
@@ -151,7 +188,7 @@ export function Onboarding({ onDone }: { onDone: () => void }) {
           )}
           {step === slides.length && (
             <button type="button" className="btn btn--xs" onClick={() => void finish()}>
-              {t('app.onboarding.permissionLater')}
+              {denied ? t('app.onboarding.permissionContinue') : t('app.onboarding.permissionLater')}
             </button>
           )}
         </div>

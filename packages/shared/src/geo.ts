@@ -147,8 +147,14 @@ export function formatDistance(
   }
 
   if (meters < 1000) {
-    const rounded = meters < 10 ? Math.round(meters * 10) / 10 : Math.round(meters);
-    return `${rounded} m`;
+    /**
+     * Unter 10 m eine Nachkommastelle – aber mit dem Dezimalzeichen der Sprache.
+     * Vorher stand hier `${rounded}`, und in der deutschen App las man „2.4 m"
+     * statt „2,4 m". Bei 8,4 m fiel es im Test nicht auf, weil dort „8.4 m"
+     * als Erwartung stand: der Test hatte den Fehler mitgeschrieben.
+     */
+    if (meters < 10) return `${String(Math.round(meters * 10) / 10).replace('.', decimal)} m`;
+    return `${Math.round(meters)} m`;
   }
   const km = meters / 1000;
   const rounded = km < 10 ? Math.round(km * 100) / 100 : Math.round(km * 10) / 10;

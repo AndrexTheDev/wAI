@@ -45,3 +45,7 @@ tmp/
 store/screenshots/*.png
 !store/screenshots/capture.json
 !store/screenshots/.gitkeep
+
+# Walkthrough-Screenshots: Prüfmaterial, kein Store-Asset. Der Bericht
+# (docs/WALKTHROUGH.md) wird committet, die Bilder nicht.
+.walkthrough/
