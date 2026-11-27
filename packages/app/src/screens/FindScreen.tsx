@@ -545,9 +545,16 @@ export function FindScreen({
         )}
 
         {isDemo && (
-          <p className="muted" style={{ textAlign: 'center' }}>
-            {t('app.demo.simulated')} · {t('app.demo.hint')}
-          </p>
+          /**
+           * Die Demo-Angabe ist eine Einladung, kein Fließtext: sie erklärt, was
+           * gerade passiert (simulierte Sensoren) und was man tun kann (tippen).
+           * Vorher lief sie als eine Zeile über den Rand hinaus – auf dem
+           * Screenshot endete sie mitten im Wort.
+           */
+          <div className="demo-hint">
+            <span className="demo-hint__tag">{t('app.demo.simulated')}</span>
+            <span className="demo-hint__text">{t('app.demo.hint')}</span>
+          </div>
         )}
 
         {!multiView && (
