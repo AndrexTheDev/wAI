@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "name": "München Lehel (Demo)",
+  "name": "München Mitte",
   "zoom": 18,
   "bounds": {
     "south": 48.128,
@@ -10,259 +10,4361 @@
   },
   "tiles": [
     {
-      "x": 139503,
-      "y": 90974,
-      "bytes": 212,
+      "x": 139512,
+      "y": 90951,
+      "bytes": 4926,
+      "buildings": 0,
+      "roads": 0
+    },
+    {
+      "x": 139516,
+      "y": 90962,
+      "bytes": 547,
+      "buildings": 0,
+      "roads": 0
+    },
+    {
+      "x": 139513,
+      "y": 90963,
+      "bytes": 673,
+      "buildings": 0,
+      "roads": 0
+    },
+    {
+      "x": 139516,
+      "y": 90965,
+      "bytes": 2712,
+      "buildings": 0,
+      "roads": 0
+    },
+    {
+      "x": 139486,
+      "y": 90966,
+      "bytes": 278,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139488,
+      "y": 90966,
+      "bytes": 489,
+      "buildings": 0,
+      "roads": 3
+    },
+    {
+      "x": 139489,
+      "y": 90966,
+      "bytes": 267,
       "buildings": 1,
       "roads": 1
     },
     {
-      "x": 139504,
-      "y": 90974,
-      "bytes": 275,
+      "x": 139490,
+      "y": 90966,
+      "bytes": 199,
       "buildings": 1,
+      "roads": 0
+    },
+    {
+      "x": 139491,
+      "y": 90966,
+      "bytes": 152,
+      "buildings": 1,
+      "roads": 0
+    },
+    {
+      "x": 139492,
+      "y": 90966,
+      "bytes": 406,
+      "buildings": 0,
       "roads": 2
     },
     {
-      "x": 139505,
-      "y": 90974,
-      "bytes": 216,
+      "x": 139493,
+      "y": 90966,
+      "bytes": 273,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139494,
+      "y": 90966,
+      "bytes": 170,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139495,
+      "y": 90966,
+      "bytes": 443,
+      "buildings": 0,
+      "roads": 3
+    },
+    {
+      "x": 139496,
+      "y": 90966,
+      "bytes": 1123,
+      "buildings": 0,
+      "roads": 4
+    },
+    {
+      "x": 139498,
+      "y": 90966,
+      "bytes": 464,
       "buildings": 1,
       "roads": 1
     },
     {
-      "x": 139506,
-      "y": 90974,
-      "bytes": 349,
-      "buildings": 2,
-      "roads": 2
-    },
-    {
-      "x": 139507,
-      "y": 90974,
-      "bytes": 218,
-      "buildings": 1,
+      "x": 139499,
+      "y": 90966,
+      "bytes": 134,
+      "buildings": 0,
       "roads": 1
     },
     {
-      "x": 139508,
-      "y": 90974,
-      "bytes": 287,
-      "buildings": 2,
-      "roads": 1
-    },
-    {
-      "x": 139509,
-      "y": 90974,
-      "bytes": 336,
+      "x": 139500,
+      "y": 90966,
+      "bytes": 544,
       "buildings": 1,
       "roads": 3
     },
     {
+      "x": 139502,
+      "y": 90966,
+      "bytes": 286,
+      "buildings": 1,
+      "roads": 0
+    },
+    {
       "x": 139503,
-      "y": 90975,
-      "bytes": 232,
-      "buildings": 2,
-      "roads": 0
-    },
-    {
-      "x": 139504,
-      "y": 90975,
-      "bytes": 234,
-      "buildings": 2,
-      "roads": 0
-    },
-    {
-      "x": 139505,
-      "y": 90975,
-      "bytes": 236,
-      "buildings": 2,
-      "roads": 0
-    },
-    {
-      "x": 139506,
-      "y": 90975,
-      "bytes": 385,
-      "buildings": 4,
-      "roads": 0
-    },
-    {
-      "x": 139507,
-      "y": 90975,
-      "bytes": 240,
-      "buildings": 2,
-      "roads": 0
-    },
-    {
-      "x": 139508,
-      "y": 90975,
-      "bytes": 473,
-      "buildings": 4,
-      "roads": 0
-    },
-    {
-      "x": 139509,
-      "y": 90975,
-      "bytes": 353,
-      "buildings": 2,
+      "y": 90966,
+      "bytes": 384,
+      "buildings": 1,
       "roads": 2
     },
     {
-      "x": 139503,
-      "y": 90976,
-      "bytes": 226,
-      "buildings": 2,
-      "roads": 0
-    },
-    {
       "x": 139504,
-      "y": 90976,
-      "bytes": 228,
-      "buildings": 2,
-      "roads": 0
+      "y": 90966,
+      "bytes": 411,
+      "buildings": 0,
+      "roads": 2
     },
     {
       "x": 139505,
-      "y": 90976,
-      "bytes": 319,
-      "buildings": 2,
-      "roads": 0
-    },
-    {
-      "x": 139506,
-      "y": 90976,
-      "bytes": 492,
+      "y": 90966,
+      "bytes": 688,
       "buildings": 3,
+      "roads": 1
+    },
+    {
+      "x": 139506,
+      "y": 90966,
+      "bytes": 188,
+      "buildings": 1,
       "roads": 0
     },
     {
       "x": 139507,
-      "y": 90976,
-      "bytes": 234,
-      "buildings": 2,
+      "y": 90966,
+      "bytes": 835,
+      "buildings": 1,
       "roads": 0
     },
     {
       "x": 139508,
-      "y": 90976,
-      "bytes": 373,
-      "buildings": 4,
-      "roads": 0
+      "y": 90966,
+      "bytes": 770,
+      "buildings": 0,
+      "roads": 2
     },
     {
       "x": 139509,
-      "y": 90976,
-      "bytes": 351,
+      "y": 90966,
+      "bytes": 340,
+      "buildings": 0,
+      "roads": 0
+    },
+    {
+      "x": 139510,
+      "y": 90966,
+      "bytes": 513,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139513,
+      "y": 90966,
+      "bytes": 542,
+      "buildings": 1,
+      "roads": 0
+    },
+    {
+      "x": 139514,
+      "y": 90966,
+      "bytes": 138,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139515,
+      "y": 90966,
+      "bytes": 381,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139484,
+      "y": 90967,
+      "bytes": 469,
+      "buildings": 0,
+      "roads": 2
+    },
+    {
+      "x": 139486,
+      "y": 90967,
+      "bytes": 2390,
+      "buildings": 9,
+      "roads": 7
+    },
+    {
+      "x": 139487,
+      "y": 90967,
+      "bytes": 2069,
+      "buildings": 7,
+      "roads": 5
+    },
+    {
+      "x": 139488,
+      "y": 90967,
+      "bytes": 1526,
+      "buildings": 5,
+      "roads": 6
+    },
+    {
+      "x": 139489,
+      "y": 90967,
+      "bytes": 4598,
+      "buildings": 14,
+      "roads": 18
+    },
+    {
+      "x": 139490,
+      "y": 90967,
+      "bytes": 3309,
+      "buildings": 9,
+      "roads": 18
+    },
+    {
+      "x": 139491,
+      "y": 90967,
+      "bytes": 4432,
+      "buildings": 12,
+      "roads": 32
+    },
+    {
+      "x": 139492,
+      "y": 90967,
+      "bytes": 2378,
+      "buildings": 6,
+      "roads": 15
+    },
+    {
+      "x": 139493,
+      "y": 90967,
+      "bytes": 702,
+      "buildings": 5,
+      "roads": 0
+    },
+    {
+      "x": 139494,
+      "y": 90967,
+      "bytes": 1253,
+      "buildings": 2,
+      "roads": 10
+    },
+    {
+      "x": 139495,
+      "y": 90967,
+      "bytes": 2080,
+      "buildings": 3,
+      "roads": 11
+    },
+    {
+      "x": 139496,
+      "y": 90967,
+      "bytes": 5635,
+      "buildings": 1,
+      "roads": 24
+    },
+    {
+      "x": 139497,
+      "y": 90967,
+      "bytes": 3687,
+      "buildings": 10,
+      "roads": 19
+    },
+    {
+      "x": 139498,
+      "y": 90967,
+      "bytes": 1227,
+      "buildings": 3,
+      "roads": 9
+    },
+    {
+      "x": 139499,
+      "y": 90967,
+      "bytes": 1000,
+      "buildings": 0,
+      "roads": 12
+    },
+    {
+      "x": 139500,
+      "y": 90967,
+      "bytes": 1618,
+      "buildings": 0,
+      "roads": 14
+    },
+    {
+      "x": 139501,
+      "y": 90967,
+      "bytes": 830,
+      "buildings": 4,
+      "roads": 4
+    },
+    {
+      "x": 139502,
+      "y": 90967,
+      "bytes": 1808,
+      "buildings": 6,
+      "roads": 10
+    },
+    {
+      "x": 139503,
+      "y": 90967,
+      "bytes": 1910,
+      "buildings": 2,
+      "roads": 15
+    },
+    {
+      "x": 139504,
+      "y": 90967,
+      "bytes": 1892,
+      "buildings": 0,
+      "roads": 9
+    },
+    {
+      "x": 139505,
+      "y": 90967,
+      "bytes": 1254,
+      "buildings": 6,
+      "roads": 7
+    },
+    {
+      "x": 139506,
+      "y": 90967,
+      "bytes": 4734,
+      "buildings": 8,
+      "roads": 18
+    },
+    {
+      "x": 139507,
+      "y": 90967,
+      "bytes": 3667,
+      "buildings": 0,
+      "roads": 22
+    },
+    {
+      "x": 139508,
+      "y": 90967,
+      "bytes": 1111,
+      "buildings": 1,
+      "roads": 5
+    },
+    {
+      "x": 139509,
+      "y": 90967,
+      "bytes": 1373,
+      "buildings": 0,
+      "roads": 4
+    },
+    {
+      "x": 139510,
+      "y": 90967,
+      "bytes": 1533,
+      "buildings": 0,
+      "roads": 6
+    },
+    {
+      "x": 139511,
+      "y": 90967,
+      "bytes": 149,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139512,
+      "y": 90967,
+      "bytes": 1814,
+      "buildings": 1,
+      "roads": 10
+    },
+    {
+      "x": 139513,
+      "y": 90967,
+      "bytes": 2064,
+      "buildings": 3,
+      "roads": 6
+    },
+    {
+      "x": 139514,
+      "y": 90967,
+      "bytes": 2052,
+      "buildings": 8,
+      "roads": 1
+    },
+    {
+      "x": 139515,
+      "y": 90967,
+      "bytes": 1029,
+      "buildings": 7,
+      "roads": 0
+    },
+    {
+      "x": 139485,
+      "y": 90968,
+      "bytes": 230,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139486,
+      "y": 90968,
+      "bytes": 1774,
+      "buildings": 0,
+      "roads": 16
+    },
+    {
+      "x": 139487,
+      "y": 90968,
+      "bytes": 3478,
+      "buildings": 4,
+      "roads": 22
+    },
+    {
+      "x": 139488,
+      "y": 90968,
+      "bytes": 4069,
+      "buildings": 13,
+      "roads": 25
+    },
+    {
+      "x": 139489,
+      "y": 90968,
+      "bytes": 4934,
+      "buildings": 26,
+      "roads": 18
+    },
+    {
+      "x": 139490,
+      "y": 90968,
+      "bytes": 2313,
+      "buildings": 11,
+      "roads": 6
+    },
+    {
+      "x": 139491,
+      "y": 90968,
+      "bytes": 1888,
+      "buildings": 3,
+      "roads": 17
+    },
+    {
+      "x": 139492,
+      "y": 90968,
+      "bytes": 2015,
+      "buildings": 4,
+      "roads": 13
+    },
+    {
+      "x": 139493,
+      "y": 90968,
+      "bytes": 1284,
+      "buildings": 6,
+      "roads": 6
+    },
+    {
+      "x": 139494,
+      "y": 90968,
+      "bytes": 1028,
+      "buildings": 5,
+      "roads": 5
+    },
+    {
+      "x": 139495,
+      "y": 90968,
+      "bytes": 2062,
+      "buildings": 11,
+      "roads": 3
+    },
+    {
+      "x": 139496,
+      "y": 90968,
+      "bytes": 2599,
+      "buildings": 12,
+      "roads": 8
+    },
+    {
+      "x": 139497,
+      "y": 90968,
+      "bytes": 2010,
+      "buildings": 11,
+      "roads": 5
+    },
+    {
+      "x": 139498,
+      "y": 90968,
+      "bytes": 2711,
+      "buildings": 7,
+      "roads": 12
+    },
+    {
+      "x": 139499,
+      "y": 90968,
+      "bytes": 3509,
+      "buildings": 1,
+      "roads": 33
+    },
+    {
+      "x": 139500,
+      "y": 90968,
+      "bytes": 2830,
+      "buildings": 7,
+      "roads": 21
+    },
+    {
+      "x": 139501,
+      "y": 90968,
+      "bytes": 2363,
+      "buildings": 3,
+      "roads": 16
+    },
+    {
+      "x": 139502,
+      "y": 90968,
+      "bytes": 1733,
+      "buildings": 1,
+      "roads": 8
+    },
+    {
+      "x": 139503,
+      "y": 90968,
+      "bytes": 1995,
+      "buildings": 3,
+      "roads": 15
+    },
+    {
+      "x": 139504,
+      "y": 90968,
+      "bytes": 2770,
+      "buildings": 0,
+      "roads": 17
+    },
+    {
+      "x": 139505,
+      "y": 90968,
+      "bytes": 1977,
+      "buildings": 1,
+      "roads": 10
+    },
+    {
+      "x": 139506,
+      "y": 90968,
+      "bytes": 1976,
+      "buildings": 0,
+      "roads": 12
+    },
+    {
+      "x": 139507,
+      "y": 90968,
+      "bytes": 2901,
+      "buildings": 1,
+      "roads": 16
+    },
+    {
+      "x": 139508,
+      "y": 90968,
+      "bytes": 588,
+      "buildings": 0,
+      "roads": 4
+    },
+    {
+      "x": 139509,
+      "y": 90968,
+      "bytes": 1397,
+      "buildings": 1,
+      "roads": 11
+    },
+    {
+      "x": 139510,
+      "y": 90968,
+      "bytes": 2269,
+      "buildings": 1,
+      "roads": 19
+    },
+    {
+      "x": 139511,
+      "y": 90968,
+      "bytes": 754,
+      "buildings": 0,
+      "roads": 3
+    },
+    {
+      "x": 139512,
+      "y": 90968,
+      "bytes": 934,
+      "buildings": 5,
+      "roads": 1
+    },
+    {
+      "x": 139513,
+      "y": 90968,
+      "bytes": 4652,
+      "buildings": 3,
+      "roads": 30
+    },
+    {
+      "x": 139514,
+      "y": 90968,
+      "bytes": 2464,
+      "buildings": 7,
+      "roads": 9
+    },
+    {
+      "x": 139515,
+      "y": 90968,
+      "bytes": 918,
+      "buildings": 1,
+      "roads": 1
+    },
+    {
+      "x": 139485,
+      "y": 90969,
+      "bytes": 469,
+      "buildings": 0,
+      "roads": 3
+    },
+    {
+      "x": 139486,
+      "y": 90969,
+      "bytes": 391,
+      "buildings": 0,
+      "roads": 2
+    },
+    {
+      "x": 139487,
+      "y": 90969,
+      "bytes": 2593,
+      "buildings": 13,
+      "roads": 8
+    },
+    {
+      "x": 139488,
+      "y": 90969,
+      "bytes": 3712,
+      "buildings": 26,
+      "roads": 4
+    },
+    {
+      "x": 139489,
+      "y": 90969,
+      "bytes": 2642,
+      "buildings": 10,
+      "roads": 10
+    },
+    {
+      "x": 139490,
+      "y": 90969,
+      "bytes": 2254,
+      "buildings": 10,
+      "roads": 7
+    },
+    {
+      "x": 139491,
+      "y": 90969,
+      "bytes": 4380,
+      "buildings": 8,
+      "roads": 20
+    },
+    {
+      "x": 139492,
+      "y": 90969,
+      "bytes": 2301,
+      "buildings": 1,
+      "roads": 10
+    },
+    {
+      "x": 139493,
+      "y": 90969,
+      "bytes": 1475,
+      "buildings": 6,
+      "roads": 5
+    },
+    {
+      "x": 139494,
+      "y": 90969,
+      "bytes": 1696,
+      "buildings": 5,
+      "roads": 11
+    },
+    {
+      "x": 139495,
+      "y": 90969,
+      "bytes": 2474,
+      "buildings": 4,
+      "roads": 15
+    },
+    {
+      "x": 139496,
+      "y": 90969,
+      "bytes": 2994,
+      "buildings": 7,
+      "roads": 13
+    },
+    {
+      "x": 139497,
+      "y": 90969,
+      "bytes": 1344,
+      "buildings": 4,
+      "roads": 8
+    },
+    {
+      "x": 139498,
+      "y": 90969,
+      "bytes": 1429,
+      "buildings": 0,
+      "roads": 15
+    },
+    {
+      "x": 139499,
+      "y": 90969,
+      "bytes": 4244,
+      "buildings": 3,
+      "roads": 20
+    },
+    {
+      "x": 139500,
+      "y": 90969,
+      "bytes": 3092,
+      "buildings": 6,
+      "roads": 23
+    },
+    {
+      "x": 139501,
+      "y": 90969,
+      "bytes": 3301,
+      "buildings": 8,
+      "roads": 12
+    },
+    {
+      "x": 139502,
+      "y": 90969,
+      "bytes": 7380,
+      "buildings": 10,
+      "roads": 74
+    },
+    {
+      "x": 139503,
+      "y": 90969,
+      "bytes": 2334,
+      "buildings": 1,
+      "roads": 13
+    },
+    {
+      "x": 139504,
+      "y": 90969,
+      "bytes": 3663,
+      "buildings": 1,
+      "roads": 15
+    },
+    {
+      "x": 139505,
+      "y": 90969,
+      "bytes": 2260,
+      "buildings": 2,
+      "roads": 11
+    },
+    {
+      "x": 139506,
+      "y": 90969,
+      "bytes": 1963,
+      "buildings": 2,
+      "roads": 16
+    },
+    {
+      "x": 139507,
+      "y": 90969,
+      "bytes": 1265,
+      "buildings": 6,
+      "roads": 6
+    },
+    {
+      "x": 139508,
+      "y": 90969,
+      "bytes": 1317,
+      "buildings": 3,
+      "roads": 8
+    },
+    {
+      "x": 139509,
+      "y": 90969,
+      "bytes": 2371,
+      "buildings": 10,
+      "roads": 11
+    },
+    {
+      "x": 139510,
+      "y": 90969,
+      "bytes": 2028,
+      "buildings": 6,
+      "roads": 11
+    },
+    {
+      "x": 139511,
+      "y": 90969,
+      "bytes": 3010,
+      "buildings": 4,
+      "roads": 16
+    },
+    {
+      "x": 139512,
+      "y": 90969,
+      "bytes": 1875,
+      "buildings": 0,
+      "roads": 3
+    },
+    {
+      "x": 139513,
+      "y": 90969,
+      "bytes": 1877,
+      "buildings": 6,
+      "roads": 7
+    },
+    {
+      "x": 139514,
+      "y": 90969,
+      "bytes": 2295,
+      "buildings": 7,
+      "roads": 5
+    },
+    {
+      "x": 139515,
+      "y": 90969,
+      "bytes": 277,
+      "buildings": 0,
+      "roads": 2
+    },
+    {
+      "x": 139486,
+      "y": 90970,
+      "bytes": 3040,
+      "buildings": 5,
+      "roads": 26
+    },
+    {
+      "x": 139487,
+      "y": 90970,
+      "bytes": 2600,
+      "buildings": 4,
+      "roads": 21
+    },
+    {
+      "x": 139488,
+      "y": 90970,
+      "bytes": 3874,
+      "buildings": 12,
+      "roads": 28
+    },
+    {
+      "x": 139489,
+      "y": 90970,
+      "bytes": 4803,
+      "buildings": 9,
+      "roads": 39
+    },
+    {
+      "x": 139490,
+      "y": 90970,
+      "bytes": 5854,
+      "buildings": 8,
+      "roads": 43
+    },
+    {
+      "x": 139491,
+      "y": 90970,
+      "bytes": 901,
+      "buildings": 0,
+      "roads": 5
+    },
+    {
+      "x": 139492,
+      "y": 90970,
+      "bytes": 1544,
+      "buildings": 1,
+      "roads": 9
+    },
+    {
+      "x": 139493,
+      "y": 90970,
+      "bytes": 2626,
+      "buildings": 2,
+      "roads": 10
+    },
+    {
+      "x": 139494,
+      "y": 90970,
+      "bytes": 2444,
+      "buildings": 14,
+      "roads": 4
+    },
+    {
+      "x": 139495,
+      "y": 90970,
+      "bytes": 2953,
+      "buildings": 6,
+      "roads": 19
+    },
+    {
+      "x": 139496,
+      "y": 90970,
+      "bytes": 2893,
+      "buildings": 4,
+      "roads": 14
+    },
+    {
+      "x": 139497,
+      "y": 90970,
+      "bytes": 2070,
+      "buildings": 1,
+      "roads": 17
+    },
+    {
+      "x": 139498,
+      "y": 90970,
+      "bytes": 2315,
+      "buildings": 7,
+      "roads": 14
+    },
+    {
+      "x": 139499,
+      "y": 90970,
+      "bytes": 2132,
+      "buildings": 7,
+      "roads": 8
+    },
+    {
+      "x": 139500,
+      "y": 90970,
+      "bytes": 2396,
+      "buildings": 6,
+      "roads": 11
+    },
+    {
+      "x": 139501,
+      "y": 90970,
+      "bytes": 613,
+      "buildings": 1,
+      "roads": 2
+    },
+    {
+      "x": 139502,
+      "y": 90970,
+      "bytes": 1922,
+      "buildings": 4,
+      "roads": 15
+    },
+    {
+      "x": 139503,
+      "y": 90970,
+      "bytes": 1455,
+      "buildings": 0,
+      "roads": 16
+    },
+    {
+      "x": 139504,
+      "y": 90970,
+      "bytes": 3369,
+      "buildings": 1,
+      "roads": 18
+    },
+    {
+      "x": 139505,
+      "y": 90970,
+      "bytes": 1768,
+      "buildings": 0,
+      "roads": 16
+    },
+    {
+      "x": 139506,
+      "y": 90970,
+      "bytes": 914,
+      "buildings": 0,
+      "roads": 9
+    },
+    {
+      "x": 139507,
+      "y": 90970,
+      "bytes": 1640,
+      "buildings": 12,
+      "roads": 2
+    },
+    {
+      "x": 139508,
+      "y": 90970,
+      "bytes": 2318,
+      "buildings": 15,
+      "roads": 6
+    },
+    {
+      "x": 139509,
+      "y": 90970,
+      "bytes": 1604,
+      "buildings": 10,
+      "roads": 4
+    },
+    {
+      "x": 139510,
+      "y": 90970,
+      "bytes": 2139,
+      "buildings": 14,
+      "roads": 3
+    },
+    {
+      "x": 139511,
+      "y": 90970,
+      "bytes": 2793,
+      "buildings": 5,
+      "roads": 15
+    },
+    {
+      "x": 139512,
+      "y": 90970,
+      "bytes": 2624,
+      "buildings": 13,
+      "roads": 9
+    },
+    {
+      "x": 139513,
+      "y": 90970,
+      "bytes": 2004,
+      "buildings": 12,
+      "roads": 9
+    },
+    {
+      "x": 139514,
+      "y": 90970,
+      "bytes": 2846,
+      "buildings": 6,
+      "roads": 16
+    },
+    {
+      "x": 139515,
+      "y": 90970,
+      "bytes": 1211,
+      "buildings": 0,
+      "roads": 5
+    },
+    {
+      "x": 139486,
+      "y": 90971,
+      "bytes": 147,
+      "buildings": 1,
+      "roads": 0
+    },
+    {
+      "x": 139487,
+      "y": 90971,
+      "bytes": 1528,
+      "buildings": 6,
+      "roads": 4
+    },
+    {
+      "x": 139488,
+      "y": 90971,
+      "bytes": 567,
+      "buildings": 0,
+      "roads": 8
+    },
+    {
+      "x": 139489,
+      "y": 90971,
+      "bytes": 5636,
+      "buildings": 3,
+      "roads": 73
+    },
+    {
+      "x": 139490,
+      "y": 90971,
+      "bytes": 10860,
+      "buildings": 2,
+      "roads": 122
+    },
+    {
+      "x": 139491,
+      "y": 90971,
+      "bytes": 1383,
+      "buildings": 0,
+      "roads": 11
+    },
+    {
+      "x": 139492,
+      "y": 90971,
+      "bytes": 273,
+      "buildings": 0,
+      "roads": 3
+    },
+    {
+      "x": 139493,
+      "y": 90971,
+      "bytes": 1657,
+      "buildings": 0,
+      "roads": 18
+    },
+    {
+      "x": 139494,
+      "y": 90971,
+      "bytes": 3678,
+      "buildings": 2,
+      "roads": 29
+    },
+    {
+      "x": 139495,
+      "y": 90971,
+      "bytes": 5358,
+      "buildings": 7,
+      "roads": 36
+    },
+    {
+      "x": 139496,
+      "y": 90971,
+      "bytes": 4054,
+      "buildings": 3,
+      "roads": 32
+    },
+    {
+      "x": 139497,
+      "y": 90971,
+      "bytes": 3295,
+      "buildings": 14,
+      "roads": 9
+    },
+    {
+      "x": 139498,
+      "y": 90971,
+      "bytes": 2476,
+      "buildings": 14,
+      "roads": 2
+    },
+    {
+      "x": 139499,
+      "y": 90971,
+      "bytes": 2178,
+      "buildings": 12,
+      "roads": 0
+    },
+    {
+      "x": 139500,
+      "y": 90971,
+      "bytes": 1769,
+      "buildings": 9,
+      "roads": 3
+    },
+    {
+      "x": 139501,
+      "y": 90971,
+      "bytes": 3999,
+      "buildings": 10,
+      "roads": 10
+    },
+    {
+      "x": 139502,
+      "y": 90971,
+      "bytes": 4569,
+      "buildings": 15,
+      "roads": 17
+    },
+    {
+      "x": 139503,
+      "y": 90971,
+      "bytes": 2320,
+      "buildings": 2,
+      "roads": 18
+    },
+    {
+      "x": 139504,
+      "y": 90971,
+      "bytes": 1857,
+      "buildings": 1,
+      "roads": 22
+    },
+    {
+      "x": 139505,
+      "y": 90971,
+      "bytes": 1097,
+      "buildings": 2,
+      "roads": 9
+    },
+    {
+      "x": 139506,
+      "y": 90971,
+      "bytes": 3513,
+      "buildings": 2,
+      "roads": 27
+    },
+    {
+      "x": 139507,
+      "y": 90971,
+      "bytes": 3138,
+      "buildings": 20,
+      "roads": 6
+    },
+    {
+      "x": 139508,
+      "y": 90971,
+      "bytes": 2743,
+      "buildings": 11,
+      "roads": 10
+    },
+    {
+      "x": 139509,
+      "y": 90971,
+      "bytes": 3709,
+      "buildings": 13,
+      "roads": 11
+    },
+    {
+      "x": 139510,
+      "y": 90971,
+      "bytes": 4267,
+      "buildings": 20,
+      "roads": 14
+    },
+    {
+      "x": 139511,
+      "y": 90971,
+      "bytes": 3880,
+      "buildings": 12,
+      "roads": 13
+    },
+    {
+      "x": 139512,
+      "y": 90971,
+      "bytes": 4336,
+      "buildings": 16,
+      "roads": 18
+    },
+    {
+      "x": 139513,
+      "y": 90971,
+      "bytes": 2159,
+      "buildings": 15,
+      "roads": 0
+    },
+    {
+      "x": 139514,
+      "y": 90971,
+      "bytes": 932,
+      "buildings": 7,
+      "roads": 3
+    },
+    {
+      "x": 139486,
+      "y": 90972,
+      "bytes": 3639,
+      "buildings": 6,
+      "roads": 31
+    },
+    {
+      "x": 139487,
+      "y": 90972,
+      "bytes": 172,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139488,
+      "y": 90972,
+      "bytes": 1846,
+      "buildings": 0,
+      "roads": 15
+    },
+    {
+      "x": 139489,
+      "y": 90972,
+      "bytes": 1333,
+      "buildings": 3,
+      "roads": 10
+    },
+    {
+      "x": 139490,
+      "y": 90972,
+      "bytes": 8842,
+      "buildings": 3,
+      "roads": 115
+    },
+    {
+      "x": 139491,
+      "y": 90972,
+      "bytes": 2321,
+      "buildings": 12,
+      "roads": 2
+    },
+    {
+      "x": 139492,
+      "y": 90972,
+      "bytes": 825,
+      "buildings": 1,
+      "roads": 6
+    },
+    {
+      "x": 139493,
+      "y": 90972,
+      "bytes": 9053,
+      "buildings": 1,
+      "roads": 106
+    },
+    {
+      "x": 139494,
+      "y": 90972,
+      "bytes": 4573,
+      "buildings": 0,
+      "roads": 48
+    },
+    {
+      "x": 139495,
+      "y": 90972,
+      "bytes": 1892,
+      "buildings": 4,
+      "roads": 5
+    },
+    {
+      "x": 139496,
+      "y": 90972,
+      "bytes": 1699,
+      "buildings": 2,
+      "roads": 14
+    },
+    {
+      "x": 139497,
+      "y": 90972,
+      "bytes": 1758,
+      "buildings": 4,
+      "roads": 9
+    },
+    {
+      "x": 139498,
+      "y": 90972,
+      "bytes": 1755,
+      "buildings": 11,
+      "roads": 1
+    },
+    {
+      "x": 139499,
+      "y": 90972,
+      "bytes": 2843,
+      "buildings": 5,
+      "roads": 17
+    },
+    {
+      "x": 139500,
+      "y": 90972,
+      "bytes": 3531,
+      "buildings": 8,
+      "roads": 13
+    },
+    {
+      "x": 139501,
+      "y": 90972,
+      "bytes": 4172,
+      "buildings": 12,
+      "roads": 15
+    },
+    {
+      "x": 139502,
+      "y": 90972,
+      "bytes": 7199,
+      "buildings": 14,
+      "roads": 37
+    },
+    {
+      "x": 139503,
+      "y": 90972,
+      "bytes": 1391,
+      "buildings": 1,
+      "roads": 11
+    },
+    {
+      "x": 139504,
+      "y": 90972,
+      "bytes": 979,
+      "buildings": 3,
+      "roads": 3
+    },
+    {
+      "x": 139505,
+      "y": 90972,
+      "bytes": 851,
+      "buildings": 1,
+      "roads": 6
+    },
+    {
+      "x": 139506,
+      "y": 90972,
+      "bytes": 2333,
+      "buildings": 14,
+      "roads": 1
+    },
+    {
+      "x": 139507,
+      "y": 90972,
+      "bytes": 1318,
+      "buildings": 1,
+      "roads": 3
+    },
+    {
+      "x": 139508,
+      "y": 90972,
+      "bytes": 2566,
+      "buildings": 11,
+      "roads": 3
+    },
+    {
+      "x": 139509,
+      "y": 90972,
+      "bytes": 4776,
+      "buildings": 13,
+      "roads": 41
+    },
+    {
+      "x": 139510,
+      "y": 90972,
+      "bytes": 5410,
+      "buildings": 22,
+      "roads": 26
+    },
+    {
+      "x": 139511,
+      "y": 90972,
+      "bytes": 3358,
+      "buildings": 18,
+      "roads": 12
+    },
+    {
+      "x": 139512,
+      "y": 90972,
+      "bytes": 5223,
+      "buildings": 20,
+      "roads": 7
+    },
+    {
+      "x": 139513,
+      "y": 90972,
+      "bytes": 3258,
+      "buildings": 18,
+      "roads": 6
+    },
+    {
+      "x": 139514,
+      "y": 90972,
+      "bytes": 678,
+      "buildings": 1,
+      "roads": 7
+    },
+    {
+      "x": 139515,
+      "y": 90972,
+      "bytes": 661,
+      "buildings": 0,
+      "roads": 0
+    },
+    {
+      "x": 139485,
+      "y": 90973,
+      "bytes": 720,
+      "buildings": 1,
+      "roads": 2
+    },
+    {
+      "x": 139486,
+      "y": 90973,
+      "bytes": 4231,
+      "buildings": 4,
+      "roads": 35
+    },
+    {
+      "x": 139487,
+      "y": 90973,
+      "bytes": 2417,
+      "buildings": 6,
+      "roads": 14
+    },
+    {
+      "x": 139488,
+      "y": 90973,
+      "bytes": 3007,
+      "buildings": 1,
+      "roads": 33
+    },
+    {
+      "x": 139489,
+      "y": 90973,
+      "bytes": 4429,
+      "buildings": 9,
+      "roads": 43
+    },
+    {
+      "x": 139490,
+      "y": 90973,
+      "bytes": 6727,
+      "buildings": 8,
+      "roads": 74
+    },
+    {
+      "x": 139491,
+      "y": 90973,
+      "bytes": 2931,
+      "buildings": 15,
+      "roads": 4
+    },
+    {
+      "x": 139492,
+      "y": 90973,
+      "bytes": 4196,
+      "buildings": 8,
+      "roads": 17
+    },
+    {
+      "x": 139493,
+      "y": 90973,
+      "bytes": 10566,
+      "buildings": 4,
+      "roads": 87
+    },
+    {
+      "x": 139494,
+      "y": 90973,
+      "bytes": 7478,
+      "buildings": 11,
+      "roads": 44
+    },
+    {
+      "x": 139495,
+      "y": 90973,
+      "bytes": 2163,
+      "buildings": 2,
+      "roads": 12
+    },
+    {
+      "x": 139496,
+      "y": 90973,
+      "bytes": 726,
       "buildings": 2,
       "roads": 2
     },
     {
+      "x": 139497,
+      "y": 90973,
+      "bytes": 1390,
+      "buildings": 4,
+      "roads": 5
+    },
+    {
+      "x": 139498,
+      "y": 90973,
+      "bytes": 1240,
+      "buildings": 2,
+      "roads": 6
+    },
+    {
+      "x": 139499,
+      "y": 90973,
+      "bytes": 2213,
+      "buildings": 4,
+      "roads": 10
+    },
+    {
+      "x": 139500,
+      "y": 90973,
+      "bytes": 6429,
+      "buildings": 22,
+      "roads": 20
+    },
+    {
+      "x": 139501,
+      "y": 90973,
+      "bytes": 3767,
+      "buildings": 9,
+      "roads": 12
+    },
+    {
+      "x": 139502,
+      "y": 90973,
+      "bytes": 2818,
+      "buildings": 5,
+      "roads": 13
+    },
+    {
+      "x": 139503,
+      "y": 90973,
+      "bytes": 2099,
+      "buildings": 3,
+      "roads": 14
+    },
+    {
+      "x": 139504,
+      "y": 90973,
+      "bytes": 3657,
+      "buildings": 11,
+      "roads": 16
+    },
+    {
+      "x": 139505,
+      "y": 90973,
+      "bytes": 2537,
+      "buildings": 4,
+      "roads": 11
+    },
+    {
+      "x": 139506,
+      "y": 90973,
+      "bytes": 2786,
+      "buildings": 17,
+      "roads": 1
+    },
+    {
+      "x": 139507,
+      "y": 90973,
+      "bytes": 2182,
+      "buildings": 5,
+      "roads": 13
+    },
+    {
+      "x": 139508,
+      "y": 90973,
+      "bytes": 1807,
+      "buildings": 12,
+      "roads": 3
+    },
+    {
+      "x": 139509,
+      "y": 90973,
+      "bytes": 3014,
+      "buildings": 18,
+      "roads": 8
+    },
+    {
+      "x": 139510,
+      "y": 90973,
+      "bytes": 3561,
+      "buildings": 8,
+      "roads": 31
+    },
+    {
+      "x": 139511,
+      "y": 90973,
+      "bytes": 1443,
+      "buildings": 1,
+      "roads": 13
+    },
+    {
+      "x": 139512,
+      "y": 90973,
+      "bytes": 4128,
+      "buildings": 17,
+      "roads": 5
+    },
+    {
+      "x": 139513,
+      "y": 90973,
+      "bytes": 1938,
+      "buildings": 13,
+      "roads": 4
+    },
+    {
+      "x": 139514,
+      "y": 90973,
+      "bytes": 134,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139515,
+      "y": 90973,
+      "bytes": 402,
+      "buildings": 0,
+      "roads": 3
+    },
+    {
+      "x": 139516,
+      "y": 90973,
+      "bytes": 341,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139486,
+      "y": 90974,
+      "bytes": 1876,
+      "buildings": 7,
+      "roads": 5
+    },
+    {
+      "x": 139487,
+      "y": 90974,
+      "bytes": 1176,
+      "buildings": 1,
+      "roads": 14
+    },
+    {
+      "x": 139488,
+      "y": 90974,
+      "bytes": 2254,
+      "buildings": 14,
+      "roads": 2
+    },
+    {
+      "x": 139489,
+      "y": 90974,
+      "bytes": 2601,
+      "buildings": 9,
+      "roads": 9
+    },
+    {
+      "x": 139490,
+      "y": 90974,
+      "bytes": 2952,
+      "buildings": 20,
+      "roads": 2
+    },
+    {
+      "x": 139491,
+      "y": 90974,
+      "bytes": 1820,
+      "buildings": 14,
+      "roads": 4
+    },
+    {
+      "x": 139492,
+      "y": 90974,
+      "bytes": 1957,
+      "buildings": 8,
+      "roads": 5
+    },
+    {
+      "x": 139493,
+      "y": 90974,
+      "bytes": 6001,
+      "buildings": 8,
+      "roads": 53
+    },
+    {
+      "x": 139494,
+      "y": 90974,
+      "bytes": 2784,
+      "buildings": 12,
+      "roads": 6
+    },
+    {
+      "x": 139495,
+      "y": 90974,
+      "bytes": 4003,
+      "buildings": 25,
+      "roads": 1
+    },
+    {
+      "x": 139496,
+      "y": 90974,
+      "bytes": 1587,
+      "buildings": 6,
+      "roads": 3
+    },
+    {
+      "x": 139497,
+      "y": 90974,
+      "bytes": 3671,
+      "buildings": 16,
+      "roads": 4
+    },
+    {
+      "x": 139498,
+      "y": 90974,
+      "bytes": 2703,
+      "buildings": 9,
+      "roads": 4
+    },
+    {
+      "x": 139499,
+      "y": 90974,
+      "bytes": 3542,
+      "buildings": 18,
+      "roads": 7
+    },
+    {
+      "x": 139500,
+      "y": 90974,
+      "bytes": 5135,
+      "buildings": 15,
+      "roads": 19
+    },
+    {
+      "x": 139501,
+      "y": 90974,
+      "bytes": 4104,
+      "buildings": 5,
+      "roads": 43
+    },
+    {
+      "x": 139502,
+      "y": 90974,
+      "bytes": 4208,
+      "buildings": 12,
+      "roads": 12
+    },
+    {
+      "x": 139503,
+      "y": 90974,
+      "bytes": 3495,
+      "buildings": 10,
+      "roads": 14
+    },
+    {
+      "x": 139504,
+      "y": 90974,
+      "bytes": 6764,
+      "buildings": 28,
+      "roads": 26
+    },
+    {
+      "x": 139505,
+      "y": 90974,
+      "bytes": 3986,
+      "buildings": 12,
+      "roads": 12
+    },
+    {
+      "x": 139506,
+      "y": 90974,
+      "bytes": 3576,
+      "buildings": 16,
+      "roads": 10
+    },
+    {
+      "x": 139507,
+      "y": 90974,
+      "bytes": 3933,
+      "buildings": 2,
+      "roads": 38
+    },
+    {
+      "x": 139508,
+      "y": 90974,
+      "bytes": 1219,
+      "buildings": 2,
+      "roads": 8
+    },
+    {
+      "x": 139509,
+      "y": 90974,
+      "bytes": 5656,
+      "buildings": 13,
+      "roads": 30
+    },
+    {
+      "x": 139510,
+      "y": 90974,
+      "bytes": 3309,
+      "buildings": 5,
+      "roads": 16
+    },
+    {
+      "x": 139511,
+      "y": 90974,
+      "bytes": 1742,
+      "buildings": 9,
+      "roads": 2
+    },
+    {
+      "x": 139512,
+      "y": 90974,
+      "bytes": 902,
+      "buildings": 4,
+      "roads": 3
+    },
+    {
+      "x": 139513,
+      "y": 90974,
+      "bytes": 311,
+      "buildings": 1,
+      "roads": 2
+    },
+    {
+      "x": 139514,
+      "y": 90974,
+      "bytes": 986,
+      "buildings": 1,
+      "roads": 6
+    },
+    {
+      "x": 139515,
+      "y": 90974,
+      "bytes": 262,
+      "buildings": 0,
+      "roads": 0
+    },
+    {
+      "x": 139485,
+      "y": 90975,
+      "bytes": 245,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139486,
+      "y": 90975,
+      "bytes": 2266,
+      "buildings": 10,
+      "roads": 10
+    },
+    {
+      "x": 139487,
+      "y": 90975,
+      "bytes": 2645,
+      "buildings": 12,
+      "roads": 10
+    },
+    {
+      "x": 139488,
+      "y": 90975,
+      "bytes": 2239,
+      "buildings": 13,
+      "roads": 1
+    },
+    {
+      "x": 139489,
+      "y": 90975,
+      "bytes": 1009,
+      "buildings": 5,
+      "roads": 0
+    },
+    {
+      "x": 139490,
+      "y": 90975,
+      "bytes": 2930,
+      "buildings": 18,
+      "roads": 2
+    },
+    {
+      "x": 139491,
+      "y": 90975,
+      "bytes": 3177,
+      "buildings": 15,
+      "roads": 6
+    },
+    {
+      "x": 139492,
+      "y": 90975,
+      "bytes": 3123,
+      "buildings": 14,
+      "roads": 10
+    },
+    {
+      "x": 139493,
+      "y": 90975,
+      "bytes": 2021,
+      "buildings": 1,
+      "roads": 10
+    },
+    {
+      "x": 139494,
+      "y": 90975,
+      "bytes": 2208,
+      "buildings": 12,
+      "roads": 7
+    },
+    {
+      "x": 139495,
+      "y": 90975,
+      "bytes": 3934,
+      "buildings": 23,
+      "roads": 6
+    },
+    {
+      "x": 139496,
+      "y": 90975,
+      "bytes": 3613,
+      "buildings": 13,
+      "roads": 14
+    },
+    {
+      "x": 139497,
+      "y": 90975,
+      "bytes": 5173,
+      "buildings": 27,
+      "roads": 14
+    },
+    {
+      "x": 139498,
+      "y": 90975,
+      "bytes": 2911,
+      "buildings": 6,
+      "roads": 15
+    },
+    {
+      "x": 139499,
+      "y": 90975,
+      "bytes": 4862,
+      "buildings": 13,
+      "roads": 26
+    },
+    {
+      "x": 139500,
+      "y": 90975,
+      "bytes": 8721,
+      "buildings": 14,
+      "roads": 92
+    },
+    {
+      "x": 139501,
+      "y": 90975,
+      "bytes": 7457,
+      "buildings": 3,
+      "roads": 82
+    },
+    {
+      "x": 139502,
+      "y": 90975,
+      "bytes": 3054,
+      "buildings": 10,
+      "roads": 9
+    },
+    {
+      "x": 139503,
+      "y": 90975,
+      "bytes": 5673,
+      "buildings": 19,
+      "roads": 20
+    },
+    {
+      "x": 139504,
+      "y": 90975,
+      "bytes": 5073,
+      "buildings": 20,
+      "roads": 16
+    },
+    {
+      "x": 139505,
+      "y": 90975,
+      "bytes": 1862,
+      "buildings": 7,
+      "roads": 7
+    },
+    {
+      "x": 139506,
+      "y": 90975,
+      "bytes": 1961,
+      "buildings": 15,
+      "roads": 4
+    },
+    {
+      "x": 139507,
+      "y": 90975,
+      "bytes": 4276,
+      "buildings": 9,
+      "roads": 27
+    },
+    {
+      "x": 139508,
+      "y": 90975,
+      "bytes": 1868,
+      "buildings": 11,
+      "roads": 4
+    },
+    {
+      "x": 139509,
+      "y": 90975,
+      "bytes": 3624,
+      "buildings": 12,
+      "roads": 13
+    },
+    {
+      "x": 139510,
+      "y": 90975,
+      "bytes": 5531,
+      "buildings": 7,
+      "roads": 28
+    },
+    {
+      "x": 139511,
+      "y": 90975,
+      "bytes": 2673,
+      "buildings": 1,
+      "roads": 19
+    },
+    {
+      "x": 139512,
+      "y": 90975,
+      "bytes": 1247,
+      "buildings": 2,
+      "roads": 8
+    },
+    {
+      "x": 139513,
+      "y": 90975,
+      "bytes": 2691,
+      "buildings": 0,
+      "roads": 12
+    },
+    {
+      "x": 139514,
+      "y": 90975,
+      "bytes": 1233,
+      "buildings": 0,
+      "roads": 6
+    },
+    {
+      "x": 139515,
+      "y": 90975,
+      "bytes": 771,
+      "buildings": 0,
+      "roads": 3
+    },
+    {
+      "x": 139485,
+      "y": 90976,
+      "bytes": 470,
+      "buildings": 1,
+      "roads": 1
+    },
+    {
+      "x": 139486,
+      "y": 90976,
+      "bytes": 2153,
+      "buildings": 8,
+      "roads": 6
+    },
+    {
+      "x": 139487,
+      "y": 90976,
+      "bytes": 4490,
+      "buildings": 24,
+      "roads": 18
+    },
+    {
+      "x": 139488,
+      "y": 90976,
+      "bytes": 3519,
+      "buildings": 18,
+      "roads": 8
+    },
+    {
+      "x": 139489,
+      "y": 90976,
+      "bytes": 2473,
+      "buildings": 20,
+      "roads": 0
+    },
+    {
+      "x": 139490,
+      "y": 90976,
+      "bytes": 2118,
+      "buildings": 15,
+      "roads": 1
+    },
+    {
+      "x": 139491,
+      "y": 90976,
+      "bytes": 3916,
+      "buildings": 23,
+      "roads": 16
+    },
+    {
+      "x": 139492,
+      "y": 90976,
+      "bytes": 4588,
+      "buildings": 22,
+      "roads": 12
+    },
+    {
+      "x": 139493,
+      "y": 90976,
+      "bytes": 2528,
+      "buildings": 2,
+      "roads": 20
+    },
+    {
+      "x": 139494,
+      "y": 90976,
+      "bytes": 2578,
+      "buildings": 4,
+      "roads": 18
+    },
+    {
+      "x": 139495,
+      "y": 90976,
+      "bytes": 4113,
+      "buildings": 23,
+      "roads": 1
+    },
+    {
+      "x": 139496,
+      "y": 90976,
+      "bytes": 3825,
+      "buildings": 17,
+      "roads": 5
+    },
+    {
+      "x": 139497,
+      "y": 90976,
+      "bytes": 4376,
+      "buildings": 16,
+      "roads": 14
+    },
+    {
+      "x": 139498,
+      "y": 90976,
+      "bytes": 3166,
+      "buildings": 10,
+      "roads": 12
+    },
+    {
+      "x": 139499,
+      "y": 90976,
+      "bytes": 6270,
+      "buildings": 10,
+      "roads": 17
+    },
+    {
+      "x": 139500,
+      "y": 90976,
+      "bytes": 5588,
+      "buildings": 13,
+      "roads": 29
+    },
+    {
+      "x": 139501,
+      "y": 90976,
+      "bytes": 4692,
+      "buildings": 11,
+      "roads": 14
+    },
+    {
+      "x": 139502,
+      "y": 90976,
+      "bytes": 4722,
+      "buildings": 10,
+      "roads": 19
+    },
+    {
+      "x": 139503,
+      "y": 90976,
+      "bytes": 3657,
+      "buildings": 13,
+      "roads": 18
+    },
+    {
+      "x": 139504,
+      "y": 90976,
+      "bytes": 4350,
+      "buildings": 21,
+      "roads": 9
+    },
+    {
+      "x": 139505,
+      "y": 90976,
+      "bytes": 2227,
+      "buildings": 8,
+      "roads": 13
+    },
+    {
+      "x": 139506,
+      "y": 90976,
+      "bytes": 3838,
+      "buildings": 15,
+      "roads": 19
+    },
+    {
+      "x": 139507,
+      "y": 90976,
+      "bytes": 4749,
+      "buildings": 12,
+      "roads": 22
+    },
+    {
+      "x": 139508,
+      "y": 90976,
+      "bytes": 1980,
+      "buildings": 12,
+      "roads": 7
+    },
+    {
+      "x": 139509,
+      "y": 90976,
+      "bytes": 2163,
+      "buildings": 19,
+      "roads": 0
+    },
+    {
+      "x": 139510,
+      "y": 90976,
+      "bytes": 1504,
+      "buildings": 11,
+      "roads": 4
+    },
+    {
+      "x": 139511,
+      "y": 90976,
+      "bytes": 965,
+      "buildings": 3,
+      "roads": 5
+    },
+    {
+      "x": 139512,
+      "y": 90976,
+      "bytes": 1117,
+      "buildings": 5,
+      "roads": 8
+    },
+    {
+      "x": 139513,
+      "y": 90976,
+      "bytes": 1238,
+      "buildings": 0,
+      "roads": 15
+    },
+    {
+      "x": 139514,
+      "y": 90976,
+      "bytes": 1671,
+      "buildings": 1,
+      "roads": 3
+    },
+    {
+      "x": 139515,
+      "y": 90976,
+      "bytes": 359,
+      "buildings": 1,
+      "roads": 2
+    },
+    {
+      "x": 139484,
+      "y": 90977,
+      "bytes": 311,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139485,
+      "y": 90977,
+      "bytes": 353,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139486,
+      "y": 90977,
+      "bytes": 2959,
+      "buildings": 5,
+      "roads": 12
+    },
+    {
+      "x": 139487,
+      "y": 90977,
+      "bytes": 2445,
+      "buildings": 6,
+      "roads": 16
+    },
+    {
+      "x": 139488,
+      "y": 90977,
+      "bytes": 3510,
+      "buildings": 14,
+      "roads": 15
+    },
+    {
+      "x": 139489,
+      "y": 90977,
+      "bytes": 1175,
+      "buildings": 4,
+      "roads": 7
+    },
+    {
+      "x": 139490,
+      "y": 90977,
+      "bytes": 2267,
+      "buildings": 13,
+      "roads": 10
+    },
+    {
+      "x": 139491,
+      "y": 90977,
+      "bytes": 1635,
+      "buildings": 3,
+      "roads": 4
+    },
+    {
+      "x": 139492,
+      "y": 90977,
+      "bytes": 1704,
+      "buildings": 5,
+      "roads": 12
+    },
+    {
+      "x": 139493,
+      "y": 90977,
+      "bytes": 1752,
+      "buildings": 4,
+      "roads": 11
+    },
+    {
+      "x": 139494,
+      "y": 90977,
+      "bytes": 2675,
+      "buildings": 6,
+      "roads": 19
+    },
+    {
+      "x": 139495,
+      "y": 90977,
+      "bytes": 5656,
+      "buildings": 31,
+      "roads": 18
+    },
+    {
+      "x": 139496,
+      "y": 90977,
+      "bytes": 3676,
+      "buildings": 17,
+      "roads": 10
+    },
+    {
+      "x": 139497,
+      "y": 90977,
+      "bytes": 5260,
+      "buildings": 20,
+      "roads": 15
+    },
+    {
+      "x": 139498,
+      "y": 90977,
+      "bytes": 4049,
+      "buildings": 6,
+      "roads": 24
+    },
+    {
+      "x": 139499,
+      "y": 90977,
+      "bytes": 2693,
+      "buildings": 2,
+      "roads": 21
+    },
+    {
+      "x": 139500,
+      "y": 90977,
+      "bytes": 4986,
+      "buildings": 16,
+      "roads": 21
+    },
+    {
+      "x": 139501,
+      "y": 90977,
+      "bytes": 4588,
+      "buildings": 22,
+      "roads": 8
+    },
+    {
+      "x": 139502,
+      "y": 90977,
+      "bytes": 5226,
+      "buildings": 27,
+      "roads": 11
+    },
+    {
       "x": 139503,
       "y": 90977,
-      "bytes": 232,
-      "buildings": 2,
-      "roads": 0
+      "bytes": 4083,
+      "buildings": 21,
+      "roads": 11
     },
     {
       "x": 139504,
       "y": 90977,
-      "bytes": 234,
-      "buildings": 2,
-      "roads": 0
+      "bytes": 5304,
+      "buildings": 26,
+      "roads": 11
     },
     {
       "x": 139505,
       "y": 90977,
-      "bytes": 236,
-      "buildings": 2,
-      "roads": 0
+      "bytes": 5559,
+      "buildings": 12,
+      "roads": 43
     },
     {
       "x": 139506,
       "y": 90977,
-      "bytes": 385,
-      "buildings": 4,
-      "roads": 0
+      "bytes": 3872,
+      "buildings": 7,
+      "roads": 29
     },
     {
       "x": 139507,
       "y": 90977,
-      "bytes": 240,
-      "buildings": 2,
-      "roads": 0
+      "bytes": 2926,
+      "buildings": 14,
+      "roads": 6
     },
     {
       "x": 139508,
       "y": 90977,
-      "bytes": 385,
-      "buildings": 4,
-      "roads": 0
+      "bytes": 2798,
+      "buildings": 13,
+      "roads": 5
     },
     {
       "x": 139509,
       "y": 90977,
-      "bytes": 416,
+      "bytes": 4601,
       "buildings": 2,
+      "roads": 24
+    },
+    {
+      "x": 139510,
+      "y": 90977,
+      "bytes": 1889,
+      "buildings": 4,
+      "roads": 7
+    },
+    {
+      "x": 139511,
+      "y": 90977,
+      "bytes": 1267,
+      "buildings": 3,
+      "roads": 2
+    },
+    {
+      "x": 139512,
+      "y": 90977,
+      "bytes": 881,
+      "buildings": 0,
+      "roads": 5
+    },
+    {
+      "x": 139513,
+      "y": 90977,
+      "bytes": 612,
+      "buildings": 0,
+      "roads": 6
+    },
+    {
+      "x": 139514,
+      "y": 90977,
+      "bytes": 2235,
+      "buildings": 5,
+      "roads": 11
+    },
+    {
+      "x": 139515,
+      "y": 90977,
+      "bytes": 290,
+      "buildings": 1,
+      "roads": 2
+    },
+    {
+      "x": 139486,
+      "y": 90978,
+      "bytes": 1806,
+      "buildings": 7,
+      "roads": 8
+    },
+    {
+      "x": 139487,
+      "y": 90978,
+      "bytes": 1816,
+      "buildings": 8,
+      "roads": 7
+    },
+    {
+      "x": 139488,
+      "y": 90978,
+      "bytes": 1528,
+      "buildings": 6,
+      "roads": 3
+    },
+    {
+      "x": 139489,
+      "y": 90978,
+      "bytes": 1520,
+      "buildings": 5,
+      "roads": 5
+    },
+    {
+      "x": 139490,
+      "y": 90978,
+      "bytes": 1933,
+      "buildings": 10,
+      "roads": 8
+    },
+    {
+      "x": 139491,
+      "y": 90978,
+      "bytes": 448,
+      "buildings": 1,
+      "roads": 2
+    },
+    {
+      "x": 139492,
+      "y": 90978,
+      "bytes": 1905,
+      "buildings": 8,
+      "roads": 4
+    },
+    {
+      "x": 139493,
+      "y": 90978,
+      "bytes": 1818,
+      "buildings": 7,
+      "roads": 7
+    },
+    {
+      "x": 139494,
+      "y": 90978,
+      "bytes": 3014,
+      "buildings": 6,
+      "roads": 12
+    },
+    {
+      "x": 139495,
+      "y": 90978,
+      "bytes": 6421,
+      "buildings": 19,
+      "roads": 22
+    },
+    {
+      "x": 139496,
+      "y": 90978,
+      "bytes": 3432,
+      "buildings": 10,
+      "roads": 13
+    },
+    {
+      "x": 139497,
+      "y": 90978,
+      "bytes": 2993,
+      "buildings": 4,
+      "roads": 17
+    },
+    {
+      "x": 139498,
+      "y": 90978,
+      "bytes": 1256,
+      "buildings": 3,
+      "roads": 6
+    },
+    {
+      "x": 139499,
+      "y": 90978,
+      "bytes": 4466,
+      "buildings": 12,
+      "roads": 23
+    },
+    {
+      "x": 139500,
+      "y": 90978,
+      "bytes": 4258,
+      "buildings": 15,
+      "roads": 16
+    },
+    {
+      "x": 139501,
+      "y": 90978,
+      "bytes": 5391,
+      "buildings": 23,
+      "roads": 13
+    },
+    {
+      "x": 139502,
+      "y": 90978,
+      "bytes": 4557,
+      "buildings": 29,
       "roads": 3
     },
     {
       "x": 139503,
       "y": 90978,
-      "bytes": 228,
-      "buildings": 2,
-      "roads": 0
+      "bytes": 4290,
+      "buildings": 23,
+      "roads": 6
     },
     {
       "x": 139504,
       "y": 90978,
-      "bytes": 230,
-      "buildings": 2,
-      "roads": 0
+      "bytes": 4898,
+      "buildings": 11,
+      "roads": 19
     },
     {
       "x": 139505,
       "y": 90978,
-      "bytes": 232,
-      "buildings": 2,
-      "roads": 0
+      "bytes": 4490,
+      "buildings": 1,
+      "roads": 53
     },
     {
       "x": 139506,
       "y": 90978,
-      "bytes": 377,
-      "buildings": 4,
-      "roads": 0
+      "bytes": 4573,
+      "buildings": 5,
+      "roads": 36
     },
     {
       "x": 139507,
       "y": 90978,
-      "bytes": 236,
-      "buildings": 2,
-      "roads": 0
+      "bytes": 4230,
+      "buildings": 20,
+      "roads": 8
     },
     {
       "x": 139508,
       "y": 90978,
-      "bytes": 377,
-      "buildings": 4,
-      "roads": 0
+      "bytes": 3003,
+      "buildings": 14,
+      "roads": 7
     },
     {
       "x": 139509,
       "y": 90978,
-      "bytes": 355,
+      "bytes": 1886,
+      "buildings": 7,
+      "roads": 4
+    },
+    {
+      "x": 139510,
+      "y": 90978,
+      "bytes": 432,
+      "buildings": 1,
+      "roads": 4
+    },
+    {
+      "x": 139511,
+      "y": 90978,
+      "bytes": 879,
+      "buildings": 0,
+      "roads": 4
+    },
+    {
+      "x": 139512,
+      "y": 90978,
+      "bytes": 539,
+      "buildings": 0,
+      "roads": 6
+    },
+    {
+      "x": 139513,
+      "y": 90978,
+      "bytes": 364,
       "buildings": 2,
+      "roads": 1
+    },
+    {
+      "x": 139514,
+      "y": 90978,
+      "bytes": 1554,
+      "buildings": 4,
+      "roads": 9
+    },
+    {
+      "x": 139515,
+      "y": 90978,
+      "bytes": 1206,
+      "buildings": 2,
+      "roads": 5
+    },
+    {
+      "x": 139485,
+      "y": 90979,
+      "bytes": 543,
+      "buildings": 1,
       "roads": 2
+    },
+    {
+      "x": 139486,
+      "y": 90979,
+      "bytes": 1625,
+      "buildings": 13,
+      "roads": 1
+    },
+    {
+      "x": 139487,
+      "y": 90979,
+      "bytes": 1269,
+      "buildings": 12,
+      "roads": 0
+    },
+    {
+      "x": 139488,
+      "y": 90979,
+      "bytes": 2129,
+      "buildings": 9,
+      "roads": 7
+    },
+    {
+      "x": 139489,
+      "y": 90979,
+      "bytes": 2259,
+      "buildings": 12,
+      "roads": 2
+    },
+    {
+      "x": 139490,
+      "y": 90979,
+      "bytes": 2371,
+      "buildings": 5,
+      "roads": 12
+    },
+    {
+      "x": 139491,
+      "y": 90979,
+      "bytes": 1001,
+      "buildings": 3,
+      "roads": 7
+    },
+    {
+      "x": 139492,
+      "y": 90979,
+      "bytes": 2256,
+      "buildings": 12,
+      "roads": 2
+    },
+    {
+      "x": 139493,
+      "y": 90979,
+      "bytes": 6938,
+      "buildings": 9,
+      "roads": 22
+    },
+    {
+      "x": 139494,
+      "y": 90979,
+      "bytes": 13477,
+      "buildings": 4,
+      "roads": 152
+    },
+    {
+      "x": 139495,
+      "y": 90979,
+      "bytes": 4590,
+      "buildings": 3,
+      "roads": 45
+    },
+    {
+      "x": 139496,
+      "y": 90979,
+      "bytes": 3178,
+      "buildings": 12,
+      "roads": 13
+    },
+    {
+      "x": 139497,
+      "y": 90979,
+      "bytes": 3053,
+      "buildings": 15,
+      "roads": 6
+    },
+    {
+      "x": 139498,
+      "y": 90979,
+      "bytes": 620,
+      "buildings": 3,
+      "roads": 1
+    },
+    {
+      "x": 139499,
+      "y": 90979,
+      "bytes": 2385,
+      "buildings": 2,
+      "roads": 17
+    },
+    {
+      "x": 139500,
+      "y": 90979,
+      "bytes": 4950,
+      "buildings": 28,
+      "roads": 13
+    },
+    {
+      "x": 139501,
+      "y": 90979,
+      "bytes": 4164,
+      "buildings": 15,
+      "roads": 13
+    },
+    {
+      "x": 139502,
+      "y": 90979,
+      "bytes": 3539,
+      "buildings": 27,
+      "roads": 6
+    },
+    {
+      "x": 139503,
+      "y": 90979,
+      "bytes": 3316,
+      "buildings": 19,
+      "roads": 8
+    },
+    {
+      "x": 139504,
+      "y": 90979,
+      "bytes": 2994,
+      "buildings": 17,
+      "roads": 5
+    },
+    {
+      "x": 139505,
+      "y": 90979,
+      "bytes": 2749,
+      "buildings": 11,
+      "roads": 6
+    },
+    {
+      "x": 139506,
+      "y": 90979,
+      "bytes": 5091,
+      "buildings": 12,
+      "roads": 28
+    },
+    {
+      "x": 139507,
+      "y": 90979,
+      "bytes": 3156,
+      "buildings": 14,
+      "roads": 17
+    },
+    {
+      "x": 139508,
+      "y": 90979,
+      "bytes": 2278,
+      "buildings": 11,
+      "roads": 5
     },
     {
       "x": 139509,
       "y": 90979,
-      "bytes": 140,
+      "bytes": 507,
+      "buildings": 0,
+      "roads": 3
+    },
+    {
+      "x": 139510,
+      "y": 90979,
+      "bytes": 447,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139511,
+      "y": 90979,
+      "bytes": 615,
+      "buildings": 2,
+      "roads": 5
+    },
+    {
+      "x": 139512,
+      "y": 90979,
+      "bytes": 883,
+      "buildings": 1,
+      "roads": 7
+    },
+    {
+      "x": 139513,
+      "y": 90979,
+      "bytes": 3360,
+      "buildings": 8,
+      "roads": 13
+    },
+    {
+      "x": 139514,
+      "y": 90979,
+      "bytes": 3614,
+      "buildings": 16,
+      "roads": 16
+    },
+    {
+      "x": 139515,
+      "y": 90979,
+      "bytes": 786,
+      "buildings": 5,
+      "roads": 2
+    },
+    {
+      "x": 139485,
+      "y": 90980,
+      "bytes": 327,
+      "buildings": 1,
+      "roads": 1
+    },
+    {
+      "x": 139486,
+      "y": 90980,
+      "bytes": 3456,
+      "buildings": 4,
+      "roads": 16
+    },
+    {
+      "x": 139487,
+      "y": 90980,
+      "bytes": 2066,
+      "buildings": 10,
+      "roads": 6
+    },
+    {
+      "x": 139488,
+      "y": 90980,
+      "bytes": 3598,
+      "buildings": 6,
+      "roads": 15
+    },
+    {
+      "x": 139489,
+      "y": 90980,
+      "bytes": 2089,
+      "buildings": 4,
+      "roads": 8
+    },
+    {
+      "x": 139490,
+      "y": 90980,
+      "bytes": 966,
+      "buildings": 2,
+      "roads": 6
+    },
+    {
+      "x": 139491,
+      "y": 90980,
+      "bytes": 1869,
+      "buildings": 1,
+      "roads": 5
+    },
+    {
+      "x": 139492,
+      "y": 90980,
+      "bytes": 2558,
+      "buildings": 0,
+      "roads": 7
+    },
+    {
+      "x": 139493,
+      "y": 90980,
+      "bytes": 2683,
+      "buildings": 9,
+      "roads": 12
+    },
+    {
+      "x": 139494,
+      "y": 90980,
+      "bytes": 4572,
+      "buildings": 7,
+      "roads": 25
+    },
+    {
+      "x": 139495,
+      "y": 90980,
+      "bytes": 4726,
+      "buildings": 8,
+      "roads": 33
+    },
+    {
+      "x": 139496,
+      "y": 90980,
+      "bytes": 2225,
+      "buildings": 3,
+      "roads": 12
+    },
+    {
+      "x": 139497,
+      "y": 90980,
+      "bytes": 1185,
+      "buildings": 7,
+      "roads": 2
+    },
+    {
+      "x": 139498,
+      "y": 90980,
+      "bytes": 916,
+      "buildings": 4,
+      "roads": 2
+    },
+    {
+      "x": 139499,
+      "y": 90980,
+      "bytes": 2987,
+      "buildings": 14,
+      "roads": 7
+    },
+    {
+      "x": 139500,
+      "y": 90980,
+      "bytes": 4276,
+      "buildings": 24,
+      "roads": 14
+    },
+    {
+      "x": 139501,
+      "y": 90980,
+      "bytes": 4198,
+      "buildings": 29,
+      "roads": 2
+    },
+    {
+      "x": 139502,
+      "y": 90980,
+      "bytes": 3281,
+      "buildings": 17,
+      "roads": 11
+    },
+    {
+      "x": 139503,
+      "y": 90980,
+      "bytes": 3582,
+      "buildings": 21,
+      "roads": 9
+    },
+    {
+      "x": 139504,
+      "y": 90980,
+      "bytes": 2769,
+      "buildings": 13,
+      "roads": 7
+    },
+    {
+      "x": 139505,
+      "y": 90980,
+      "bytes": 1734,
+      "buildings": 17,
+      "roads": 0
+    },
+    {
+      "x": 139506,
+      "y": 90980,
+      "bytes": 2225,
+      "buildings": 9,
+      "roads": 9
+    },
+    {
+      "x": 139507,
+      "y": 90980,
+      "bytes": 3565,
+      "buildings": 12,
+      "roads": 15
+    },
+    {
+      "x": 139508,
+      "y": 90980,
+      "bytes": 2047,
+      "buildings": 3,
+      "roads": 22
+    },
+    {
+      "x": 139509,
+      "y": 90980,
+      "bytes": 898,
+      "buildings": 0,
+      "roads": 11
+    },
+    {
+      "x": 139510,
+      "y": 90980,
+      "bytes": 2129,
+      "buildings": 7,
+      "roads": 15
+    },
+    {
+      "x": 139511,
+      "y": 90980,
+      "bytes": 1372,
+      "buildings": 0,
+      "roads": 9
+    },
+    {
+      "x": 139512,
+      "y": 90980,
+      "bytes": 3977,
+      "buildings": 11,
+      "roads": 25
+    },
+    {
+      "x": 139513,
+      "y": 90980,
+      "bytes": 2442,
+      "buildings": 12,
+      "roads": 10
+    },
+    {
+      "x": 139514,
+      "y": 90980,
+      "bytes": 3379,
+      "buildings": 11,
+      "roads": 19
+    },
+    {
+      "x": 139515,
+      "y": 90980,
+      "bytes": 699,
+      "buildings": 4,
+      "roads": 2
+    },
+    {
+      "x": 139485,
+      "y": 90981,
+      "bytes": 135,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139486,
+      "y": 90981,
+      "bytes": 1017,
+      "buildings": 3,
+      "roads": 2
+    },
+    {
+      "x": 139487,
+      "y": 90981,
+      "bytes": 1957,
+      "buildings": 5,
+      "roads": 14
+    },
+    {
+      "x": 139488,
+      "y": 90981,
+      "bytes": 1673,
+      "buildings": 6,
+      "roads": 7
+    },
+    {
+      "x": 139489,
+      "y": 90981,
+      "bytes": 2574,
+      "buildings": 5,
+      "roads": 10
+    },
+    {
+      "x": 139490,
+      "y": 90981,
+      "bytes": 1367,
+      "buildings": 7,
+      "roads": 3
+    },
+    {
+      "x": 139491,
+      "y": 90981,
+      "bytes": 1391,
+      "buildings": 3,
+      "roads": 12
+    },
+    {
+      "x": 139492,
+      "y": 90981,
+      "bytes": 3513,
+      "buildings": 18,
+      "roads": 10
+    },
+    {
+      "x": 139493,
+      "y": 90981,
+      "bytes": 3008,
+      "buildings": 23,
+      "roads": 5
+    },
+    {
+      "x": 139494,
+      "y": 90981,
+      "bytes": 4103,
+      "buildings": 25,
+      "roads": 4
+    },
+    {
+      "x": 139495,
+      "y": 90981,
+      "bytes": 5079,
+      "buildings": 18,
+      "roads": 18
+    },
+    {
+      "x": 139496,
+      "y": 90981,
+      "bytes": 2192,
+      "buildings": 13,
+      "roads": 5
+    },
+    {
+      "x": 139497,
+      "y": 90981,
+      "bytes": 3147,
+      "buildings": 6,
+      "roads": 19
+    },
+    {
+      "x": 139498,
+      "y": 90981,
+      "bytes": 3181,
+      "buildings": 17,
+      "roads": 12
+    },
+    {
+      "x": 139499,
+      "y": 90981,
+      "bytes": 1586,
+      "buildings": 4,
+      "roads": 4
+    },
+    {
+      "x": 139500,
+      "y": 90981,
+      "bytes": 2952,
+      "buildings": 19,
+      "roads": 2
+    },
+    {
+      "x": 139501,
+      "y": 90981,
+      "bytes": 7774,
+      "buildings": 4,
+      "roads": 28
+    },
+    {
+      "x": 139502,
+      "y": 90981,
+      "bytes": 2971,
+      "buildings": 17,
+      "roads": 11
+    },
+    {
+      "x": 139503,
+      "y": 90981,
+      "bytes": 3458,
+      "buildings": 25,
+      "roads": 0
+    },
+    {
+      "x": 139504,
+      "y": 90981,
+      "bytes": 3201,
+      "buildings": 18,
+      "roads": 9
+    },
+    {
+      "x": 139505,
+      "y": 90981,
+      "bytes": 2563,
+      "buildings": 17,
+      "roads": 12
+    },
+    {
+      "x": 139506,
+      "y": 90981,
+      "bytes": 257,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139507,
+      "y": 90981,
+      "bytes": 1005,
+      "buildings": 0,
+      "roads": 7
+    },
+    {
+      "x": 139508,
+      "y": 90981,
+      "bytes": 2091,
+      "buildings": 0,
+      "roads": 26
+    },
+    {
+      "x": 139509,
+      "y": 90981,
+      "bytes": 2212,
+      "buildings": 0,
+      "roads": 23
+    },
+    {
+      "x": 139510,
+      "y": 90981,
+      "bytes": 2593,
+      "buildings": 7,
+      "roads": 12
+    },
+    {
+      "x": 139511,
+      "y": 90981,
+      "bytes": 3785,
+      "buildings": 1,
+      "roads": 45
+    },
+    {
+      "x": 139512,
+      "y": 90981,
+      "bytes": 2026,
+      "buildings": 4,
+      "roads": 21
+    },
+    {
+      "x": 139513,
+      "y": 90981,
+      "bytes": 2855,
+      "buildings": 11,
+      "roads": 15
+    },
+    {
+      "x": 139514,
+      "y": 90981,
+      "bytes": 4191,
+      "buildings": 24,
+      "roads": 15
+    },
+    {
+      "x": 139515,
+      "y": 90981,
+      "bytes": 1362,
+      "buildings": 12,
+      "roads": 2
+    },
+    {
+      "x": 139485,
+      "y": 90982,
+      "bytes": 645,
+      "buildings": 1,
+      "roads": 1
+    },
+    {
+      "x": 139486,
+      "y": 90982,
+      "bytes": 1770,
+      "buildings": 11,
+      "roads": 3
+    },
+    {
+      "x": 139487,
+      "y": 90982,
+      "bytes": 1356,
+      "buildings": 7,
+      "roads": 3
+    },
+    {
+      "x": 139488,
+      "y": 90982,
+      "bytes": 2604,
+      "buildings": 6,
+      "roads": 23
+    },
+    {
+      "x": 139489,
+      "y": 90982,
+      "bytes": 2548,
+      "buildings": 4,
+      "roads": 16
+    },
+    {
+      "x": 139490,
+      "y": 90982,
+      "bytes": 1998,
+      "buildings": 9,
+      "roads": 9
+    },
+    {
+      "x": 139491,
+      "y": 90982,
+      "bytes": 4081,
+      "buildings": 26,
+      "roads": 9
+    },
+    {
+      "x": 139492,
+      "y": 90982,
+      "bytes": 2059,
+      "buildings": 14,
+      "roads": 3
+    },
+    {
+      "x": 139493,
+      "y": 90982,
+      "bytes": 1899,
+      "buildings": 15,
+      "roads": 2
+    },
+    {
+      "x": 139494,
+      "y": 90982,
+      "bytes": 3503,
+      "buildings": 11,
+      "roads": 14
+    },
+    {
+      "x": 139495,
+      "y": 90982,
+      "bytes": 3411,
+      "buildings": 24,
+      "roads": 6
+    },
+    {
+      "x": 139496,
+      "y": 90982,
+      "bytes": 3446,
+      "buildings": 18,
+      "roads": 5
+    },
+    {
+      "x": 139497,
+      "y": 90982,
+      "bytes": 4074,
+      "buildings": 10,
+      "roads": 16
+    },
+    {
+      "x": 139498,
+      "y": 90982,
+      "bytes": 3150,
+      "buildings": 17,
+      "roads": 4
+    },
+    {
+      "x": 139499,
+      "y": 90982,
+      "bytes": 2508,
+      "buildings": 17,
+      "roads": 3
+    },
+    {
+      "x": 139500,
+      "y": 90982,
+      "bytes": 2230,
+      "buildings": 14,
+      "roads": 4
+    },
+    {
+      "x": 139501,
+      "y": 90982,
+      "bytes": 3323,
+      "buildings": 18,
+      "roads": 1
+    },
+    {
+      "x": 139502,
+      "y": 90982,
+      "bytes": 3717,
+      "buildings": 28,
+      "roads": 5
+    },
+    {
+      "x": 139503,
+      "y": 90982,
+      "bytes": 2670,
+      "buildings": 20,
+      "roads": 3
+    },
+    {
+      "x": 139504,
+      "y": 90982,
+      "bytes": 1072,
+      "buildings": 5,
+      "roads": 6
+    },
+    {
+      "x": 139505,
+      "y": 90982,
+      "bytes": 1311,
+      "buildings": 0,
+      "roads": 10
+    },
+    {
+      "x": 139506,
+      "y": 90982,
+      "bytes": 1079,
+      "buildings": 0,
+      "roads": 10
+    },
+    {
+      "x": 139507,
+      "y": 90982,
+      "bytes": 807,
+      "buildings": 1,
+      "roads": 7
+    },
+    {
+      "x": 139508,
+      "y": 90982,
+      "bytes": 389,
+      "buildings": 1,
+      "roads": 1
+    },
+    {
+      "x": 139509,
+      "y": 90982,
+      "bytes": 2055,
+      "buildings": 9,
+      "roads": 9
+    },
+    {
+      "x": 139510,
+      "y": 90982,
+      "bytes": 3803,
+      "buildings": 20,
+      "roads": 16
+    },
+    {
+      "x": 139511,
+      "y": 90982,
+      "bytes": 2269,
+      "buildings": 6,
+      "roads": 17
+    },
+    {
+      "x": 139512,
+      "y": 90982,
+      "bytes": 2369,
+      "buildings": 3,
+      "roads": 24
+    },
+    {
+      "x": 139513,
+      "y": 90982,
+      "bytes": 1905,
+      "buildings": 1,
+      "roads": 11
+    },
+    {
+      "x": 139514,
+      "y": 90982,
+      "bytes": 3246,
+      "buildings": 9,
+      "roads": 18
+    },
+    {
+      "x": 139515,
+      "y": 90982,
+      "bytes": 1144,
+      "buildings": 5,
+      "roads": 5
+    },
+    {
+      "x": 139485,
+      "y": 90983,
+      "bytes": 419,
+      "buildings": 0,
+      "roads": 2
+    },
+    {
+      "x": 139486,
+      "y": 90983,
+      "bytes": 1859,
+      "buildings": 11,
+      "roads": 4
+    },
+    {
+      "x": 139487,
+      "y": 90983,
+      "bytes": 2981,
+      "buildings": 16,
+      "roads": 9
+    },
+    {
+      "x": 139488,
+      "y": 90983,
+      "bytes": 5725,
+      "buildings": 8,
+      "roads": 54
+    },
+    {
+      "x": 139489,
+      "y": 90983,
+      "bytes": 2285,
+      "buildings": 11,
+      "roads": 8
+    },
+    {
+      "x": 139490,
+      "y": 90983,
+      "bytes": 2875,
+      "buildings": 19,
+      "roads": 3
+    },
+    {
+      "x": 139491,
+      "y": 90983,
+      "bytes": 3739,
+      "buildings": 17,
+      "roads": 11
+    },
+    {
+      "x": 139492,
+      "y": 90983,
+      "bytes": 3286,
+      "buildings": 4,
+      "roads": 16
+    },
+    {
+      "x": 139493,
+      "y": 90983,
+      "bytes": 1155,
+      "buildings": 6,
+      "roads": 2
+    },
+    {
+      "x": 139494,
+      "y": 90983,
+      "bytes": 1796,
+      "buildings": 13,
+      "roads": 3
+    },
+    {
+      "x": 139495,
+      "y": 90983,
+      "bytes": 4876,
+      "buildings": 23,
+      "roads": 18
+    },
+    {
+      "x": 139496,
+      "y": 90983,
+      "bytes": 3580,
+      "buildings": 17,
+      "roads": 12
+    },
+    {
+      "x": 139497,
+      "y": 90983,
+      "bytes": 2098,
+      "buildings": 12,
+      "roads": 1
+    },
+    {
+      "x": 139498,
+      "y": 90983,
+      "bytes": 1757,
+      "buildings": 12,
+      "roads": 5
+    },
+    {
+      "x": 139499,
+      "y": 90983,
+      "bytes": 4458,
+      "buildings": 16,
+      "roads": 31
+    },
+    {
+      "x": 139500,
+      "y": 90983,
+      "bytes": 2396,
+      "buildings": 19,
+      "roads": 4
+    },
+    {
+      "x": 139501,
+      "y": 90983,
+      "bytes": 2900,
+      "buildings": 17,
+      "roads": 2
+    },
+    {
+      "x": 139502,
+      "y": 90983,
+      "bytes": 3243,
+      "buildings": 25,
+      "roads": 5
+    },
+    {
+      "x": 139503,
+      "y": 90983,
+      "bytes": 3807,
+      "buildings": 9,
+      "roads": 12
+    },
+    {
+      "x": 139504,
+      "y": 90983,
+      "bytes": 385,
+      "buildings": 0,
+      "roads": 5
+    },
+    {
+      "x": 139505,
+      "y": 90983,
+      "bytes": 772,
+      "buildings": 1,
+      "roads": 4
+    },
+    {
+      "x": 139506,
+      "y": 90983,
+      "bytes": 394,
+      "buildings": 0,
+      "roads": 4
+    },
+    {
+      "x": 139507,
+      "y": 90983,
+      "bytes": 519,
+      "buildings": 0,
+      "roads": 7
+    },
+    {
+      "x": 139508,
+      "y": 90983,
+      "bytes": 1398,
+      "buildings": 6,
+      "roads": 8
+    },
+    {
+      "x": 139509,
+      "y": 90983,
+      "bytes": 8527,
+      "buildings": 15,
+      "roads": 14
+    },
+    {
+      "x": 139510,
+      "y": 90983,
+      "bytes": 3377,
+      "buildings": 5,
+      "roads": 21
+    },
+    {
+      "x": 139511,
+      "y": 90983,
+      "bytes": 1411,
+      "buildings": 7,
+      "roads": 8
+    },
+    {
+      "x": 139512,
+      "y": 90983,
+      "bytes": 4067,
+      "buildings": 9,
+      "roads": 31
+    },
+    {
+      "x": 139513,
+      "y": 90983,
+      "bytes": 2095,
+      "buildings": 1,
+      "roads": 21
+    },
+    {
+      "x": 139514,
+      "y": 90983,
+      "bytes": 1874,
+      "buildings": 6,
+      "roads": 11
+    },
+    {
+      "x": 139515,
+      "y": 90983,
+      "bytes": 1237,
+      "buildings": 5,
+      "roads": 7
+    },
+    {
+      "x": 139485,
+      "y": 90984,
+      "bytes": 388,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139486,
+      "y": 90984,
+      "bytes": 2750,
+      "buildings": 17,
+      "roads": 3
+    },
+    {
+      "x": 139487,
+      "y": 90984,
+      "bytes": 4685,
+      "buildings": 12,
+      "roads": 31
+    },
+    {
+      "x": 139488,
+      "y": 90984,
+      "bytes": 4122,
+      "buildings": 14,
+      "roads": 26
+    },
+    {
+      "x": 139489,
+      "y": 90984,
+      "bytes": 3177,
+      "buildings": 17,
+      "roads": 9
+    },
+    {
+      "x": 139490,
+      "y": 90984,
+      "bytes": 2407,
+      "buildings": 15,
+      "roads": 5
+    },
+    {
+      "x": 139491,
+      "y": 90984,
+      "bytes": 3335,
+      "buildings": 20,
+      "roads": 9
+    },
+    {
+      "x": 139492,
+      "y": 90984,
+      "bytes": 1977,
+      "buildings": 5,
+      "roads": 5
+    },
+    {
+      "x": 139493,
+      "y": 90984,
+      "bytes": 656,
+      "buildings": 0,
+      "roads": 6
+    },
+    {
+      "x": 139494,
+      "y": 90984,
+      "bytes": 2231,
+      "buildings": 4,
+      "roads": 4
+    },
+    {
+      "x": 139495,
+      "y": 90984,
+      "bytes": 3424,
+      "buildings": 15,
+      "roads": 10
+    },
+    {
+      "x": 139496,
+      "y": 90984,
+      "bytes": 3752,
+      "buildings": 23,
+      "roads": 6
+    },
+    {
+      "x": 139497,
+      "y": 90984,
+      "bytes": 3549,
+      "buildings": 27,
+      "roads": 8
+    },
+    {
+      "x": 139498,
+      "y": 90984,
+      "bytes": 2883,
+      "buildings": 19,
+      "roads": 8
+    },
+    {
+      "x": 139499,
+      "y": 90984,
+      "bytes": 2334,
+      "buildings": 13,
+      "roads": 8
+    },
+    {
+      "x": 139500,
+      "y": 90984,
+      "bytes": 3993,
+      "buildings": 16,
+      "roads": 22
+    },
+    {
+      "x": 139501,
+      "y": 90984,
+      "bytes": 3719,
+      "buildings": 21,
+      "roads": 5
+    },
+    {
+      "x": 139502,
+      "y": 90984,
+      "bytes": 3456,
+      "buildings": 20,
+      "roads": 5
+    },
+    {
+      "x": 139503,
+      "y": 90984,
+      "bytes": 1652,
+      "buildings": 4,
+      "roads": 10
+    },
+    {
+      "x": 139504,
+      "y": 90984,
+      "bytes": 1600,
+      "buildings": 2,
+      "roads": 10
+    },
+    {
+      "x": 139505,
+      "y": 90984,
+      "bytes": 524,
+      "buildings": 1,
+      "roads": 3
+    },
+    {
+      "x": 139507,
+      "y": 90984,
+      "bytes": 974,
+      "buildings": 5,
+      "roads": 5
+    },
+    {
+      "x": 139508,
+      "y": 90984,
+      "bytes": 2651,
+      "buildings": 16,
+      "roads": 9
+    },
+    {
+      "x": 139509,
+      "y": 90984,
+      "bytes": 3349,
+      "buildings": 13,
+      "roads": 14
+    },
+    {
+      "x": 139510,
+      "y": 90984,
+      "bytes": 1123,
+      "buildings": 7,
+      "roads": 4
+    },
+    {
+      "x": 139511,
+      "y": 90984,
+      "bytes": 832,
+      "buildings": 3,
+      "roads": 4
+    },
+    {
+      "x": 139512,
+      "y": 90984,
+      "bytes": 1529,
+      "buildings": 10,
+      "roads": 7
+    },
+    {
+      "x": 139513,
+      "y": 90984,
+      "bytes": 3432,
+      "buildings": 11,
+      "roads": 10
+    },
+    {
+      "x": 139514,
+      "y": 90984,
+      "bytes": 7115,
+      "buildings": 5,
+      "roads": 88
+    },
+    {
+      "x": 139515,
+      "y": 90984,
+      "bytes": 1896,
+      "buildings": 10,
+      "roads": 4
+    },
+    {
+      "x": 139486,
+      "y": 90985,
+      "bytes": 3517,
+      "buildings": 9,
+      "roads": 16
+    },
+    {
+      "x": 139487,
+      "y": 90985,
+      "bytes": 4087,
+      "buildings": 15,
+      "roads": 23
+    },
+    {
+      "x": 139488,
+      "y": 90985,
+      "bytes": 2072,
+      "buildings": 8,
+      "roads": 9
+    },
+    {
+      "x": 139489,
+      "y": 90985,
+      "bytes": 1686,
+      "buildings": 9,
+      "roads": 5
+    },
+    {
+      "x": 139490,
+      "y": 90985,
+      "bytes": 1508,
+      "buildings": 8,
+      "roads": 2
+    },
+    {
+      "x": 139491,
+      "y": 90985,
+      "bytes": 1762,
+      "buildings": 4,
+      "roads": 14
+    },
+    {
+      "x": 139492,
+      "y": 90985,
+      "bytes": 561,
+      "buildings": 1,
+      "roads": 3
+    },
+    {
+      "x": 139493,
+      "y": 90985,
+      "bytes": 408,
+      "buildings": 0,
+      "roads": 4
+    },
+    {
+      "x": 139494,
+      "y": 90985,
+      "bytes": 1172,
+      "buildings": 4,
+      "roads": 3
+    },
+    {
+      "x": 139495,
+      "y": 90985,
+      "bytes": 2180,
+      "buildings": 6,
+      "roads": 7
+    },
+    {
+      "x": 139496,
+      "y": 90985,
+      "bytes": 2835,
+      "buildings": 19,
+      "roads": 4
+    },
+    {
+      "x": 139497,
+      "y": 90985,
+      "bytes": 2003,
+      "buildings": 10,
+      "roads": 2
+    },
+    {
+      "x": 139498,
+      "y": 90985,
+      "bytes": 1553,
+      "buildings": 9,
+      "roads": 4
+    },
+    {
+      "x": 139499,
+      "y": 90985,
+      "bytes": 1735,
+      "buildings": 12,
+      "roads": 5
+    },
+    {
+      "x": 139500,
+      "y": 90985,
+      "bytes": 2499,
+      "buildings": 9,
+      "roads": 13
+    },
+    {
+      "x": 139501,
+      "y": 90985,
+      "bytes": 3673,
+      "buildings": 11,
+      "roads": 28
+    },
+    {
+      "x": 139502,
+      "y": 90985,
+      "bytes": 379,
+      "buildings": 1,
+      "roads": 0
+    },
+    {
+      "x": 139504,
+      "y": 90985,
+      "bytes": 598,
+      "buildings": 0,
+      "roads": 4
+    },
+    {
+      "x": 139505,
+      "y": 90985,
+      "bytes": 352,
+      "buildings": 0,
+      "roads": 3
+    },
+    {
+      "x": 139506,
+      "y": 90985,
+      "bytes": 1333,
+      "buildings": 0,
+      "roads": 8
+    },
+    {
+      "x": 139507,
+      "y": 90985,
+      "bytes": 1547,
+      "buildings": 9,
+      "roads": 5
+    },
+    {
+      "x": 139508,
+      "y": 90985,
+      "bytes": 1555,
+      "buildings": 8,
+      "roads": 7
+    },
+    {
+      "x": 139509,
+      "y": 90985,
+      "bytes": 3115,
+      "buildings": 5,
+      "roads": 10
+    },
+    {
+      "x": 139510,
+      "y": 90985,
+      "bytes": 1120,
+      "buildings": 2,
+      "roads": 5
+    },
+    {
+      "x": 139511,
+      "y": 90985,
+      "bytes": 461,
+      "buildings": 1,
+      "roads": 2
+    },
+    {
+      "x": 139512,
+      "y": 90985,
+      "bytes": 1241,
+      "buildings": 6,
+      "roads": 6
+    },
+    {
+      "x": 139513,
+      "y": 90985,
+      "bytes": 1670,
+      "buildings": 7,
+      "roads": 8
+    },
+    {
+      "x": 139514,
+      "y": 90985,
+      "bytes": 3694,
+      "buildings": 12,
+      "roads": 23
+    },
+    {
+      "x": 139515,
+      "y": 90985,
+      "bytes": 1064,
+      "buildings": 4,
+      "roads": 2
+    },
+    {
+      "x": 139487,
+      "y": 90986,
+      "bytes": 283,
+      "buildings": 1,
+      "roads": 0
+    },
+    {
+      "x": 139488,
+      "y": 90986,
+      "bytes": 370,
+      "buildings": 0,
+      "roads": 2
+    },
+    {
+      "x": 139489,
+      "y": 90986,
+      "bytes": 217,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139490,
+      "y": 90986,
+      "bytes": 318,
+      "buildings": 1,
+      "roads": 0
+    },
+    {
+      "x": 139492,
+      "y": 90986,
+      "bytes": 577,
+      "buildings": 0,
+      "roads": 3
+    },
+    {
+      "x": 139494,
+      "y": 90986,
+      "bytes": 599,
+      "buildings": 0,
+      "roads": 2
+    },
+    {
+      "x": 139498,
+      "y": 90986,
+      "bytes": 644,
+      "buildings": 1,
+      "roads": 1
+    },
+    {
+      "x": 139510,
+      "y": 90986,
+      "bytes": 334,
+      "buildings": 1,
+      "roads": 0
+    },
+    {
+      "x": 139514,
+      "y": 90986,
+      "bytes": 168,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139488,
+      "y": 90987,
+      "bytes": 414,
+      "buildings": 0,
+      "roads": 1
+    },
+    {
+      "x": 139496,
+      "y": 90987,
+      "bytes": 266,
       "buildings": 0,
       "roads": 1
     }
   ],
-  "source": "Synthetische Demodaten – kein OpenStreetMap-Material",
-  "synthetic": true,
-  "generatedAt": "2026-11-27T06:30:56.199Z"
+  "source": "© OpenStreetMap-Mitwirkende, ODbL 1.0 – openstreetmap.org/copyright",
+  "synthetic": false,
+  "generatedAt": "2026-11-27T06:56:34.773Z"
 }
