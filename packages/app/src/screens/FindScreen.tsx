@@ -65,8 +65,19 @@ export function FindScreen({
 }) {
   const { t, locale } = useT();
   const { distance: fmtDistance, height: fmtHeight } = useUnits();
-  const { fix, sensors, plan, activeAnchors, appendTrail, anchors, estimated, estimatedSteps, demo, moveDemoPosition } =
-    useApp();
+  const {
+    fix,
+    sensors,
+    plan,
+    activeAnchors,
+    appendTrail,
+    anchors,
+    estimated,
+    estimatedSteps,
+    demo,
+    moveDemoPosition,
+    requestPermissions,
+  } = useApp();
   const toast = useToast();
   const [view, setView] = useState<'compass' | 'map' | 'trail' | 'media'>('compass');
   const [proximityOn, setProximityOn] = useState(plan === 'pro');
@@ -144,12 +155,29 @@ export function FindScreen({
     return (
       <EmptyState
         icon={<Info size={26} />}
-        title={t('app.permissions.noLocation')}
-        body={t('app.find.compassHint')}
+        /*
+          Ohne Position ist „Standort derzeit nicht verfügbar. Anker wird mit
+          Sensordaten gesetzt" der falsche Satz: hier will niemand einen Anker
+          setzen, sondern zurückfinden. Der Text nennt jetzt den nächsten Schritt.
+        */
+        title={t('app.permissions.noFixTitle')}
+        body={t('app.permissions.noFixBody')}
         action={
-          <button type="button" className="btn btn--sm" onClick={onBack}>
-            {t('common.back')}
-          </button>
+          <div className="row" style={{ gap: 6, justifyContent: 'center' }}>
+            <button type="button" className="btn btn--sm btn--ghost" onClick={onBack}>
+              {t('common.back')}
+            </button>
+            {/*
+              Kein „Einstellungen öffnen"-Knopf: den gibt es hier nicht (kein
+              Plugin dafür installiert, Android braucht `AppSettings`). Ein Knopf,
+              der nur den Berechtigungsdialog erneut aufruft, während der Text
+              „Einstellungen" verspricht, wäre genau der Fehler, den diese Runde
+              behebt. Stattdessen ein echter zweiter Versuch.
+            */}
+            <button type="button" className="btn btn--sm" onClick={() => void requestPermissions()}>
+              {t('app.permissions.retry')}
+            </button>
+          </div>
         }
       />
     );

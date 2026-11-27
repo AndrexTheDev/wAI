@@ -879,6 +879,10 @@ export const en: Widen<GermanDictionary> = {
       denied: 'Permission denied. You can grant it in the Android settings.',
       openSettings: 'Open settings',
       noLocation: 'Location currently unavailable. The anchor will be created from sensor data.',
+      noFixTitle: 'No position yet',
+      retry: 'Try again',
+      noFixBody:
+        'Step outside for a moment and wait until the dot appears on the compass. Without a network the device compass still works - the map does not need it.',
     },
     pro: {
       title: 'wAI Pro',

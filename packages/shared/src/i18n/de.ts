@@ -887,6 +887,11 @@ export const de = {
       denied: 'Berechtigung abgelehnt. Du kannst sie in den Android-Einstellungen erteilen.',
       openSettings: 'Einstellungen öffnen',
       noLocation: 'Standort derzeit nicht verfügbar. Anker wird mit Sensordaten gesetzt.',
+      // Für den Suchbildschirm: dort ist „Anker setzen" keine Option, es geht ums Finden.
+      noFixTitle: 'Noch keine Position',
+      retry: 'Erneut versuchen',
+      noFixBody:
+        'Geh ein paar Schritte ins Freie und warte, bis der Punkt im Kompass erscheint. Ohne Netz hilft der Gerätekompass – die Karte braucht ihn nicht.',
     },
     pro: {
       title: 'wAI Pro',
