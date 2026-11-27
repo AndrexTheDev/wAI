@@ -389,3 +389,24 @@ test('a failed download is retried, then reported as a download problem', () => 
   assert.match(source, /for \(let attempt = 1; attempt <= 3/, 'download must retry');
   assert.match(source, /Overpass ist ausgelastet/, 'the failure must name Overpass');
 });
+
+test('the shipped pack carries a short attribution that fits the map corner', () => {
+  /**
+   * Der volle Satz („© OpenStreetMap-Mitwirkende, ODbL 1.0 – openstreetmap.org/copyright")
+   * ist auf einem Handy breiter als die Karte und lief hinter die Tab-Leiste – eine
+   * Nennung, die man nicht lesen kann, erfüllt die Lizenz nicht. Die Kurzform steht
+   * darum im Index; der volle Satz bleibt als `source` erhalten.
+   */
+  const index = JSON.parse(
+    readFileSync(path.join(ROOT, 'packages/app/public/map/muenchen-mitte/index.json'), 'utf8'),
+  );
+  if (index.synthetic) {
+    assert.equal(index.attribution, null, 'synthetic packs must not carry an OSM credit');
+    return;
+  }
+  assert.ok(typeof index.attribution === 'string' && index.attribution.length > 0, 'no short attribution');
+  assert.ok(index.attribution.length <= 40, `too long for the map corner: ${index.attribution}`);
+  assert.match(index.attribution, /OpenStreetMap/);
+  assert.match(index.attribution, /ODbL/);
+  assert.match(index.source, /openstreetmap\.org\/copyright/, 'the full notice must stay available');
+});

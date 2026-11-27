@@ -754,7 +754,7 @@ export const de = {
       outsideAllBody:
         'Offline sind gespeichert: {names}. Die Karte ist kein Netzangebot – sie zeigt nur, was auf dem Gerät liegt.',
       demoPack: 'Demo-Gebiet · synthetische Häuser, keine echten Daten',
-      attribution: '© OpenStreetMap-Mitwirkende, ODbL',
+      attribution: '© OpenStreetMap-Mitwirkende · ODbL',
       offlineNote: 'Kartenpaket auf dem Gerät · kein Netz, kein Konto',
     },
     timer: {

@@ -555,6 +555,12 @@ const index = {
   source: synthetic
     ? 'Synthetische Demodaten – kein OpenStreetMap-Material'
     : '© OpenStreetMap-Mitwirkende, ODbL 1.0 – openstreetmap.org/copyright',
+  /**
+   * Kurzform für die Anzeige auf der Karte. Der lange Satz ist richtig, passt auf
+   * einem Handy aber in keine Ecke – dort steht die knappe Nennung, der volle Satz
+   * bleibt im Index und damit überall sonst verfügbar.
+   */
+  attribution: synthetic ? null : '© OpenStreetMap-Mitwirkende · ODbL',
   synthetic,
   generatedAt: new Date().toISOString(),
 };

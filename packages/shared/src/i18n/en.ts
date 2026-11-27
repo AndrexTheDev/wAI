@@ -756,7 +756,7 @@ export const en: Widen<GermanDictionary> = {
       outsideAllBody:
         'Stored offline: {names}. The map is not an online service – it only shows what is on the device.',
       demoPack: 'Demo area · synthetic buildings, not real data',
-      attribution: '© OpenStreetMap contributors, ODbL',
+      attribution: '© OpenStreetMap contributors · ODbL',
       offlineNote: 'Map pack on the device · no network, no account',
     },
     timer: {

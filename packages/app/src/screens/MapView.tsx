@@ -447,7 +447,9 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
       </div>
 
       <p className="map__attribution">
-        {index?.synthetic ? t('app.map.demoPack') : index?.source ?? t('app.map.attribution')}
+        {index?.synthetic
+          ? t('app.map.demoPack')
+          : index?.attribution ?? index?.source ?? t('app.map.attribution')}
       </p>
     </div>
   );
