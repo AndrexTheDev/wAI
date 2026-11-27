@@ -220,7 +220,14 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
 
     // Straßen zuerst platzieren: sie tragen die Orientierung.
     labels.sort((a, b) => a.priority - b.priority);
-    const placed = placeLabels(labels, (text) => ({ width: text.length * 5.2, height: 10 }));
+    // Maßstab und Wiederholdistanz in Bildschirmpixeln: 5,2 px je Zeichen ist die
+    // Breite der 9-px-Schrift, 90 px Abstand sorgen dafür, dass ein Name nur dort
+    // wiederholt wird, wo er wirklich weiterhilft.
+    const placed = placeLabels(
+      labels,
+      (text) => ({ width: text.length * 5.2, height: 10 }),
+      { repeatDistance: 90 / viewport.unitsPerPixel },
+    );
     return { paths, labels: placed, pois };
   }, [tiles, visible, viewport.unitsPerPixel, coversArea]);
 

@@ -147,3 +147,33 @@ test('leaving the pack keeps the last tiles instead of going blank', () => {
   // Sanity: the tile of the position itself is what a full pack would return.
   assert.equal(typeof tile.x, 'number');
 });
+
+test('a street name is placed once, not once per OSM way', () => {
+  // OSM zerlegt eine Straße in Dutzende Wege, jeder mit demselben Namen. Ohne
+  // Sperre stand „Isartorplatz" fünfmal übereinander auf dem Schirm.
+  const labels = [
+    { text: 'Isartorplatz', x: 10, y: 10 },
+    { text: 'Isartorplatz', x: 40, y: 30 },
+    { text: 'Isartorplatz', x: 400, y: 400 },
+    { text: 'Tal', x: 200, y: 200 },
+  ];
+  const placed = placeLabels(labels, (text) => ({ width: text.length * 5, height: 10 }));
+  assert.deepEqual(
+    placed.map((label) => `${label.text}@${label.x},${label.y}`),
+    ['Isartorplatz@10,10', 'Isartorplatz@400,400', 'Tal@200,200'],
+  );
+});
+
+test('priority decides who gets the scarce space', () => {
+  // Straßen tragen die Orientierung, Ortsnamen sind Beiwerk: bei Gleichstand muss
+  // die Straße gewinnen, sonst verdeckt ein Ladenname genau das, was hilft.
+  const labels = [
+    { text: 'Ladenname', x: 100, y: 100, priority: 1 },
+    { text: 'Straße', x: 100, y: 100, priority: 0 },
+  ];
+  const placed = placeLabels(
+    [...labels].sort((a, b) => a.priority - b.priority),
+    (text) => ({ width: text.length * 6, height: 10 }),
+  );
+  assert.deepEqual(placed.map((label) => label.text), ['Straße']);
+});
