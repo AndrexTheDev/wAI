@@ -47,14 +47,14 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
 - Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | Alle 0 | Favoriten | So funktioniert wAI | Anker | Finden | Archiv | Einstellungen
-- Scroll: rund 300 px unterhalb des Viewports
+- Scroll: braucht Scrollen
 
 ### Start ohne Anker
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
 - Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | Alle 0 | Favoriten | So funktioniert wAI | Anker | Finden | Archiv | Einstellungen
-- Scroll: rund 300 px unterhalb des Viewports
+- Scroll: braucht Scrollen
 
 ### Editor nach dem Setzen
 
@@ -81,8 +81,8 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
-- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | 24 Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | N m | Wegkreuzung West Natur | N m | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: rund 400 px unterhalb des Viewports
+- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | N Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | N m | Wegkreuzung West Natur | N m | 2 Anker | Finden | Archiv | Einstellungen
+- Scroll: braucht Scrollen
 
 ### Finden: Liste
 
@@ -110,7 +110,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - Erste Zeile: „Mein Auto · Säule B17"
 - Sichtbar: Mein Auto · Säule B17 · AUTO · NO NN° · SIMULIERTE SENSOREN · Im Reiter „Karte" kannst du deine Position antippen und verschieben.
 - Bedienelemente: Zurück | Taschenlampe | Wähle einen Anker | Kompass | Karte | Spur | Foto | PRO | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: rund 100 px unterhalb des Viewports
+- Scroll: braucht Scrollen
 
 ### Finden: Foto
 
@@ -130,64 +130,64 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
-- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | 24 Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | N m | Wegkreuzung West Natur | N m | 2 Anker | Finden | Archiv | Einstellungen | Schließen | Auto | Zelt | Treffpunkt | Werkzeug | Eingang | Natur | Sonstiges | −3 | −2 | −1 | EG | 1 | 2 | 3 | Kamera | Galerie | Aufnehmen | ★ Favorit | Archivieren | Anker löschen | 48.13620, 11.58320 | Das schaltet Pro frei | Teilen | Park-Timer | Speichern
-- Scroll: rund 400 px unterhalb des Viewports
+- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | N Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | N m | Wegkreuzung West Natur | N m | 2 Anker | Finden | Archiv | Einstellungen | Schließen | Auto | Zelt | Treffpunkt | Werkzeug | Eingang | Natur | Sonstiges | −3 | −2 | −1 | EG | 1 | 2 | 3 | Kamera | Galerie | Aufnehmen | ★ Favorit | Archivieren | Anker löschen | 48.13620, 11.58320 | Das schaltet Pro frei | Teilen | Park-Timer | Speichern
+- Scroll: braucht Scrollen
 
 ### Favorit im Free-Tarif
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
-- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | 24 Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Filter zurücksetzen | 2 Anker | Finden | Archiv | Einstellungen | Schließen | Auto | Zelt | Treffpunkt | Werkzeug | Eingang | Natur | Sonstiges | −3 | −2 | −1 | EG | 1 | 2 | 3 | Kamera | Galerie | Aufnehmen | ★ Favorit | Archivieren | Anker löschen | 48.13620, 11.58320 | Das schaltet Pro frei | Teilen | Park-Timer | Speichern
-- Scroll: rund 400 px unterhalb des Viewports
+- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | N Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Filter zurücksetzen | 2 Anker | Finden | Archiv | Einstellungen | Schließen | Auto | Zelt | Treffpunkt | Werkzeug | Eingang | Natur | Sonstiges | −3 | −2 | −1 | EG | 1 | 2 | 3 | Kamera | Galerie | Aufnehmen | ★ Favorit | Archivieren | Anker löschen | 48.13620, 11.58320 | Das schaltet Pro frei | Teilen | Park-Timer | Speichern
+- Scroll: braucht Scrollen
 
 ### Teilen
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
-- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | 24 Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | N m | Wegkreuzung West Natur | N m | 2 Anker | Finden | Archiv | Einstellungen | Schließen | Mit Notiz & Medien | Kopieren | Link kopieren | Als Datei | Importieren | Als QR-Code | Als Link
-- Scroll: rund 400 px unterhalb des Viewports
+- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | N Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | N m | Wegkreuzung West Natur | N m | 2 Anker | Finden | Archiv | Einstellungen | Schließen | Mit Notiz & Medien | Kopieren | Link kopieren | Als Datei | Importieren | Als QR-Code | Als Link
+- Scroll: braucht Scrollen
 
 ### Suche nach „Auto"
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
-- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | 24 Min. VERBLEIBEND | Zum Auto | Park-Timer | Schließen | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | N m | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: rund 300 px unterhalb des Viewports
+- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | N Min. VERBLEIBEND | Zum Auto | Park-Timer | Schließen | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | N m | 2 Anker | Finden | Archiv | Einstellungen
+- Scroll: braucht Scrollen
 
 ### Suche ohne Treffer
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
-- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | 24 Min. VERBLEIBEND | Zum Auto | Park-Timer | Schließen | Alle 2 | Favoriten | Auto 1 | Natur 1 | Filter zurücksetzen | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: rund 400 px unterhalb des Viewports
+- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | N Min. VERBLEIBEND | Zum Auto | Park-Timer | Schließen | Alle 2 | Favoriten | Auto 1 | Natur 1 | Filter zurücksetzen | 2 Anker | Finden | Archiv | Einstellungen
+- Scroll: braucht Scrollen
 
 ### Nach dem Zurücksetzen
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
-- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | 24 Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | N m | Wegkreuzung West Natur | N m | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: rund 400 px unterhalb des Viewports
+- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | N Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | N m | Wegkreuzung West Natur | N m | 2 Anker | Finden | Archiv | Einstellungen
+- Scroll: braucht Scrollen
 
 ### Einstellungen
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
 - Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Taschenlampe | Automatisch (Gerätesprache) | Deutsch | English | System | Hell | Dunkel | Nacht | Näher-dran-Signal | m | ft | Sensoren testen | Lizenz aktivieren | Daten exportieren | Daten importieren | Alle Daten löschen | SOL | BTC | ETH | Haftungsausschluss | AGB | Widerrufsbelehrung | Datenschutz | Impressum | Krypto-Kaufanleitung | Impressum auf der Website | hippie.highho@gmail.com | Einführung erneut zeigen | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: rund 1200 px unterhalb des Viewports
+- Scroll: braucht Scrollen
 
 ### Einstellungen: unten
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
 - Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Taschenlampe | Automatisch (Gerätesprache) | Deutsch | English | System | Hell | Dunkel | Nacht | Näher-dran-Signal | m | ft | Sensoren testen | Lizenz aktivieren | Daten exportieren | Daten importieren | Alle Daten löschen | SOL | BTC | ETH | Haftungsausschluss | AGB | Widerrufsbelehrung | Datenschutz | Impressum | Krypto-Kaufanleitung | Impressum auf der Website | hippie.highho@gmail.com | Einführung erneut zeigen | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: rund 1200 px unterhalb des Viewports
+- Scroll: braucht Scrollen
 
 ### Einstellungen: Ende der Seite
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
 - Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Taschenlampe | Automatisch (Gerätesprache) | Deutsch | English | System | Hell | Dunkel | Nacht | Näher-dran-Signal | m | ft | Sensoren testen | Lizenz aktivieren | Daten exportieren | Daten importieren | Alle Daten löschen | SOL | BTC | ETH | Haftungsausschluss | AGB | Widerrufsbelehrung | Datenschutz | Impressum | Krypto-Kaufanleitung | Impressum auf der Website | hippie.highho@gmail.com | Einführung erneut zeigen | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: rund 1200 px unterhalb des Viewports
+- Scroll: braucht Scrollen
 
 ### Archiv
 
@@ -214,29 +214,29 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
-- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | 24 Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | N m | Wegkreuzung West Natur | N m | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: rund 400 px unterhalb des Viewports
+- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | N Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | N m | Wegkreuzung West Natur | N m | 2 Anker | Finden | Archiv | Einstellungen
+- Scroll: braucht Scrollen
 
 ### Kleines Telefon: Einstellungen
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
 - Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Taschenlampe | Automatisch (Gerätesprache) | Deutsch | English | System | Hell | Dunkel | Nacht | Näher-dran-Signal | m | ft | Sensoren testen | Lizenz aktivieren | Daten exportieren | Daten importieren | Alle Daten löschen | SOL | BTC | ETH | Haftungsausschluss | AGB | Widerrufsbelehrung | Datenschutz | Impressum | Krypto-Kaufanleitung | Impressum auf der Website | hippie.highho@gmail.com | Einführung erneut zeigen | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: rund 1300 px unterhalb des Viewports
+- Scroll: braucht Scrollen
 
 ### Start (EN)
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · ENVIRONMENTAL MEMORY ANCHOR · GPS active · Accuracy ±N m
 - Bedienelemente: Language | Unlock Pro | How it works | Drop anchor TAP SAVES THIS S | N m AWAY | 24 min REMAINING | To the car | Parking timer | All 2 | Favourites | Car 1 | Nature 1 | Mein Auto · Säule B17 Car 1  | running | N m | Wegkreuzung West Nature | N m | 2 Anchors | Find | Archive | Settings
-- Scroll: rund 400 px unterhalb des Viewports
+- Scroll: braucht Scrollen
 
 ### Einstellungen (EN)
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · ENVIRONMENTAL MEMORY ANCHOR · GPS active · Accuracy ±N m
 - Bedienelemente: Language | Unlock Pro | How it works | Flashlight | Automatic (device language) | Deutsch | English | System | Light | Dark | Night | Getting-closer signal | m | ft | Test sensors | Activate licence | Export data | Import data | Delete all data | SOL | BTC | ETH | Disclaimer | Terms | Withdrawal notice | Privacy | Imprint | Crypto guide | Imprint on the website | hippie.highho@gmail.com | Show introduction again | 2 Anchors | Find | Archive | Settings
-- Scroll: rund 1100 px unterhalb des Viewports
+- Scroll: braucht Scrollen
 
 ## Bedienelemente je Ansicht
 
@@ -374,14 +374,14 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - button: So funktioniert’s
 - button: Anker setzen TIPPEN SPEICHERT DIESEN ORT
 - button: N m ENTFERNT
-- button: 24 Min. VERBLEIBEND
+- button: N Min. VERBLEIBEND
 - button: Zum Auto
 - button: Park-Timer
 - tab: Alle 2
 - tab: Favoriten
 - tab: Auto 1
 - tab: Natur 1
-- button: Mein Auto · Säule B17 Auto 1 Std. 35 Min. · Zone B · 2,50 €/h
+- button: Mein Auto · Säule B17 Auto N Std. N Min. · Zone B · 2,50 €/h
 - button: läuft
 - button: N m
 - button: Wegkreuzung West Natur
@@ -485,14 +485,14 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - button: So funktioniert’s
 - button: Anker setzen TIPPEN SPEICHERT DIESEN ORT
 - button: N m ENTFERNT
-- button: 24 Min. VERBLEIBEND
+- button: N Min. VERBLEIBEND
 - button: Zum Auto
 - button: Park-Timer
 - tab: Alle 2
 - tab: Favoriten
 - tab: Auto 1
 - tab: Natur 1
-- button: Mein Auto · Säule B17 Auto 1 Std. 35 Min. · Zone B · 2,50 €/h
+- button: Mein Auto · Säule B17 Auto N Std. N Min. · Zone B · 2,50 €/h
 - button: läuft
 - button: N m
 - button: Wegkreuzung West Natur
@@ -535,7 +535,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - button: So funktioniert’s
 - button: Anker setzen TIPPEN SPEICHERT DIESEN ORT
 - button: N m ENTFERNT
-- button: 24 Min. VERBLEIBEND
+- button: N Min. VERBLEIBEND
 - button: Zum Auto
 - button: Park-Timer
 - tab: Alle 2
@@ -581,14 +581,14 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - button: So funktioniert’s
 - button: Anker setzen TIPPEN SPEICHERT DIESEN ORT
 - button: N m ENTFERNT
-- button: 24 Min. VERBLEIBEND
+- button: N Min. VERBLEIBEND
 - button: Zum Auto
 - button: Park-Timer
 - tab: Alle 2
 - tab: Favoriten
 - tab: Auto 1
 - tab: Natur 1
-- button: Mein Auto · Säule B17 Auto 1 Std. 35 Min. · Zone B · 2,50 €/h
+- button: Mein Auto · Säule B17 Auto N Std. N Min. · Zone B · 2,50 €/h
 - button: läuft
 - button: N m
 - button: Wegkreuzung West Natur
@@ -613,7 +613,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - button: So funktioniert’s
 - button: Anker setzen TIPPEN SPEICHERT DIESEN ORT
 - button: N m ENTFERNT
-- button: 24 Min. VERBLEIBEND
+- button: N Min. VERBLEIBEND
 - button: Zum Auto
 - button: Park-Timer
 - button: Schließen
@@ -621,7 +621,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - tab: Favoriten
 - tab: Auto 1
 - tab: Natur 1
-- button: Mein Auto · Säule B17 Auto 1 Std. 35 Min. · Zone B · 2,50 €/h
+- button: Mein Auto · Säule B17 Auto N Std. N Min. · Zone B · 2,50 €/h
 - button: läuft
 - button: N m
 - button: 2 Anker
@@ -636,7 +636,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - button: So funktioniert’s
 - button: Anker setzen TIPPEN SPEICHERT DIESEN ORT
 - button: N m ENTFERNT
-- button: 24 Min. VERBLEIBEND
+- button: N Min. VERBLEIBEND
 - button: Zum Auto
 - button: Park-Timer
 - button: Schließen
@@ -657,14 +657,14 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - button: So funktioniert’s
 - button: Anker setzen TIPPEN SPEICHERT DIESEN ORT
 - button: N m ENTFERNT
-- button: 24 Min. VERBLEIBEND
+- button: N Min. VERBLEIBEND
 - button: Zum Auto
 - button: Park-Timer
 - tab: Alle 2
 - tab: Favoriten
 - tab: Auto 1
 - tab: Natur 1
-- button: Mein Auto · Säule B17 Auto 1 Std. 35 Min. · Zone B · 2,50 €/h
+- button: Mein Auto · Säule B17 Auto N Std. N Min. · Zone B · 2,50 €/h
 - button: läuft
 - button: N m
 - button: Wegkreuzung West Natur
@@ -845,14 +845,14 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - button: So funktioniert’s
 - button: Anker setzen TIPPEN SPEICHERT DIESEN ORT
 - button: N m ENTFERNT
-- button: 24 Min. VERBLEIBEND
+- button: N Min. VERBLEIBEND
 - button: Zum Auto
 - button: Park-Timer
 - tab: Alle 2
 - tab: Favoriten
 - tab: Auto 1
 - tab: Natur 1
-- button: Mein Auto · Säule B17 Auto 1 Std. 35 Min. · Zone B · 2,50 €/h
+- button: Mein Auto · Säule B17 Auto N Std. N Min. · Zone B · 2,50 €/h
 - button: läuft
 - button: N m
 - button: Wegkreuzung West Natur
