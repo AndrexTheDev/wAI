@@ -358,9 +358,10 @@ export function visiblePolygons<T extends { points: Array<[number, number]> }>(
 export function placeLabels(
   labels: ReadonlyArray<{ text: string; x: number; y: number; priority?: number }>,
   measure: (text: string) => { width: number; height: number },
-  options: { repeatDistance?: number } = {},
+  options: { repeatDistance?: number; bounds?: { width: number; height: number } } = {},
 ): Array<{ text: string; x: number; y: number }> {
   const repeatDistance = options.repeatDistance ?? 120;
+  const bounds = options.bounds;
   const placed: Array<{ text: string; x: number; y: number }> = [];
   const boxes: Array<{ x1: number; y1: number; x2: number; y2: number }> = [];
   const seen = new Map<string, Array<{ x: number; y: number }>>();
@@ -374,6 +375,9 @@ export function placeLabels(
       x2: label.x + size.width / 2,
       y2: label.y + size.height / 2,
     };
+    // Ein halb abgeschnittener Straßenname („Ma…", „Ka…") irritiert mehr, als er
+    // hilft: was nicht ganz ins Bild passt, wird nicht gesetzt.
+    if (bounds && (box.x1 < 0 || box.y1 < 0 || box.x2 > bounds.width || box.y2 > bounds.height)) continue;
     const collides = boxes.some(
       (other) => box.x1 < other.x2 && box.x2 > other.x1 && box.y1 < other.y2 && box.y2 > other.y1,
     );

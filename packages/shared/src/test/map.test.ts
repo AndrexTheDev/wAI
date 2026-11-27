@@ -234,3 +234,18 @@ test('a position outside every pack is recognised as such', () => {
   // Die Kante gehört dazu – sonst ist der Rand der Karte ein Fehler.
   assert.equal(packContains(pack, { lat: 48.128, lng: 11.555 }), true);
 });
+
+test('a name that would be cut in half at the map edge is not placed', () => {
+  // Auf der echten Karte standen „Ma…", „Be…", „Ka…" am Rand: halbe Straßennamen
+  // irritieren mehr, als sie orientieren.
+  const placed = placeLabels(
+    [
+      { text: 'Marienstraße', x: 6, y: 100 },
+      { text: 'Knöbelstraße', x: 300, y: 100 },
+      { text: 'Tal', x: 150, y: 150 },
+    ],
+    (text) => ({ width: text.length * 6, height: 10 }),
+    { bounds: { width: 320, height: 320 } },
+  );
+  assert.deepEqual(placed.map((label) => label.text), ['Tal']);
+});
