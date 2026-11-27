@@ -96,6 +96,7 @@ const CLAIMS = [
       ['packages/app/public/map/muenchen-mitte/index.json', '"buildings"'],
       // Ein Paket ist erst dann „offline pro Stadt", wenn die App mehrere kennt.
       ['packages/app/public/map/packs.json', '"slug"'],
+      ['packages/app/src/screens/MapView.tsx', 'pickPack'],
     ],
   },
   {

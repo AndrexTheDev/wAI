@@ -54,7 +54,7 @@ tools/
   license-cli.mjs         ← keygen / issue / verify / mail for Pro licences
   check-store-listing.mjs ← Play limits + DE/EN parity + product consistency
   check-claims.mjs        ← jeder Marketing-Claim muss im Code gedeckt sein (docs/ROADMAP.md)
-  build-map-pack.mjs      ← OpenStreetMap → Offline-Kartenkacheln (public/map)
+  build-map-pack.mjs      ← OpenStreetMap → Offline-Kartenkacheln (public/map/<slug>)
   make-store-assets.sh    ← icon-512 + feature graphic, reproduced from the real icon
   capture-store-screenshots.mjs ← real screenshots, refuses to fake them
   keys/                   ← issuer key pair (private key is git-ignored)
