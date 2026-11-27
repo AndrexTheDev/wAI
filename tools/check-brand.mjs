@@ -32,8 +32,26 @@ const fail = (message) => {
 };
 const ok = (message) => console.log(`  ✔ ${message}`);
 
+/**
+ * ImageMagick heißt je nach System `magick` oder `convert`. Fehlt beides, werden die
+ * Bildprüfungen übersprungen und das **gesagt** – ein Prüfskript, das ohne sein
+ * Werkzeug abstürzt, blockiert einen Build, ohne etwas geprüft zu haben.
+ */
+function findMagick() {
+  for (const candidate of ['magick', 'convert']) {
+    try {
+      execFileSync(candidate, ['-version'], { stdio: 'ignore' });
+      return candidate;
+    } catch {
+      /* weiter probieren */
+    }
+  }
+  return null;
+}
+const MAGICK = findMagick();
+
 function tool(args) {
-  return execFileSync('convert', args, { encoding: 'utf8' }).trim();
+  return execFileSync(MAGICK, args, { encoding: 'utf8' }).trim();
 }
 
 function metrics(file) {
@@ -62,7 +80,13 @@ function metrics(file) {
 }
 
 console.log('App-Marke');
-if (!existsSync(ICON_512)) {
+if (!MAGICK) {
+  console.warn('  ! ImageMagick nicht gefunden – Bildmaße, Deckung und Silhouette bleiben ungeprüft');
+  console.warn('    (die SVG-Prüfungen laufen trotzdem)');
+}
+if (!MAGICK) {
+  // Nur die statischen Prüfungen unten ausführen.
+} else if (!existsSync(ICON_512)) {
   fail('store/assets/icon-512.png fehlt – node tools/make-icons.mjs');
 } else {
   const { size, coverage } = metrics(ICON_512);
@@ -75,9 +99,9 @@ if (!existsSync(ICON_512)) {
   else ok('Store-Icon ist deckend');
 }
 
-const reference = existsSync(ICON_512) ? metrics(ICON_512) : null;
+const reference = MAGICK && existsSync(ICON_512) ? metrics(ICON_512) : null;
 const launcherSizes = { mdpi: 48, hdpi: 72, xhdpi: 96, xxhdpi: 144, xxxhdpi: 192 };
-for (const [density, expected] of Object.entries(launcherSizes)) {
+for (const [density, expected] of MAGICK ? Object.entries(launcherSizes) : []) {
   const file = path.join(RES, `mipmap-${density}`, 'ic_launcher.png');
   if (!existsSync(file)) {
     fail(`${density}: ic_launcher.png fehlt`);
@@ -108,7 +132,7 @@ for (const [density, expected] of Object.entries(launcherSizes)) {
     }
   }
 }
-ok('Launcher-Größen und Silhouette geprüft');
+if (MAGICK) ok('Launcher-Größen und Silhouette geprüft');
 
 for (const file of [
   'packages/app/public/favicon.svg',
