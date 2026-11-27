@@ -46,6 +46,7 @@ export function AppShell() {
     locationError,
     demo,
     setAnchor,
+    deleteAnchor,
     archiveAnchor,
     setLocale,
     updateSettings,
@@ -179,10 +180,19 @@ export function AppShell() {
     }
     void vibrate('strong');
     setEditing({ anchor: result.anchor, mode: 'create' });
+    /**
+     * „Rückgängig" hatte einen leeren Handler: der Knopf war da, sah bedienbar
+     * aus und tat nichts. Jetzt nimmt er den gerade angelegten Anker wieder
+     * heraus – der einzige Fall, in dem das gefahrlos ist, weil der Anker
+     * Sekunden alt ist und noch nichts daran hängt.
+     */
+    const created = result.anchor;
     toast.show(t('app.home.saved'), 'ok', {
       label: t('app.home.undo'),
       onClick: () => {
-        /* undo handled by editor delete */
+        deleteAnchor(created.id);
+        setEditing((current) => (current.anchor?.id === created.id ? { anchor: null, mode: 'create' } : current));
+        void vibrate('tap');
       },
     });
   };

@@ -419,6 +419,52 @@ async function journeySetAnchor() {
 }
 
 /* ============================================================
+   2b. Rückgängig: nimmt der Knopf den Anker wirklich zurück?
+   ============================================================ */
+async function journeyUndo() {
+  /**
+   * „Anker setzen" legt sofort einen Anker an und zeigt dazu die Meldung
+   * „Anker gesetzt · Rückgängig". Der Knopf hatte einen leeren Handler: er war
+   * sichtbar, bedienbar und tat nichts. Ein Nutzer, der sich vertippt, bekam
+   * seinen Anker also nicht mehr weg – und im Free-Tarif zählt jeder Anker
+   * gegen das Limit von drei.
+   *
+   * Der Schritt zählt die Anker vorher und nachher, statt nur zu prüfen, dass
+   * der Knopf da ist: genau das war ja der Fehler.
+   */
+  const { context, page } = await session();
+  const count = () =>
+    page.evaluate(() => {
+      try {
+        return JSON.parse(window.localStorage.getItem('wai.v1.anchors') ?? '[]').length;
+      } catch {
+        return -1;
+      }
+    });
+
+  await tap(page, ['Anker setzen']);
+  await step(page, 'Rückgängig: nach dem Setzen', { expect: ['Anker gesetzt'], shot: false });
+  const afterCreate = await count();
+  const undo = await tap(page, ['Rückgängig', 'Undo']);
+  if (!undo) {
+    issues.push({ view: 'Rückgängig', findings: ['keine „Rückgängig"-Aktion nach dem Setzen'], text: await textOf(page) });
+  }
+  await page.waitForTimeout(700);
+  const afterUndo = await count();
+  if (afterCreate < 1) {
+    issues.push({ view: 'Rückgängig', findings: ['„Anker setzen" hat keinen Anker angelegt'], text: '' });
+  } else if (afterUndo >= afterCreate) {
+    issues.push({
+      view: 'Rückgängig',
+      findings: [`„Rückgängig" ließ ${afterUndo} statt ${afterCreate - 1} Anker übrig – der Knopf tut nichts`],
+      text: await textOf(page),
+    });
+  }
+  await step(page, 'Rückgängig: danach wieder leer', { expect: ['Anker setzen'], shot: false });
+  await context.close();
+}
+
+/* ============================================================
    3. Wiederfinden: Kompass, Karte, Spur, Foto
    ============================================================ */
 async function journeyFind() {
@@ -683,6 +729,7 @@ try {
   log('▶ Nutzer-Workflow');
   await journeyFirstRun();
   await journeySetAnchor();
+  await journeyUndo();
   await journeyFind();
   await journeyProGates();
   await journeyShare();

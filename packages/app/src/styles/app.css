@@ -1112,6 +1112,31 @@ a {
 
 .sheet__foot .btn {
   flex: 1;
+  /**
+   * Ohne `nowrap` bricht ein Knopftext mitten im Wort: im Editor stand auf
+   * einem 412-dp-Telefon „Park-" über „Timer" und „Anker" über „speichern".
+   * Die Beschriftungen sind kurz genug – sie sollen ganz bleiben.
+   */
+  white-space: nowrap;
+}
+
+/**
+ * Drei Knöpfe nebeneinander passen ab etwa 380 dp nicht mehr, ohne dass die
+ * Beschriftung umbricht. Statt zu quetschen bekommt die Hauptaktion eine
+ * eigene Zeile: „Teilen" und „Park-Timer" oben, „Anker speichern" darunter in
+ * voller Breite – und damit in der Daumenzone, wo die Hauptaktion hingehört.
+ */
+@media (max-width: 420px) {
+  .sheet__foot {
+    flex-wrap: wrap;
+  }
+  .sheet__foot .btn:not(.btn--primary):not(.btn--danger) {
+    flex: 1 1 0;
+  }
+  .sheet__foot .btn--primary,
+  .sheet__foot .btn--danger {
+    flex: 1 1 100%;
+  }
 }
 
 /* ---------------- form fields ---------------- */
@@ -1672,6 +1697,21 @@ a {
   gap: 6px;
   width: min(520px, calc(100% - 32px));
   pointer-events: none;
+}
+
+/**
+ * Ist ein Sheet offen, liegt die Meldung sonst hinter dessen Fußzeile: der
+ * Toast sitzt auf Höhe der Tab-Leiste, der Sheet-Fuß aber direkt über dem
+ * Bildschirmrand. In der Bestätigung „Anker gesetzt · Rückgängig" war der
+ * Knopf damit unerreichbar – er sah aus wie eine Meldung, war aber die einzige
+ * Möglichkeit, den gerade angelegten Anker wieder loszuwerden.
+ *
+ * `--sheet-foot-h` misst `Sheet.tsx`, weil die Fußzeile je nach Breite
+ * umbricht (69 px oder 113 px).
+ */
+body[data-sheet-open] .toast-wrap {
+  bottom: calc(var(--safe-bottom) + var(--sheet-foot-h, 113px) + 12px);
+  z-index: 60;
 }
 
 .toast-item {
