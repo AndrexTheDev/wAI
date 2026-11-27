@@ -1140,16 +1140,16 @@ a {
   position: relative;
   display: grid;
   place-items: center;
-  aspect-ratio: 1;
   /**
-   * 300 px waren auf einem 412×732-Gerät zu hoch: mit Demo-Hinweis, Reiterleiste,
-   * Kacheln und Höhenkarte lag der letzte Block außerhalb des Displays. 252 px
-   * reichten nicht (der Capture meldete 81 px Überschuss), 216 px passen – und der
-   * Kompass bleibt groß genug, um die Richtung zu lesen.
+   * Kreis, so groß wie es passt: `min(100%, 216px)`. Vorher stand hier nur
+   * `aspect-ratio: 1` plus `max-height` – das ergab auf einem 412-px-Gerät eine
+   * **Ellipse** (380×216), und eine Nadel in einer Ellipse zeigt ins Nichts.
+   * 300 px waren zu hoch (der letzte Block lag außerhalb des Bildschirms), 252 px
+   * reichten nicht, 216 px passen – und der Capture prüft das nach.
    */
-  max-height: 216px;
+  width: min(100%, 216px);
+  aspect-ratio: 1;
   margin-inline: auto;
-  width: 100%;
   border-radius: 50%;
   background:
     radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.1), transparent 62%),

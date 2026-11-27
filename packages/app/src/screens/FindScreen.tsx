@@ -583,17 +583,14 @@ export function FindScreen({
           </div>
         )}
 
-        {!multiView && (
-          <div className="banner banner--info">
-            <Crown size={15} />
-            <div className="banner__body">
-              <span>{t('app.find.multiViewPro')}</span>
-              <button type="button" className="btn btn--xs" style={{ justifySelf: 'start' }} onClick={() => onOpenPro(t('app.pro.multViewBanner'))}>
-                {t('app.pro.seeWallets')}
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Kein Pro-Banner mehr an dieser Stelle.
+             *
+             * Er stand als letzter Block unter der Höhenkarte und schob den
+             * Bildschirm über die Displayhöhe – im Store-Screenshot war er halb
+             * abgeschnitten, also ausgerechnet die Werbung. Das Pro-Angebot steht
+             * ohnehin zweimal sichtbar auf diesem Bildschirm: als PRO-Knopf in der
+             * Näher-dran-Kachel und als Reiter in der Leiste.
+             */}
       </div>
     </>
   );
