@@ -174,9 +174,10 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
 
   const drawn = useMemo(() => {
     const paths: Array<{ d: string; className: string }> = [];
-    const labels: Array<{ text: string; x: number; y: number }> = [];
+    const labels: Array<{ text: string; x: number; y: number; priority: number }> = [];
+    const pois: Array<{ x: number; y: number; kind: string }> = [];
 
-    if (!coversArea) return { paths, labels };
+    if (!coversArea) return { paths, labels, pois };
     for (const { tile, dx, dy } of visible) {
       const data = tiles.get(`${tile.x}/${tile.y}`);
       if (!data) continue;
@@ -198,16 +199,29 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
           className: `map__building ${building.kind === 'parking' ? 'is-parking' : ''}`,
         });
       }
+      for (const poi of data.pois ?? []) {
+        const point = toScreen(viewport, { x: poi.x + dx + tile.x * 256, y: poi.y + dy + tile.y * 256 });
+        if (poi.kind === 'parking' || poi.kind === 'shop') {
+          pois.push({ x: point.x, y: point.y, kind: poi.kind });
+        }
+      }
       for (const label of data.labels) {
+        // Straßennamen sind die Orientierung; Ortsnamen (Läden, Häuser) nur, wenn
+        // Platz bleibt. Ohne diese Unterscheidung standen 15 Ladennamen über einem
+        // Fleck und verdeckten genau die Straßen, die man braucht.
         labels.push({
           text: label.text,
           x: (label.x + dx) / viewport.unitsPerPixel,
           y: (label.y + dy) / viewport.unitsPerPixel,
+          priority: label.kind === 'street' ? 0 : 1,
         });
       }
     }
 
-    return { paths, labels: placeLabels(labels, (text) => ({ width: text.length * 5.4, height: 11 })) };
+    // Straßen zuerst platzieren: sie tragen die Orientierung.
+    labels.sort((a, b) => a.priority - b.priority);
+    const placed = placeLabels(labels, (text) => ({ width: text.length * 5.2, height: 10 }));
+    return { paths, labels: placed, pois };
   }, [tiles, visible, viewport.unitsPerPixel, coversArea]);
 
   const metersPerPixel = metresPerUnit(here.lat) * viewport.unitsPerPixel;
@@ -257,9 +271,9 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
       >
         <rect className="map__ground" x={0} y={0} width={size.width} height={size.height} />
 
-        {drawn.paths.map((path, i) => (
-          <path key={i} d={path.d} className={path.className} />
-        ))}
+        {drawn.paths.map((path, i) =>
+          path.d ? <path key={i} d={path.d} className={path.className} /> : null,
+        )}
 
         {trailPoints.length > 1 && (
           <polyline
@@ -307,6 +321,16 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
             <circle cx={userPoint.x} cy={userPoint.y} r={11} className="map__user-ring" />
           </g>
         )}
+
+        {drawn.pois.map((poi, i) => (
+          <circle
+            key={`poi${i}`}
+            className={`map__poi map__poi--${poi.kind}`}
+            cx={poi.x}
+            cy={poi.y}
+            r={poi.kind === 'parking' ? 3 : 1.6}
+          />
+        ))}
 
         {drawn.labels.map((label) => (
           <text key={`${label.text}${label.x}`} className="map__label" x={label.x} y={label.y}>
@@ -359,11 +383,18 @@ function polygonPath(
   close: boolean,
 ): string {
   let d = '';
-  for (let i = 0; i < points.length; i++) {
-    const x = (points[i][0] + dx) / scale;
-    const y = (points[i][1] + dy) / scale;
-    d += `${i === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`;
+  let previous: { x: number; y: number } | null = null;
+  for (const [px, py] of points) {
+    const x = (px + dx) / scale;
+    const y = (py + dy) / scale;
+    // Doppelte Punkte erzeugen Null-Linien, die SVG je nach Renderer als
+    // Kringel zeichnet – auf dem Handy sieht das wie ein Knoten aus.
+    if (previous && Math.abs(previous.x - x) < 0.05 && Math.abs(previous.y - y) < 0.05) continue;
+    d += `${d === '' ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`;
+    previous = { x, y };
   }
+  // Weniger als zwei Punkte sind kein Pfad.
+  if (d === '' || !d.includes('L')) return '';
   return close ? `${d}Z` : d;
 }
 
