@@ -465,16 +465,26 @@ for (const shot of SHOTS) {
     problems.push('.app__body reicht in die Tab-Leiste, scrollt aber nicht');
   }
   /**
-   * Ein scrollbarer Bildschirm ist kein Fehler – die Einstellungen sind länger als
-   * jedes Telefon. Ein Fehler ist ein *angeschnittener* Block: eine Karte, die zur
-   * Hälfte hinter der Tab-Leiste endet, sieht aus wie ein Renderfehler. Ein schmaler
-   * Streifen am unteren Rand ist dagegen die übliche Andeutung, dass es weitergeht.
-   * Offene Sheets sind ausgenommen, sie liegen über dem Inhalt.
+   * Zwei verschiedene Sachen, die auf einem Foto gleich aussehen:
+   *
+   * 1. Inhalt endet am Scrollrand des Bildschirms. Das ist normal – die Liste ist
+   *    länger als jedes Telefon, und ein angeschnittenes Element ist die übliche
+   *    Andeutung, dass es weitergeht. Kein Fehler.
+   * 2. Inhalt liegt **hinter** der Tab-Leiste, also unter einer deckenden Fläche.
+   *    Das ist immer ein Layoutfehler: Text, der hinter der Leiste verschwindet,
+   *    sieht aus wie ein kaputter Bildschirm, und man kann ihn nicht wegscrollen.
+   *
+   * Unterschieden wird an den Rändern: liegt die Unterkante des Scrollbereichs
+   * unterhalb der Oberkante der Leiste, überlappt etwas.
    */
+  const overlap = layout.body && layout.tabbar ? layout.body.bottom - layout.tabbar.top : 0;
+  if (overlap > 1) {
+    problems.push(`Inhalt liegt ${overlap} px hinter der Tab-Leiste`);
+  }
   for (const cut of layout.cut ?? []) {
     const visible = Math.min(1, Math.max(0, cut.visible / cut.height));
-    if (visible > 0.1 && visible < 0.9) {
-      problems.push(`"${cut.label}" ist zu ${Math.round(visible * 100)} % sichtbar und dann abgeschnitten`);
+    if (overlap > 1 && visible > 0.1 && visible < 0.95) {
+      problems.push(`"${cut.label}" ist zu ${Math.round(visible * 100)} % sichtbar und dahinter abgeschnitten`);
     }
   }
   if (problems.length) {
@@ -542,6 +552,9 @@ for (const shot of SHOTS) {
 
 await browser.close();
 
+/** Der Bericht wird vor der Prüfung geschrieben – sonst fehlt er genau im Fehlerfall. */
+writeCaptureReport();
+
 /**
  * Erst hier abbrechen, mit vollständiger Liste: die Bilder liegen bereits auf der
  * Platte, und der Bericht nennt jedes betroffene Bild statt nur das erste.
@@ -555,30 +568,36 @@ if (layoutProblems.length) {
 console.log(`\n${results.length} screenshots written to ${path.relative(ROOT, outDir)}`);
 console.log('Captions to burn in (Play allows up to 6 words per image):');
 for (const r of results) console.log(`  ${r.slug}: DE "${r.caption.de}" · EN "${r.caption.en}"`);
-// Bericht neben die Bilder: prüfbar per git, ohne Artefakt-Download.
-writeFileSync(
-  path.join(outDir, 'capture.json'),
-  `${JSON.stringify(
-    {
-      capturedAt: new Date().toISOString(),
-      viewport: { ...VIEWPORT, outputPixels: PIXELS },
-      url,
-      shots: results.map((r) => ({
-        slug: r.slug,
-        caption: r.caption,
-        navigation: r.reached,
-        visibleText: r.seen.text,
-        signature: r.seen.signature,
-        hasAppShell: r.seen.hasApp,
-        cssViewport: r.viewportUsed,
-        // Messwerte statt Augenmaß: so lässt sich „das passt doch" nachprüfen.
-        layout: r.layout,
-      })),
-    },
-    null,
-    2,
-  )}\n`,
-);
+/**
+ * Bericht neben die Bilder: prüfbar per git, ohne Artefakt-Download. Als Funktion,
+ * damit er auch im Fehlerfall geschrieben wird – ein Lauf, der nur „Fehler" sagt,
+ * hilft niemandem.
+ */
+function writeCaptureReport() {
+  writeFileSync(
+    path.join(outDir, 'capture.json'),
+    `${JSON.stringify(
+      {
+        capturedAt: new Date().toISOString(),
+        viewport: { ...VIEWPORT, outputPixels: PIXELS },
+        url,
+        shots: results.map((r) => ({
+          slug: r.slug,
+          caption: r.caption,
+          navigation: r.reached,
+          visibleText: r.seen.text,
+          signature: r.seen.signature,
+          hasAppShell: r.seen.hasApp,
+          cssViewport: r.viewportUsed,
+          // Messwerte statt Augenmaß: so lässt sich „das passt doch" nachprüfen.
+          layout: r.layout,
+        })),
+      },
+      null,
+      2,
+    )}\n`,
+  );
+}
 
 /**
  * Zwei Bilder mit identischem Text sind kein Screenshot-Set, sondern ein Fehler.
