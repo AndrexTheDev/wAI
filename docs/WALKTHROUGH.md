@@ -215,7 +215,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
 - Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | N m ENTFERNT | 24 Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | N m | Wegkreuzung West Natur | N m | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: rund 500 px unterhalb des Viewports
+- Scroll: rund 400 px unterhalb des Viewports
 
 ### Kleines Telefon: Einstellungen
 
@@ -236,7 +236,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · ENVIRONMENTAL MEMORY ANCHOR · GPS active · Accuracy ±N m
 - Bedienelemente: Language | Unlock Pro | How it works | Flashlight | Automatic (device language) | Deutsch | English | System | Light | Dark | Night | Getting-closer signal | m | ft | Test sensors | Activate licence | Export data | Import data | Delete all data | SOL | BTC | ETH | Disclaimer | Terms | Withdrawal notice | Privacy | Imprint | Crypto guide | Imprint on the website | hippie.highho@gmail.com | Show introduction again | 2 Anchors | Find | Archive | Settings
-- Scroll: rund 1200 px unterhalb des Viewports
+- Scroll: rund 1100 px unterhalb des Viewports
 
 ## Bedienelemente je Ansicht
 
