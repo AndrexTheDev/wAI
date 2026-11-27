@@ -278,8 +278,12 @@ const stable = (text) =>
     .replace(/±\s*\d+([.,]\d+)?\s*m/g, '±N m')
     /** Entfernungen: die Demo-Position wandert, „2,4 m" ist keine Aussage. */
     .replace(/\b\d+([.,]\d+)?\s*(m|km|ft|mi)\b/g, 'N $2')
-    /** Laufende Zeiten: „24 Min.", „1 Std. 35 Min.", „12 s". */
-    .replace(/\b\d+\s*(Min\.|Std\.|h|s)\b/g, 'N $1')
+    /**
+     * Laufende Zeiten: „24 Min.", „1 Std. 35 Min.", „12 s". Kein `\b` nach der
+     * Einheit – „Min." endet auf einen Punkt, und dahinter ist keine Wortgrenze
+     * mehr, also griff die Regel nie.
+     */
+    .replace(/\b\d+\s*(Min\.|Std\.|h\b|s\b)/g, 'N $1')
     .replace(/\b\d{1,3}°/g, 'NN°');
 
 /**
@@ -725,15 +729,19 @@ lines.push('## Weg und Inhalt', '');
 for (const result of results) {
   const firstLine = result.text.split('\n').map((l) => l.trim()).find((l) => l.length > 0) ?? '';
   const summary = result.text.split('\n').map((l) => l.trim()).filter(Boolean).slice(0, 4).join(' · ');
-  /** Scrollhöhe in 100-px-Stufen: „0", „100", „1.200" statt jeder Messung. */
-  const scrollBucket = Math.round(result.layout.scroll / 100) * 100;
+  /**
+   * Scrollhöhe: ob überhaupt gescrollt werden muss, ist die Aussage – nicht wie
+   * viele Pixel, denn die schwanken mit jeder Animation und jedem Text, der
+   * einen Tag länger ist. „400 oder 500 px" interessiert niemanden.
+   */
+  const needsScroll = result.layout.scroll > 40;
   lines.push(
     `### ${result.view}`,
     '',
     `- Erste Zeile: „${stable(firstLine).slice(0, 90)}"`,
     `- Sichtbar: ${stable(summary).slice(0, 300)}`,
     `- Bedienelemente: ${stable(result.controls.filter((c) => c.text).map((c) => c.text.slice(0, 28)).join(' | ')) || '—'}`,
-    `- Scroll: ${scrollBucket === 0 ? 'passt ohne Scrollen' : `rund ${scrollBucket} px unterhalb des Viewports`}`,
+    `- Scroll: ${needsScroll ? 'braucht Scrollen' : 'passt ohne Scrollen'}`,
     '',
   );
 }
