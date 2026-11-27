@@ -263,14 +263,24 @@ export function visiblePolygons<T extends { points: Array<[number, number]> }>(
  * Greedy placement in draw order: take the first label that does not collide with
  * something already placed. Deterministic, so the map does not jitter between
  * frames while walking.
+ *
+ * Two rules learned from the first real pack, where the screen was a wall of print:
+ * a name is placed **once** (OSM splits one street into dozens of ways, each with
+ * the same name), and two labels of the same text need real distance, not just
+ * non-overlapping boxes – "Isartorplatz" twice, side by side, reads as a glitch.
  */
 export function placeLabels(
-  labels: ReadonlyArray<{ text: string; x: number; y: number }>,
+  labels: ReadonlyArray<{ text: string; x: number; y: number; priority?: number }>,
   measure: (text: string) => { width: number; height: number },
+  options: { repeatDistance?: number } = {},
 ): Array<{ text: string; x: number; y: number }> {
+  const repeatDistance = options.repeatDistance ?? 120;
   const placed: Array<{ text: string; x: number; y: number }> = [];
   const boxes: Array<{ x1: number; y1: number; x2: number; y2: number }> = [];
+  const seen = new Map<string, Array<{ x: number; y: number }>>();
   for (const label of labels) {
+    const near = seen.get(label.text);
+    if (near?.some((p) => Math.hypot(p.x - label.x, p.y - label.y) < repeatDistance)) continue;
     const size = measure(label.text);
     const box = {
       x1: label.x - size.width / 2,
@@ -284,6 +294,7 @@ export function placeLabels(
     if (collides) continue;
     boxes.push(box);
     placed.push(label);
+    (near ?? seen.set(label.text, []).get(label.text)!).push({ x: label.x, y: label.y });
   }
   return placed;
 }

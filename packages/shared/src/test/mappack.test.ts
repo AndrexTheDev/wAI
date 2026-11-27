@@ -286,3 +286,41 @@ test('the pack lands on the grid the app expects', () => {
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test('a relation is drawn as its outline, not as one line through all its parts', () => {
+  /**
+   * OSM verkettet bei `out geom` die Ringe eines Multipolygons. Ein Gebäudeblock
+   * mit Innenhof oder ein Park aus mehreren Wiesen kam als **eine** Punktfolge an –
+   * und wurde als Zickzack über die halbe Kachel gezeichnet. Genau das waren die
+   * langen Striche auf der ersten echten Karte.
+   */
+  const dir = mkdtempSync(path.join(tmpdir(), 'wai-map-'));
+  try {
+    const index = JSON.parse(buildInto(dir, ['--fixture', 'tools/fixtures/courtyard.json']));
+    for (const tile of index.tiles) {
+      const content = JSON.parse(
+        readFileSync(path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
+      );
+      for (const building of content.buildings as Array<{ points: Array<[number, number]> }>) {
+        const ring = building.points;
+        // Ein Innenhof darf kein zweites Haus im Block werden: genau zwei Gebäude.
+        const xs = ring.map(([x]) => x);
+        const ys = ring.map(([, y]) => y);
+        assert.ok(Math.max(...xs) - Math.min(...xs) < 300, 'outline spans a tile edge twice');
+        assert.ok(Math.max(...ys) - Math.min(...ys) < 300, 'outline spans a tile edge twice');
+        assert.deepEqual(ring[0], ring[ring.length - 1]);
+      }
+    }
+    // Und die Anzahl: der Innenhof ist ein Loch, keine Hütte.
+    let houses = 0;
+    for (const tile of index.tiles) {
+      const content = JSON.parse(
+        readFileSync(path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
+      );
+      houses += (content.buildings as unknown[]).length;
+    }
+    assert.equal(houses, 2, `expected the block and the house, got ${houses}`);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

@@ -84,6 +84,9 @@ function query() {
   const box = `${bbox.south},${bbox.west},${bbox.north},${bbox.east}`;
   return `[out:json][timeout:90];
 (
+  relation["building"](${box});
+  relation["natural"="water"](${box});
+  relation["landuse"~"^(grass|forest|meadow)$"](${box});
   way["building"](${box});
   way["highway"~"^(motorway|trunk|primary|secondary|tertiary|residential|unclassified|service|living_street|pedestrian|footway|path|steps)$"](${box});
   way["natural"="water"](${box});
@@ -191,6 +194,75 @@ function assignToTile(geometry) {
   };
 }
 
+/** Der flächengrößte Ring einer Gruppe – bei Gebäuden der Außenring. */
+function largest(rings) {
+  let best = rings[0];
+  let bestArea = 0;
+  for (const ring of rings) {
+    let area = 0;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      area += (ring[j].lon + ring[i].lon) * (ring[j].lat - ring[i].lat);
+    }
+    if (Math.abs(area) > bestArea) {
+      bestArea = Math.abs(area);
+      best = ring;
+    }
+  }
+  return best;
+}
+
+/**
+ * Zerlegt eine Punktfolge, die mehrere geschlossene Ringe enthält.
+ *
+ * OSM verkettet bei `out geom` die Ringe eines Multipolygons. Ein Gebäudeblock mit
+ * Innenhof kommt so als Außenring **plus** Innenring an, ein Stadtpark als mehrere
+ * Wiesen. Der Pfad springt dann vom Ende des einen zum Anfang des nächsten Ringes –
+ * quer durch den Block. Hier wird an der Wiederkehr des Startpunktes getrennt.
+ */
+function splitRings(geometry) {
+  const rings = [];
+  let current = [];
+  for (const point of geometry) {
+    const previous = current[current.length - 1];
+    if (previous && previous.lat === point.lat && previous.lon === point.lon) continue;
+    current.push(point);
+    const first = current[0];
+    if (current.length >= 4 && point.lat === first.lat && point.lon === first.lon) {
+      rings.push(current);
+      current = [];
+    }
+  }
+  if (current.length >= 3) rings.push(current);
+  // Kein geschlossener Ring erkannt: die ganze Folge bleibt ein Umriss.
+  return rings.length ? rings : [geometry];
+}
+
+/**
+ * Zerlegt eine OSM-Relation in ihre Ringe.
+ *
+ * `out geom` hängt die Ringe eines Multipolygons **aneinander** – ein Gebäudeblock
+ * mit Innenhof kommt als eine Punktfolge, ein Stadtpark mit drei Wiesen als eine
+ * Linie von Wiese zu Wiese. Genau das waren die langen Striche quer über die erste
+ * echte Karte. Eine Relation liefert dagegen ihre Mitglieder einzeln; daraus werden
+ * echte Ringe, und nur der äußere Umriss wird gezeichnet.
+ */
+function relationRings(element) {
+  const rings = [];
+  for (const member of element.members ?? []) {
+    if (member.type !== 'way' || member.role === 'inner') continue;
+    if (!Array.isArray(member.geometry) || member.geometry.length < 3) continue;
+    const ring = member.geometry.map((point) => [point.lat, point.lon]);
+    const first = ring[0];
+    const last = ring[ring.length - 1];
+    if (first[0] !== last[0] || first[1] !== last[1]) ring.push(first);
+    rings.push(ring);
+  }
+  if (!rings.length) return [];
+  // Nur der größte Außenring: der Umriss eines Blocks, nicht jede Teilfläche.
+  const longest = rings.reduce((best, ring) => (ring.length > best.length ? ring : best), rings[0]);
+  return [longest.map(([lat, lon]) => ({ lat, lon }))];
+}
+
 let skippedDegenerate = 0;
 let skippedUnknown = 0;
 
@@ -223,38 +295,52 @@ for (const element of (await loadElements()).elements) {
 
   // Gebäude und Flächen: geschlossen und mit Fläche, sonst ist es ein Strich.
   if (tags.building || tags.natural === 'water' || tags.leisure || tags.landuse) {
-    const run = assignToTile(element.geometry);
-    // Ein Gebäude braucht mindestens drei Ecken, sonst ist es ein Strich.
-    if (run.points.length < 4) {
-      skippedDegenerate++;
-      continue;
-    }
-    const tile = tileFor(run.x, run.y);
-    if (tags.building) {
-      /**
-       * Ein Gebäude mit Innenhof hat in OSM einen Außen- und mehrere Innenringe;
-       * `out geom` liefert sie als eine Punktfolge. Naiv gezeichnet zieht der Pfad
-       * eine Linie quer durch den Block – auf dem ersten echten Paket war genau das
-       * der Grund, warum die Karte wie ein Knoten aussah.
-       *
-       * Ohne Multipolygon-Auswertung wird daraus der Umriss: konvexe Hülle,
-       * vereinfacht. Ehrlicher als ein durchkreuzter Ring, und für „neben welchem
-       * Haus stehe ich" genau genug.
-       */
-      const outline = simplifyRing(hull(run.points), 0.6);
-      tile.buildings.push({
-        points: outline,
-        ...(tags.building === 'garage' || tags.building === 'parking' ? { kind: 'parking' } : {}),
-      });
-      if (tags.name) {
-        const [cx, cy] = centroid(run.points);
-        tile.labels.push({ text: tags.name.slice(0, 22), x: cx, y: cy, kind: 'place' });
+    /**
+     * Bei Relationen sind die Mitglieder die Wahrheit, bei Wegen die Geometrie.
+     * Vorher wurde eine Relation wie ein Weg behandelt – ihre Ringe kamen
+     * verkettet an und wurden zu einem Zickzack über die halbe Kachel.
+     */
+    /**
+     * Bei Relationen sind die Mitglieder die Wahrheit, bei Wegen die Geometrie.
+     * Vorher wurde eine Relation wie ein Weg behandelt – ihre Ringe kamen
+     * verkettet an und wurden zu einem Zickzack quer über die Kachel.
+     *
+     * Und wenn ein Weg doch einmal mehrere Ringe in einer Punktfolge trägt (OSM
+     * tut das bei manchen Flächen), wird daraus der Umriss statt eines Knotens.
+     */
+    const rings =
+      element.type === 'relation'
+        ? relationRings(element)
+        : [element.geometry].map((ring) => splitRings(ring));
+    for (const group of rings) {
+      // Bei Gebäuden zählt der Umriss: ein Innenhof ist ein Loch, keine zweite
+      // Hütte mitten im Block. Flächen (Wiesen, Wasser) dürfen mehrere Teile haben.
+      const drawn = tags.building ? [largest(group)] : group;
+      for (const ring of drawn) {
+        if (ring.length < 3) continue;
+        const run = assignToTile(ring);
+        // Ein Gebäude braucht mindestens drei Ecken, sonst ist es ein Strich.
+        if (run.points.length < 4) {
+          skippedDegenerate++;
+          continue;
+        }
+        const tile = tileFor(run.x, run.y);
+        if (tags.building) {
+          tile.buildings.push({
+            points: simplifyRing(run.points, 0.6),
+            ...(tags.building === 'garage' || tags.building === 'parking' ? { kind: 'parking' } : {}),
+          });
+          if (tags.name) {
+            const [cx, cy] = centroid(run.points);
+            tile.labels.push({ text: tags.name.slice(0, 22), x: cx, y: cy, kind: 'place' });
+          }
+        } else {
+          tile.areas.push({
+            kind: tags.natural === 'water' ? 'water' : 'green',
+            points: run.points,
+          });
+        }
       }
-    } else {
-      tile.areas.push({
-        kind: tags.natural === 'water' ? 'water' : 'green',
-        points: run.points,
-      });
     }
     continue;
   }
@@ -313,7 +399,33 @@ function hull(points) {
  * unterhalb jeder Darstellungsgenauigkeit, spart aber die Hälfte der Punkte.
  */
 function simplifyRing(points, tolerance) {
-  if (points.length <= 4) return [...points, points[0]];
+  /**
+   * Ein Ring wird als **offene** Linie vereinfacht und danach wieder geschlossen.
+   *
+   * Die frühere Fassung hat Douglas-Peucker direkt auf den geschlossenen Ring
+   * angewandt – dessen erster und letzter Punkt identisch sind. Die Strecke
+   * dazwischen hat dann die Länge null, der Abstand jedes Punktes dazu ist
+   * beliebig groß, und die Rekursion spaltete am falschen Ort: übrig blieb ein
+   * Ring mit doppelten Punkten und einer Schlaufe, die auf dem Schirm wie ein
+   * Knoten aussah.
+   */
+  const unique = [];
+  for (const point of points) {
+    const last = unique[unique.length - 1];
+    if (last && last[0] === point[0] && last[1] === point[1]) continue;
+    unique.push(point);
+  }
+  const closed = unique.length > 1
+    && unique[0][0] === unique[unique.length - 1][0]
+    && unique[0][1] === unique[unique.length - 1][1];
+  const open = closed ? unique.slice(0, -1) : unique;
+  if (open.length < 3) return [];
+  const simplified = open.length > 3 ? douglasPeucker(open, tolerance) : open;
+  return [...simplified, simplified[0]];
+}
+
+/** Douglas-Peucker auf einer **offenen** Linie. */
+function douglasPeucker(points, tolerance) {
   let maxDistance = 0;
   let index = 0;
   const [ax, ay] = points[0];
@@ -325,12 +437,13 @@ function simplifyRing(points, tolerance) {
       index = i;
     }
   }
-  if (maxDistance > tolerance) {
-    const left = simplifyRing(points.slice(0, index + 1), tolerance).slice(0, -1);
-    const right = simplifyRing(points.slice(index), tolerance);
-    return [...left, ...right];
+  if (maxDistance > tolerance && index > 0) {
+    return [
+      ...douglasPeucker(points.slice(0, index + 1), tolerance).slice(0, -1),
+      ...douglasPeucker(points.slice(index), tolerance),
+    ];
   }
-  return [...points, points[0]];
+  return [points[0], points[points.length - 1]];
 }
 
 function perpendicular([px, py], [ax, ay], [bx, by]) {
