@@ -26,27 +26,27 @@ die Schrittschätzung verspricht und keine hat, ist ein Widerrufsgrund).
 | # | Versprechen | Status | Beleg / Lücke |
 |---|---|---|---|
 | 1 | Ein-Tipp-Anker | ✅ | `HomeScreen` → `setAnchor()` → sofort gespeichert, Editor nur zum Anreichern |
-| 2 | Anker ohne GPS setzbar | ⚠️ | `createAnchorNow` bricht bei `!fix` ab; „manuell“ fehlt im UI, obwohl `source: 'manual'` existiert |
+| 2 | Anker ohne GPS setzbar | ✅ | **entschieden:** ohne Position gibt es keinen Anker — ein Anker ohne Koordinate wäre eine leere Hülle. Stattdessen sagt der Knopf, warum, und führt zum Fund-Bildschirm, wo Kompass und Schrittschätzung ohne GPS funktionieren. `source: 'manual'` bleibt für den Import |
 | 3 | Foto mit Blickrichtung | ✅ | `makePhotoRef(captured, sensors.heading)` |
 | 4 | Sprachnotiz | ✅ | `startVoiceRecording` + `VoiceRef` (Pro) |
 | 5 | Kategorien, Titel, Notiz | ✅ | `AnchorEditor` |
 | 6 | **Etage / Ebenen-Label** | ✅ | **behoben:** Presets (−3 … 3) + Freitext im Editor, Lotse liest `floorLabel` | `floorLabel` existiert im Draft, wird aber **nirgends eingegeben** — das Höhen-Lotse zeigt dauerhaft nichts. Genau das Feature, das Tiefgaragen rettet |
 | 7 | Viele Anker parallel, Suche, Filter, Sortierung | ✅ | `queryAnchors` |
-| 8 | Favoriten / Archiv | 🔒 | vorhanden, aber Pro-Gate inkonsistent: Favoriten-Stern ist im Free-UI klickbar (`AnchorEditor`), Archiv leitet auf Pro um |
+| 8 | Favoriten / Archiv | 🔒 | **behoben:** `toggleFavorite` prüft `FREE_LIMITS.favorites` und gibt `ok: false` zurück; Stern und Archiv-Knopf öffnen im Free-Tarif das Pro-Sheet mit Grund. Test koppelt Grenze und Erklärung |
 | 9 | Kompass + Entfernung | ✅ | `guidanceFor` + Nadel mit relativer Peilung |
-| 10 | Höhen-/Etagen-Lotse | ⚠️ | `elevationHint` rechnet, aber ohne `floorLabel`-Eingabe und ohne Barometer-Fallback halb blind |
+| 10 | Höhen-/Etagen-Lotse | ✅ | `floorLabel` wird im Editor gesetzt (Presets −3 … 3 + Freitext) und im Lotse angezeigt; Höhenunterschiede über 60 m werden als unplausibel benannt statt in Etagen umgerechnet |
 | 11 | Brotkrumen-Spur | ✅ | Aufzeichnung + `TrailCanvas` (SVG) |
-| 12 | Foto-/Notiz-Abgleich beim Suchen | ⚠️ | Fotos ja, aber ohne Blickrichtungs-Hinweis („Foto wurde bei 240° aufgenommen“) — der eigentliche Mehrwert fehlt |
+| 12 | Foto-/Notiz-Abgleich beim Suchen | ✅ | **behoben:** `photoHeadingHint()` — jedes Referenzfoto trägt „aufgenommen aus SW 225° – dreh dich 45° nach links". Ohne Kompasskurs bleibt es bei der Himmelsrichtung, eine Drehung wird nie erfunden |
 | 13 | Näher-dran-Feedback | ✅ | `proximityTier` + `beep`/`vibrate` |
 | 14 | **Schrittschätzung / Dead Reckoning** | ✅ | **behoben:** Schritterkennung über `devicemotion`, `advanceWalker` greift nach 8 s ohne Fix, Anzeige „geschätzte Position“ + Banner mit Schrittzahl und ehrlicher Fehlermarge |
-| 15 | Park-Timer + Erinnerung | ⚠️ | Timer läuft, Benachrichtigung kommt — aber **Tippen auf die Benachrichtigung tut nichts** (`localNotificationActionPerformed` fehlt), `reminderState: 'fired'` wird nie gesetzt |
+| 15 | Park-Timer + Erinnerung | ✅ | Benachrichtigung trägt die Anker-ID, Tippen öffnet den Anker im Suchbildschirm; `reminderTransition()` setzt `fired` beim nächsten Öffnen nach Ablauf ehrlich nach |
 | 16 | Park-Timer erreichbar | ✅ | **behoben:** Uhr-Knopf direkt auf jeder Auto-Karte; Benachrichtigung trägt `anchorId` und öffnet den Anker beim Antippen |
 | 17 | Zonen-/Kostennotiz | ✅ | `zone` im Editor |
 | 18 | Teilen (Link/QR/Datei) | ✅ | Link mit Web-Vorschau, Intent-Handoff, `.waipack` (Pro) |
 | 19 | Taschenlampe beim Suchen | ✅ | **behoben:** Knopf im Suchbildschirm, schaltet beim Verlassen automatisch aus |
 | 20 | Nacht-/Notfallmodus | ✅ | Theme `night` (rotverschoben) |
 | 21 | Näherung ohne GPS ehrlich anzeigen | ✅ | **behoben:** Statuschip „geschätzte Position“, Banner im Suchbildschirm mit Schritten + Restdistanz |
-| 22 | Ankunft | ⚠️ | Banner „angekommen“, aber keine Folgeaktion (Timer stoppen, Anker ablegen) |
+| 22 | Ankunft | ✅ | Ankunftskarte bietet Timer stoppen, „als gefunden ablegen" und zurück zur Liste |
 
 ## 3. Befund — Bedienbarkeit („selbsterklärend“)
 
@@ -54,10 +54,10 @@ die Schrittschätzung verspricht und keine hat, ist ein Widerrufsgrund).
 |---|---|---|---|
 | 23 | Leerer Zustand erklärt sich | ✅ | **behoben:** eigener Text, Tipp und „So funktioniert wAI“; gefilterte Leere bietet „Filter zurücksetzen“ |
 | 24 | Löschen bestätigen | ✅ | **behoben:** `ui/Confirm.tsx` — bilingual, themebar, Fokus-Falle, Abbruch vorausgewählt |
-| 25 | Hilfe in der App | ⚠️ | `HelpSheet` zeigt nur drei Landingpage-Schritte, keine FAQ, keine Sensor-Hilfe, keine Krisen-Hinweise |
-| 26 | Fehlermeldungen erklären den nächsten Schritt | ⚠️ | „Standort nicht verfügbar“ ohne Handlungsanweisung |
+| 25 | Hilfe in der App | ✅ | `HelpSheet` mit Drei-Schritte-Weg, FAQ aus der Landingpage, Sensor-Hilfe und einem Abschnitt „was wAI nicht kann" — offline, DE/EN |
+| 26 | Fehlermeldungen erklären den nächsten Schritt | ✅ | **behoben:** der Suchbildschirm ohne Fix nennt den nächsten Schritt („geh ein paar Schritte ins Freie") und bietet einen echten zweiten Versuch statt eines Knopfs, der „Einstellungen" verspricht und nur den Dialog erneut öffnet |
 | 27 | Einheiten (metrisch/imperial) | ✅ | **behoben:** `formatDistance`/`formatHeight` mit Einheitensystem, `useUnits()` in Liste und Suche, Tests decken ft/mi ab |
-| 28 | Fokusführung in Sheets | ⚠️ | kein Fokus-Trap; `aria-label="Close"` auf Englisch |
+| 28 | Fokusführung in Sheets | ✅ | **behoben:** `Sheet` fängt Tab (vorher nur `Confirm`), Fokus außerhalb springt zurück ins Sheet, Schließen-Knopf heißt lokalisiert „Schließen" |
 | 29 | Pro-Momente erklären den Nutzen | ✅ | `ProScreen` mit Grund-Kontext + Wallets + QR |
 | 30 | Erster Start | ✅ | Onboarding mit Sprachwahl + Berechtigungen |
 
@@ -84,7 +84,29 @@ die Schrittschätzung verspricht und keine hat, ist ein Widerrufsgrund).
 | 42 | Datenschutz deckt Teilen ab | ✅ (3.6) |
 | 43 | Store-Paket, Screenshot-Plan, Prüfskripte | ✅ |
 | 44 | **Marketing-Claims vs. Code** | ✅ | **behoben:** `tools/check-claims.mjs` hält 11 Behauptungen gegen den Code (wortgrenzen-scharf) und läuft in `npm run verify`. Schrittschätzung existiert jetzt wirklich (14), das Notiz-Gate ist im Editor erklärt |
-| 45 | Screenshots | ⚠️ fehlen noch (kein Browser in der Sandbox → Skript verweigert Fake-Bilder) |
+| 45 | Screenshots | ✅ | neun Bilder aus der laufenden App (`tools/capture-store-screenshots.mjs`, CI-Workflow), jedes mit Pflicht-Merkmalen und Layout-Messung; ein falsches Bild lässt den Lauf scheitern |
+
+## 5a. Stand nach der Bild- und Ehrlichkeitsrunde (PR #37–…)
+
+Alle Zeilen in §2/§3 sind ✅ oder bewusst entschieden. Was in dieser Runde
+zusätzlich gefunden wurde, weil jedes Store-Bild einzeln geprüft wurde:
+
+| Fund | Ursache | Beleg |
+|---|---|---|
+| Fund-Screen war höher als das Telefon | `.app` hatte drei Grid-Zeilen, der Screen rendert zwei Kinder → `main` in der `auto`-Zeile, `overflow: hidden` schnitt ab, gescrollt wurde nie | `app.css` `.app`, `.app__body`, `.topbar`, `.tabbar` je `grid-row` |
+| Kompass war eine **Ellipse** | `aspect-ratio: 1` zusammen mit `max-height` | `width: min(100%, 216px)` |
+| „Spur"-Bild zeigte keine Spur | Klick öffnete den Anker und blieb beim Kompass; alle Ansichten hatten dieselbe Signatur | `mustSee` je Shot im Capture-Skript |
+| „ca. 3 Etage(n)", „8 Std. 0 Min." | Platzhalter statt Plural, Null als Messwert | `floorForm()`, `formatDuration()`, Tests |
+| „6 Anker" über Zähler 3 | zählte archivierte mit | `activeAnchors.length` |
+| Anker 640 m über Gerät bei 411 m | Seed-Daten widersprachen sich | feste Szene, Anker 402 m |
+| Screenshots nicht reproduzierbar | `Math.random()` in den Seed-Daten | feste Koordinaten |
+| Demo-Hinweis versprach eine Funktion, die es nicht gab | kein Handler auf der Karte | `onPickPosition` + `toWorld`/`unproject`, Test |
+| Fotos ohne Blickrichtung | `PhotoRef.heading` gespeichert, nie gezeigt | `photoHeadingHint()` |
+
+Der Capture-Lauf prüft sich selbst: Pflicht-Merkmale pro Bild, Messung von
+`.app`/`.app__body`/Tab-Leiste, Exit-Code 1 bei Inhalt hinter der Leiste. Beim
+ersten Einsatz meldete er 81 px Überstand — die Zahl, mit der 216 px als
+Kompasshöhe bestimmt wurde.
 
 ## 6. Die drei teuersten Funde
 
@@ -143,7 +165,7 @@ Ziel: Nichts Behauptetes bleibt unimplementiert, kein toter Schalter.
 | Task | Warum |
 |---|---|
 | 5.1 Claims gegen Code prüfen ✅ | `tools/check-claims.mjs`, in `verify` verdrahtet, gegen Fehlalarm getestet |
-| 5.2 Screenshots erzeugen (Runner mit Chromium) | letzte fehlende Store-Zutat |
+| 5.2 Screenshots erzeugen (Runner mit Chromium) ✅ | neun Bilder, reproduzierbar (feste Koordinaten), selbstgeprüft |
 | 5.3 Store-Text um Auto-Kachel + Erinnerung ✅ | Store-Text und Landing-Use-Case nennen Auto-Kachel, 10-Minuten-Erinnerung und Parkschein-Foto |
 
 ### Phase 6 — Launch-Gate (P3, blockiert Veröffentlichung)

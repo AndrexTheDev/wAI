@@ -887,6 +887,10 @@ export const de = {
       denied: 'Berechtigung abgelehnt. Du kannst sie in den Android-Einstellungen erteilen.',
       openSettings: 'Einstellungen öffnen',
       noLocation: 'Standort derzeit nicht verfügbar. Anker wird mit Sensordaten gesetzt.',
+      // Ehrlich: ohne Position gibt es keinen Anker. Der Text sagt, warum, und
+      // wohin der Tipp führt, statt nur „nicht verfügbar".
+      noFixToFind:
+        'Ohne Position lässt sich kein Anker setzen. Auf dem Fund-Bildschirm siehst du, was Kompass und Schätzung trotzdem können.',
       // Für den Suchbildschirm: dort ist „Anker setzen" keine Option, es geht ums Finden.
       noFixTitle: 'Noch keine Position',
       retry: 'Erneut versuchen',

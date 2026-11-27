@@ -879,6 +879,8 @@ export const en: Widen<GermanDictionary> = {
       denied: 'Permission denied. You can grant it in the Android settings.',
       openSettings: 'Open settings',
       noLocation: 'Location currently unavailable. The anchor will be created from sensor data.',
+      noFixToFind:
+        'Without a position no anchor can be set. The find screen shows what the compass and the step estimate can still do.',
       noFixTitle: 'No position yet',
       retry: 'Try again',
       noFixBody:
