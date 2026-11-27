@@ -264,6 +264,7 @@ function relationRings(element) {
 }
 
 let skippedDegenerate = 0;
+let skippedOversized = 0;
 let skippedUnknown = 0;
 
 for (const element of (await loadElements()).elements) {
@@ -326,6 +327,19 @@ for (const element of (await loadElements()).elements) {
         }
         const tile = tileFor(run.x, run.y);
         if (tags.building) {
+          /**
+           * Ein Umriss von mehr als 160 m Kantenlänge ist kein Haus, sondern ein
+           * zusammengefasster Gebäudekomplex (Bahnhofshalle, Kaufhausriegel). Als
+           * Zickzack über zwei Kacheln verdeckt er die halbe Nachbarschaft und
+           * liefert keine Information – also bleibt er weg, statt zu stören.
+           */
+          const xs = run.points.map(([x]) => x);
+          const ys = run.points.map(([, y]) => y);
+          const extent = Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys));
+          if (extent > 400) {
+            skippedOversized++;
+            continue;
+          }
           tile.buildings.push({
             points: simplifyRing(run.points, 0.6),
             ...(tags.building === 'garage' || tags.building === 'parking' ? { kind: 'parking' } : {}),
@@ -538,6 +552,7 @@ writeFileSync(path.join(outDir, 'index.json'), `${JSON.stringify(index, null, 2)
 const summary = `\n${index.tiles.length} Kacheln · ${(totalBytes / 1024).toFixed(0)} kB · ${index.tiles.reduce((n, t) => n + t.buildings, 0)} Gebäude in ${name}`;
 console.log(summary);
 if (skippedDegenerate) console.log(`  · ${skippedDegenerate} zu kleine Gebäudefragmente übersprungen`);
+if (skippedOversized) console.log(`  · ${skippedOversized} übergroße Gebäudekomplexe ausgelassen (>160 m)`);
 if (skippedUnknown) console.log(`  · ${skippedUnknown} Elemente ohne darstellbare Geometrie übersprungen`);
 
 
