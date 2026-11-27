@@ -11,6 +11,7 @@
  *   - i18n drift between res/values, res/values-de and res/values-en
  */
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -132,10 +133,42 @@ if (errors === 0) ok(`all ${refs.length} manifest resource references resolve`);
 console.log('\nLauncher icons & splash screens');
 const densities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'];
 for (const density of densities) {
-  for (const name of ['ic_launcher.png', 'ic_launcher_round.png', 'ic_launcher_foreground.png']) {
+  for (const name of ['ic_launcher.png', 'ic_launcher_round.png', 'ic_launcher_foreground.png', 'ic_launcher_monochrome.png']) {
     const file = path.join(RES, `mipmap-${density}`, name);
     if (!existsSync(file)) fail(`missing mipmap-${density}/${name}`);
     else if (statSync(file).size < 200) fail(`mipmap-${density}/${name} looks empty (${statSync(file).size} bytes)`);
+  }
+}
+/**
+ * Eine leere oder fast leere Icon-Datei ist der Fehler, der am längsten unbemerkt
+ * bleibt: das Symbol ist dann auf dem Gerät unsichtbar, aber Größe und Endung
+ * stimmen. Deshalb wird hier die **Deckung** gemessen, nicht nur die Dateigröße.
+ * Gemessen mit ImageMagick, weil ein PNG-Decoder in einem Prüfskript zu viel
+ * Angriffsfläche wäre.
+ */
+function coverage(file) {
+  /**
+   * Anteil deckender Pixel. Die mittlere Deckung wäre das falsche Maß: das
+   * Launcher-Icon hat runde, also transparente Ecken und läge damit unter jeder
+   * sinnvollen Schwelle. Ein leeres Symbol hat trotzdem ~0 % deckende Fläche.
+   */
+  try {
+    const out = execFileSync('convert', [file, '-alpha', 'extract', '-threshold', '50%', '-format', '%[fx:mean]', 'info:'], {
+      encoding: 'utf8',
+    });
+    return Number(out.trim());
+  } catch {
+    return null; // ImageMagick fehlt – dann nur die Größenprüfung.
+  }
+}
+for (const density of densities) {
+  for (const name of ['ic_launcher.png', 'ic_launcher_foreground.png', 'ic_launcher_monochrome.png']) {
+    const file = path.join(RES, `mipmap-${density}`, name);
+    if (!existsSync(file)) continue; // Fehlen wird oben schon gemeldet
+    const visible = coverage(file);
+    if (visible !== null && visible < 0.04) {
+      fail(`mipmap-${density}/${name} is (nearly) empty – ${(visible * 100).toFixed(1)} % opaque`);
+    }
   }
 }
 for (const orientation of ['port', 'land']) {

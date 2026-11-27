@@ -16,13 +16,18 @@ const base = ({ size = 22, ...rest }: IconProps) => ({
   ...rest,
 });
 
+/**
+ * Das Markenzeichen: Pin mit Pfeil nach oben.
+ *
+ * Vorher war es ein Anker – dasselbe Symbol wie das alte App-Icon, und für ein
+ * Produkt, das ein Auto im Parkhaus wiederfindet, sagt ein Marineanker nichts.
+ * Marke, App-Icon, Launcher und Benachrichtigung zeigen jetzt dieselbe Form; sie
+ * kommt aus `tools/make-icons.mjs`, hier als Linienfassung für die Website.
+ */
 export const AnchorIcon = (p: IconProps) => (
   <svg {...base(p)}>
-    <circle cx="12" cy="5" r="2.4" />
-    <path d="M12 7.4V21" />
-    <path d="M8 11h8" />
-    <path d="M4 15a8 8 0 0 0 16 0" />
-    <path d="M4 15h3M17 15h3" />
+    <path d="M12 21.2c3.6-3.7 5.3-5.8 5.3-8.1a5.3 5.3 0 1 0-10.6 0c0 2.3 1.7 4.4 5.3 8.1Z" />
+    <path d="M12 6.9l2.6 3.1h-1.6v2.2h-2V10H9.4z" fill="currentColor" stroke="none" />
   </svg>
 );
 
