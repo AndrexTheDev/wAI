@@ -749,7 +749,10 @@ export const de = {
         'Die Karte ist offline und braucht ein Gebiet auf dem Gerät. Du kannst trotzdem zurückfinden – Kompass und Spur funktionieren ohne.',
       outsidePack: '„{name}" liegt woanders',
       outsidePackBody:
-        'Dein Standort liegt außerhalb des Kartenpakets. Kompass, Spur und Entfernung funktionieren trotzdem – die Karte zeigt nur Gebiete, die auf dem Gerät gespeichert sind.',
+        'Dein Standort liegt außerhalb der Kartenpakete auf diesem Gerät. Kompass, Spur und Entfernung funktionieren trotzdem.',
+      outsideAll: 'Kein Paket für diesen Ort',
+      outsideAllBody:
+        'Offline sind gespeichert: {names}. Die Karte ist kein Netzangebot – sie zeigt nur, was auf dem Gerät liegt.',
       demoPack: 'Demo-Gebiet · synthetische Häuser, keine echten Daten',
       attribution: '© OpenStreetMap-Mitwirkende, ODbL',
       offlineNote: 'Kartenpaket auf dem Gerät · kein Netz, kein Konto',

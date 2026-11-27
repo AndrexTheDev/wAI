@@ -93,7 +93,9 @@ const CLAIMS = [
       // Generator und ein tatsächlich ausgeliefertes Paket.
       ['packages/app/src/screens/MapView.tsx', 'map__building'],
       ['tools/build-map-pack.mjs', 'overpass-api.de'],
-      ['packages/app/public/map/index.json', '"buildings"'],
+      ['packages/app/public/map/muenchen-mitte/index.json', '"buildings"'],
+      // Ein Paket ist erst dann „offline pro Stadt", wenn die App mehrere kennt.
+      ['packages/app/public/map/packs.json', '"slug"'],
     ],
   },
   {

@@ -1,6 +1,7 @@
 {
   "version": 1,
-  "name": "München Mitte",
+  "slug": "muenchen-mitte",
+  "name": "M\u00fcnchen Mitte",
   "zoom": 18,
   "bounds": {
     "south": 48.128,
@@ -4364,7 +4365,7 @@
       "roads": 1
     }
   ],
-  "source": "© OpenStreetMap-Mitwirkende, ODbL 1.0 – openstreetmap.org/copyright",
+  "source": "\u00a9 OpenStreetMap-Mitwirkende, ODbL 1.0 \u2013 openstreetmap.org/copyright",
   "synthetic": false,
   "generatedAt": "2026-11-27T08:15:14.909Z"
 }

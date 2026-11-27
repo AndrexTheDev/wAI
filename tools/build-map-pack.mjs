@@ -2,10 +2,14 @@
 /**
  * Map-Paket bauen: OpenStreetMap → Kacheln für ein Gebiet.
  *
- * Ergebnis ist ein Ordner `public/map/`, den die App offline liest:
+ * Ergebnis ist ein Ordner `public/map/<slug>/`, den die App offline liest:
  *
- *   public/map/index.json        ← Gebiet, Herkunft, Lizenz, Kachelverzeichnis
- *   public/map/18/<x>/<y>.json   ← Gebäude, Straßen, Flächen, Beschriftungen
+ *   public/map/packs.json              ← welche Pakete es gibt (Gebiete, Slug)
+ *   public/map/<slug>/index.json       ← Gebiet, Herkunft, Lizenz, Kacheln
+ *   public/map/<slug>/18/<x>/<y>.json  ← Gebäude, Straßen, Flächen, Beschriftungen
+ *
+ * Ein Paket ist **ein** Gebiet; die App kann mehrere halten. Ohne `<slug>` wäre
+ * „offline pro Stadt" eine Behauptung mit genau einer Stadt.
  *
  * Warum ein Generator und kein fertiges Paket im Repo: Gebäudeumrisse ändern sich,
  * ein Gebiet ist eine Entscheidung des Nutzers („München Mitte"), und ein
@@ -14,7 +18,7 @@
  *
  * Aufruf:
  *   node tools/build-map-pack.mjs --south 48.13 --west 11.56 --north 48.14 --east 11.59 \
- *        --name "München Mitte" --out packages/app/public/map
+ *        --name "München Mitte" --slug muenchen-mitte --out packages/app/public/map
  *   node tools/build-map-pack.mjs --fixture tools/fixtures/overpass-sample.json   # ohne Netz
  *
  * Lizenz: die Daten sind © OpenStreetMap-Mitwirkende, ODbL. Die Attribution steht
@@ -49,8 +53,24 @@ const bbox = {
   north: Number(arg('north', '48.1450')),
   east: Number(arg('east', '11.5950')),
 };
+/** Ein Name wird zum Ordner: „München Mitte" → „muenchen-mitte". */
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .replace(/ä/g, 'ae')
+    .replace(/ö/g, 'oe')
+    .replace(/ü/g, 'ue')
+    .replace(/ß/g, 'ss')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 48);
+}
+
 const name = arg('name', 'München Mitte');
-const outDir = path.resolve(ROOT, arg('out', 'packages/app/public/map'));
+const slug = arg('slug', slugify(name));
+const rootDir = path.resolve(ROOT, arg('out', 'packages/app/public/map'));
+const outDir = path.join(rootDir, slug);
+const tilePrefix = `${slug}/${MAP_ZOOM}`;
 const fixture = arg('fixture');
 const force = args.includes('--force');
 /**
@@ -508,6 +528,7 @@ mkdirSync(outDir, { recursive: true });
 
 const index = {
   version: MAP_PACK_VERSION,
+  slug,
   name,
   zoom: MAP_ZOOM,
   bounds: bbox,
@@ -549,7 +570,31 @@ for (const tile of [...tiles.values()].sort((a, b) => a.y - b.y || a.x - b.x)) {
 
 writeFileSync(path.join(outDir, 'index.json'), `${JSON.stringify(index, null, 2)}\n`);
 
-const summary = `\n${index.tiles.length} Kacheln · ${(totalBytes / 1024).toFixed(0)} kB · ${index.tiles.reduce((n, t) => n + t.buildings, 0)} Gebäude in ${name}`;
+/**
+ * Registry pflegen: `map/packs.json` ist die einzige Stelle, an der die App
+ * erfährt, welche Gebiete offline vorliegen. Wird sie nicht mitgeschrieben, kennt
+ * die App ein zweites Paket nie – sie würde es weder finden noch anbieten.
+ */
+const registryPath = path.join(rootDir, 'packs.json');
+const registry = existsSync(registryPath)
+  ? JSON.parse(readFileSync(registryPath, 'utf8'))
+  : { version: 1, packs: [] };
+const buildings = index.tiles.reduce((n, tile) => n + tile.buildings, 0);
+const summaryEntry = {
+  slug,
+  name,
+  bounds: bbox,
+  buildings,
+  ...(synthetic ? { synthetic: true } : {}),
+};
+registry.version = 1;
+registry.packs = [...registry.packs.filter((pack) => pack.slug !== slug), summaryEntry].sort((a, b) =>
+  a.slug.localeCompare(b.slug),
+);
+writeFileSync(registryPath, `${JSON.stringify(registry, null, 2)}\n`);
+console.log(`· Registry: ${registry.packs.map((pack) => pack.slug).join(', ')}`);
+
+const summary = `\n${index.tiles.length} Kacheln · ${(totalBytes / 1024).toFixed(0)} kB · ${buildings} Gebäude in ${name} (${slug})`;
 console.log(summary);
 if (skippedDegenerate) console.log(`  · ${skippedDegenerate} zu kleine Gebäudefragmente übersprungen`);
 if (skippedOversized) console.log(`  · ${skippedOversized} übergroße Gebäudekomplexe ausgelassen (>160 m)`);
