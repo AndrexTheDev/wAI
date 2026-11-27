@@ -369,26 +369,15 @@ for (const shot of SHOTS) {
     console.warn(`      Karten im DOM: ${JSON.stringify(inventory).slice(0, 500)}`);
   }
   /**
-   * Keine halben Zeilen im Bild. Ein Screenshot schneidet immer irgendwo ab; wenn
-   * er aber mitten durch eine Textzeile schneidet, sieht das nach kaputtem Layout
-   * aus (so wie „Etage: −3", das halb hinter der Tab-Leiste lag). Hier wird der
-   * Scrollbereich so weitergescrollt, dass der erste angeschnittene Block genau
-   * an der Kante der Tab-Leiste endet – der Schnitt fällt damit in die Lücke.
+   * Immer von oben fotografieren. Ein Auto-Scroll auf die nächste Blockkante hat
+   * zwar die halbe Zeile am unteren Rand beseitigt, dafür aber die Kopfzeile mit
+   * Ankername aus dem Bild geschoben – und die ist die halbe Aussage. Der Schnitt
+   * am unteren Rand wird stattdessen über die Höhe des Inhalts gelöst (siehe
+   * `max-height` am Kompass), nicht über die Scrollposition.
    */
   await page.evaluate(() => {
     const scroller = document.querySelector('.app__body');
-    if (!scroller) return;
-    const bar = document.querySelector('.tabbar');
-    const limit = bar ? bar.getBoundingClientRect().top : window.innerHeight;
-    if (scroller.scrollHeight <= scroller.clientHeight + 1) return;
-    const blocks = Array.from(scroller.querySelectorAll(':scope > * > *, :scope > *'));
-    const clipped = blocks
-      .map((node) => ({ node, box: node.getBoundingClientRect() }))
-      .filter(({ box }) => box.height > 6 && box.top < limit && box.bottom > limit + 1)
-      .sort((a, b) => a.box.bottom - b.box.bottom)[0];
-    if (!clipped) return;
-    const overflow = clipped.box.bottom - limit;
-    scroller.scrollTop += overflow;
+    if (scroller) scroller.scrollTop = 0;
   });
   await page.waitForTimeout(200);
 

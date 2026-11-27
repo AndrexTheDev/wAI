@@ -1141,7 +1141,13 @@ a {
   display: grid;
   place-items: center;
   aspect-ratio: 1;
-  max-height: 300px;
+  /**
+   * 300 px waren auf einem 412×732-Gerät zu hoch: mit Demo-Hinweis, Reiterleiste,
+   * Kacheln und Höhenkarte war der Bildschirm über 40 px länger als das Display,
+   * sodass der Store-Screenshot den letzten Block halb abschnitt. Bei 252 px passt
+   * die ganze Ansicht – und der Kompass bleibt groß genug, um die Richtung zu lesen.
+   */
+  max-height: 252px;
   margin-inline: auto;
   width: 100%;
   border-radius: 50%;
@@ -1311,6 +1317,12 @@ a {
 
 .tile__value--amber {
   color: var(--amber);
+}
+
+/* Kein Wert vorhanden: der Strich soll nicht wie eine Zahl wirken. */
+.tile__value--none {
+  color: var(--text-3);
+  font-weight: 600;
 }
 
 .tile__sub {

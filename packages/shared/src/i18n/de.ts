@@ -765,6 +765,9 @@ export const de = {
     timer: {
       title: 'Park-Timer',
       remaining: 'Verbleibend',
+      // Ohne laufenden Parkvorgang gibt es keine Zeit zu zeigen – nur den Hinweis.
+      notStarted: 'nicht gestartet',
+      noLimit: 'ohne Limit',
       over: 'Überzogen',
       setReminder: 'Erinnerung setzen',
       minutes: 'Minuten',

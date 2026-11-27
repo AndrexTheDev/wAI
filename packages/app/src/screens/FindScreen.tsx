@@ -514,12 +514,31 @@ export function FindScreen({
             <span className="tile__label">
               <Timer size={11} /> {t('app.timer.title')}
             </span>
-            <span className={`tile__value ${parking.overdue ? 'tile__value--amber' : ''}`}>
-              {formatDuration(parking.elapsed, locale)}
-            </span>
-            <span className="tile__sub">
-              {parking.overdue ? t('app.timer.expired') : current.parking?.limitMinutes ? t('app.timer.remaining') : '—'}
-            </span>
+            {current.parking ? (
+              <>
+                <span className={`tile__value ${parking.overdue ? 'tile__value--amber' : ''}`}>
+                  {formatDuration(parking.elapsed, locale)}
+                </span>
+                <span className="tile__sub">
+                  {parking.overdue
+                    ? t('app.timer.expired')
+                    : current.parking.limitMinutes
+                      ? t('app.timer.remaining')
+                      : t('app.timer.noLimit')}
+                </span>
+              </>
+            ) : (
+              /**
+               * Ohne laufenden Parkvorgang stand hier die Zeit seit dem Anlegen des
+               * Ankers („8 Std.") mit einem Strich darunter – auf dem Screenshot
+               * sah das wie eine laufende Parkzeit aus, war aber nur das Alter
+               * eines Ankers. Jetzt: keine Zahl, ein Satz.
+               */
+              <>
+                <span className="tile__value tile__value--none">—</span>
+                <span className="tile__sub">{t('app.timer.notStarted')}</span>
+              </>
+            )}
           </div>
         </div>
 

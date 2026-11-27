@@ -762,6 +762,8 @@ export const en: Widen<GermanDictionary> = {
     timer: {
       title: 'Parking timer',
       remaining: 'Remaining',
+      notStarted: 'not started',
+      noLimit: 'no limit',
       over: 'Overdue',
       setReminder: 'Set a reminder',
       minutes: 'minutes',
