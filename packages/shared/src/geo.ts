@@ -6,6 +6,8 @@
  * in a forest without any connectivity.
  */
 
+import { floorForm } from './i18n';
+
 export const EARTH_RADIUS_M = 6371008.8;
 
 export interface LatLng {
@@ -311,13 +313,21 @@ export function guidanceText(
       : // Bei unplausiblem Unterschied keine Etagen erfinden (siehe elevationHint).
         elevation.implausible
         ? ''
-        : locale === 'de'
-        ? elevation.level === 'higher'
-          ? ` · ${elevation.floors || 1} Etage(n) höher`
-          : ` · ${elevation.floors || 1} Etage(n) tiefer`
-        : elevation.level === 'higher'
-          ? ` · ${elevation.floors || 1} floor(s) up`
-          : ` · ${elevation.floors || 1} floor(s) down`;
+        : (() => {
+            // „3 Etagen höher", nicht „3 Etage(n) höher" – die Form entscheidet die
+            // Zahl, nicht der Platzhalter.
+            const floors = elevation.floors || 1;
+            const word = floorForm(floors, locale);
+            const direction =
+              locale === 'de'
+                ? elevation.level === 'higher'
+                  ? 'höher'
+                  : 'tiefer'
+                : elevation.level === 'higher'
+                  ? 'up'
+                  : 'down';
+            return ` · ${floors} ${word} ${direction}`;
+          })();
 
   return `${formatDistance(distance, locale)} ${dir}${elevationText}`;
 }

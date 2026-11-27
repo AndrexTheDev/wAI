@@ -705,8 +705,13 @@ export const de = {
       floorLabel: 'Etage',
       elevationUnclearShort: 'außerhalb jeder Etage',
       elevationUnclear: 'Höhe unklar – {meters} m Unterschied, das ist kein Gebäude. Prüfe den Ort.',
-      elevationHigher: 'Ziel liegt höher ({meters} m, ca. {floors} Etage(n))',
-      elevationLower: 'Ziel liegt tiefer ({meters} m, ca. {floors} Etage(n))',
+      /**
+       * „ca. 3 {floorWord}" – die Form (Etage/Etagen) kommt aus `floorForm()`,
+       * nicht aus dem Text. Vorher stand hier „Etage(n)", ein Platzhalter, der im
+       * Store-Screenshot als solcher zu sehen war.
+       */
+      elevationHigher: 'Ziel liegt höher ({meters} m, ca. {floors} {floorWord})',
+      elevationLower: 'Ziel liegt tiefer ({meters} m, ca. {floors} {floorWord})',
       noElevation: 'Keine Höhendaten',
       trail: 'Brotkrumen-Spur',
       trailLength: 'Spur: {distance}',

@@ -1194,7 +1194,11 @@ a {
   transition: rotate 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Spitze: Basis genau in der Mitte, Apex 112 px darüber. */
+/**
+ * Spitze: Basis genau in der Mitte, Apex 96 px darüber. Vorher 112 px hoch bei
+ * 32 px Breite – ein 16°-Winkel, der auf dem Screenshot wie ein Splitter aussah.
+ * 52 px breit auf 96 px Höhe liest als Pfeil, ohne die Zahl zu erdrücken.
+ */
 .guide__needle-arrow {
   position: absolute;
   left: 50%;
@@ -1202,10 +1206,10 @@ a {
   translate: -50% 0;
   width: 0;
   height: 0;
-  border-left: 16px solid transparent;
-  border-right: 16px solid transparent;
-  border-bottom: 112px solid var(--mint);
-  filter: drop-shadow(0 0 10px rgba(110, 231, 183, 0.55));
+  border-left: 26px solid transparent;
+  border-right: 26px solid transparent;
+  border-bottom: 96px solid var(--mint);
+  filter: drop-shadow(0 0 12px rgba(110, 231, 183, 0.5));
 }
 
 /* Schwanz: gleiche Länge nach unten, aber zurückgenommen – ein Objekt, das zeigt. */
@@ -1214,10 +1218,10 @@ a {
   left: 50%;
   top: 50%;
   translate: -50% 0;
-  width: 7px;
-  height: 112px;
-  border-radius: 0 0 4px 4px;
-  background: linear-gradient(rgba(110, 231, 183, 0.5), rgba(110, 231, 183, 0.04));
+  width: 9px;
+  height: 96px;
+  border-radius: 0 0 5px 5px;
+  background: linear-gradient(rgba(110, 231, 183, 0.45), rgba(110, 231, 183, 0.03));
 }
 
 .guide__center {

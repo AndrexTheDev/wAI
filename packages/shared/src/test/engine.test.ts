@@ -36,6 +36,7 @@ import {
   trailDistance,
   reminderTransition,
 } from '../engine.ts';
+import { createTranslator } from '../i18n/index.ts';
 import { anchorToShare, decodeSharePayload, encodeSharePayload, sanitizeImportedAnchor } from '../codec.ts';
 import { buildIntentLink, buildShareLink, extractShareCode } from '../deeplink.ts';
 import { base64urlDecode, base64urlEncode, canonicalJson, licenseFingerprint, verifyLicense } from '../license.ts';
@@ -374,6 +375,39 @@ test('a fabricated floor count is worse than none', () => {
   assert.equal(absurd.floors, 0);
   // Und die Textzeile schweigt dazu, statt eine Zahl zu erfinden.
   assert.equal(guidanceText(120, 0, absurd, 'de'), '120 m geradeaus');
-  // Im Parkhaus bleibt die Etage eine echte Aussage.
-  assert.match(guidanceText(30, 0, elevationHint(421, 412), 'de'), /3 Etage\(n\) höher/);
+  // Im Parkhaus bleibt die Etage eine echte Aussage – und zwar in richtiger Form.
+  // „Etage(n)" war ein Platzhalter, der im Store-Screenshot stand.
+  assert.match(guidanceText(30, 0, elevationHint(421, 412), 'de'), /3 Etagen höher/);
+  // Einzahl ist keine Sonderform mehr: „1 Etage", nicht „1 Etage(n)".
+  assert.match(guidanceText(30, 0, elevationHint(415, 412), 'de'), / · 1 Etage tiefer| · 1 Etage höher/);
+});
+
+test('floor plurals are words, not placeholders', () => {
+  // Quelle des Fehlers: der Store-Screenshot zeigte „ca. 3 Etage(n)".
+  const de = createTranslator('de');
+  const en = createTranslator('en');
+  assert.equal(
+    de('app.find.elevationLower', { meters: 10, floors: 3 }),
+    'Ziel liegt tiefer (10 m, ca. 3 Etagen)',
+  );
+  assert.equal(
+    de('app.find.elevationHigher', { meters: 3, floors: 1 }),
+    'Ziel liegt höher (3 m, ca. 1 Etage)',
+  );
+  assert.equal(
+    en('app.find.elevationHigher', { meters: 3, floors: 1 }),
+    'Target is higher (3 m, approx. 1 floor)',
+  );
+  assert.equal(
+    en('app.find.elevationLower', { meters: 9, floors: 3 }),
+    'Target is lower (9 m, approx. 3 floors)',
+  );
+  // Kein Text darf ein Platzhalter-Fragment wie „(n)" enthalten.
+  for (const text of [
+    de('app.find.elevationLower', { meters: 10, floors: 3 }),
+    de('app.find.elevationHigher', { meters: 10, floors: 2 }),
+    en('app.find.elevationLower', { meters: 10, floors: 3 }),
+  ]) {
+    assert.doesNotMatch(text, /\(n\)|\(s\)/);
+  }
 });

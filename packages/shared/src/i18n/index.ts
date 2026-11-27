@@ -107,15 +107,43 @@ function isDevBuild(): boolean {
 
 export type TFunction = (path: string, vars?: Record<string, string | number>) => string;
 
+/**
+ * Platzhalter wie „Etage(n)" sind keine deutsche Schreibweise – sie standen im
+ * Store-Screenshot als „ca. 3 Etage(n)". Übersetzungen sagen deshalb `{floorWord}`
+ * und `{floorSuffix}`, und hier wird die passende Form gewählt.
+ *
+ * `Etage` + Suffix `n` ergibt „Etagen", `floor` + `s` ergibt „floors" – das Muster
+ * deckt beide Sprachen mit einem Schlüsselpaar ab.
+ */
+export const FLOOR_FORMS = {
+  de: { one: 'Etage', many: 'Etagen' },
+  en: { one: 'floor', many: 'floors' },
+} as const;
+
+export function floorForm(floors: number, locale: Locale): string {
+  const forms = FLOOR_FORMS[locale] ?? FLOOR_FORMS.de;
+  return floors === 1 ? forms.one : forms.many;
+}
+
 /** Build a translator for a locale. Missing keys fall back to German, then the path. */
 export function createTranslator(locale: Locale): TFunction {
   const primary = getDictionary(locale);
   const fallback = dictionaries.de;
+  /**
+   * `{floorWord}` wird aus `floors` abgeleitet, statt an jeder Aufrufstelle
+   * mitgegeben zu werden – sonst geriete eine davon ins Vergessen und die
+   * Pluralform stünde als Platzhalter im Text.
+   */
+  const withVars = (vars?: Record<string, string | number>) => {
+    if (!vars || !('floors' in vars)) return vars;
+    const floors = Number(vars.floors);
+    return Number.isFinite(floors) ? { ...vars, floorWord: floorForm(floors, locale) } : vars;
+  };
   return (path, vars) => {
     const value = resolvePath(primary, path);
-    if (typeof value === 'string') return interpolate(value, vars);
+    if (typeof value === 'string') return interpolate(value, withVars(vars));
     const deValue = resolvePath(fallback, path);
-    if (typeof deValue === 'string') return interpolate(deValue, vars);
+    if (typeof deValue === 'string') return interpolate(deValue, withVars(vars));
     if (isDevBuild()) console.warn(`[i18n] missing key: ${path}`);
     return path;
   };

@@ -299,6 +299,29 @@ export function FindScreen({
           </div>
         )}
 
+        {/*
+          Der Umschalter steht direkt unter dem Kompass, nicht unter den Kacheln.
+          Vorher lag er bei 523 von 732 CSS-Pixeln Höhe – also genau auf der Falz,
+          wo der Store-Screenshot ihn halb abschnitt. Er steuert die Hauptansicht
+          dieses Bildschirms und gehört deshalb zu ihr.
+        */}
+        {!multiView && (
+          <div className="segmented" role="tablist">
+            <button type="button" role="tab" aria-selected={view === 'compass'} className={view === 'compass' ? 'is-active' : ''} onClick={() => setView('compass')}>
+              <Compass size={13} /> {locale === 'de' ? 'Kompass' : 'Compass'}
+            </button>
+            <button type="button" role="tab" aria-selected={view === 'map'} className={view === 'map' ? 'is-active' : ''} onClick={() => setView('map')}>
+              <MapIcon size={13} /> {t('app.map.tab')}
+            </button>
+            <button type="button" role="tab" aria-selected={view === 'trail'} className={view === 'trail' ? 'is-active' : ''} onClick={() => setView('trail')}>
+              <Trail size={13} /> {locale === 'de' ? 'Spur' : 'Trail'}
+            </button>
+            <button type="button" role="tab" aria-selected={view === 'media'} className={view === 'media' ? 'is-active' : ''} onClick={() => setView('media')}>
+              <Camera size={13} /> {locale === 'de' ? 'Foto' : 'Photo'}
+            </button>
+          </div>
+        )}
+
         {(multiView || view === 'compass') && (
           <div
             className={`guide__compass guide__compass--tier${tier} ${arrived ? 'is-arrived' : ''} ${
@@ -518,23 +541,6 @@ export function FindScreen({
             </p>
           )}
         </div>
-
-        {!multiView && (
-          <div className="segmented" role="tablist">
-            <button type="button" role="tab" aria-selected={view === 'compass'} className={view === 'compass' ? 'is-active' : ''} onClick={() => setView('compass')}>
-              <Compass size={13} /> {locale === 'de' ? 'Kompass' : 'Compass'}
-            </button>
-            <button type="button" role="tab" aria-selected={view === 'map'} className={view === 'map' ? 'is-active' : ''} onClick={() => setView('map')}>
-              <MapIcon size={13} /> {t('app.map.tab')}
-            </button>
-            <button type="button" role="tab" aria-selected={view === 'trail'} className={view === 'trail' ? 'is-active' : ''} onClick={() => setView('trail')}>
-              <Trail size={13} /> {locale === 'de' ? 'Spur' : 'Trail'}
-            </button>
-            <button type="button" role="tab" aria-selected={view === 'media'} className={view === 'media' ? 'is-active' : ''} onClick={() => setView('media')}>
-              <Camera size={13} /> {locale === 'de' ? 'Foto' : 'Photo'}
-            </button>
-          </div>
-        )}
 
         {multiView && (
           <div className="row" style={{ gap: 6 }}>

@@ -158,14 +158,24 @@ try {
 // the screenshots show plausible data instead of an empty state.
 await page.evaluate(() => {
   const now = Date.now();
+  let seq = 0;
   const anchor = (over) => ({
-    id: `shot-${Math.random().toString(36).slice(2, 9)}`,
+    // Fortlaufende Kennung statt Zufall: reproduzierbar und in der Selbstauskunft
+    // lesbar. Die alten IDs standen nirgends im Bild, waren aber bei jedem Lauf anders.
+    id: `shot-${seq++}`,
     name: '',
     category: 'other',
-    // Rund um den Demo-Standort (48.1355, 11.5826) – sonst liegt der Anker
-    // 1 400 km entfernt und die Karte zeigt „irgendwo anders".
-    lat: 48.1362 + (Math.random() - 0.5) * 0.002,
-    lng: 11.5831 + (Math.random() - 0.5) * 0.002,
+    /**
+     * Feste Koordinaten statt `Math.random()`: mit Zufall stand im einen Lauf
+     * „32 m", im nächsten „109 m", und die Näher-dran-Anzeige sprang zwischen 0/4
+     * und 2/4. Screenshots müssen reproduzierbar sein – sonst lässt sich ein
+     * Fehler auf einem Bild nie wieder nachstellen.
+     *
+     * Die Werte liegen innerhalb von ~60 m um die Demo-Position der App
+     * (48.1359, 11.5832), damit die Karte den richtigen Block zeigt.
+     */
+    lat: 48.1362,
+    lng: 11.5832,
     /**
      * Die Demo-Position der App liegt bei 411 m (simulierte Sensoren). Anker mit
      * 640 m ergaben im Fund-Screen „Höhe unklar – 228 m Unterschied, das ist kein
@@ -199,10 +209,31 @@ await page.evaluate(() => {
       favorite: true,
       createdAt: now - 95 * 60_000,
     }),
-    anchor({ name: 'Zelt – blaue Kuppel', category: 'tent', note: 'Hinter der Wiese, neben dem roten Pavillon', createdAt: now - 3 * 3_600_000 }),
-    anchor({ name: 'Werkzeugkasten', category: 'tool', note: 'Regal links, hinter der Leiter', createdAt: now - 26 * 3_600_000 }),
-    anchor({ name: 'Treffpunkt Eingang Nord', category: 'entrance', createdAt: now - 40 * 60_000, favorite: true }),
-    anchor({ name: 'Wasserstelle am Bach', category: 'nature', createdAt: now - 30 * 3_600_000 }),
+    anchor({
+      name: 'Zelt – blaue Kuppel',
+      category: 'tent',
+      note: 'Hinter der Wiese, neben dem roten Pavillon',
+      createdAt: now - 3 * 3_600_000,
+      lat: 48.1352,
+      lng: 11.5839,
+    }),
+    anchor({
+      name: 'Werkzeugkasten',
+      category: 'tool',
+      note: 'Regal links, hinter der Leiter',
+      createdAt: now - 26 * 3_600_000,
+      lat: 48.1352,
+      lng: 11.5821,
+    }),
+    anchor({
+      name: 'Treffpunkt Eingang Nord',
+      category: 'entrance',
+      createdAt: now - 40 * 60_000,
+      favorite: true,
+      lat: 48.1366,
+      lng: 11.5819,
+    }),
+    anchor({ name: 'Wasserstelle am Bach', category: 'nature', createdAt: now - 30 * 3_600_000, lat: 48.1344, lng: 11.5846 }),
     anchor({
       name: 'Wegkreuzung West',
       category: 'nature',
@@ -213,6 +244,8 @@ await page.evaluate(() => {
         { lat: 48.1354, lng: 11.5825, at: now - 3 * 3_600_000 - 240_000 },
       ],
       createdAt: now - 8 * 3_600_000,
+      lat: 48.1349,
+      lng: 11.5818,
     }),
   ];
   window.localStorage.setItem('wai.v1.anchors', JSON.stringify(anchors));
