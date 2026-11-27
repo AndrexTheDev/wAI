@@ -15,6 +15,7 @@ import { HelpSheet } from './HelpSheet';
 import { ParkingTimerSheet } from './ParkingTimerSheet';
 import { Onboarding } from './Onboarding';
 import {
+  Brand as BrandIcon,
   Anchor as AnchorIcon,
   Archive,
   Compass,
@@ -204,7 +205,7 @@ export function AppShell() {
         <header className="topbar">
           <div className="topbar__brand">
             <span className="topbar__mark">
-              <AnchorIcon size={17} />
+              <BrandIcon size={17} />
             </span>
             <div className="topbar__titles">
               <span className="topbar__name">wAI</span>

@@ -240,7 +240,8 @@ for (const key of placeholderChecks) {
   );
   if (!mapHtml.includes('map__svg')) problems.push('map: no svg');
   if (!mapHtml.includes('map__user-dot')) problems.push('map: user position missing');
-  if (!mapHtml.includes('map__target-dot')) problems.push('map: target missing');
+  // Das Ziel ist ein Pin geworden („genau hier"), kein Punkt („irgendwo hier").
+  if (!mapHtml.includes('map__target-pin')) problems.push('map: target pin missing');
   if (!mapHtml.includes('map__scale-bar')) problems.push('map: scale bar missing');
   // ODbL verlangt die Namensnennung sichtbar, nicht im Impressum.
   if (!/OpenStreetMap/.test(mapHtml)) problems.push('map: attribution missing');

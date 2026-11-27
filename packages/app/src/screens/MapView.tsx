@@ -372,9 +372,18 @@ export function MapView({ position, target, anchors = [], trail = [], height = 3
           })}
 
         {targetPoint && (
-          <g className="map__target">
-            <circle cx={targetPoint.x} cy={targetPoint.y} r={12} className="map__target-halo" />
-            <circle cx={targetPoint.x} cy={targetPoint.y} r={5.5} className="map__target-dot" />
+          /**
+           * Das Ziel ist ein **Pin**, kein Punkt: der Pin markiert genau die Stelle,
+           * seine Spitze sitzt auf der Koordinate. Ein Kreis sagt „irgendwo hier",
+           * ein Pin sagt „genau hier" – und genau das ist die Frage der App.
+           */
+          <g className="map__target" transform={`translate(${targetPoint.x} ${targetPoint.y})`}>
+            <circle cx={0} cy={0} r={13} className="map__target-halo" />
+            <path
+              className="map__target-pin"
+              d="M0 9C0 9 -8.5 1.1 -8.5 -4.6a8.5 8.5 0 1 1 17 0C8.5 1.1 0 9 0 9Z"
+            />
+            <circle cx={0} cy={-4.6} r={2.8} className="map__target-hole" />
           </g>
         )}
 
