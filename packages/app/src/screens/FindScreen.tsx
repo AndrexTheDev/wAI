@@ -227,6 +227,20 @@ export function FindScreen({
       </div>
 
       <div className="guide">
+        {isDemo && (
+          /**
+           * Der Demo-Hinweis erklärt den Zustand, in dem der ganze Bildschirm
+           * steht – simulierte Sensoren, keine echte Position. Als Fließtext am
+           * Ende lag er unter allem anderen und war auf einem 732-px-Viewport
+           * schlicht außerhalb des Bildes; als Zustandsangabe gehört er nach oben,
+           * direkt unter die Kopfzeile. Das violette Feld hebt ihn von echten
+           * Messwerten ab.
+           */
+          <div className="demo-hint">
+            <span className="demo-hint__tag">{t('app.demo.simulated')}</span>
+            <span className="demo-hint__text">{t('app.demo.hint')}</span>
+          </div>
+        )}
         {arrived && (
           <div className="arrived-card">
             <div className="arrived-card__head">
@@ -282,6 +296,29 @@ export function FindScreen({
               <span className="banner__title">{t('app.find.estimatedTitle')}</span>
               <span>{t('app.find.estimatedBody', { steps: estimatedSteps, meters: Math.round(guidance?.distance ?? 0) })}</span>
             </div>
+          </div>
+        )}
+
+        {/*
+          Der Umschalter steht direkt unter dem Kompass, nicht unter den Kacheln.
+          Vorher lag er bei 523 von 732 CSS-Pixeln Höhe – also genau auf der Falz,
+          wo der Store-Screenshot ihn halb abschnitt. Er steuert die Hauptansicht
+          dieses Bildschirms und gehört deshalb zu ihr.
+        */}
+        {!multiView && (
+          <div className="segmented" role="tablist">
+            <button type="button" role="tab" aria-selected={view === 'compass'} className={view === 'compass' ? 'is-active' : ''} onClick={() => setView('compass')}>
+              <Compass size={13} /> {locale === 'de' ? 'Kompass' : 'Compass'}
+            </button>
+            <button type="button" role="tab" aria-selected={view === 'map'} className={view === 'map' ? 'is-active' : ''} onClick={() => setView('map')}>
+              <MapIcon size={13} /> {t('app.map.tab')}
+            </button>
+            <button type="button" role="tab" aria-selected={view === 'trail'} className={view === 'trail' ? 'is-active' : ''} onClick={() => setView('trail')}>
+              <Trail size={13} /> {locale === 'de' ? 'Spur' : 'Trail'}
+            </button>
+            <button type="button" role="tab" aria-selected={view === 'media'} className={view === 'media' ? 'is-active' : ''} onClick={() => setView('media')}>
+              <Camera size={13} /> {locale === 'de' ? 'Foto' : 'Photo'}
+            </button>
           </div>
         )}
 
@@ -380,7 +417,13 @@ export function FindScreen({
                 category: anchor.category,
               }))}
             trail={current.trail ?? []}
-            height={330}
+            /**
+             * 330 px ließen unter der Höhenkarte nur noch 45 px Platz, sodass der
+             * Store-Screenshot sie mitten in der Überschrift abschnitt. 260 px
+             * zeigen denselben Kartenausschnitt – die Karte ist Kontext, die
+             * Zahlen sind die Aussage – und der Bildschirm endet sauber.
+             */
+            height={260}
           />
         )}
 
@@ -475,14 +518,33 @@ export function FindScreen({
 
           <div className="tile">
             <span className="tile__label">
-              <Timer size={11} /> {t('app.timer.title')}
+              <Timer size={11} /> {current.parking ? t('app.timer.title') : t('app.timer.trackTitle')}
             </span>
-            <span className={`tile__value ${parking.overdue ? 'tile__value--amber' : ''}`}>
-              {formatDuration(parking.elapsed, locale)}
-            </span>
-            <span className="tile__sub">
-              {parking.overdue ? t('app.timer.expired') : current.parking?.limitMinutes ? t('app.timer.remaining') : '—'}
-            </span>
+            {current.parking ? (
+              <>
+                <span className={`tile__value ${parking.overdue ? 'tile__value--amber' : ''}`}>
+                  {formatDuration(parking.elapsed, locale)}
+                </span>
+                <span className="tile__sub">
+                  {parking.overdue
+                    ? t('app.timer.expired')
+                    : current.parking.limitMinutes
+                      ? t('app.timer.remaining')
+                      : t('app.timer.noLimit')}
+                </span>
+              </>
+            ) : (
+              /**
+               * Ohne laufenden Parkvorgang stand hier die Zeit seit dem Anlegen des
+               * Ankers („8 Std.") mit einem Strich darunter – auf dem Screenshot
+               * sah das wie eine laufende Parkzeit aus, war aber nur das Alter
+               * eines Ankers. Jetzt: keine Zahl, ein Satz.
+               */
+              <>
+                <span className="tile__value tile__value--none">—</span>
+                <span className="tile__sub">{t('app.timer.notStarted')}</span>
+              </>
+            )}
           </div>
         </div>
 
@@ -504,23 +566,6 @@ export function FindScreen({
             </p>
           )}
         </div>
-
-        {!multiView && (
-          <div className="segmented" role="tablist">
-            <button type="button" role="tab" aria-selected={view === 'compass'} className={view === 'compass' ? 'is-active' : ''} onClick={() => setView('compass')}>
-              <Compass size={13} /> {locale === 'de' ? 'Kompass' : 'Compass'}
-            </button>
-            <button type="button" role="tab" aria-selected={view === 'map'} className={view === 'map' ? 'is-active' : ''} onClick={() => setView('map')}>
-              <MapIcon size={13} /> {t('app.map.tab')}
-            </button>
-            <button type="button" role="tab" aria-selected={view === 'trail'} className={view === 'trail' ? 'is-active' : ''} onClick={() => setView('trail')}>
-              <Trail size={13} /> {locale === 'de' ? 'Spur' : 'Trail'}
-            </button>
-            <button type="button" role="tab" aria-selected={view === 'media'} className={view === 'media' ? 'is-active' : ''} onClick={() => setView('media')}>
-              <Camera size={13} /> {locale === 'de' ? 'Foto' : 'Photo'}
-            </button>
-          </div>
-        )}
 
         {multiView && (
           <div className="row" style={{ gap: 6 }}>
@@ -544,30 +589,14 @@ export function FindScreen({
           </div>
         )}
 
-        {isDemo && (
-          /**
-           * Die Demo-Angabe ist eine Einladung, kein Fließtext: sie erklärt, was
-           * gerade passiert (simulierte Sensoren) und was man tun kann (tippen).
-           * Vorher lief sie als eine Zeile über den Rand hinaus – auf dem
-           * Screenshot endete sie mitten im Wort.
-           */
-          <div className="demo-hint">
-            <span className="demo-hint__tag">{t('app.demo.simulated')}</span>
-            <span className="demo-hint__text">{t('app.demo.hint')}</span>
-          </div>
-        )}
-
-        {!multiView && (
-          <div className="banner banner--info">
-            <Crown size={15} />
-            <div className="banner__body">
-              <span>{t('app.find.multiViewPro')}</span>
-              <button type="button" className="btn btn--xs" style={{ justifySelf: 'start' }} onClick={() => onOpenPro(t('app.pro.multViewBanner'))}>
-                {t('app.pro.seeWallets')}
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Kein Pro-Banner mehr an dieser Stelle.
+             *
+             * Er stand als letzter Block unter der Höhenkarte und schob den
+             * Bildschirm über die Displayhöhe – im Store-Screenshot war er halb
+             * abgeschnitten, also ausgerechnet die Werbung. Das Pro-Angebot steht
+             * ohnehin zweimal sichtbar auf diesem Bildschirm: als PRO-Knopf in der
+             * Näher-dran-Kachel und als Reiter in der Leiste.
+             */}
       </div>
     </>
   );

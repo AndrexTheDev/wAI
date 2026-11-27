@@ -39,15 +39,23 @@ const PIXELS = { width: 1080, height: 1920 };
 const SHOTS = [
   {
     slug: '01-find',
-    caption: { de: 'In 38 m – 3 Etagen über dir', en: '38 m away — 3 floors up' },
+    /**
+     * Keine Zahl in der Bildunterschrift: die Demo-Position driftet, die Distanz
+     * im Bild ist also 30–40 m. Eine feste Zahl („38 m") wäre eine Behauptung,
+     * die das Bild daneben widerlegt.
+     */
+    caption: { de: 'Drei Ebenen unter dir', en: 'Three levels below you' },
     // Die Auto-Kachel steht über der Liste; ihr Knopf führt zum Kompass.
     steps: [['Zum Auto', 'To the car']],
+    // Was muss zu sehen sein? Sonst ist „Screenshot sieht gut aus" kein Kriterium.
+    mustSee: ['compass'],
   },
   {
     slug: '02-anchor',
     caption: { de: 'Säule B17, Ebene −3', en: 'Pillar B17, level −3' },
     // Der Editor: Etage, Zone, Notiz – das, was man nach drei Stunden vergisst.
     steps: [{ within: 'Mein Auto', selector: '.anchor-card__tap' }],
+    mustSee: ['sheet:Bearbeiten'],
   },
   {
     slug: '03-list',
@@ -55,13 +63,22 @@ const SHOTS = [
     // Kategorie-Filter, damit sich Liste und Detail klar unterscheiden.
     // Filter-Chip statt bloßer Liste, damit sich 02/03 klar unterscheiden.
     steps: [{ selector: '.chips .chip', text: ['Natur', 'Nature'] }],
+    mustSee: ['chips'],
   },
   {
     slug: '04-trail',
     caption: { de: 'Dein eigener Weg zurück', en: 'Your own way back' },
-    // Die Spur zeigt der Find-Bildschirm; der Knopf trägt nur die Distanz,
-    // deshalb über aria-label ("Finden: …") ansteuern.
-    steps: [{ within: 'Wegkreuzung', selector: '.anchor-card__distance' }],
+    /**
+     * Die Spur ist ein Reiter im Find-Bildschirm – der Distanz-Knopf öffnet nur
+     * den Kompass. Das alte Bild hieß „Spur", zeigte aber den Kompass, weil der
+     * zweite Schritt fehlte. Jetzt: Anker öffnen, dann auf „Spur" wechseln.
+     */
+    steps: [
+      { within: 'Wegkreuzung', selector: '.anchor-card__distance' },
+      { selector: '.segmented button', text: ['Spur', 'Trail'] },
+    ],
+    // Die Spur ist keine Ansicht des Kompasses: das Bild muss die Trail-Karte zeigen.
+    mustSee: ['trailmap'],
   },
   {
     slug: '04b-map',
@@ -71,6 +88,7 @@ const SHOTS = [
       { within: 'Mein Auto', selector: '.anchor-card__distance' },
       { selector: '.segmented button', text: ['Karte', 'Map'] },
     ],
+    mustSee: ['map'],
   },
   {
     slug: '05-share',
@@ -80,6 +98,7 @@ const SHOTS = [
       { within: 'Wegkreuzung', selector: '.anchor-card__tap' },
       { aria: ['Teilen', 'Share'] },
     ],
+    mustSee: ['sheet:Anker teilen'],
   },
   {
     slug: '06-timer',
@@ -87,16 +106,19 @@ const SHOTS = [
     // Der Timer-Knopf sitzt auf der Auto-Kachel oben (carspot) und zusätzlich in
     // der Liste; der obere ist der, den ein Nutzer zuerst sieht.
     steps: [{ selector: '.carspot__side' }],
+    mustSee: ['sheet:Park-Timer'],
   },
   {
     slug: '07-settings',
     caption: { de: 'Ohne Konto. Ohne Cloud.', en: 'No account. No cloud.' },
     steps: [['Einstellungen', 'Settings']],
+    mustSee: ['settings'],
   },
   {
     slug: '08-pro',
     caption: { de: 'Einmal zahlen. Für immer.', en: 'Pay once. Keep it.' },
     steps: [['Einstellungen', 'Settings'], { aria: ['Pro', 'Free upgraden', 'Upgrade'] }],
+    mustSee: ['sheet:Pro freischalten'],
   },
 ];
 
@@ -153,15 +175,31 @@ try {
 // the screenshots show plausible data instead of an empty state.
 await page.evaluate(() => {
   const now = Date.now();
+  let seq = 0;
   const anchor = (over) => ({
-    id: `shot-${Math.random().toString(36).slice(2, 9)}`,
+    // Fortlaufende Kennung statt Zufall: reproduzierbar und in der Selbstauskunft
+    // lesbar. Die alten IDs standen nirgends im Bild, waren aber bei jedem Lauf anders.
+    id: `shot-${seq++}`,
     name: '',
     category: 'other',
-    // Rund um den Demo-Standort (48.1355, 11.5826) – sonst liegt der Anker
-    // 1 400 km entfernt und die Karte zeigt „irgendwo anders".
-    lat: 48.1362 + (Math.random() - 0.5) * 0.002,
-    lng: 11.5831 + (Math.random() - 0.5) * 0.002,
-    altitude: 640,
+    /**
+     * Feste Koordinaten statt `Math.random()`: mit Zufall stand im einen Lauf
+     * „32 m", im nächsten „109 m", und die Näher-dran-Anzeige sprang zwischen 0/4
+     * und 2/4. Screenshots müssen reproduzierbar sein – sonst lässt sich ein
+     * Fehler auf einem Bild nie wieder nachstellen.
+     *
+     * Die Werte liegen innerhalb von ~60 m um die Demo-Position der App
+     * (48.1359, 11.5832), damit die Karte den richtigen Block zeigt.
+     */
+    lat: 48.1362,
+    lng: 11.5832,
+    /**
+     * Die Demo-Position der App liegt bei 411 m (simulierte Sensoren). Anker mit
+     * 640 m ergaben im Fund-Screen „Höhe unklar – 228 m Unterschied, das ist kein
+     * Gebäude" direkt über „Etage: −3" – zwei Angaben, die sich widersprechen.
+     * Ein Parkhaus-Anker muss auf derselben Höhenreferenz liegen wie das Gerät.
+     */
+    altitude: 411,
     floorLabel: '',
     createdAt: now,
     updatedAt: now,
@@ -174,21 +212,53 @@ await page.evaluate(() => {
   });
   // Kategorien und Feldnamen müssen exakt dem Domain-Modell entsprechen
   // (packages/shared/src/types.ts) – erfundenes „vehicle" hätte leere Icons gezeigt.
+  /**
+   * Sechs Anker, aber das Free-Limit liegt bei drei (FREE_LIMITS.activeAnchors).
+   * Deshalb steht im Bild „Free-Limit erreicht … Du hast 3 aktive Anker" und
+   * trotzdem eine Liste mit fünf Einträgen – ein Widerspruch, den ein Käufer
+   * sofort sieht. Für die Liste werden die beiden ältesten deshalb archiviert:
+   * sie bleiben als Daten da (das Bild zeigt die Liste ja mit), zählen aber nicht
+   * gegen das Limit. Das ist derselbe Zustand, den eine echte Free-Nutzung hätte.
+   */
   const anchors = [
     anchor({
       name: 'Mein Auto · Säule B17',
       category: 'car',
       floorLabel: '−3',
+      // Drei Ebenen unter dem Gerät (3 m je Ebene) – daraus rechnet die App
+      // „Ziel liegt tiefer … ca. 3 Etage(n)", passend zur Bildunterschrift.
+      altitude: 402,
       zone: 'Zone B · 2,50 €/h',
       note: 'Rechts neben dem blauen Pfeiler, Ausgang Ost.',
       parking: { startedAt: now - 95 * 60_000, limitMinutes: 120, reminderState: 'scheduled' },
       favorite: true,
       createdAt: now - 95 * 60_000,
     }),
-    anchor({ name: 'Zelt – blaue Kuppel', category: 'tent', note: 'Hinter der Wiese, neben dem roten Pavillon', createdAt: now - 3 * 3_600_000 }),
-    anchor({ name: 'Werkzeugkasten', category: 'tool', note: 'Regal links, hinter der Leiter', createdAt: now - 26 * 3_600_000 }),
-    anchor({ name: 'Treffpunkt Eingang Nord', category: 'entrance', createdAt: now - 40 * 60_000, favorite: true }),
-    anchor({ name: 'Wasserstelle am Bach', category: 'nature', createdAt: now - 30 * 3_600_000 }),
+    anchor({
+      name: 'Zelt – blaue Kuppel',
+      category: 'tent',
+      note: 'Hinter der Wiese, neben dem roten Pavillon',
+      createdAt: now - 3 * 3_600_000,
+      lat: 48.1352,
+      lng: 11.5839,
+    }),
+    anchor({
+      name: 'Werkzeugkasten',
+      category: 'tool',
+      note: 'Regal links, hinter der Leiter',
+      createdAt: now - 26 * 3_600_000,
+      lat: 48.1352,
+      lng: 11.5821,
+    }),
+    anchor({
+      name: 'Treffpunkt Eingang Nord',
+      category: 'entrance',
+      createdAt: now - 40 * 60_000,
+      favorite: true,
+      lat: 48.1366,
+      lng: 11.5819,
+    }),
+    anchor({ name: 'Wasserstelle am Bach', category: 'nature', createdAt: now - 30 * 3_600_000, lat: 48.1344, lng: 11.5846 }),
     anchor({
       name: 'Wegkreuzung West',
       category: 'nature',
@@ -199,9 +269,20 @@ await page.evaluate(() => {
         { lat: 48.1354, lng: 11.5825, at: now - 3 * 3_600_000 - 240_000 },
       ],
       createdAt: now - 8 * 3_600_000,
+      lat: 48.1349,
+      lng: 11.5818,
     }),
   ];
-  window.localStorage.setItem('wai.v1.anchors', JSON.stringify(anchors));
+  /**
+   * Genau die drei Anker, die in keinem Bild angesteuert werden, wandern ins
+   * Archiv: die aktive Liste füllt damit exakt das Free-Limit von 3. Nach Alter
+   * zu sortieren wäre falsch – „Wegkreuzung" ist alt und wird in den Bildern für
+   * Spur und Teilen gebraucht.
+   */
+  const ARCHIVED = ['Werkzeugkasten', 'Wasserstelle am Bach', 'Zelt – blaue Kuppel'];
+  const archived = new Set(anchors.filter((item) => ARCHIVED.includes(item.name)).map((item) => item.id));
+  const seeded = anchors.map((item) => (archived.has(item.id) ? { ...item, archived: true } : item));
+  window.localStorage.setItem('wai.v1.anchors', JSON.stringify(seeded));
   window.localStorage.setItem(
     'wai.v1.settings',
     JSON.stringify({ locale: 'de', theme: 'dark', proximity: true, units: 'metric', onboardingDone: true }),
@@ -263,6 +344,7 @@ await clickLabel(page, ['Überspringen', 'Skip', 'Los geht', 'Los geht’s', 'Ge
 await page.waitForTimeout(400);
 
 const results = [];
+const layoutProblems = [];
 for (const shot of SHOTS) {
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForSelector('.app', { timeout: 15_000 }).catch(() => {});
@@ -287,6 +369,19 @@ for (const shot of SHOTS) {
     console.warn(`  ! ${shot.slug}: ${missing.length} Navigationsschritt(e) nicht gefunden`);
     console.warn(`      Karten im DOM: ${JSON.stringify(inventory).slice(0, 500)}`);
   }
+  /**
+   * Immer von oben fotografieren. Ein Auto-Scroll auf die nächste Blockkante hat
+   * zwar die halbe Zeile am unteren Rand beseitigt, dafür aber die Kopfzeile mit
+   * Ankername aus dem Bild geschoben – und die ist die halbe Aussage. Der Schnitt
+   * am unteren Rand wird stattdessen über die Höhe des Inhalts gelöst (siehe
+   * `max-height` am Kompass), nicht über die Scrollposition.
+   */
+  await page.evaluate(() => {
+    const scroller = document.querySelector('.app__body');
+    if (scroller) scroller.scrollTop = 0;
+  });
+  await page.waitForTimeout(200);
+
   const file = path.join(outDir, `${shot.slug}.png`);
   await page.screenshot({ path: file, fullPage: false });
 
@@ -311,6 +406,94 @@ for (const shot of SHOTS) {
     console.warn(`      Karte: ${JSON.stringify(drawn)}`);
     if (drawn.houses < 5) throw new Error(`Karte zeigt nur ${drawn.houses} Häuser – Layer kaputt?`);
   }
+  /**
+   * Layout-Selbstauskunft. Ein Bild „sieht" immer richtig aus – man merkt nicht,
+   * dass der letzte Absatz unterhalb des Viewports liegt. Genau das war der Fall:
+   * `.app` ist ein Grid mit vier Zeilen, der Fund-Screen rendert nur zwei Kinder,
+   * und `main` landete in der `auto`-Zeile. Ergebnis: Die App ragte über den
+   * Viewport hinaus, `overflow: hidden` schnitt sie ab, gescrollt wurde nie.
+   * Deshalb wird hier gemessen statt geschätzt.
+   */
+  const layout = await page.evaluate(() => {
+    const rect = (selector) => {
+      const node = document.querySelector(selector);
+      if (!node) return null;
+      const box = node.getBoundingClientRect();
+      return {
+        top: Math.round(box.top),
+        bottom: Math.round(box.bottom),
+        height: Math.round(box.height),
+        scrollHeight: node.scrollHeight,
+        clientHeight: node.clientHeight,
+      };
+    };
+    const bar = document.querySelector('.tabbar');
+    const limit = bar ? bar.getBoundingClientRect().top : window.innerHeight;
+    const openSheet = document.querySelector('.sheet, [role="dialog"]');
+    const cut = [];
+    if (!openSheet) {
+      const scroller = document.querySelector('.app__body');
+      for (const node of Array.from(document.querySelectorAll('.app__body > * > *, .app__body > *'))) {
+        const box = node.getBoundingClientRect();
+        if (box.height < 24) continue;
+        if (box.top < limit && box.bottom > limit) {
+          cut.push({
+            label: (node.textContent ?? '').replace(/\s+/g, ' ').trim().slice(0, 40) || node.className || node.tagName,
+            height: Math.round(box.height),
+            visible: Math.round(limit - box.top),
+          });
+        }
+      }
+    }
+    return {
+      viewportHeight: window.innerHeight,
+      app: rect('.app'),
+      body: rect('.app__body'),
+      tabbar: rect('.tabbar'),
+      cut,
+    };
+  });
+  const problems = [];
+  if (layout.app && layout.app.bottom > layout.viewportHeight + 1) {
+    problems.push(`.app ragt ${layout.app.bottom - layout.viewportHeight} px unter den Viewport`);
+  }
+  if (layout.body && layout.body.bottom > layout.viewportHeight + 1) {
+    problems.push(`.app__body endet ${layout.body.bottom - layout.viewportHeight} px unter dem Viewport`);
+  }
+  const scrolls = layout.body ? layout.body.scrollHeight > layout.body.clientHeight + 1 : false;
+  if (layout.body && layout.tabbar && !scrolls && layout.body.bottom > layout.tabbar.top + 1) {
+    problems.push('.app__body reicht in die Tab-Leiste, scrollt aber nicht');
+  }
+  /**
+   * Zwei verschiedene Sachen, die auf einem Foto gleich aussehen:
+   *
+   * 1. Inhalt endet am Scrollrand des Bildschirms. Das ist normal – die Liste ist
+   *    länger als jedes Telefon, und ein angeschnittenes Element ist die übliche
+   *    Andeutung, dass es weitergeht. Kein Fehler.
+   * 2. Inhalt liegt **hinter** der Tab-Leiste, also unter einer deckenden Fläche.
+   *    Das ist immer ein Layoutfehler: Text, der hinter der Leiste verschwindet,
+   *    sieht aus wie ein kaputter Bildschirm, und man kann ihn nicht wegscrollen.
+   *
+   * Unterschieden wird an den Rändern: liegt die Unterkante des Scrollbereichs
+   * unterhalb der Oberkante der Leiste, überlappt etwas.
+   */
+  const overlap = layout.body && layout.tabbar ? layout.body.bottom - layout.tabbar.top : 0;
+  if (overlap > 1) {
+    problems.push(`Inhalt liegt ${overlap} px hinter der Tab-Leiste`);
+  }
+  for (const cut of layout.cut ?? []) {
+    const visible = Math.min(1, Math.max(0, cut.visible / cut.height));
+    if (overlap > 1 && visible > 0.1 && visible < 0.95) {
+      problems.push(`"${cut.label}" ist zu ${Math.round(visible * 100)} % sichtbar und dahinter abgeschnitten`);
+    }
+  }
+  if (problems.length) {
+    // Sammeln statt abbrechen: ein Lauf soll *alle* betroffenen Bilder melden,
+    // nicht nur das erste. Sonst kostet jede Korrektur einen weiteren Lauf.
+    console.warn(`  ! ${shot.slug}: ${problems.join(' · ')}`);
+    layoutProblems.push(`${shot.slug}: ${problems.join(' · ')}`);
+  }
+
   const viewportUsed = page.viewportSize();
   const seen = await page.evaluate(() => {
     const body = document.body.innerText.replace(/\s+/g, ' ').trim();
@@ -326,6 +509,18 @@ for (const shot of SHOTS) {
       document.querySelector('.carspot') ? 'carspot' : '',
       document.querySelector('.chips') ? 'chips' : '',
       document.querySelector('.compass, .guide') ? 'compass' : '',
+      /**
+       * Die drei Ansichten des Fund-Screens sahen in der Signatur identisch aus
+       * („compass"), deshalb blieb unbemerkt, dass 04-trail den Kompass zeigte
+       * statt der Spur. Der aktive Reiter und der jeweilige Inhalt machen den
+       * Unterschied sichtbar.
+       */
+      (() => {
+        const active = document.querySelector('.segmented .is-active');
+        return active ? `view:${(active.textContent ?? '').trim().toLowerCase()}` : '';
+      })(),
+      document.querySelector('.trail-map') ? 'trailmap' : '',
+      document.querySelector('.map__svg') ? 'map' : '',
       document.querySelector('.settings, .setting-row') ? 'settings' : '',
       document.querySelector('.pro, .pro__hero') ? 'pro' : '',
       sheetTitle ? `sheet:${(sheetTitle.textContent ?? '').trim()}` : '',
@@ -338,38 +533,71 @@ for (const shot of SHOTS) {
       title: document.title,
     };
   });
-  results.push({ slug: shot.slug, file, caption: shot.caption, reached, seen, viewportUsed });
+  /**
+   * Zeigt das Bild, was draufsteht? Ein Screenshot einer falschen Ansicht sieht
+   * für sich genommen immer in Ordnung aus – nur der Vergleich mit dem Titel
+   * verrät ihn.
+   */
+  const missingMarks = (shot.mustSee ?? []).filter((mark) => !seen.signature.includes(mark));
+  if (missingMarks.length) {
+    layoutProblems.push(
+      `${shot.slug}: zeigt nicht, was der Titel verspricht – erwartet ${missingMarks.join(', ')} · gesehen "${seen.signature}"`,
+    );
+  }
+
+  results.push({ slug: shot.slug, file, caption: shot.caption, reached, seen, viewportUsed, layout });
   console.log(`  ✔ ${shot.slug}.png — ${shot.caption.de}`);
   console.log(`      gesehen: ${seen.text.slice(0, 110)}`);
 }
 
 await browser.close();
 
+/** Der Bericht wird vor der Prüfung geschrieben – sonst fehlt er genau im Fehlerfall. */
+writeCaptureReport();
+
+/**
+ * Erst hier abbrechen, mit vollständiger Liste: die Bilder liegen bereits auf der
+ * Platte, und der Bericht nennt jedes betroffene Bild statt nur das erste.
+ */
+if (layoutProblems.length) {
+  console.error(`\n\x1b[31m✖ Screenshot-Prüfung fehlgeschlagen\x1b[0m`);
+  for (const problem of layoutProblems) console.error(`  - ${problem}`);
+  process.exitCode = 1;
+}
+
 console.log(`\n${results.length} screenshots written to ${path.relative(ROOT, outDir)}`);
 console.log('Captions to burn in (Play allows up to 6 words per image):');
 for (const r of results) console.log(`  ${r.slug}: DE "${r.caption.de}" · EN "${r.caption.en}"`);
-// Bericht neben die Bilder: prüfbar per git, ohne Artefakt-Download.
-writeFileSync(
-  path.join(outDir, 'capture.json'),
-  `${JSON.stringify(
-    {
-      capturedAt: new Date().toISOString(),
-      viewport: { ...VIEWPORT, outputPixels: PIXELS },
-      url,
-      shots: results.map((r) => ({
-        slug: r.slug,
-        caption: r.caption,
-        navigation: r.reached,
-        visibleText: r.seen.text,
-        signature: r.seen.signature,
-        hasAppShell: r.seen.hasApp,
-        cssViewport: r.viewportUsed,
-      })),
-    },
-    null,
-    2,
-  )}\n`,
-);
+/**
+ * Bericht neben die Bilder: prüfbar per git, ohne Artefakt-Download. Als Funktion,
+ * damit er auch im Fehlerfall geschrieben wird – ein Lauf, der nur „Fehler" sagt,
+ * hilft niemandem.
+ */
+function writeCaptureReport() {
+  writeFileSync(
+    path.join(outDir, 'capture.json'),
+    `${JSON.stringify(
+      {
+        capturedAt: new Date().toISOString(),
+        viewport: { ...VIEWPORT, outputPixels: PIXELS },
+        url,
+        shots: results.map((r) => ({
+          slug: r.slug,
+          caption: r.caption,
+          navigation: r.reached,
+          visibleText: r.seen.text,
+          signature: r.seen.signature,
+          hasAppShell: r.seen.hasApp,
+          cssViewport: r.viewportUsed,
+          // Messwerte statt Augenmaß: so lässt sich „das passt doch" nachprüfen.
+          layout: r.layout,
+        })),
+      },
+      null,
+      2,
+    )}\n`,
+  );
+}
 
 /**
  * Zwei Bilder mit identischem Text sind kein Screenshot-Set, sondern ein Fehler.

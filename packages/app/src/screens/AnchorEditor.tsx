@@ -277,6 +277,12 @@ export function AnchorEditor({
         </span>
         <textarea
           className="field__textarea"
+          /**
+           * `rows` statt einer Mindesthöhe: das Feld war 76 px hoch, also Platz für
+           * drei Zeilen, und ein einzeiliger Satz stand darin wie in einem leeren
+           * Kasten. Zwei Zeilen reichen, wachsen kann es beim Tippen.
+           */
+          rows={2}
           value={draft.note}
           onChange={(event) => setDraft({ ...draft, note: event.target.value })}
           placeholder={t('app.anchor.notePlaceholder')}

@@ -603,7 +603,7 @@ export const de = {
       title: 'Deine Anker',
       subtitle: 'Alle Punkte bleiben lokal auf diesem Gerät.',
       setAnchor: 'Anker setzen',
-      setAnchorHint: 'Tippe, um den aktuellen Ort zu speichern',
+      setAnchorHint: 'Tippen speichert diesen Ort',
       emptyTitle: 'Noch kein Anker',
       emptyBody:
         'Stell dich neben dein Auto, dein Zelt oder deinen Treffpunkt und tippe einmal auf den großen Knopf. wAI merkt sich die Stelle – Titel und Foto kannst du danach ergänzen.',
@@ -705,8 +705,13 @@ export const de = {
       floorLabel: 'Etage',
       elevationUnclearShort: 'außerhalb jeder Etage',
       elevationUnclear: 'Höhe unklar – {meters} m Unterschied, das ist kein Gebäude. Prüfe den Ort.',
-      elevationHigher: 'Ziel liegt höher ({meters} m, ca. {floors} Etage(n))',
-      elevationLower: 'Ziel liegt tiefer ({meters} m, ca. {floors} Etage(n))',
+      /**
+       * „ca. 3 {floorWord}" – die Form (Etage/Etagen) kommt aus `floorForm()`,
+       * nicht aus dem Text. Vorher stand hier „Etage(n)", ein Platzhalter, der im
+       * Store-Screenshot als solcher zu sehen war.
+       */
+      elevationHigher: 'Ziel liegt {floors} {floorWord} höher ({meters} m)',
+      elevationLower: 'Ziel liegt {floors} {floorWord} tiefer ({meters} m)',
       noElevation: 'Keine Höhendaten',
       trail: 'Brotkrumen-Spur',
       trailLength: 'Spur: {distance}',
@@ -760,6 +765,11 @@ export const de = {
     timer: {
       title: 'Park-Timer',
       remaining: 'Verbleibend',
+      // Ohne laufenden Parkvorgang gibt es keine Zeit zu zeigen – nur den Hinweis.
+      notStarted: 'nicht gestartet',
+      // Überschrift der Kachel, wenn noch keine Parkzeit läuft (start = Aktion im Sheet).
+      trackTitle: 'Parkzeit festhalten',
+      noLimit: 'ohne Limit',
       over: 'Überzogen',
       setReminder: 'Erinnerung setzen',
       minutes: 'Minuten',
@@ -827,10 +837,16 @@ export const de = {
       theme: 'Darstellung',
       themeSystem: 'System',
       themeDark: 'Dunkel',
-      themeNight: 'Nachtmodus (kontrastarm)',
+      // Kurz, weil der Umschalter vier Optionen in einer Zeile trägt: der lange
+      // Text „Nachtmodus (kontrastarm)" brach dort zweizeilig um.
+      themeNight: 'Nacht',
+      feedback: 'Rückmeldung',
       themeLight: 'Hell',
       privacy: 'Privatsphäre',
       privacyBody: 'Alle Daten bleiben auf diesem Gerät. Kein Konto, kein Upload.',
+      // Zustand, nicht Versprechen: die Zahlen sind gemessen, nicht behauptet.
+      offlineTitle: 'Alles offline, ohne Konto',
+      offlineBody: '{count} Anker · {bytes} auf diesem Gerät',
       exportData: 'Daten exportieren',
       exportDataBody: 'Erstellt ein JSON-Paket mit allen Ankern, Notizen und Metadaten.',
       importData: 'Daten importieren',
@@ -878,6 +894,20 @@ export const de = {
       what: 'Das schaltet Pro frei',
       limitBanner: 'Free-Limit: {limit} aktive Anker',
       limitBannerBody: 'Archiviere einen Anker oder hol dir Pro für unbegrenzte Anker.',
+      /**
+       * Kurzform für die Merkmalsliste im Pro-Sheet. Die langen `…Banner`-Texte
+       * sind Sätze für einen Hinweis an einer Stelle, keine Listenpunkte: sie
+       * standen zu siebt untereinander und endeten alle mit „in Pro enthalten".
+       */
+      listAnchors: 'Unbegrenzte Anker',
+      listMedia: 'Mehrere Fotos je Anker',
+      listVoice: 'Sprachnotizen',
+      listMultiView: 'Multi-Ansicht',
+      listTrail: 'Brotkrumen-Spur',
+      listTimer: 'Park-Timer mit Erinnerung',
+      listProximity: 'Näher-dran-Feedback',
+      listFavorite: 'Favoriten',
+      listShareFull: 'Teilen mit Notizen und Fotos',
       mediaBanner: 'Mehrere Fotos und Sprachnotizen sind in Pro enthalten.',
       voiceBanner: 'Sprachnotizen sind in Pro enthalten.',
       multViewBanner: 'Multi-Ansicht ist in Pro enthalten.',

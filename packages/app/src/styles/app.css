@@ -163,7 +163,16 @@ a {
 
 .app {
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  /**
+   * Vier Zeilen, auch wenn mal eine fehlt: Header und Statusleiste werden auf dem
+   * Fund-Screen nicht gerendert. Mit nur drei Zeilen (`auto 1fr auto`) rückten die
+   * Kinder dann eine Zeile nach oben – `main` landete in der **auto**-Zeile, wuchs
+   * auf volle Inhaltshöhe, und die Tab-Leiste bekam die `1fr`-Zeile. Ergebnis: der
+   * Seiteninhalt ragte unter den Viewport, `overflow: hidden` schnitt ihn ab, und
+   * gescrollt wurde nie. Leere `auto`-Zeilen sind 0 px hoch, die feste Zuordnung
+   * kostet also nichts.
+   */
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
   height: 100dvh;
   max-width: 560px;
   margin-inline: auto;
@@ -224,6 +233,7 @@ a {
 }
 
 .app__body {
+  grid-row: 3;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
@@ -241,8 +251,14 @@ a {
  * verschwand dahinter. Ein eigener Scrollbereich braucht den Platz, den die Leiste
  * tatsächlich einnimmt.
  */
+/**
+ * Vollansicht (Fund-Screen mit gewähltem Anker). Der Inhalt liegt hier nie hinter
+ * der Tab-Leiste – der Demo-Hinweis war nicht verdeckt, sondern außerhalb des
+ * Viewports (siehe `.app`). Bleibt die Luft am Ende: der letzte Absatz soll nicht
+ * an der Leiste kleben.
+ */
 .app--full .app__body {
-  padding-bottom: calc(24px + var(--tabbar-h) + var(--safe-bottom));
+  padding-bottom: calc(20px + var(--safe-bottom));
 }
 
 /* ---------------- header ---------------- */
@@ -254,6 +270,7 @@ a {
   padding: calc(10px + var(--safe-top)) 16px 10px;
   position: relative;
   z-index: 10;
+  grid-row: 1;
 }
 
 .topbar__brand {
@@ -346,6 +363,7 @@ a {
   padding: 0 16px 10px;
   font-size: 10.5px;
   color: var(--text-3);
+  grid-row: 2;
 }
 
 .status-chip {
@@ -401,7 +419,12 @@ a {
   position: relative;
   display: grid;
   place-items: center;
-  width: min(58vw, 196px);
+  /**
+   * 196 px reichten nicht für Symbol, Titel und zweizeiligen Hinweis: der Hinweis
+   * endete unten außerhalb des Kreises und ragte als Text über den Rand. Der Ring
+   * ist der größte Gegenstand des Bildschirms und darf das auch sein.
+   */
+  width: min(64vw, 216px);
   aspect-ratio: 1;
   border-radius: 50%;
   color: #04121a;
@@ -883,6 +906,7 @@ a {
   background: rgba(7, 11, 20, 0.86);
   backdrop-filter: blur(16px);
   z-index: 20;
+  grid-row: 4;
 }
 
 :root[data-theme='light'] .tabbar {
@@ -1024,6 +1048,12 @@ a {
   display: grid;
   gap: 12px;
   align-content: start;
+  /**
+   * Ein Sheet ist länger als der Bildschirm, also endet es irgendwo mitten im
+   * Inhalt – und ein halber Satz hinter dem „Aktivieren"-Knopf sieht aus wie ein
+   * Fehler, nicht wie „es geht weiter". Der weiche Auslauf unten sagt genau das.
+   */
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 22px), transparent 100%);
 }
 
 .sheet__foot {
@@ -1075,7 +1105,8 @@ a {
 }
 
 .field__textarea {
-  min-height: 76px;
+  /* Zwei Zeilen als Grundmaß; gewachsen wird beim Tippen, nicht per leerem Kasten. */
+  min-height: 62px;
   resize: vertical;
 }
 
@@ -1121,10 +1152,16 @@ a {
   position: relative;
   display: grid;
   place-items: center;
+  /**
+   * Kreis, so groß wie es passt: `min(100%, 216px)`. Vorher stand hier nur
+   * `aspect-ratio: 1` plus `max-height` – das ergab auf einem 412-px-Gerät eine
+   * **Ellipse** (380×216), und eine Nadel in einer Ellipse zeigt ins Nichts.
+   * 300 px waren zu hoch (der letzte Block lag außerhalb des Bildschirms), 252 px
+   * reichten nicht, 216 px passen – und der Capture prüft das nach.
+   */
+  width: min(100%, 216px);
   aspect-ratio: 1;
-  max-height: 300px;
   margin-inline: auto;
-  width: 100%;
   border-radius: 50%;
   background:
     radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.1), transparent 62%),
@@ -1157,29 +1194,54 @@ a {
 }
 
 .guide__needle {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 46%;
-  aspect-ratio: 1;
+  /**
+   * Die Nadel liegt als Overlay über dem ganzen Kompass und dreht um dessen Mitte.
+   * Vorher war sie ein 46-%-Kasten mit zwei gestapelten Kindern: dadurch war sie
+   * höchstens so lang wie der Kasten, ihre Spitze endete knapp über der
+   * Distanz-Plakette und der Schwanz knapp darunter. Man sah einen mintfarbenen
+   * Splitter und darunter ein graues Etwas – keine Richtung.
+   *
+   * Jetzt wird die Nadel von der Mitte aus nach oben und unten gelegt, damit sie
+   * über die Plakette hinausreicht. Sie bleibt unter der Plakette (z-index), denn
+   * die Zahl ist die Hauptinformation.
+   */
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
   transition: rotate 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/**
+ * Die Nadel misst in Prozent der Kompassfläche, nicht in Pixeln. Vorher standen
+ * hier feste 96 px; als der Kompass für die Store-Screenshots kleiner wurde,
+ * ragte die Nadel fast bis zum Rand. Prozent heißt: die Form bleibt im Verhältnis.
+ *
+ * Basis in der Mitte, Spitze 44 % darüber, Breite 24 % – bei 216 px Kompass sind
+ * das 95 px Höhe auf 52 px Breite, ein Winkel von 61°.
+ */
 .guide__needle-arrow {
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-bottom: 60px solid var(--mint);
-  filter: drop-shadow(0 0 10px rgba(110, 231, 183, 0.65));
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  translate: -50% 0;
+  width: 24%;
+  height: 44%;
+  background: var(--mint);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  filter: drop-shadow(0 0 10px rgba(110, 231, 183, 0.5));
 }
 
+/* Schwanz: gleiche Länge nach unten, aber zurückgenommen – ein Objekt, das zeigt. */
 .guide__needle-tail {
-  width: 5px;
-  height: 34px;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.16);
-  margin-top: 2px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% 0;
+  width: 4%;
+  height: 44%;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(rgba(110, 231, 183, 0.45), rgba(110, 231, 183, 0.03));
 }
 
 .guide__center {
@@ -1188,6 +1250,8 @@ a {
   display: grid;
   place-items: center;
   pointer-events: none;
+  /* Über der Nadel: die Zahl ist die Hauptinformation, die Nadel die Richtung. */
+  z-index: 2;
 }
 
 .guide__distance {
@@ -1267,6 +1331,12 @@ a {
 
 .tile__value--amber {
   color: var(--amber);
+}
+
+/* Kein Wert vorhanden: der Strich soll nicht wie eine Zahl wirken. */
+.tile__value--none {
+  color: var(--text-3);
+  font-weight: 600;
 }
 
 .tile__sub {
@@ -1358,26 +1428,45 @@ a {
   box-shadow: 0 14px 36px -16px rgba(110, 231, 183, 0.8);
 }
 
+/**
+ * Zwei Spalten: neun kurze Fähigkeiten untereinander ergaben eine Liste, die
+ * länger war als der Platz im Sheet – der letzte Punkt lag halb hinter dem
+ * „Aktivieren"-Knopf. In zwei Spalten passen sie in fünf Zeilen und enden sichtbar.
+ */
 .pro-features {
   display: grid;
-  gap: 7px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
 }
 
 .pro-feature {
   display: flex;
   gap: 8px;
-  align-items: flex-start;
+  align-items: center;
+  /**
+   * 7 px Abstand und 10 px Innenabstand ergaben sieben fast identische Balken,
+   * von denen der letzte hinter dem „Aktivieren"-Knopf verschwand. Mit etwas mehr
+   * Luft bleibt jeder Punkt ein eigener Satz – und die Liste endet sichtbar.
+   */
   padding: 10px 11px;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--surface);
-  font-size: 12.5px;
+  font-size: 12px;
+  line-height: 1.25;
   color: var(--text-2);
+  min-height: 44px;
 }
 
+/* Bei ungerader Anzahl füllt der letzte Punkt die Zeile – sonst bleibt eine Lücke. */
+.pro-feature:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* Icon bleibt oben, wenn der Text zweizeilig umbricht. */
 .pro-feature svg {
   flex: none;
-  margin-top: 2px;
+  margin-top: 1px;
   color: var(--mint);
 }
 
@@ -2844,4 +2933,32 @@ a {
   font-size: 12px;
   line-height: 1.35;
   color: var(--text-muted, rgba(214, 226, 245, 0.72));
+}
+
+/* ============================================================
+   Teilen: Code und Link als Schlüssel, nicht als Fließtext
+   ============================================================ */
+
+.share__code {
+  display: block;
+  margin-top: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-2);
+  font-size: 11px;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Offline-Karte in den Einstellungen: grün umrandet, weil sie ein Zustand ist. */
+.card--offline {
+  border-color: rgba(110, 231, 183, 0.28);
+  background: linear-gradient(180deg, rgba(110, 231, 183, 0.08), var(--surface));
+}
+
+:root[data-theme='light'] .card--offline {
+  background: linear-gradient(180deg, rgba(16, 122, 87, 0.07), var(--surface));
 }

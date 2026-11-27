@@ -37,16 +37,21 @@ import {
 } from '../ui/icons';
 import { useEffect, useRef } from 'react';
 
+/**
+ * Die Merkmalsliste nennt Fähigkeiten, keine Hinweissätze. Vorher standen hier die
+ * langen Banner-Texte („… ist in Pro enthalten."), siebenmal derselbe Schluss –
+ * eine Liste, die wie eine Fehlermeldung siebenmal wiederholt wurde.
+ */
 const PRO_LIST = [
-  { icon: AnchorIcon, key: 'app.pro.limitBannerBody' },
-  { icon: Camera, key: 'app.pro.mediaBanner' },
-  { icon: Mic, key: 'app.pro.voiceBanner' },
-  { icon: Layers, key: 'app.pro.multViewBanner' },
-  { icon: Trail, key: 'app.pro.trailBanner' },
-  { icon: Vibrate, key: 'app.pro.proximityBanner' },
-  { icon: Timer, key: 'app.pro.timerBanner' },
-  { icon: Star, key: 'app.anchor.favorite' },
-  { icon: Share, key: 'app.anchor.shareFull' },
+  { icon: AnchorIcon, key: 'app.pro.listAnchors' },
+  { icon: Camera, key: 'app.pro.listMedia' },
+  { icon: Mic, key: 'app.pro.listVoice' },
+  { icon: Layers, key: 'app.pro.listMultiView' },
+  { icon: Trail, key: 'app.pro.listTrail' },
+  { icon: Vibrate, key: 'app.pro.listProximity' },
+  { icon: Timer, key: 'app.pro.listTimer' },
+  { icon: Star, key: 'app.pro.listFavorite' },
+  { icon: Share, key: 'app.pro.listShareFull' },
 ] as const;
 
 function Qr({ value }: { value: string }) {

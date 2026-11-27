@@ -159,8 +159,15 @@ export function ShareSheet({
             aria-label={t('app.anchor.shareFull')}
           />
         </div>
-        <code className="mono" style={{ display: 'block', wordBreak: 'break-all', marginTop: 8, fontSize: 10.5, color: 'var(--text-3)' }}>
-          {code}
+        {/*
+          Der Code ist ein Schlüssel, kein Lesetext: er stand als vierzeiliger
+          Zeichensalat mitten im Bild (Store-Screenshot 05) und drängte die
+          eigentliche Aussage – „Kein Server beteiligt" – an den Rand. Deshalb:
+          gekürzt, in einer Zeile, mit Kopierknopf. Der vollständige Code bleibt
+          über „Kopieren" und den Link zugänglich.
+        */}
+        <code className="share__code mono" title={code}>
+          {code.slice(0, 18)}…{code.slice(-6)}
         </code>
         <div className="row" style={{ marginTop: 8 }}>
           <button
@@ -181,11 +188,8 @@ export function ShareSheet({
         <div className="row row--between">
           <span className="field__label">{t('app.share.asLink')}</span>
         </div>
-        <code
-          className="mono"
-          style={{ display: 'block', wordBreak: 'break-all', marginTop: 8, fontSize: 10.5, color: 'var(--text-3)' }}
-        >
-          {shareLink}
+        <code className="share__code mono" title={shareLink}>
+          {`${shareLink.slice(0, 34)}…${shareLink.slice(-8)}`}
         </code>
         <div className="row" style={{ marginTop: 8 }}>
           <button type="button" className="btn btn--xs" onClick={() => void copyLink()}>
