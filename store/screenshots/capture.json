@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-27T18:20:53.023Z",
+  "capturedAt": "2026-11-27T18:27:05.598Z",
   "viewport": {
     "width": 412,
     "height": 732,
@@ -153,7 +153,7 @@
         "Zurückfinden: Wegkreuzung West",
         "Spur"
       ],
-      "visibleText": "Wegkreuzung West NATUR · SW 225° SIMULIERTE SENSOREN Tippe irgendwo auf die Karte, um deine Position zu verschieben. Kompass Karte Spur Foto Brotkrumen-Spur 76 m Spur: 76 m NÄHER-DRAN-SIGNAL — PRO PARKZEIT FESTHALTEN — nicht gestartet Höhe ",
+      "visibleText": "Wegkreuzung West NATUR · SW 224° SIMULIERTE SENSOREN Tippe irgendwo auf die Karte, um deine Position zu verschieben. Kompass Karte Spur Foto Brotkrumen-Spur 76 m Spur: 76 m NÄHER-DRAN-SIGNAL — PRO PARKZEIT FESTHALTEN — nicht gestartet Höhe ",
       "signature": "anchor:Wegkreuzung WestNatur ·  + compass + view:spur + trailmap",
       "hasAppShell": true,
       "cssViewport": {
@@ -250,7 +250,7 @@
         "Wegkreuzung West – Bearbeiten",
         "Teilen"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±8 m 83° Demo Anker setzen TIPPEN SPEICHERT DIESEN ORT Genauigkeit ±8 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachnotizen und den",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±8 m 86° Demo Anker setzen TIPPEN SPEICHERT DIESEN ORT Genauigkeit ±8 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachnotizen und den",
       "signature": "anchor:wAIUmgebungs-Gedächtnisa + carspot + chips + sheet:Anker teilen",
       "hasAppShell": true,
       "cssViewport": {
@@ -292,7 +292,7 @@
       "navigation": [
         "24 Min.Verbleibend"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 72° Demo Anker setzen TIPPEN SPEICHERT DIESEN ORT Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachnotizen und den",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 70° Demo Anker setzen TIPPEN SPEICHERT DIESEN ORT Genauigkeit ±7 m Free-Limit erreicht Du hast 3 aktive Anker. Pro hebt das Limit auf und schaltet Multi-Ansicht, Sprachnotizen und den",
       "signature": "anchor:wAIUmgebungs-Gedächtnisa + carspot + chips + sheet:Park-Timer",
       "hasAppShell": true,
       "cssViewport": {
@@ -334,7 +334,7 @@
       "navigation": [
         "Einstellungen"
       ],
-      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 68° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nacht Rückmeldung Näher-dran-Signal Näher-dran-Feedb",
+      "visibleText": "wAI UMGEBUNGS-GEDÄCHTNISANKER GPS aktiv Genauigkeit ±7 m 70° Demo Einstellungen WAI 1.0.0 · FREE-VERSION Sprache Automatisch (Gerätesprache) Deutsch English Darstellung System Hell Dunkel Nacht Rückmeldung Näher-dran-Signal Näher-dran-Feedb",
       "signature": "anchor:wAIUmgebungs-Gedächtnisa + view:deutsch + settings",
       "hasAppShell": true,
       "cssViewport": {
