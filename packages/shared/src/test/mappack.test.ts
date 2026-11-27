@@ -32,8 +32,13 @@ test('the generator turns an OSM answer into a usable pack', () => {
 
     assert.equal(index.version, 1);
     assert.equal(index.zoom, 18);
-    assert.match(index.source, /OpenStreetMap/);
-    assert.match(index.source, /ODbL/);
+    // Wichtig: ein aus Fixtures gebautes Paket ist synthetisch und darf **nicht**
+    // mit OpenStreetMap-Nennung ausgeliefert werden. Der Test hat vorher genau
+    // das Gegenteil festgeschrieben – eine falsche Zusicherung ist schlimmer als
+    // keine, weil sie den Fehler deckt.
+    assert.equal(index.synthetic, true);
+    assert.doesNotMatch(index.source, /ODbL/);
+    assert.match(index.source, /Synthetisch/);
     assert.ok(index.tiles.length > 0, 'pack has no tiles');
 
     const buildings = index.tiles.reduce((sum: number, tile: { buildings: number }) => sum + tile.buildings, 0);
@@ -99,6 +104,17 @@ test('roads keep their class and only named ones get a label', () => {
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test('the shipped demo pack does not claim to be OpenStreetMap', () => {
+  // Das Paket im Repo ist das, was Nutzer sehen: es muss dieselbe Ehrlichkeit
+  // tragen wie der Generator.
+  const shipped = JSON.parse(
+    readFileSync(path.join(ROOT, 'packages/app/public/map/index.json'), 'utf8'),
+  );
+  if (!shipped.synthetic) return; // Ein echtes Paket ist der bessere Zustand.
+  assert.doesNotMatch(shipped.source, /ODbL|OpenStreetMap-Mitwirkende/);
+  assert.ok(shipped.tiles.length > 0);
 });
 
 test('an empty answer fails loudly instead of shipping a blank map', () => {
