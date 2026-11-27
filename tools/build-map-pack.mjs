@@ -161,24 +161,34 @@ function tileFor(x, y) {
 }
 
 /**
- * Ein Weg gehört **einer** Kachel: der unter seinem Schwerpunkt.
+ * Ein Weg gehört **einer** Kachel, aber seine Punkte bleiben Weltkoordinaten des
+ * Blocks, nur um den Ursprung dieser Kachel verschoben.
  *
- * Erste Fassung hat Wege an Kachelgrenzen zerschnitten – dann blieb von einem
- * Gebäude pro Kachel nur ein Punktestumpf übrig und die Karte war leer. Punkte
- * dürfen deshalb über die Kachelkante hinausragen (bis ±256), genau wie bei
- * Vektorkacheln mit Puffer; der Renderer zeichnet Nachbarkacheln mit und clippt.
- * Ein kleiner Puffer von einer Kachel Kantenlänge genügt, weil kein Gebäude dieser
- * Stadt größer als ein Block ist – größere werden aufgeteilt (siehe unten).
+ * Genau hier lag der Fehler, der das erste echte Paket zu einem Knoten machte:
+ * `locate()` rechnete jeden Punkt relativ zu **seiner eigenen** Kachel, der Block
+ * wurde aber nach dem mittleren Punkt gewählt. Punkte aus der Nachbarkachel
+ * sprangen dadurch um 256 Einheiten – aus einem Haus wurde ein Fadenkreuz quer
+ * über den Block. Der Renderer addiert `dx`/`dy` in **einem** Bezugssystem und
+ * kann den Sprung nicht ausgleichen.
+ *
+ * Deshalb: Kachel einmal bestimmen, dann alle Punkte gegen **diesen** Ursprung.
+ * Punkte dürfen über die Kante hinausragen (bis ±256), wie bei Vektorkacheln mit
+ * Puffer; Nachbarkacheln werden ohnehin mitgezeichnet.
  */
 function assignToTile(geometry) {
   const spots = geometry.map((point) => locate(point.lat, point.lon));
-  const cx = spots.reduce((sum, spot) => sum + spot.local[0] + 0, 0) / spots.length;
-  const cy = spots.reduce((sum, spot) => sum + spot.local[1], 0) / spots.length;
-  void cx;
-  void cy;
   // Kachel des mittleren Punktes – stabiler als der Schwerpunkt der Fläche.
   const middle = spots[Math.floor(spots.length / 2)];
-  return { x: middle.x, y: middle.y, points: spots.map((spot) => spot.local) };
+  const originX = middle.x * TILE_SIZE;
+  const originY = middle.y * TILE_SIZE;
+  return {
+    x: middle.x,
+    y: middle.y,
+    points: geometry.map((point) => {
+      const world = project(point.lat, point.lon);
+      return [round(world.x - originX), round(world.y - originY)];
+    }),
+  };
 }
 
 let skippedDegenerate = 0;

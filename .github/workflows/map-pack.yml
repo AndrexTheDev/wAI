@@ -63,9 +63,12 @@ jobs:
           EAST: ${{ inputs.east || '11.5950' }}
           AREA: ${{ inputs.name || 'München Mitte' }}
         run: |
+          # tee ist hier falsch: es verschluckt den Exit-Code des Generators, und
+          # ein gescheiterter Lauf committet dann das alte Paket als „neu".
           node tools/build-map-pack.mjs \
             --south "$SOUTH" --west "$WEST" --north "$NORTH" --east "$EAST" \
-            --name "$AREA" --out packages/app/public/map --force | tee pack.log
+            --name "$AREA" --out packages/app/public/map --force 2>&1 | tee pack.log
+          test "${PIPESTATUS[0]}" -eq 0
 
       # Selbstauskunft über die API lesbar, statt in einem Artefakt zu verschwinden.
       - name: Report
@@ -100,6 +103,15 @@ jobs:
         run: |
           git config user.name 'wAI map bot'
           git config user.email 'bot@andrexthedev.dev'
+          # Selbstprüfung: ein Paket ohne POIs wäre ein alter Generator.
+          node -e '
+            const fs = require("fs");
+            const idx = JSON.parse(fs.readFileSync("packages/app/public/map/index.json", "utf8"));
+            const t = idx.tiles[0];
+            const tile = JSON.parse(fs.readFileSync(`packages/app/public/map/18/${t.x}/${t.y}.json`, "utf8"));
+            if (!("pois" in tile)) { console.error("Pack hat keine pois – Generator zu alt?"); process.exit(1); }
+            console.log(`Pack geprüft: ${idx.tiles.length} Kacheln`);
+          '
           git add packages/app/public/map
           if git diff --cached --quiet; then echo 'unverändert'; exit 0; fi
           git commit -m "chore: rebuild map pack (${AREA:-München Mitte})"

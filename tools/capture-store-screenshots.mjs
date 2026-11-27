@@ -296,8 +296,20 @@ for (const shot of SHOTS) {
    * wurde — der Screenshot selbst sieht ja immer „richtig" aus.
    */
   if (shot.slug === '04b-map') {
-    const diag = await page.evaluate(() => (window).__waiMap ?? null);
-    console.warn(`      Karte: ${JSON.stringify(diag).slice(0, 700)}`);
+    /**
+     * Die Karte meldet sich selbst: Häuser, Straßen und Namen zählen. Ein leerer
+     * oder zerschossener Kartenlayer sieht auf einem Screenshot sonst plausibel aus
+     * – genau so blieb das erste echte Paket unbemerkt, das aus Fadenkreuzen
+     * bestand. Geprüft wird das DOM, nicht ein Debug-Objekt im Fenster.
+     */
+    const drawn = await page.evaluate(() => ({
+      houses: document.querySelectorAll('.map__building').length,
+      roads: document.querySelectorAll('.map__road').length,
+      labels: document.querySelectorAll('.map__label').length,
+      pois: document.querySelectorAll('.map__poi').length,
+    }));
+    console.warn(`      Karte: ${JSON.stringify(drawn)}`);
+    if (drawn.houses < 5) throw new Error(`Karte zeigt nur ${drawn.houses} Häuser – Layer kaputt?`);
   }
   const viewportUsed = page.viewportSize();
   const seen = await page.evaluate(() => {

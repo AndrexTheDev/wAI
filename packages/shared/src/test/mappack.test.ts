@@ -17,9 +17,12 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../..');
 
 function buildInto(dir: string, extra: string[] = []): string {
+  // Der Generator nimmt das **erste** --fixture. Ein fest eingetragenes Default
+  // vor `extra` hätte jeden Test heimlich gegen das Beispiel-Fixture laufen lassen.
+  const chosen = extra.includes('--fixture') ? extra : ['--fixture', 'tools/fixtures/overpass-sample.json', ...extra];
   execFileSync(
     process.execPath,
-    ['tools/build-map-pack.mjs', '--fixture', 'tools/fixtures/overpass-sample.json', '--out', dir, '--force', ...extra],
+    ['tools/build-map-pack.mjs', '--out', dir, '--force', ...chosen],
     { cwd: ROOT, encoding: 'utf8' },
   );
   return readFileSync(path.join(dir, 'index.json'), 'utf8');
@@ -101,6 +104,95 @@ test('roads keep their class and only named ones get a label', () => {
     assert.ok(labels.includes('Kaufingerstraße'), `labels: ${labels.join(', ')}`);
     // Namenlose Wege dürfen keine leeren Beschriftungen erzeugen.
     assert.ok(!labels.some((text) => text.trim() === ''));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('a building across a tile edge keeps one coordinate origin', () => {
+  /**
+   * Der Fehler, der das erste echte Paket unlesbar machte: `locate()` rechnete
+   * jeden Punkt relativ zu **seiner eigenen** Kachel, der Block wurde aber nach dem
+   * mittleren Punkt gewählt. Ein Haus, das über die Kante reicht, sprang dadurch um
+   * 256 Einheiten – auf dem Screenshot ein Fadenkreuz quer über den Block.
+   *
+   * Erwartet: alle Punkte gegen **einen** Ursprung. Das Haus im Fixture ist
+   * 40×30 Einheiten groß; ein Ursprungssprung wäre 256 – an der Bounding-Box also
+   * sofort zu sehen. (Das synthetische Overpass-Fixture-Haus ist absichtlich grob
+   * und 149 Einheiten breit, deshalb wird hier gezielt das Kanten-Fixture geprüft.)
+   */
+  const dir = mkdtempSync(path.join(tmpdir(), 'wai-map-'));
+  try {
+    const index = JSON.parse(buildInto(dir, ['--fixture', 'tools/fixtures/tile-edge.json']));
+    let houses = 0;
+    for (const tile of index.tiles) {
+      const content = JSON.parse(
+        readFileSync(path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
+      );
+      for (const building of content.buildings as Array<{ points: Array<[number, number]> }>) {
+        const xs = building.points.map(([x]) => x);
+        const ys = building.points.map(([, y]) => y);
+        const width = Math.max(...xs) - Math.min(...xs);
+        const height = Math.max(...ys) - Math.min(...ys);
+        assert.ok(width < 100 && height < 100, `house torn across tiles: ${width}×${height}`);
+        houses++;
+      }
+      // Dieselbe Falle für Wege: ein Straßenzug über die Kante darf nicht springen.
+      for (const road of content.roads as Array<{ points: Array<[number, number]> }>) {
+        const xs = road.points.map(([x]) => x);
+        const ys = road.points.map(([, y]) => y);
+        assert.ok(
+          Math.max(...xs) - Math.min(...xs) < 200 && Math.max(...ys) - Math.min(...ys) < 200,
+          `road torn across tiles: ${JSON.stringify(road.points)}`,
+        );
+      }
+    }
+    assert.equal(houses, 1, 'the edge house must be stored');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('a road is stored whole, not cut at every tile edge', () => {
+  // Das Fixture hat eine Wohnstraße mit drei Punkten über zwei Kacheln. Zerlegt
+  // ergab das zwei Striche, die an der Kante abrissen – auf dem echten Paket sah
+  // die Karte deshalb aus wie ein Flickenteppich.
+  const dir = mkdtempSync(path.join(tmpdir(), 'wai-map-'));
+  try {
+    const index = JSON.parse(buildInto(dir));
+    let threePoint = 0;
+    for (const tile of index.tiles) {
+      const content = JSON.parse(
+        readFileSync(path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
+      );
+      for (const road of content.roads as Array<{ class: string; points: unknown[] }>) {
+        if (road.points.length >= 3) threePoint++;
+      }
+    }
+    assert.ok(threePoint >= 1, 'the three-point street must survive as one polyline');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('a shop becomes a dot, never a label', () => {
+  // Erste Fassung schrieb jeden Ladennamen als Beschriftung in die Kachel; auf dem
+  // echten Paket standen 15 davon über einem Fleck und verdeckten die Straßen, die
+  // orientieren. Läden sind jetzt ein Punkt ohne Text.
+  const dir = mkdtempSync(path.join(tmpdir(), 'wai-map-'));
+  try {
+    const index = JSON.parse(buildInto(dir));
+    let shops = 0;
+    for (const tile of index.tiles) {
+      const content = JSON.parse(
+        readFileSync(path.join(dir, String(index.zoom), String(tile.x), `${tile.y}.json`), 'utf8'),
+      );
+      for (const poi of content.pois ?? []) if (poi.kind === 'shop') shops++;
+      for (const label of content.labels as Array<{ text: string }>) {
+        assert.notEqual(label.text, 'Bäckerei', `shop became a label: ${label.text}`);
+      }
+    }
+    assert.equal(shops, 1, 'the bakery must be a poi dot');
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
