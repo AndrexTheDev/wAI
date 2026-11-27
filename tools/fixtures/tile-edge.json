@@ -1,0 +1,80 @@
+{
+"version": 0.6,
+"elements": [
+{
+"type": "way",
+"id": 11,
+"tags": {
+"building": "yes"
+},
+"geometry": [
+{
+"lat": 48.1357428,
+"lon": 11.5753627
+},
+{
+"lat": 48.1357428,
+"lon": 11.5755773
+},
+{
+"lat": 48.1356354,
+"lon": 11.5755773
+},
+{
+"lat": 48.1356354,
+"lon": 11.5753627
+}
+]
+},
+{
+"type": "node",
+"id": 12,
+"lat": 48.1355638,
+"lon": 11.5752554,
+"tags": {
+"shop": "bakery",
+"name": "B\u00e4ckerei"
+}
+},
+{
+"type": "way",
+"id": 13,
+"tags": {
+"highway": "residential",
+"name": "Kachelkantenstra\u00dfe"
+},
+"geometry": [
+{
+"lat": 48.1357428,
+"lon": 11.5751
+},
+{
+"lat": 48.1357428,
+"lon": 11.5759
+}
+]
+},
+{
+"type": "way",
+"id": 14,
+"tags": {
+"highway": "residential",
+"name": "Kachelkantenstra\u00dfe-S\u00fcd"
+},
+"geometry": [
+{
+"lat": 48.1354206,
+"lon": 11.5751481
+},
+{
+"lat": 48.1354206,
+"lon": 11.57547
+},
+{
+"lat": 48.1354206,
+"lon": 11.5757918
+}
+]
+}
+]
+}
