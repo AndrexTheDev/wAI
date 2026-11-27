@@ -60,14 +60,14 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
-- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | Alle 1 | Favoriten | Sonstiges 1 | Unbenannter Anker Sonstiges | 0 m | 1 Anker | Finden | Archiv | Einstellungen | Schließen | Auto | Zelt | Treffpunkt | Werkzeug | Eingang | Natur | Sonstiges | −3 | −2 | −1 | EG | 1 | 2 | 3 | Kamera | Galerie | Aufnehmen | Das schaltet Pro frei | Teilen | Park-Timer | Anker speichern | Rückgängig
+- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | Alle 1 | Favoriten | Sonstiges 1 | Unbenannter Anker Sonstiges | 2,4 m | 1 Anker | Finden | Archiv | Einstellungen | Schließen | Auto | Zelt | Treffpunkt | Werkzeug | Eingang | Natur | Sonstiges | −3 | −2 | −1 | EG | 1 | 2 | 3 | Kamera | Galerie | Aufnehmen | Das schaltet Pro frei | Teilen | Park-Timer | Anker speichern | Rückgängig
 - Scroll: passt ohne Scrollen
 
 ### Start mit einem Anker
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
-- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | Alle 1 | Favoriten | Sonstiges 1 | Unbenannter Anker Sonstiges | 2,4 m | 1 Anker | Finden | Archiv | Einstellungen | Rückgängig
+- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | Alle 1 | Favoriten | Sonstiges 1 | Unbenannter Anker Sonstiges | 4,8 m | 1 Anker | Finden | Archiv | Einstellungen | Rückgängig
 - Scroll: passt ohne Scrollen
 
 ### Finden: Kompass
@@ -137,7 +137,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
-- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | 78 m ENTFERNT | 24 Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Filter zurücksetzen | 2 Anker | Finden | Archiv | Einstellungen | Schließen | Auto | Zelt | Treffpunkt | Werkzeug | Eingang | Natur | Sonstiges | −3 | −2 | −1 | EG | 1 | 2 | 3 | Kamera | Galerie | Aufnehmen | ★ Favorit | Archivieren | Anker löschen | 48.13620, 11.58320 | Das schaltet Pro frei | Teilen | Park-Timer | Speichern
+- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | 80 m ENTFERNT | 24 Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Filter zurücksetzen | 2 Anker | Finden | Archiv | Einstellungen | Schließen | Auto | Zelt | Treffpunkt | Werkzeug | Eingang | Natur | Sonstiges | −3 | −2 | −1 | EG | 1 | 2 | 3 | Kamera | Galerie | Aufnehmen | ★ Favorit | Archivieren | Anker löschen | 48.13620, 11.58320 | Das schaltet Pro frei | Teilen | Park-Timer | Speichern
 - Scroll: rund 400 px unterhalb des Viewports
 
 ### Teilen
@@ -215,7 +215,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
 - Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | 82 m ENTFERNT | 24 Min. VERBLEIBEND | Zum Auto | Park-Timer | Alle 2 | Favoriten | Auto 1 | Natur 1 | Mein Auto · Säule B17 Auto 1 | läuft | 82 m | Wegkreuzung West Natur | 99 m | 2 Anker | Finden | Archiv | Einstellungen
-- Scroll: rund 500 px unterhalb des Viewports
+- Scroll: rund 400 px unterhalb des Viewports
 
 ### Kleines Telefon: Einstellungen
 
@@ -236,7 +236,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · ENVIRONMENTAL MEMORY ANCHOR · GPS active · Accuracy ±N m
 - Bedienelemente: Language | Unlock Pro | How it works | Flashlight | Automatic (device language) | Deutsch | English | System | Light | Dark | Night | Getting-closer signal | m | ft | Test sensors | Activate licence | Export data | Import data | Delete all data | SOL | BTC | ETH | Disclaimer | Terms | Withdrawal notice | Privacy | Imprint | Crypto guide | Imprint on the website | hippie.highho@gmail.com | Show introduction again | 2 Anchors | Find | Archive | Settings
-- Scroll: rund 1200 px unterhalb des Viewports
+- Scroll: rund 1100 px unterhalb des Viewports
 
 ## Bedienelemente je Ansicht
 
@@ -306,7 +306,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - tab: Favoriten
 - tab: Sonstiges 1
 - button: Unbenannter Anker Sonstiges
-- button: 0 m
+- button: 2,4 m
 - button: 1 Anker
 - button: Finden
 - button: Archiv
@@ -345,7 +345,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - tab: Favoriten
 - tab: Sonstiges 1
 - button: Unbenannter Anker Sonstiges
-- button: 2,4 m
+- button: 4,8 m
 - button: 1 Anker
 - button: Finden
 - button: Archiv
@@ -534,7 +534,7 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - button: Pro freischalten
 - button: So funktioniert’s
 - button: Anker setzen TIPPEN SPEICHERT DIESEN ORT
-- button: 78 m ENTFERNT
+- button: 80 m ENTFERNT
 - button: 24 Min. VERBLEIBEND
 - button: Zum Auto
 - button: Park-Timer
