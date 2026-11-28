@@ -50,6 +50,28 @@ preserves dark adaptation. Contrast stays ≥ 4.5:1 for text.
 Contrast: all body text ≥ 4.5:1, large text ≥ 3:1, focus rings ≥ 3:1 against both
 the surface and the surrounding background.
 
+Focus rings have their own rules, because a ring can be correct in the palette
+and still invisible on screen:
+
+- **The ring is `--mint`**, except on chips, where mint would read as "selected"
+  (a focused chip and a chosen chip looked identical in the parking timer). Chips
+  use `--text-3` — 4.6–6.4:1 in all five themes. `--border-2`, the obvious quiet
+  choice, is 1.40–1.64:1 and was invisible in night mode.
+- **A border changing colour is not a focus ring.** The form fields had
+  `outline: none` and only recoloured their 1 px border, in place and in a form
+  with eight fields. They now get a real `outline: 2px` on `:focus-visible`, and
+  the borderless search input puts its ring on its surround (`:focus-within`,
+  `outline-offset: -2px`).
+- **Never `transition: all` on anything focusable.** In `.chip`, `.category-btn`,
+  `.segmented button` and `.anchor-card__timer` it animated the ring itself: it
+  grew from 0 to 2 px over 130 ms, so it was invisible at the moment it mattered.
+  List the three properties that actually change.
+
+`tools/check-focus-ring.mjs` walks the keyboard path (`Tab`, not `.focus()` —
+`:focus-visible` only applies to real keyboard focus), reads the ring colour from
+the rendered element and computes it against the backdrop *next to* it, in all
+three themes. It runs in the same workflow as the tap-target check.
+
 This is checked, not asserted: `npm run check:contrast`
 (`tools/check-contrast.mjs`) reads the tokens straight out of the two CSS files
 and computes 77 pairs across the five themes — body/secondary/meta text on the

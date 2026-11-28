@@ -13,7 +13,7 @@
 #
 # Der Bericht geht nach `docs/TAP_TARGETS.md` zurück, damit er ohne
 # Artefakt-Download lesbar ist.
-name: Trefferflächen
+name: Trefferflächen & Fokusringe
 
 on:
   workflow_dispatch:
@@ -69,10 +69,18 @@ jobs:
             sleep 1
           done
 
-      - name: Measure
+      - name: Measure tap targets
         run: |
           set -o pipefail
           npm run check:tap -- --out docs/TAP_TARGETS.md 2>&1 | tee tap.log
+
+      # Fokusringe gehören in denselben Lauf: beide brauchen dieselbe gebaute
+      # App und denselben Browser, und beide sind Aussagen über das, was ein
+      # Nutzer ohne Maus sieht.
+      - name: Measure focus rings
+        run: |
+          set -o pipefail
+          npm run check:focus -- --out docs/FOCUS_RINGS.md 2>&1 | tee focus.log
 
       - name: Report
         if: always()
@@ -84,6 +92,11 @@ jobs:
             echo '```'
             grep -E '✔|✖|Bauteile|Geprüft' tap.log | head -40 || tail -30 tap.log
             echo '```'
+            echo ''
+            echo "### Fokusringe"
+            echo '```'
+            grep -E '✔|✖|Stationen' focus.log | tail -20 || tail -20 focus.log
+            echo '```'
           } > report.md
           gh api -X POST "repos/${{ github.repository }}/commits/${{ github.sha }}/comments" \
             -f body="$(cat report.md)" >/dev/null 2>&1 || echo 'Kommentar nicht möglich'
@@ -93,10 +106,10 @@ jobs:
         run: |
           git config user.name 'wAI tap-target bot'
           git config user.email 'bot@andrexthedev.dev'
-          git add docs/TAP_TARGETS.md || true
+          git add docs/TAP_TARGETS.md docs/FOCUS_RINGS.md || true
           if git diff --cached --quiet; then
             echo 'keine Änderung'
           else
-            git commit -m 'chore(docs): Trefferflächen-Bericht aktualisiert'
+            git commit -m 'chore(docs): Berichte zu Trefferflächen und Fokusringen aktualisiert'
             git push
           fi
