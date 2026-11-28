@@ -370,7 +370,10 @@ export function AppShell() {
               <item.icon size={20} />
               {item.badge ? <span className="tab__badge">{item.badge}</span> : null}
             </span>
-            {item.label}
+            {/* Eigener Span, damit die Beschriftung umbrechen darf: ein loser
+                Textknoten im Grid wird so breit wie sein längstes Wort und
+                schiebt die Leiste sonst seitlich aus dem Bild. */}
+            <span className="tab__label">{item.label}</span>
           </button>
         ))}
       </nav>

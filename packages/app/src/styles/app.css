@@ -74,6 +74,22 @@
   box-sizing: border-box;
 }
 
+/**
+ * Die Wurzelgröße ist der Hebel für die Systemschrift. Alle Schriftgrößen in
+ * dieser Datei stehen in `rem`; damit die App auf einem normalen Gerät exakt
+ * so aussieht wie vorher, ist 1 rem hier 10 px. Wer im Browser oder auf dem
+ * Telefon größere Schrift einstellt, vergrößert nur diesen Wert – Abstände,
+ * Radien und Tap-Flächen in px bleiben, wo sie sind.
+ *
+ * Vorher standen hier 93 Schriftgrößen in px und keine einzige in rem. Die
+ * App war damit die einzige Stelle im Projekt, die die Schriftgröße des
+ * Systems ignoriert hat – obwohl docs/DESIGN_SYSTEM.md das Gegenteil behauptet.
+ * 15px Fließtext blieb 15px, auch wenn jemand 200 % eingestellt hatte.
+ */
+html {
+  font-size: 1rem;
+}
+
 html,
 body {
   margin: 0;
@@ -86,7 +102,7 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
-  font-size: 15px;
+  font-size: 1.5rem;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
@@ -163,6 +179,14 @@ a {
 
 .app {
   display: grid;
+  /**
+   * Grid-Kinder dürfen nicht breiter werden als ihre Spur. Ohne diese Zeile ist
+   * `min-width` der Kinder `auto` – bei großer Systemschrift schiebt die
+   * Kopfzeile dann die ganze App seitlich über den Bildschirm (bei 200 % um
+   * 89 px auf einem 320-dp-Gerät). Mit `min-width: 0` darf sie schrumpfen und
+   * ihre Inhalte umbrechen.
+   */
+  grid-template-columns: minmax(0, 1fr);
   /**
    * Vier Zeilen, auch wenn mal eine fehlt: Header und Statusleiste werden auf dem
    * Fund-Screen nicht gerendert. Mit nur drei Zeilen (`auto 1fr auto`) rückten die
@@ -266,6 +290,7 @@ a {
 .topbar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
   padding: calc(10px + var(--safe-top)) 16px 10px;
   position: relative;
@@ -299,13 +324,13 @@ a {
 }
 
 .topbar__name {
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: 800;
   letter-spacing: -0.01em;
 }
 
 .topbar__sub {
-  font-size: 10px;
+  font-size: 1rem;
   color: var(--text-3);
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -330,7 +355,7 @@ a {
  */
 @media (max-width: 380px) {
   .topbar__sub {
-    font-size: 8.5px;
+    font-size: 0.85rem;
     letter-spacing: 0;
   }
 }
@@ -399,7 +424,7 @@ a {
   gap: 6px;
   flex-wrap: wrap;
   padding: 0 16px 10px;
-  font-size: 10.5px;
+  font-size: 1.05rem;
   color: var(--text-3);
   grid-row: 2;
 }
@@ -513,13 +538,13 @@ a {
 }
 
 .anchor-btn__label {
-  font-size: 14.5px;
+  font-size: 1.45rem;
   font-weight: 800;
   letter-spacing: -0.01em;
 }
 
 .anchor-btn__hint {
-  font-size: 9.5px;
+  font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -530,7 +555,7 @@ a {
 }
 
 .anchor-hero__hint {
-  font-size: 11.5px;
+  font-size: 1.15rem;
   color: var(--text-3);
   text-align: center;
   max-width: 30ch;
@@ -540,8 +565,17 @@ a {
 
 .toolbar {
   display: grid;
+  /**
+   * Gleiche Falle wie in `.app`: `grid-template-columns: 1fr` wäre
+   * `minmax(auto, 1fr)` und die Spalte wächst mit dem Suchfeld. Das Suchfeld
+   * wiederum hat von Chromium eine Mindestbreite aus seinem `size`-Attribut –
+   * bei 200 % Schrift sind das 353 px auf einem 320-dp-Bildschirm. Die Spalte
+   * wird deshalb auf den Container gedeckelt und das Feld darf schrumpfen.
+   */
+  grid-template-columns: minmax(0, 1fr);
   gap: 8px;
   margin-bottom: 12px;
+  min-width: 0;
 }
 
 .search {
@@ -549,7 +583,9 @@ a {
   align-items: center;
   gap: 8px;
   padding: 0 12px;
-  height: 42px;
+  /* Mindesthöhe statt fester Höhe: bei großer Schrift wächst das Feld mit,
+     statt den Text oben und unten abzuschneiden. */
+  min-height: 42px;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   background: var(--surface);
@@ -563,7 +599,7 @@ a {
   border: none;
   outline: none;
   color: var(--text);
-  font-size: 14px;
+  font-size: 1.4rem;
 }
 
 .search input::placeholder {
@@ -609,7 +645,7 @@ a {
   border-radius: var(--radius-pill);
   border: 1px solid var(--border);
   background: var(--surface);
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--text-2);
   white-space: nowrap;
@@ -623,7 +659,7 @@ a {
 }
 
 .chip__count {
-  font-size: 10px;
+  font-size: 1rem;
   opacity: 0.7;
   font-variant-numeric: tabular-nums;
 }
@@ -725,7 +761,7 @@ a {
 }
 
 .anchor-card__title {
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 700;
   /**
    * Zwei Zeilen statt einer. Anfangsbuchstaben wie „Mein Auto · Säule B…" sind
@@ -744,7 +780,7 @@ a {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
+  font-size: 1.1rem;
   color: var(--text-3);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -765,7 +801,7 @@ a {
 }
 
 .anchor-card__distance {
-  font-size: 13px;
+  font-size: 1.3rem;
   font-weight: 750;
   color: var(--mint);
   font-variant-numeric: tabular-nums;
@@ -781,7 +817,7 @@ a {
   place-items: center;
   padding: 1px 5px;
   border-radius: 5px;
-  font-size: 8.5px;
+  font-size: 0.85rem;
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -824,11 +860,11 @@ a {
 }
 
 .empty h3 {
-  font-size: 15px;
+  font-size: 1.5rem;
 }
 
 .empty p {
-  font-size: 12.5px;
+  font-size: 1.25rem;
   color: var(--text-3);
   max-width: 32ch;
 }
@@ -857,7 +893,7 @@ a {
 }
 
 .card__title {
-  font-size: 13px;
+  font-size: 1.3rem;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -876,16 +912,22 @@ a {
 
 .row--between {
   justify-content: space-between;
+  /**
+   * „0 aktive Anker / 3" und die Sortierauswahl standen bei großer Schrift
+   * nebeneinander, bis die Auswahl rechts aus dem Bild ragte. Sie dürfen
+   * untereinander rutschen, statt den Text abzuschneiden.
+   */
+  flex-wrap: wrap;
 }
 
 .muted {
   color: var(--text-3);
-  font-size: 12px;
+  font-size: 1.2rem;
 }
 
 .mono {
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: 1.15rem;
 }
 
 /* ---------------- buttons ---------------- */
@@ -901,7 +943,7 @@ a {
   border: 1px solid var(--border-2);
   background: var(--surface);
   color: var(--text);
-  font-size: 13.5px;
+  font-size: 1.35rem;
   font-weight: 650;
   transition:
     transform 120ms,
@@ -936,13 +978,13 @@ a {
 
 .btn--sm {
   min-height: 36px;
-  font-size: 12px;
+  font-size: 1.2rem;
   padding: 0 12px;
 }
 
 .btn--xs {
   min-height: 30px;
-  font-size: 11px;
+  font-size: 1.1rem;
   padding: 0 9px;
   border-radius: 9px;
 }
@@ -956,7 +998,18 @@ a {
 .tabbar {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 1fr;
+  /**
+   * Vier *gleich* breite Spalten passen nicht zu vier unterschiedlich langen
+   * Wörtern: bei 200 % Systemschrift ist „Einstellungen" 81 px breit, eine
+   * Viertelspalte auf 320 dp aber nur 74 px – der Reiter schob die Leiste
+   * seitlich aus dem Bild oder brach mitten im Wort.
+   *
+   * Deshalb bekommt jeder Reiter die Breite, die sein Wort braucht, und der
+   * Rest wird verteilt. In Summe sind das bei 200 % rund 255 px von 320 px;
+   * es passt also reichlich, ohne dass ein Wort getrennt wird.
+   */
+  grid-auto-columns: auto;
+  justify-content: space-between;
   align-items: center;
   gap: 2px;
   padding: 6px 10px calc(6px + var(--safe-bottom));
@@ -975,13 +1028,34 @@ a {
   display: grid;
   justify-items: center;
   gap: 3px;
+  min-width: 0;
+  text-align: center;
   padding: 6px 2px;
   border-radius: 12px;
   color: var(--text-3);
-  font-size: 9.5px;
+  /**
+   * Die vier Beschriftungen bestimmen zusammen die Breite der Leiste. Bei
+   * 200 % Systemschrift brauchen sie 378 px, auf einem 320-dp-Gerät sind
+   * 294 px da – deshalb ein Deckel bei 14 px. Das ist noch deutlich größer
+   * als die 9,5 px von heute, und kein Wort muss getrennt werden.
+   */
+  font-size: min(0.95rem, 14px);
   font-weight: 650;
   letter-spacing: 0.03em;
   transition: color 140ms;
+}
+
+.tab__label {
+  /**
+   * Eine Zeile, nie mitten im Wort getrennt: „Einstellungen" ist der längste
+   * Reiter und bestimmt die Breite seiner Spalte (siehe `.tabbar`).
+   * `min-width: 0` erlaubt trotzdem, dass die Leiste notfalls schrumpft,
+   * statt seitlich aus dem Bild zu laufen.
+   */
+  min-width: 0;
+  white-space: nowrap;
+  line-height: 1.15;
+  text-align: center;
 }
 
 .tab.is-active {
@@ -1030,7 +1104,7 @@ a {
   border-radius: 7px;
   background: var(--grad);
   color: #04121a;
-  font-size: 8.5px;
+  font-size: 0.85rem;
   font-weight: 800;
   display: grid;
   place-items: center;
@@ -1096,7 +1170,7 @@ a {
 }
 
 .sheet__title {
-  font-size: 15px;
+  font-size: 1.5rem;
   font-weight: 750;
 }
 
@@ -1164,7 +1238,7 @@ a {
 }
 
 .field__label {
-  font-size: 10.5px;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1180,7 +1254,7 @@ a {
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text);
-  font-size: 14px;
+  font-size: 1.4rem;
   outline: none;
   transition: border-color 140ms, box-shadow 140ms;
 }
@@ -1199,7 +1273,7 @@ a {
 }
 
 .field__help {
-  font-size: 11px;
+  font-size: 1.1rem;
   color: var(--text-3);
 }
 
@@ -1218,7 +1292,7 @@ a {
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text-3);
-  font-size: 10.5px;
+  font-size: 1.05rem;
   font-weight: 600;
   transition: all 130ms;
 }
@@ -1354,7 +1428,7 @@ a {
 }
 
 .guide__distance strong {
-  font-size: 26px;
+  font-size: 2.6rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
@@ -1362,7 +1436,7 @@ a {
 }
 
 .guide__distance span {
-  font-size: 10px;
+  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--text-3);
@@ -1370,7 +1444,7 @@ a {
 
 .guide__compass-cardinal {
   position: absolute;
-  font-size: 9.5px;
+  font-size: 0.95rem;
   font-weight: 800;
   color: var(--text-3);
   letter-spacing: 0.08em;
@@ -1400,7 +1474,7 @@ a {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 9.5px;
+  font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1408,7 +1482,7 @@ a {
 }
 
 .tile__value {
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: -0.01em;
 }
@@ -1428,7 +1502,7 @@ a {
 }
 
 .tile__sub {
-  font-size: 10.5px;
+  font-size: 1.05rem;
   color: var(--text-3);
 }
 
@@ -1513,7 +1587,7 @@ a {
   display: flex;
   align-items: flex-start;
   gap: 4px;
-  font-size: 10px;
+  font-size: 1rem;
   line-height: 1.25;
   color: var(--text-3);
 }
@@ -1574,7 +1648,7 @@ a {
   border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--surface);
-  font-size: 12px;
+  font-size: 1.2rem;
   line-height: 1.25;
   color: var(--text-2);
   min-height: 44px;
@@ -1618,19 +1692,19 @@ a {
 }
 
 .wallet__name {
-  font-size: 12.5px;
+  font-size: 1.25rem;
   font-weight: 700;
 }
 
 .wallet__network {
-  font-size: 10px;
+  font-size: 1rem;
   color: var(--text-3);
 }
 
 .wallet__amount {
   margin-left: auto;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 1.1rem;
   font-weight: 700;
   padding: 2px 7px;
   border-radius: var(--radius-pill);
@@ -1639,7 +1713,7 @@ a {
 
 .wallet__address {
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 1.05rem;
   word-break: break-all;
   line-height: 1.45;
   color: var(--text-2);
@@ -1657,7 +1731,7 @@ a {
 .wallet__warn {
   display: flex;
   gap: 4px;
-  font-size: 10px;
+  font-size: 1rem;
   color: var(--amber);
   line-height: 1.4;
 }
@@ -1670,7 +1744,7 @@ a {
   border-radius: 13px;
   border: 1px solid rgba(251, 191, 36, 0.3);
   background: rgba(251, 191, 36, 0.09);
-  font-size: 12px;
+  font-size: 1.2rem;
   color: #ffe9b8;
 }
 
@@ -1699,7 +1773,7 @@ a {
 
 .banner__title {
   font-weight: 700;
-  font-size: 12.5px;
+  font-size: 1.25rem;
 }
 
 /* ---------------- toast ---------------- */
@@ -1740,7 +1814,7 @@ body[data-sheet-open] .toast-wrap {
   background: #0f1a2b;
   border: 1px solid var(--border-2);
   box-shadow: 0 16px 40px -18px rgba(0, 0, 0, 0.9);
-  font-size: 12.5px;
+  font-size: 1.25rem;
   font-weight: 600;
   animation: toast-in 200ms cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: auto;
@@ -1769,6 +1843,13 @@ body[data-sheet-open] .toast-wrap {
 
 .segmented {
   display: flex;
+  /**
+   * Bei großer Systemschrift sind „Automatisch (Gerätesprache)" und „Deutsch"
+   * zusammen breiter als ein 320-dp-Bildschirm. `nowrap` in den Knöpfen ist
+   * richtig (ein Segment soll nicht zweizeilig werden), aber dann muss die
+   * Gruppe umbrechen dürfen statt seitlich aus dem Bild zu laufen.
+   */
+  flex-wrap: wrap;
   padding: 3px;
   gap: 2px;
   border-radius: var(--radius-pill);
@@ -1777,10 +1858,12 @@ body[data-sheet-open] .toast-wrap {
 }
 
 .segmented button {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
   padding: 7px 10px;
   border-radius: var(--radius-pill);
-  font-size: 11.5px;
+  font-size: 1.15rem;
   font-weight: 650;
   color: var(--text-3);
   transition: all 130ms;
@@ -1804,12 +1887,12 @@ body[data-sheet-open] .toast-wrap {
 }
 
 .setting-row__label {
-  font-size: 13.5px;
+  font-size: 1.35rem;
   font-weight: 600;
 }
 
 .setting-row__sub {
-  font-size: 11px;
+  font-size: 1.1rem;
   color: var(--text-3);
   margin-top: 1px;
 }
@@ -1873,7 +1956,7 @@ body[data-sheet-open] .toast-wrap {
   background: none;
   border: none;
   color: var(--text-2);
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: 600;
   padding: 0;
   cursor: pointer;
@@ -1987,12 +2070,12 @@ body[data-sheet-open] .toast-wrap {
   display: grid;
   place-items: center;
   color: #05080f;
-  font-size: 15px;
+  font-size: 1.5rem;
   font-weight: 800;
 }
 
 .consent-card__label {
-  font-size: 13px;
+  font-size: 1.3rem;
   line-height: 1.45;
   color: var(--text);
   cursor: pointer;
@@ -2004,7 +2087,7 @@ body[data-sheet-open] .toast-wrap {
   gap: 6px;
   margin: 0;
   padding: 8px 10px;
-  font-size: 12px;
+  font-size: 1.2rem;
   color: var(--mint);
   background: rgba(110, 231, 183, 0.08);
   border: 1px solid rgba(110, 231, 183, 0.22);
@@ -2018,14 +2101,14 @@ body[data-sheet-open] .toast-wrap {
 .legal-doc {
   display: grid;
   gap: 14px;
-  font-size: 13.5px;
+  font-size: 1.35rem;
   line-height: 1.62;
   color: var(--text-2);
 }
 
 .legal-doc__meta {
   margin: 0;
-  font-size: 11.5px;
+  font-size: 1.15rem;
   letter-spacing: 0.02em;
   color: var(--text-3);
   text-transform: uppercase;
@@ -2034,7 +2117,7 @@ body[data-sheet-open] .toast-wrap {
 .legal-doc__intro {
   margin: 0;
   color: var(--text);
-  font-size: 14px;
+  font-size: 1.4rem;
 }
 
 .legal-doc__section {
@@ -2046,14 +2129,14 @@ body[data-sheet-open] .toast-wrap {
 
 .legal-doc__section h3 {
   margin: 0;
-  font-size: 14.5px;
+  font-size: 1.45rem;
   font-weight: 650;
   color: var(--text);
 }
 
 .legal-doc__h4 {
   margin: 4px 0 0;
-  font-size: 13px;
+  font-size: 1.3rem;
   font-weight: 600;
   color: var(--text);
 }
@@ -2093,7 +2176,7 @@ body[data-sheet-open] .toast-wrap {
   height: 20px;
   border-radius: 50%;
   background: var(--surface-2);
-  font-size: 10.5px;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--text-3);
 }
@@ -2104,7 +2187,7 @@ body[data-sheet-open] .toast-wrap {
   border-radius: var(--radius);
   border: 1px solid rgba(110, 231, 183, 0.24);
   background: rgba(110, 231, 183, 0.07);
-  font-size: 12.5px;
+  font-size: 1.25rem;
   color: var(--text);
 }
 
@@ -2115,7 +2198,7 @@ body[data-sheet-open] .toast-wrap {
   border-radius: 0 var(--radius) var(--radius) 0;
   background: var(--surface);
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: 1.15rem;
   line-height: 1.7;
   white-space: pre-line;
   color: var(--text-2);
@@ -2130,7 +2213,7 @@ body[data-sheet-open] .toast-wrap {
 .legal-doc__table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: 1.2rem;
 }
 
 .legal-doc__table th,
@@ -2143,7 +2226,7 @@ body[data-sheet-open] .toast-wrap {
 .legal-doc__table th {
   color: var(--text-3);
   font-weight: 600;
-  font-size: 10.5px;
+  font-size: 1.05rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
@@ -2156,7 +2239,7 @@ body[data-sheet-open] .toast-wrap {
   margin: 0;
   padding-top: 12px;
   border-top: 1px solid var(--border);
-  font-size: 12px;
+  font-size: 1.2rem;
   color: var(--text-3);
 }
 
@@ -2170,7 +2253,7 @@ body[data-sheet-open] .toast-wrap {
 
 .legal-doc__title {
   margin: 0 0 2px;
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: 700;
   color: var(--text);
 }
@@ -2216,13 +2299,13 @@ body[data-sheet-open] .toast-wrap {
 
 .confirm__title {
   margin: 0;
-  font-size: 17px;
+  font-size: 1.7rem;
   line-height: 1.3;
   letter-spacing: -0.01em;
 }
 
 .confirm__body {
-  font-size: 13.5px;
+  font-size: 1.35rem;
   line-height: 1.55;
   color: var(--text-2);
 }
@@ -2249,7 +2332,7 @@ body[data-sheet-open] .toast-wrap {
 }
 
 .empty__hint {
-  font-size: 12.5px;
+  font-size: 1.25rem;
   color: var(--text-3);
   max-width: 34ch;
   text-align: center;
@@ -2266,7 +2349,7 @@ body[data-sheet-open] .toast-wrap {
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text-2);
-  font-size: 10.5px;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   transition: all 130ms;
@@ -2458,25 +2541,25 @@ body[data-sheet-open] .toast-wrap {
   background: var(--grad-soft);
   border: 1px solid rgba(110, 231, 183, 0.28);
   color: var(--mint);
-  font-size: 11.5px;
+  font-size: 1.15rem;
   font-weight: 800;
 }
 
 .help-step__title {
-  font-size: 13.5px;
+  font-size: 1.35rem;
   font-weight: 700;
   margin-bottom: 2px;
 }
 
 .help-step__body {
-  font-size: 12.5px;
+  font-size: 1.25rem;
   line-height: 1.55;
   color: var(--text-2);
 }
 
 .help__section {
   margin: 18px 0 8px;
-  font-size: 12px;
+  font-size: 1.2rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--text-3);
@@ -2508,7 +2591,7 @@ body[data-sheet-open] .toast-wrap {
   width: 100%;
   padding: 12px 13px;
   text-align: left;
-  font-size: 13px;
+  font-size: 1.3rem;
   font-weight: 650;
 }
 
@@ -2525,7 +2608,7 @@ body[data-sheet-open] .toast-wrap {
 
 .help-item__a {
   padding: 0 13px 13px;
-  font-size: 12.5px;
+  font-size: 1.25rem;
   line-height: 1.6;
   color: var(--text-2);
   animation: help-in 180ms ease-out;
@@ -2546,7 +2629,7 @@ body[data-sheet-open] .toast-wrap {
 .help-list {
   display: grid;
   gap: 7px;
-  font-size: 12.5px;
+  font-size: 1.25rem;
   line-height: 1.5;
   color: var(--text-2);
 }
@@ -2565,7 +2648,7 @@ body[data-sheet-open] .toast-wrap {
 
 .help__meta {
   text-align: center;
-  font-size: 11px;
+  font-size: 1.1rem;
   color: var(--text-3);
   margin-top: 4px;
 }
@@ -2613,13 +2696,13 @@ body[data-sheet-open] .toast-wrap {
 }
 
 .arrived-card__title {
-  font-size: 15px;
+  font-size: 1.5rem;
   font-weight: 750;
   letter-spacing: -0.01em;
 }
 
 .arrived-card__body {
-  font-size: 12.5px;
+  font-size: 1.25rem;
   line-height: 1.5;
   color: var(--text-2);
   margin-top: 2px;
@@ -2699,7 +2782,7 @@ body[data-sheet-open] .toast-wrap {
   background: rgba(56, 189, 248, 0.16);
   border: 1px solid rgba(56, 189, 248, 0.3);
   color: var(--sky);
-  font-size: 9.5px;
+  font-size: 0.95rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -2707,7 +2790,7 @@ body[data-sheet-open] .toast-wrap {
 }
 
 .carspot__name {
-  font-size: 13px;
+  font-size: 1.3rem;
   font-weight: 650;
   color: var(--text-2);
   overflow: hidden;
@@ -2740,7 +2823,7 @@ body[data-sheet-open] .toast-wrap {
 }
 
 .carspot__value {
-  font-size: 26px;
+  font-size: 2.6rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -2749,7 +2832,7 @@ body[data-sheet-open] .toast-wrap {
 
 .carspot__label,
 .carspot__side-label {
-  font-size: 10px;
+  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--text-3);
@@ -2763,7 +2846,7 @@ body[data-sheet-open] .toast-wrap {
 }
 
 .carspot__side-value {
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 750;
   font-variant-numeric: tabular-nums;
   color: var(--text);
@@ -2774,7 +2857,7 @@ body[data-sheet-open] .toast-wrap {
 }
 
 .carspot__meta {
-  font-size: 12px;
+  font-size: 1.2rem;
   color: var(--text-2);
 }
 
@@ -2904,7 +2987,7 @@ body[data-sheet-open] .toast-wrap {
 
 .map__label {
   fill: rgba(214, 226, 245, 0.62);
-  font-size: 9px;
+  font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   text-anchor: middle;
@@ -3000,7 +3083,7 @@ body[data-sheet-open] .toast-wrap {
   background: rgba(10, 17, 25, 0.82);
   backdrop-filter: blur(8px);
   color: var(--text);
-  font-size: 17px;
+  font-size: 1.7rem;
   font-weight: 700;
   line-height: 1;
   display: grid;
@@ -3034,7 +3117,7 @@ body[data-sheet-open] .toast-wrap {
 }
 
 .map__scale-text {
-  font-size: 9px;
+  font-size: 0.9rem;
   font-weight: 700;
   color: rgba(214, 226, 245, 0.7);
   letter-spacing: 0.04em;
@@ -3055,7 +3138,7 @@ body[data-sheet-open] .toast-wrap {
   padding: 2px 5px;
   border-radius: 4px;
   background: rgba(8, 14, 22, 0.72);
-  font-size: 8px;
+  font-size: 0.8rem;
   line-height: 1.3;
   color: rgba(214, 226, 245, 0.65);
   letter-spacing: 0.02em;
@@ -3071,7 +3154,7 @@ body[data-sheet-open] .toast-wrap {
   gap: 6px;
   padding: 24px;
   text-align: center;
-  font-size: 12px;
+  font-size: 1.2rem;
   color: var(--text-2);
   background: radial-gradient(120% 120% at 50% 30%, rgba(56, 189, 248, 0.08), transparent 60%);
 }
@@ -3104,7 +3187,7 @@ body[data-sheet-open] .toast-wrap {
 }
 
 .demo-hint__tag {
-  font-size: 10px;
+  font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -3115,7 +3198,7 @@ body[data-sheet-open] .toast-wrap {
 .demo-hint__text {
   flex: 1 1 180px;
   min-width: 0;
-  font-size: 12px;
+  font-size: 1.2rem;
   line-height: 1.35;
   color: var(--text-muted, rgba(214, 226, 245, 0.72));
 }
@@ -3131,7 +3214,7 @@ body[data-sheet-open] .toast-wrap {
   border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--bg-2);
-  font-size: 11px;
+  font-size: 1.1rem;
   color: var(--text-3);
   white-space: nowrap;
   overflow: hidden;

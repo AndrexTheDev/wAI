@@ -174,6 +174,33 @@ jede Route bei 15 Breiten (320–1440 px) und nennen das Element, das übersteht
 gegen `vite preview`, weil `python3 -m http.server` `/legal/privacy` mit 404
 beantwortet und genau dort einer der Fehler saß.
 
+## 5d. Stand nach der Schriftgrößen-Runde (PR #46)
+
+`docs/DESIGN_SYSTEM.md` behauptete seit dem ersten Tag, im App-Shell stünden
+alle Schriftgrößen in `rem` — „Text scales with browser/OS font size". In
+`packages/app/src/styles/app.css` standen **93 Schriftgrößen, alle in px, und
+keine einzige in rem**. Wer auf dem Telefon 200 % Schrift einstellte, sah
+exakt dieselbe 15-px-Schrift wie vorher. Für viele Menschen ist das die
+einzige Möglichkeit, die App überhaupt zu lesen.
+
+Umgestellt auf `rem` bei einer Wurzel von 10 px (damit `1.5rem` die gewohnten
+15 px sind) – und danach das gemessen, was dabei bricht:
+
+| Fund | Ursache | Behebung |
+|---|---|---|
+| Seite 89 px zu breit bei 200 % auf 320 dp | `.app` ist ein Grid; Kinder haben `min-width: auto` | `grid-template-columns: minmax(0, 1fr)` |
+| Suchfeld 353 px breit | Chromium gibt `<input>` eine Mindestbreite aus dem `size`-Attribut | `.toolbar` mit `minmax(0, 1fr)` |
+| Sortierzeile ragte rechts heraus | Text und Auswahl waren eine nicht umbruchfähige Zeile | `.row--between` darf umbrechen |
+| Sprach-/Darstellungs-Schalter ragte heraus | drei Segmente ohne Umbruch | `.segmented` umbricht, Segmente bleiben einzeilig |
+| Vier Reiter teilten sich die Leiste in Viertel | bei 200 % ist „Einstellungen" 81 px breit, die Spalte 74 px → „Einst/ellun/gen" | Spalten an den Inhalt (`grid-auto-columns: auto`), Beschriftung bei `min(0.95rem, 14px)` gedeckelt |
+| Kopfzeile brach nicht um | Marke + drei Knöpfe in einer starren Zeile | `.topbar` darf umbrechen |
+| Suchfeld hatte feste Höhe | Text wurde oben und unten abgeschnitten | `min-height` statt `height` |
+| Beschriftung der Reiter brauchte einen eigenen Span | loser Textknoten im Grid wird so breit wie sein längstes Wort | `<span class="tab__label">` |
+
+`walkthrough.mjs` prüft jetzt zusätzlich **320 dp bei 200 %** und **412 dp bei
+150 %**: keine Seite breiter als der Bildschirm, und kein Reiter, dessen
+Beschriftung abgeschnitten ist. Bericht: 38 Ansichten.
+
 ## 6. Die drei teuersten Funde
 
 1. **`floorLabel` ist nicht eingebbar** (#6). Das Höhen-Lotse — Kern-USP für Tiefgaragen — hat keine Datenquelle. Ein Nutzer merkt das erst, wenn er in Ebene 3 steht.

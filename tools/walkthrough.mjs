@@ -720,6 +720,54 @@ async function journeySmallPhone() {
 }
 
 /* ============================================================
+   7c. Große Systemschrift: bleibt die App bedienbar?
+   ============================================================ */
+async function journeyLargeText() {
+  /**
+   * Die App hatte 93 Schriftgrößen in px und keine einzige in rem: wer auf dem
+   * Telefon 200 % Schrift einstellte, sah exakt dieselbe 15-px-Schrift wie
+   * vorher. Das ist für viele Menschen die einzige Möglichkeit, die App
+   * überhaupt zu lesen – und `docs/DESIGN_SYSTEM.md` behauptete seit jeher das
+   * Gegenteil („all sizes in rem inside the app shell").
+   *
+   * Alle Schriftgrößen stehen jetzt in rem bei einer Wurzel von 10 px; dieser
+   * Durchlauf prüft bei 320 dp und 200 %, dass dabei nichts aus dem Bild
+   * rutscht: keine Seite darf breiter sein als der Bildschirm, und die vier
+   * Reiter der Tab-Leiste müssen vollständig lesbar bleiben.
+   */
+  for (const [width, scale, label] of [
+    [320, 20, 'Große Schrift: 320 dp · 200 %'],
+    [412, 15, 'Große Schrift: 412 dp · 150 %'],
+  ]) {
+    const { context, page } = await session({ anchors: true, viewport: { width, height: 700 } });
+    // `font-size` auf der Wurzel ist genau das, was der Browser bei „Schrift
+    // vergrößern" tut.
+    await page.addStyleTag({ content: `html { font-size: ${scale}px }` });
+    await page.waitForTimeout(600);
+    await step(page, label, { expect: ['Anker'], shot: false });
+
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    if (overflow > 1) {
+      issues.push({ view: label, findings: [`die Seite ist ${overflow} px breiter als der Bildschirm`], text: '' });
+    }
+    /**
+     * Ein Reiter, der seine Beschriftung nicht mehr zeigt, ist ein toter Knopf:
+     * man weiß nicht, wohin er führt. `scrollWidth > clientWidth` ist genau
+     * dieser Fall – auch wenn CSS-`overflow` ihn unsichtbar macht.
+     */
+    const clipped = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('.tab'))
+        .filter((tab) => tab.scrollWidth > tab.clientWidth + 1)
+        .map((tab) => (tab.textContent ?? '').trim()),
+    );
+    if (clipped.length) {
+      issues.push({ view: label, findings: [`abgeschnittene Reiter: ${clipped.map((t) => `„${t}"`).join(', ')}`], text: '' });
+    }
+    await context.close();
+  }
+}
+
+/* ============================================================
    8. Englisch: ist die zweite Sprache vollständig?
    ============================================================ */
 async function journeyEnglish() {
@@ -750,6 +798,7 @@ try {
   await journeySearch();
   await journeyTabs();
   await journeySmallPhone();
+  await journeyLargeText();
   await journeyEnglish();
 } catch (error) {
   issues.push({ view: 'Abbruch', findings: [String(error).split('\n')[0]], text: '' });
