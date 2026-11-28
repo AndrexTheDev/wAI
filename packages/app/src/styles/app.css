@@ -615,21 +615,70 @@ a {
   padding: 0 12px;
   /* Mindesthöhe statt fester Höhe: bei großer Schrift wächst das Feld mit,
      statt den Text oben und unten abzuschneiden. */
-  min-height: 42px;
+  /**
+   * 44 statt 42: das Suchfeld ist das meistbenutzte Ziel auf dem Startbildschirm
+   * und wurde bisher knapp verfehlt. `input` darin muss die Hülle füllen, damit
+   * ein Tipp auf den Rand nicht ins Leere geht.
+   */
+  min-height: 44px;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text-3);
 }
 
+/**
+ * Das Suchfeld ist die Ausnahme bei den getönten Flächen: es hat kein Icon, das
+ * einen Tipp abfängt, und ist der erste Griff auf dem Startbildschirm. Hier
+ * wird die Hülle selbst zum Ziel (Mindesthöhe 44), nicht nur das `<input>`
+ * darin – sonst trifft ein Tipp auf den Rand das `<div>` und nichts passiert.
+ */
+.search {
+  cursor: text;
+}
+
 .search input {
   flex: 1;
+  /**
+   * `min-height: 44px` und nicht `align-self: stretch`: ein `<input>` ist ein
+   * ersetztes Element mit eigener Höhe, `stretch` lässt es in Chromium deshalb
+   * bei seinen 42 px (Zeichenhöhe plus Innenabstand). Prozentangaben helfen
+   * nicht, weil die Höhe der Hülle nur eine Mindesthöhe ist. Beides gemessen,
+   * beides nicht geraten: die Hülle ist damit 46 px hoch, das Feld 44.
+   */
+  align-self: stretch;
+  min-height: 44px;
   min-width: 0;
   background: none;
   border: none;
   outline: none;
   color: var(--text);
   font-size: 1.4rem;
+}
+
+/**
+ * Der Löschknopf im Suchfeld war ein nackter `<button>` ohne Größe – rund 22 px.
+ * Er bekommt dieselbe Aufweitung wie `icon-btn`, sitzt aber in einer 8-px-Reihe,
+ * also ohne Überlappung: 44 px breit, volle Höhe der Hülle.
+ */
+.search button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 100%;
+  min-height: 44px;
+  flex: none;
+  color: var(--text-3);
+}
+
+.search button::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: max(100%, 46px);
+  height: max(100%, 48px);
+  translate: -50% -50%;
 }
 
 .search input::placeholder {
@@ -1007,7 +1056,12 @@ a {
 }
 
 .btn--sm {
-  min-height: 36px;
+  /**
+   * War 36 px hoch. Für einen Daumen zu klein, und die Zusage nennt 44 –
+   * die kleineren Schriftgrößen sparen Breite, nicht Höhe. `padding` bleibt,
+   * damit die Optik dieselbe ist; nur die Fläche wächst.
+   */
+  min-height: 44px;
   font-size: 1.2rem;
   padding: 0 12px;
 }
@@ -1867,6 +1921,80 @@ body[data-sheet-open] .toast-wrap {
     transform: translateY(10px);
     opacity: 0;
   }
+}
+
+/* ---------------- Trefferfläche ----------------
+ *
+ * docs/DESIGN_SYSTEM.md sagt: „Tap targets ≥ 44×44 px; icon-only buttons get a
+ * 44 px hit area via padding." Gemessen war das nirgends wahr: `icon-btn` ist
+ * 38×38, `chip` 43 hoch, die Segmente im Sprachschalter 42, der Schalter selbst
+ * 46×27. Ein 38-px-Knopf ist mit dem Daumen im Gehen ein Glücksspiel, und genau
+ * so wird die App benutzt.
+ *
+ * Die Fläche wird deshalb aufgeweitet, ohne die Optik zu vergrößern: ein
+ * unsichtbares ::after mit mindestens 44 px Kantenlänge, um das Element
+ * zentriert. `position: relative` am Element ist die einzige Voraussetzung.
+ *
+ * Warum nicht einfach `padding`? Weil die Doku das zwar so sagt, aber die
+ * Elemente in `flex`/`grid`-Zeilen mit `gap: 2–6px` sitzen: 3 px mehr Padding
+ * pro Seite schieben die Nachbarn weg und brechen die Leisten bei 320 dp.
+ * Das Pseudo-Element kostet kein Layout.
+ *
+ * Es wird nur dort eingesetzt, wo die Nachbarn weit genug weg sind. Ein
+ * aufgeweitetes Element liegt über dem Nachbarn, dessen Trefferfläche es
+ * schneidet – bei 6 px Abstand wäre ein großer Knopf mit einem falschen Ziel
+ * darin schlimmer als ein kleiner. Deshalb:
+ *
+ *   aufgeweitet:  .icon-btn (38), .chip (43), .switch (46×27), die Segmente
+ *                 im Sprach-/Darstellungs-Schalter (42 hoch, 2 px Abstand)
+ *   nicht:        .btn--xs und der Sortier-Select – dort stehen mehrere Knöpfe
+ *                 in einer 6-px-Reihe, das wäre Überlappung statt Hilfe
+ */
+.icon-btn,
+.chip,
+.switch,
+.segmented button {
+  position: relative;
+}
+
+.icon-btn::after,
+.chip::after,
+.switch::before,
+.segmented button::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  /**
+   * Genau 44 – nicht mehr. Die Knöpfe der Kopfzeile sitzen 6 px auseinander;
+   * eine breitere Fläche würde die des Nachbarn schneiden, und weil das später
+   * im DOM stehende Element gewinnt, verlöre der linke Knopf genau die Pixel,
+   * die er dazubekommen sollte. Bei 44 trifft die Kante die des Nachbarn exakt.
+   */
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  translate: -50% -50%;
+}
+
+/* Der Schalter braucht ::after für den Knopf – also nimmt die Fläche ::before,
+   und der Knopf muss darüber liegen, sonst deckt ihn die Fläche zu. */
+.switch::before {
+  border-radius: inherit;
+}
+
+.switch::after {
+  z-index: 1;
+}
+
+/**
+ * Der Sortier-Select trägt `btn--xs` (30 px), steht aber allein in seiner Zeile
+ * – nichts spricht gegen eine echte Trefferhöhe. Er wird deshalb nicht
+ * aufgeweitet, sondern höher; 36 px reichen für die Optik, 40 für den Daumen.
+ */
+select.btn--xs {
+  /** Steht allein in seiner Zeile – also darf er die volle Höhe haben. */
+  min-height: 44px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 /* ---------------- misc ---------------- */

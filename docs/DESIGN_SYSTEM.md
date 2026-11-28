@@ -88,7 +88,22 @@ counters and distances so they do not jitter.
 - Elevation is expressed with borders plus a soft shadow, not heavy drop shadows:
   `0 12px 32px rgba(0,0,0,.35)` on sheets, `0 1px 0 rgba(255,255,255,.05)` inset
   highlight on cards.
-- Tap targets ≥ 44×44 px; icon-only buttons get a 44 px hit area via padding.
+- Tap targets ≥ 44×44 px. Small-looking controls get their 44 px hit area from
+  a transparent `::after`, **not** from padding: the controls sit in flex rows
+  with 2–6 px gaps, and 3 px of extra padding per side would push the row apart
+  at 320 dp. The pattern is one rule for `.icon-btn`, `.chip`, `.switch` and
+  `.segmented button`; anything smaller than 44 px must be documented, and
+  `tools/check-tap-targets.mjs` fails the build if it is not.
+
+  The exception is a row of buttons 6 px apart where several would need the
+  area: an enlarged target that covers its neighbour is worse than a small one,
+  so `.btn--xs` in those rows keeps its size. Everywhere else the *box* grew —
+  `.btn--sm` 36 → 44, the search field 42 → 46, the sort select 30 → 44.
+
+  Measured, not assumed: the hit area is probed with `elementFromPoint` in half
+  pixels outwards from each edge, because a 38 px button is supposed to have an
+  invisible 44 px area. `getBoundingClientRect()` cannot see that, and neither
+  could any reviewer.
 
 ## 4b. Breakpoints
 

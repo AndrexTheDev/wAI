@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   formatDuration,
   parkingStatus,
@@ -54,6 +54,7 @@ export function HomeScreen({
   const { anchors, activeAnchors, plan, limits, fix, search, demo } = useApp();
   const toast = useToast();
   const [query, setQuery] = useState('');
+  const searchRef = useRef<HTMLInputElement>(null);
   const [category, setCategory] = useState<AnchorCategory | 'all'>('all');
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const [sort, setSort] = useState<Sort>('newest');
@@ -179,9 +180,12 @@ export function HomeScreen({
       )}
 
       <div className="toolbar">
-        <div className="search">
+        {/* Klick auf die Hülle (Icon, Rand) setzt den Fokus ins Feld – sonst ist
+            die getönte Fläche ein Ziel, das aussieht wie ein Feld und keins ist. */}
+        <div className="search" onClick={() => searchRef.current?.focus()}>
           <Search size={16} />
           <input
+            ref={searchRef}
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}

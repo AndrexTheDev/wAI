@@ -300,3 +300,52 @@ Ziel: Nichts Behauptetes bleibt unimplementiert, kein toter Schalter.
 - Ein neuer Nutzer schafft „Auto abstellen → wiederfinden“ in unter 30 Sekunden
   ohne Anleitung, im Dunkeln, ohne Netz.
 - `npm run verify` grün, APK auf echtem Gerät im Flugmodus geprüft.
+
+## 5e. Stand nach der Trefferflächen-Runde (PR #48)
+
+`docs/DESIGN_SYSTEM.md` §4 sagt: „Tap targets ≥ 44×44 px; icon-only buttons get
+a 44 px hit area via padding." Gemessen war das **nirgends** wahr – der Beweis
+stand die ganze Zeit im Stylesheet:
+
+| Bauteil | Box | Trefferfläche |
+|---|---|---|
+| `.icon-btn` (Sprache, Taschenlampe, Schließen) | 38×38 | 38×38 |
+| `.chip` (Kategorien, Etagen, Filter) | 81–163×43 | 43 hoch |
+| `.segmented button` (Sprache, Darstellung) | 62–342×42 | 42 hoch |
+| `.switch` (Näher-dran-Signal) | 46×27 | 46×27 |
+| `.btn--sm` (Kamera, Galerie, Aufnehmen, Pro) | 130–199×36 | 36 hoch |
+| Sortier-Select | 191×30 | 30 hoch |
+| Suchfeld | 330×36 | 36 hoch |
+
+Ein 38-px-Knopf ist mit dem Daumen im Gehen ein Glücksspiel – und genau so wird
+die App benutzt, in einer Tiefgarage, mit einer Tüte in der anderen Hand.
+
+**Warum `padding`, wie die Doku sagt, nicht funktioniert:** die Knöpfe sitzen in
+`flex`-Zeilen mit 2–6 px Abstand. Drei Pixel mehr Innenabstand pro Seite schieben
+die Nachbarn weg und brechen die Leisten bei 320 dp – genau der Fehler, der in
+der Layout-Runde (PR #43) behoben wurde. Stattdessen ein unsichtbares `::after`
+mit 44 px Kantenlänge, zentriert; das kostet kein Layout.
+
+**Wo die Aufweitung nicht geht, wächst die Box:** mehrere Knöpfe in einer 6-px-
+Reihe (`.btn--xs` in der Rückgängig-Zeile) bekommen keine Hitzone, weil eine
+übergroße Fläche die des Nachbarn schneidet und der falsche Knopf gewinnt.
+Dort ist eine kleine Fläche das kleinere Übel; überall sonst wurde die Höhe
+selbst angehoben.
+
+**Der Test:** `tools/check-tap-targets.mjs` startet die App, klappert die vier
+Reiter ab und tastet für jedes bedienbare Element die Trefferfläche mit
+`elementFromPoint` in **halben Pixeln** von der Kante nach außen ab. Drei
+Anläufe waren nötig, jeder mit einem eigenen Fehler:
+
+1. `getBoundingClientRect()` misst die Box, nicht die Fläche – genau die
+   Unterscheidung, um die es hier geht (ein 38-px-Knopf *soll* 44 haben).
+2. 1-px-Raster: bei 38 px auf halben Pixeln meldet die Messung „43" und erfindet
+   einen Fehler. Halbe Pixel, sonst misst man die Rundung.
+3. Die Hitzone vergrößerte `scrollWidth` eines 37-px-Chips auf 40 – der
+   Walkthrough meldete daraufhin drei vollständig lesbare Chips als
+   „abgeschnitten". Der Walkthrough misst seitdem die Textstrecke per `Range`
+   statt `scrollWidth`, und ein künstlich verengter Reiter erzeugt weiterhin 36
+   echte Befunde – der Fehlalarm ist weg, die Empfindlichkeit nicht.
+
+Bericht: `docs/TAP_TARGETS.md` (40 Elemente, alle ≥ 44×44), erzeugt im
+Workflow `.github/workflows/tap-targets.yml`.
