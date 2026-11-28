@@ -6,19 +6,17 @@ müssen für den tatsächlich zu veröffentlichenden Stand bestätigt werden.
 Diese Liste ergänzt [CI_CD.md](CI_CD.md), [BUILD_AND_RELEASE.md](BUILD_AND_RELEASE.md)
 und [LEGAL_REVIEW.md](LEGAL_REVIEW.md); sie ersetzt keine Rechtsberatung.
 
-## Zuerst: öffentliches Preview-Release
+## Zuerst: Downloadpfad nach Entfernung des Preview-Releases
 
-- **Ist-Zustand:** Das öffentliche GitHub-Release `v1.0.0` ist als „preview build“
-  beschriftet, aber **kein** GitHub-Prerelease und derzeit `latest`. Es enthält ein
-  APK und AAB, signiert mit einem Wegwerf-Schlüssel; es ist laut Release-Text nur
-  zum Testen gedacht. Die Landingpage verweist standardmäßig auf
-  [`/releases/latest`](https://github.com/AndrexTheDev/wAI/releases/latest).
-  Wenn Pages aktiviert wird, können Besucher so zum Preview-Download gelangen.
-- [ ] Vor öffentlicher Verbreitung entscheiden, wie das Preview entfernt oder
-  unmissverständlich vom echten Download getrennt wird. Ein neues finales Release
-  darf erst nach den folgenden Freigaben öffentlich als `latest` erscheinen.
-  Änderungen an bestehenden Releases oder Tags bewusst vornehmen; vorher
-  Download-Links und Auswirkungen auf Nutzer prüfen.
+- Das öffentliche Preview-Release `v1.0.0` wurde auf Wunsch des Eigentümers samt
+  Release-Assets gelöscht. Das Git-Tag `v1.0.0` bleibt bestehen. Zum Zeitpunkt der
+  Prüfung gibt es kein anderes GitHub-Release; alte Asset-Links sind nicht mehr
+  verfügbar und der Standardlink der Landingpage auf
+  [`/releases/latest`](https://github.com/AndrexTheDev/wAI/releases/latest) hat
+  derzeit kein finales Release als Ziel.
+- [ ] Vor Aktivierung von Pages einen passenden Downloadpfad festlegen. Ein neues
+  finales Release darf erst nach den folgenden Freigaben öffentlich erscheinen.
+  Änderungen am bestehenden Tag und Auswirkungen auf frühere Nutzer bewusst prüfen.
 - **Wichtig:** Preview und echtes Release haben unterschiedliche Signaturschlüssel.
   Android akzeptiert ein Update über die Preview-Installation daher normalerweise
   nicht. Ein nötiges Deinstallieren kann lokale Daten löschen: vorher Testdaten
@@ -139,7 +137,7 @@ und [LEGAL_REVIEW.md](LEGAL_REVIEW.md); sie ersetzt keine Rechtsberatung.
   ändert Dateien, committet, taggt **und pusht**; der `v*`-Tag veröffentlicht
   automatisch. `gh workflow run android.yml --ref main -f release=true` ist
   ebenfalls eine Veröffentlichung, **kein** reiner Testlauf. Vorher Version,
-  Ziel-Commit, Signatur, bestehendes Preview und die Freigaben überprüfen.
+  Ziel-Commit, Signatur, bestehendes Tag und die Freigaben überprüfen.
 - [ ] Nach Veröffentlichung den öffentlichen Download, SHA-256 und
   Zertifikatfingerabdruck unabhängig kontrollieren sowie die Pages-/Store-Links
   und Supportmöglichkeiten prüfen.

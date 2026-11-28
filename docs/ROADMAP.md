@@ -274,7 +274,7 @@ Betrieb der offengelegte Lizenz-Ausstellerschlüssel ersetzt werden.
 | 6.3 Anwaltliche Prüfung `docs/LEGAL_REVIEW.md` | offen (Nutzer) |
 | 6.4 Gerätetest im Flugmodus | offen |
 | 6.5 Kompromittierten Lizenz-Ausstellerschlüssel ersetzen und Ausgabe testen | offen (Nutzer) |
-| 6.6 Öffentliches Preview-Release und Downloadpfad vor Launch klären | offen (Nutzer) |
+| 6.6 Preview-Release gelöscht; finalen Downloadpfad vor Launch prüfen | teilweise erledigt; Downloadpfad offen |
 
 ---
 
