@@ -144,6 +144,36 @@ nach den Korrekturen.
 Der Lauf scheitert jetzt auch an Laufzeitfehlern, leeren Bildschirmen und rohen
 Übersetzungsschlüsseln – nicht nur an fehlendem Text.
 
+## 5c. Stand nach der Layout-Runde (PR #43, #44)
+
+Diesmal ging es um das, was man auf einem fremden Gerät sieht, aber auf dem
+eigenen nicht: **die Website ließ sich seitlich wegziehen.** `body { overflow-x:
+hidden }` schluckt die Scrollleiste, also fällt es niemandem auf – rechts blitzt
+beim Wischen nur ein leerer Streifen auf. Gemessen (`scrollWidth > clientWidth`)
+war sie auf 412 px um 3 px, auf 360 px um 8 px, auf 480 px um 50 px und auf
+einem 1024-px-Tablet um 127 px zu breit. Vier Ursachen, alle erst im Browser bei
+der richtigen Breite sichtbar:
+
+| Fund | Ursache | Beleg |
+|---|---|---|
+| Kopfzeile 421–1179 px | Marke mit Untertitel + sechs Navigationseinträge + Sprach- und Pro-Knopf brauchen 1175 px | `Header.css`: unter 600 px kein Untertitel, unter 420 px kein Pro-Knopf in der Zeile, 941–1179 px engere Abstände |
+| Download-Kasten 320–412 px | `grid-template-columns: 1fr` ist `minmax(auto, 1fr)` und wird so breit wie das breiteste Kind – der Release-Knopf mit `nowrap` misst 314 px | `Download.css`: `minmax(0, 1fr)`, Knöpfe dürfen unter 420 px umbrechen |
+| Rechts-Seiten ≤ 360 px | dasselbe Muster; „Datenschutzhinweis“ zog die Spalte auf 327 px | `LegalPage.css`: `minmax(0, 1fr)`, Überschrift auf 1,55 rem |
+| Kartenstapel ≤ 412 px | `.multiview__pane` ist 14 px nach rechts verschoben und gedreht; abgeschnitten hat ihn nur der `body` | `MultiView.css`: `overflow-x: clip` an der Sektion |
+
+Dazu **zwei Funde in der App**, die ein Screenshot nicht zeigt:
+
+| Fund | Was passierte | Beleg |
+|---|---|---|
+| „Rückgängig“ nach „Anker setzen“ tat nichts | der `onClick` war ein leerer Handler mit dem Kommentar „undo handled by editor delete“ – den es nicht gab. Wer sich vertippte, bekam den Anker nicht weg, und im Free-Tarif zählt jeder gegen das Limit von drei | `AppShell.tsx` löscht den gerade angelegten Anker, `walkthrough.mjs` zählt die Anker vor und nach dem Tippen (`journeyUndo`) |
+| Die Meldung lag hinter dem Editor-Fuß | der Toast sitzt auf Höhe der Tab-Leiste, der Sheet-Fuß direkt über dem Bildschirmrand – „Rückgängig“ war damit nicht antippbar | `Sheet.tsx` markiert `body[data-sheet-open]` und misst die Fußzeile; `app.css` hebt den Toast darüber |
+| Drei Knöpfe brachen mitten im Wort | „Park-/Timer“, „Anker/speichern“ auf 412 px | `app.css`: `white-space: nowrap` im Sheet-Fuß, unter 420 px bekommt die Hauptaktion eine eigene Zeile |
+
+Neu: `tools/check-responsive.mjs` + `.github/workflows/responsive.yml` messen
+jede Route bei 15 Breiten (320–1440 px) und nennen das Element, das übersteht –
+gegen `vite preview`, weil `python3 -m http.server` `/legal/privacy` mit 404
+beantwortet und genau dort einer der Fehler saß.
+
 ## 6. Die drei teuersten Funde
 
 1. **`floorLabel` ist nicht eingebbar** (#6). Das Höhen-Lotse — Kern-USP für Tiefgaragen — hat keine Datenquelle. Ein Nutzer merkt das erst, wenn er in Ebene 3 steht.

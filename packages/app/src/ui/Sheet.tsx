@@ -26,6 +26,41 @@ export function Sheet({
   const panelRef = useRef<HTMLDivElement>(null);
   const restoreFocus = useRef<HTMLElement | null>(null);
 
+  /**
+   * Markiert den Körper, solange ein Sheet offen ist.
+   *
+   * Der Toast sitzt fest über der Tab-Leiste – im offenen Editor liegt dort
+   * aber die Fußzeile des Sheets. Die Meldung „Anker gesetzt · Rückgängig"
+   * verdeckte damit genau die Knöpfe, die sie betrifft: „Rückgängig" war nicht
+   * antippbar. Mit dieser Markierung wandert der Toast über den Sheet-Fuß
+   * (Regel `body[data-sheet-open] .toast-wrap`). Zähler statt Flag, weil zwei Sheets
+   * gleichzeitig offen sein können (Editor + Bestätigung).
+   */
+  useEffect(() => {
+    if (!open) return;
+    const root = document.body;
+    const count = Number(root.dataset.sheetOpen ?? '0') + 1;
+    root.dataset.sheetOpen = String(count);
+    /**
+     * Die Fußzeile ist unterschiedlich hoch: 69 px, sobald alle Knöpfe in eine
+     * Zeile passen, 113 px wenn die Hauptaktion umbricht (schmale Telefone).
+     * Deshalb wird sie gemessen statt geraten.
+     */
+    const footer = panelRef.current?.querySelector<HTMLElement>('.sheet__foot');
+    const observer = footer ? new ResizeObserver(() => root.style.setProperty('--sheet-foot-h', `${Math.round(footer.getBoundingClientRect().height)}px`)) : null;
+    if (footer && observer) {
+      root.style.setProperty('--sheet-foot-h', `${Math.round(footer.getBoundingClientRect().height)}px`);
+      observer.observe(footer);
+    }
+    return () => {
+      observer?.disconnect();
+      root.style.removeProperty('--sheet-foot-h');
+      const left = Number(root.dataset.sheetOpen ?? '1') - 1;
+      if (left <= 0) delete root.dataset.sheetOpen;
+      else root.dataset.sheetOpen = String(left);
+    };
+  }, [open]);
+
   useEffect(() => {
     if (!open) return;
     restoreFocus.current = document.activeElement as HTMLElement | null;

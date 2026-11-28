@@ -8,7 +8,7 @@
 > wäre jeder Lauf ein Diff, auch wenn sich nichts geändert hat. Kurs,
 > Genauigkeit und Scrollhöhe sind geglättet, aus demselben Grund.
 
-**Ansichten:** 32 · **Befunde:** 0
+**Ansichten:** 34 · **Befunde:** 0
 
 Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 
@@ -69,6 +69,20 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
 - Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | Alle 1 | Favoriten | Sonstiges 1 | Unbenannter Anker Sonstiges | N m | 1 Anker | Finden | Archiv | Einstellungen | Rückgängig
 - Scroll: passt ohne Scrollen
+
+### Rückgängig: nach dem Setzen
+
+- Erste Zeile: „wAI"
+- Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
+- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | Alle 1 | Favoriten | Sonstiges 1 | Unbenannter Anker Sonstiges | N m | 1 Anker | Finden | Archiv | Einstellungen | Schließen | Auto | Zelt | Treffpunkt | Werkzeug | Eingang | Natur | Sonstiges | −3 | −2 | −1 | EG | 1 | 2 | 3 | Kamera | Galerie | Aufnehmen | Das schaltet Pro frei | Teilen | Park-Timer | Anker speichern | Rückgängig
+- Scroll: passt ohne Scrollen
+
+### Rückgängig: danach wieder leer
+
+- Erste Zeile: „wAI"
+- Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
+- Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Anker setzen TIPPEN SPEICHER | Alle 0 | Favoriten | So funktioniert wAI | Anker | Finden | Archiv | Einstellungen
+- Scroll: braucht Scrollen
 
 ### Finden: Kompass
 
@@ -351,6 +365,59 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - button: Archiv
 - button: Einstellungen
 - button: Rückgängig
+
+**Rückgängig: nach dem Setzen**
+
+- button: Sprache
+- button: Pro freischalten
+- button: So funktioniert’s
+- button: Anker setzen TIPPEN SPEICHERT DIESEN ORT
+- tab: Alle 1
+- tab: Favoriten
+- tab: Sonstiges 1
+- button: Unbenannter Anker Sonstiges
+- button: N m
+- button: 1 Anker
+- button: Finden
+- button: Archiv
+- button: Einstellungen
+- button: Schließen
+- button: Auto (aktiv: false)
+- button: Zelt (aktiv: false)
+- button: Treffpunkt (aktiv: false)
+- button: Werkzeug (aktiv: false)
+- button: Eingang (aktiv: false)
+- button: Natur (aktiv: false)
+- button: Sonstiges (aktiv: true)
+- button: −3 (aktiv: false)
+- button: −2 (aktiv: false)
+- button: −1 (aktiv: false)
+- button: EG (aktiv: false)
+- button: 1 (aktiv: false)
+- button: 2 (aktiv: false)
+- button: 3 (aktiv: false)
+- button: Kamera
+- button: Galerie
+- button: Aufnehmen
+- button: Das schaltet Pro frei
+- button: Teilen
+- button: Park-Timer
+- button: Anker speichern
+- button: Rückgängig
+
+**Rückgängig: danach wieder leer**
+
+- button: Sprache
+- button: Pro freischalten
+- button: So funktioniert’s
+- button: Anker setzen TIPPEN SPEICHERT DIESEN ORT
+- tab: Alle 0
+- tab: Favoriten
+- button: So funktioniert wAI
+- button: Anker
+- button: Finden
+- button: Archiv
+- button: Einstellungen
 
 **Finden: Kompass**
 
