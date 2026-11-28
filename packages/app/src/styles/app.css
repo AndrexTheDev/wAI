@@ -195,9 +195,16 @@ a {
  * Ein Chip, der nur den Fokus hat, sah durch den Mint-Ring wie der gewählte aus —
  * im Park-Timer standen so „30 min" (Fokus) und „2 h" (gewählt) gleichzeitig
  * markiert. Fokus wird deshalb zurückhaltend gezeichnet, Auswahl bleibt eindeutig.
+ *
+ * „Zurückhaltend" hieß aber bisher `--border-2` – und der ist ein *Hauch* über
+ * der Fläche: 1,40:1 im Nachtmodus, 1,64:1 auf einer Karte. Wer per Tastatur
+ * oder Schalter navigiert, sah dort gar nichts. Die Zusage (§2) nennt 3:1 für
+ * Fokusringe; `--text-3` ist die einzige Farbe, die in allen fünf Themes
+ * sowohl ruhig als auch deutlich ist (4,6–6,4:1), und sie ist es schon als
+ * Metatext – der Ring liest sich deshalb nicht als Auswahl.
  */
 .chip:focus-visible {
-  outline: 2px solid var(--border-2);
+  outline: 2px solid var(--text-3);
   outline-offset: 2px;
 }
 
@@ -657,6 +664,19 @@ a {
 }
 
 /**
+ * Das Suchfeld ist ein `<input>`, der randlos in seiner Hülle sitzt – und war
+ * damit der einzige Punkt im Tastaturweg ohne Fokusring: die Hülle färbt sich
+ * nur bei `:focus-within` (nicht bei Tastaturfokus allein), und der Ring des
+ * Feldes lag außerhalb des sichtbaren Kastens, also unter dem Rand der Hülle.
+ * Der Ring gehört deshalb auf die Hülle, und er gehört in den Innenraum
+ * (`outline-offset: -2px`), damit er nicht über den Rand hinausläuft.
+ */
+.search:focus-within {
+  outline: 2px solid var(--mint);
+  outline-offset: -2px;
+}
+
+/**
  * Der Löschknopf im Suchfeld war ein nackter `<button>` ohne Größe – rund 22 px.
  * Er bekommt dieselbe Aufweitung wie `icon-btn`, sitzt aber in einer 8-px-Reihe,
  * also ohne Überlappung: 44 px breit, volle Höhe der Hülle.
@@ -728,7 +748,18 @@ a {
   font-weight: 600;
   color: var(--text-2);
   white-space: nowrap;
-  transition: all 130ms;
+  /**
+   * `transition: all` animiert auch den Fokusring – beim Tabben wächst er über
+   * 130 ms von 0 auf 2 px, ist also im entscheidenden Moment unsichtbar. Eine
+   * Tastaturnavigation, die man erst nach der Animation sieht, ist keine.
+   * Dieselbe Falle steckte in `.category-btn`, `.segmented button` und
+   * `.anchor-card__timer`; überall stehen jetzt die drei Eigenschaften, die
+   * sich wirklich ändern sollen.
+   */
+  transition:
+    background-color 130ms,
+    border-color 130ms,
+    color 130ms;
 }
 
 .chip.is-active {
@@ -1343,6 +1374,19 @@ a {
   transition: border-color 140ms, box-shadow 140ms;
 }
 
+/**
+ * Textfelder hatten `outline: none` und zeigten Fokus nur als mintfarbenen
+ * Rahmen – 1 px, bei 4,8:1 gegen die Fläche, aber ohne Ring *um* das Feld.
+ * Ein Rand, der sich färbt, ist kein Fokusindikator: er ist an derselben Stelle
+ * wie der Ruhezustand und in einem Formular mit acht Feldern nicht zu finden.
+ */
+.field__input:focus-visible,
+.field__textarea:focus-visible,
+.field__select:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 2px;
+}
+
 .field__input:focus,
 .field__textarea:focus,
 .field__select:focus {
@@ -1378,7 +1422,10 @@ a {
   color: var(--text-3);
   font-size: 1.05rem;
   font-weight: 600;
-  transition: all 130ms;
+  transition:
+    background-color 130ms,
+    border-color 130ms,
+    color 130ms;
 }
 
 .category-btn.is-active {
@@ -2024,7 +2071,10 @@ select.btn--xs {
   font-size: 1.15rem;
   font-weight: 650;
   color: var(--text-3);
-  transition: all 130ms;
+  transition:
+    background-color 130ms,
+    border-color 130ms,
+    color 130ms;
 }
 
 .segmented button.is-active {
@@ -2215,7 +2265,6 @@ select.btn--xs {
 .consent-card__box:hover,
 .consent-card__box:focus-visible {
   border-color: var(--mint);
-  outline: none;
 }
 
 .consent-card__box:checked {
@@ -2510,7 +2559,10 @@ select.btn--xs {
   font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  transition: all 130ms;
+  transition:
+    background-color 130ms,
+    border-color 130ms,
+    color 130ms;
 }
 
 .anchor-card__timer:hover {

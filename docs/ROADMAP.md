@@ -349,3 +349,29 @@ Anläufe waren nötig, jeder mit einem eigenen Fehler:
 
 Bericht: `docs/TAP_TARGETS.md` (40 Elemente, alle ≥ 44×44), erzeugt im
 Workflow `.github/workflows/tap-targets.yml`.
+
+## 5f. Stand nach der Fokus-Runde (PR #49)
+
+Derselbe Absatz in `docs/DESIGN_SYSTEM.md` (§2) sagt auch: „focus rings ≥ 3:1
+against both the surface and the surrounding background". Nachgerechnet hatte
+das ebenfalls niemand — und es stimmte nicht. Vier Fehler, alle unsichtbar für
+jeden Test, der nur Tokens liest:
+
+| Fund | Warum es niemand merkte | Behebung |
+|---|---|---|
+| Chip-Fokusring war `--border-2` | 1,40:1 im Nachtmodus, 1,64:1 auf einer Karte – ein Hauch über der Fläche | `--text-3` (4,6–6,4:1), bleibt ruhig und liest sich nicht als Auswahl |
+| Textfelder hatten `outline: none` | Fokus war nur ein farbiger 1-px-Rahmen, an derselben Stelle wie der Ruhezustand | `:focus-visible` mit echtem 2-px-Ring |
+| Suchfeld hatte **gar keinen** Ring | Der Ring des `<input>` lag unter dem Rand der Hülle; die Hülle färbt sich nur bei `:focus-within` | Ring auf die Hülle, `outline-offset: -2px` |
+| Einwilligungs-Box hob den Ring mit `outline: none` auf | Ein Muster, das sich beim Kopieren fortsetzt | entfernt |
+| `transition: all` in `.chip`, `.category-btn`, `.segmented button`, `.anchor-card__timer` | animierte den Ring von 0 auf 2 px – im entscheidenden Moment unsichtbar | die drei Eigenschaften, die sich wirklich ändern |
+
+**Der Test:** `tools/check-focus-ring.mjs` geht den Tastaturweg mit `Tab` ab
+(nicht mit `.focus()` — nur dann gilt `:focus-visible`), liest die Ringfarbe aus
+dem gerenderten Element und rechnet sie gegen den Grund **daneben**. Erkennt
+auch einen Ring auf dem Elternelement, weil ein randloses Feld keinen eigenen
+Umriss haben kann. 24 Stationen, drei Themes, alle ≥ 3:1. Gegenprobe: mit dem
+alten `--border-2` meldet der Lauf 1,40:1 im Nachtmodus.
+
+Die Website war in Ordnung (`--c-mint`, 4,82–12,91:1) — dort steht der Ring seit
+jeher auf allem Fokussierbaren, weil es keine Auswahl-Chips gibt, die er
+verwechseln könnte.

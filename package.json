@@ -34,6 +34,7 @@
     "check:claims": "node tools/check-claims.mjs",
     "check:contrast": "node tools/check-contrast.mjs",
     "check:tap": "node tools/check-tap-targets.mjs",
+    "check:focus": "node tools/check-focus-ring.mjs",
     "screenshots": "node tools/capture-store-screenshots.mjs",
     "check:responsive": "node tools/check-responsive.mjs",
     "walkthrough": "node tools/walkthrough.mjs",
