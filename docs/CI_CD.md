@@ -1,7 +1,9 @@
 # wAI — CI/CD und Release-Prozess
 
-Alles Rund um Build, Signatur und Veröffentlichung läuft über GitHub Actions.
-Kein Build-Server, kein Docker, kein lokales SDK nötig – nur ein Push.
+Alles rund um Build, Signatur und Veröffentlichung läuft über GitHub Actions.
+Kein Build-Server, kein Docker, kein lokales SDK nötig. Ein Push allein ist aber
+keine Launch-Freigabe: siehe [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md), insbesondere
+zum öffentlichen Preview-Release und zum kompromittierten Lizenzschlüssel.
 
 ---
 
@@ -79,11 +81,16 @@ die Version an **einer** Stelle an (App, Root, `product.ts`, `versionCode` /
 und pusht beides. Das Tag startet den Android-Workflow, der das Release
 veröffentlicht.
 
-Ohne Tag, nur zum Testen:
+Nur zum Testen, **ohne Veröffentlichung**:
 
 ```bash
-gh workflow run android.yml --ref main -f release=true
+gh workflow run android.yml --ref main -f release=false
 ```
+
+Achtung: `release=true` veröffentlicht ein GitHub-Release. Auch ein `v*`-Tag
+löst die Veröffentlichung aus — bei fehlendem Release-Key ggf. als öffentliches
+Preview. Erst nach den Freigaben in [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md)
+veröffentlichen.
 
 ## 4. Artefakte und wo sie landen
 
@@ -152,12 +159,12 @@ enabled) and **Responsive layout** (`tools/check-responsive.mjs` measures every
 route at fifteen widths from 320 to 1440 px and fails on any horizontal overflow,
 naming the element that sticks out).
 
-Signing: run `bash tools/make-keystore.sh` once, store the four `WAI_*` secrets in
-the repository; without them the pipeline still builds but labels the artifact a
-"preview build". Release with `bash tools/release.sh patch|minor|major`, which
-verifies, bumps the version in every duplicated place, tags and pushes — the tag
-triggers the signed build and the GitHub release. Landing page links to
-`/releases/latest`; set `VITE_APK_URL` for a direct CDN download later.
+Signing: configure the four `WAI_*` secrets using a trusted machine. Ordinary
+builds without them remain preview artifacts; publication is blocked without
+release signing and a safe reviewed issuer key. The existing public preview is
+unchanged. `tools/release.sh` tags and pushes after checks; manual legal, device
+and certificate-identity approvals remain essential. The landing page links to
+`/releases/latest`; see the launch checklist before making it public.
 
 Failures are surfaced as check annotations (Gradle errors, javac `error:`/`symbol:`
 lines, asset-check messages), so the cause is visible without downloading logs. The

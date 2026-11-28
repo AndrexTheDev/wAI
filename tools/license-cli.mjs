@@ -4,8 +4,8 @@
  *
  *   node tools/license-cli.mjs keygen
  *       Creates tools/keys/issuer.private.json + issuer.public.json and prints
- *       the public key that must be embedded in packages/shared/src/license.ts
- *       (DEFAULT_ISSUER_PUBLIC_KEY) and packages/app/.env (VITE_WAI_ISSUER_KEY).
+ *       the public key for review and inclusion in license-key.ts. Never share
+ *       the private key; see docs/LAUNCH_CHECKLIST.md before using this for release.
  *
  *   node tools/license-cli.mjs issue --sub buyer@example.com --via crypto-sol --id WAI-XXXXX
  *       Prints a signed WAI1.… token plus a QR-ready data URL command.
@@ -25,6 +25,8 @@ import path from 'node:path';
 import process from 'node:process';
 import * as ed from '@noble/ed25519';
 import { sha512 } from '@noble/hashes/sha2.js';
+import { ISSUER_PUBLIC_KEY } from '../packages/shared/src/license-key.ts';
+import { validateIssuer, validateIssuerPair } from './release-safety.mjs';
 
 ed.hashes.sha512 = sha512;
 
@@ -112,10 +114,8 @@ async function keygen() {
   console.log('✔ Ed25519 issuer key pair created\n');
   console.log(`  private: ${PRIVATE_KEY_FILE}   (chmod 600, git-ignored)`);
   console.log(`  public : ${PUBLIC_KEY_FILE}\n`);
-  console.log('  Embed the public key in the apps:');
-  console.log(`    packages/shared/src/license.ts  -> DEFAULT_ISSUER_PUBLIC_KEY`);
-  console.log(`    packages/app/.env               -> VITE_WAI_ISSUER_KEY`);
-  console.log(`    packages/landing/.env           -> VITE_WAI_ISSUER_KEY\n`);
+  console.log('  Review and embed ONLY the public key in packages/shared/src/license-key.ts.');
+  console.log('  Release builds must not override it through VITE_WAI_ISSUER_KEY.\n');
   console.log(`  PUBLIC KEY: ${record.publicKeyHex}`);
   console.log('\n  Backup the private key offline now (e.g. encrypted USB + password manager).');
   console.log('  If you lose it you cannot issue new licences for existing installs.');
@@ -139,12 +139,25 @@ function parseFlags(argv) {
 }
 
 async function loadPrivateKey() {
+  // Refuse to issue against a known exposed key, even when the matching private
+  // key happens to exist locally. Do not print either the key or its contents.
+  validateIssuer(ISSUER_PUBLIC_KEY);
   if (!existsSync(PRIVATE_KEY_FILE)) {
-    console.error('✖ No issuer key found. Run: node tools/license-cli.mjs keygen');
-    process.exit(1);
+    throw new Error('No issuer private key found; see docs/LAUNCH_CHECKLIST.md.');
   }
-  const record = JSON.parse(await readFile(PRIVATE_KEY_FILE, 'utf8'));
-  return unhex(record.secretKeyHex);
+  let record;
+  try {
+    record = JSON.parse(await readFile(PRIVATE_KEY_FILE, 'utf8'));
+  } catch {
+    throw new Error('Could not read or parse the issuer private key file.');
+  }
+  if (typeof record.secretKeyHex !== 'string' || !/^[a-f0-9]{64}$/i.test(record.secretKeyHex)) {
+    throw new Error('Invalid issuer private key file.');
+  }
+  const secret = unhex(record.secretKeyHex);
+  const publicKey = hex(await ed.getPublicKeyAsync(secret));
+  validateIssuerPair(publicKey, ISSUER_PUBLIC_KEY);
+  return secret;
 }
 
 function makeId() {
@@ -302,4 +315,9 @@ if (!commands[command]) {
 `);
   process.exit(command ? 1 : 0);
 }
-await commands[command]();
+try {
+  await commands[command]();
+} catch (error) {
+  console.error(`✖ ${error.message}`);
+  process.exitCode = 1;
+}

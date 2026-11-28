@@ -262,12 +262,19 @@ Ziel: Nichts Behauptetes bleibt unimplementiert, kein toter Schalter.
 | 5.3 Store-Text um Auto-Kachel + Erinnerung ✅ | Store-Text und Landing-Use-Case nennen Auto-Kachel, 10-Minuten-Erinnerung und Parkschein-Foto |
 
 ### Phase 6 — Launch-Gate (P3, blockiert Veröffentlichung)
+
+Der aktuelle Ablauf und die Sicherheitsrisiken stehen in der
+[Launch-Checkliste](LAUNCH_CHECKLIST.md); insbesondere muss vor kommerziellem
+Betrieb der offengelegte Lizenz-Ausstellerschlüssel ersetzt werden.
+
 | Task | Status |
 |---|---|
 | 6.1 Release-Keystore + 4 `WAI_*`-Secrets | offen (Nutzer) |
 | 6.2 GitHub Pages aktivieren | offen (Nutzer) |
 | 6.3 Anwaltliche Prüfung `docs/LEGAL_REVIEW.md` | offen (Nutzer) |
 | 6.4 Gerätetest im Flugmodus | offen |
+| 6.5 Kompromittierten Lizenz-Ausstellerschlüssel ersetzen und Ausgabe testen | offen (Nutzer) |
+| 6.6 Öffentliches Preview-Release und Downloadpfad vor Launch klären | offen (Nutzer) |
 
 ---
 
@@ -365,13 +372,16 @@ jeden Test, der nur Tokens liest:
 | Einwilligungs-Box hob den Ring mit `outline: none` auf | Ein Muster, das sich beim Kopieren fortsetzt | entfernt |
 | `transition: all` in `.chip`, `.category-btn`, `.segmented button`, `.anchor-card__timer` | animierte den Ring von 0 auf 2 px – im entscheidenden Moment unsichtbar | die drei Eigenschaften, die sich wirklich ändern |
 
-**Der Test:** `tools/check-focus-ring.mjs` geht den Tastaturweg mit `Tab` ab
-(nicht mit `.focus()` — nur dann gilt `:focus-visible`), liest die Ringfarbe aus
-dem gerenderten Element und rechnet sie gegen den Grund **daneben**. Erkennt
-auch einen Ring auf dem Elternelement, weil ein randloses Feld keinen eigenen
-Umriss haben kann. 24 Stationen, drei Themes, alle ≥ 3:1. Gegenprobe: mit dem
-alten `--border-2` meldet der Lauf 1,40:1 im Nachtmodus.
+**Korrektur zur ursprünglichen Prüfung:** Die 24 gemeldeten Stationen waren
+kein Editor-Nachweis: ohne Testanker wurde dessen Öffnen still übersprungen.
+Der Test legt nun einen Testanker an, verlangt den Editor und das Pro-Sheet und
+bricht ab, wenn Pflichtfelder nicht per Tab erreicht werden. Dabei zeigte sich,
+dass `Sheet` bei neuem `onClose`-Callback den Fokus jedes Mal zurücksetzte;
+der Fokus bleibt nun auch bei einem Rerender im Feld. Die Gegenprobe entfernt
+den Ring der Editor-Textarea und muss mit genau diesem Befund fehlschlagen.
 
-Die Website war in Ordnung (`--c-mint`, 4,82–12,91:1) — dort steht der Ring seit
-jeher auf allem Fokussierbaren, weil es keine Auswahl-Chips gibt, die er
-verwechseln könnte.
+Der aktuelle Bericht `docs/FOCUS_RINGS.md` nennt Zahl und Ansichten pro Theme.
+Er prüft berechnete Outline-Stile und modellierte Hintergrundfarben, nicht die
+real gemalten Pixel, Verläufe oder Abschneidung. Auch die frühere Website-Probe
+war eine Stichprobe und keine vollständige Prüfung. Sichtprüfung und Gerätetest
+bleiben für den Launch offen.

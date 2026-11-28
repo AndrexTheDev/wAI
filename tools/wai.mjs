@@ -104,7 +104,7 @@ const commands = {
   'ci:android'() {
     step('ci: trigger the Android APK/AAB workflow');
     const branch = currentBranch();
-    const { status, stderr } = gh(['workflow', 'run', 'android.yml', '--ref', branch, '-f', 'release=true']);
+    const { status, stderr } = gh(['workflow', 'run', 'android.yml', '--ref', branch, '-f', 'release=false']);
     if (status !== 0) {
       console.log(c.red(`  ✖ could not start the workflow: ${stderr.trim()}`));
       process.exit(1);
@@ -209,28 +209,17 @@ const commands = {
       console.log(`  last APK build ${lastOk ? c.green('success') : c.red('none yet')}`);
     }
 
-    // Delivery progress: the four blocking items below are what stands between a
-    // green pipeline and a public launch.
-    const blockers = [
-      ['toolchain + CI + APK pipeline', true],
-      ['website, legal texts, store package', true],
-      ['store images + listing validation', true],
-      ['release keystore + repo secrets', existsSync(path.join(process.env.HOME ?? '', '.wai/wai-release.jks'))],
-      ['GitHub Pages enabled', false],
-      ['lawyer review of the legal texts', false],
-      ['device test in airplane mode', false],
-    ];
-    const doneCount = blockers.filter(([, done]) => done).length;
-    console.log(`  delivery       ${doneCount}/${blockers.length} to launch (~${Math.round((doneCount / blockers.length) * 100)}%)`);
-
-    step('open items for launch');
-    const open = [];
-    const keystore = path.join(process.env.HOME ?? '', '.wai/wai-release.jks');
-    if (!existsSync(keystore)) open.push('release keystore + 4 WAI_* repo secrets  →  node tools/wai.mjs make-keystore');
-    open.push('enable GitHub Pages (Settings → Pages → GitHub Actions) for the live site');
-    open.push('lawyer review per docs/LEGAL_REVIEW.md');
-    open.push('test the APK on a real device in airplane mode');
-    for (const item of open) console.log(`  ${c.yellow('•')} ${item}`);
+    // A local keystore or green CI cannot prove remote secrets, legal review,
+    // certificate identity, issuer rotation or physical-device approval.
+    step('launch gates — verify manually');
+    for (const item of [
+      'rotate the compromised licence issuer key and test offline issuance',
+      'release keystore, repository secrets and independently verified signing certificate',
+      'resolve the public preview release before enabling Pages',
+      'legal review and provider details per docs/LEGAL_REVIEW.md',
+      'test the final APK on a real device in airplane mode',
+      'see docs/LAUNCH_CHECKLIST.md for the full sequence',
+    ]) console.log(`  ${c.yellow('•')} ${item}`);
   },
 
   help() {

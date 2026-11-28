@@ -1,281 +1,198 @@
 #!/usr/bin/env node
 /**
- * Ist der Fokusring sichtbar, wenn man ihn braucht?
+ * Keyboard focus regression check, not a full WCAG audit.
+ * Builds a deterministic local fixture and walks Home, Editor and Pro with Tab.
+ * Requires visible 2px outlines and checks their computed colour against a
+ * composited ancestor background. Does not measure painted pixels, clipping,
+ * gradients or occlusion; inspect those manually on actual devices as well.
  *
- *   node tools/check-focus-ring.mjs                       # Port 5174
- *   node tools/check-focus-ring.mjs --url http://…:5174 --out docs/FOCUS_RINGS.md
- *
- * Warum das existiert
- * -------------------
- * `docs/DESIGN_SYSTEM.md` §2 sagt: „focus rings ≥ 3:1 against both the surface
- * and the surrounding background." Geprüft hat das nie jemand, und es stimmte
- * nicht:
- *
- *   - der Fokusring der Chips war `--border-2`, ein Hauch über der Fläche:
- *     1,40:1 im Nachtmodus, 1,64:1 auf einer Karte;
- *   - Textfelder hatten `outline: none` und zeigten Fokus nur als farbigen
- *     1-px-Rahmen – an derselben Stelle wie im Ruhezustand;
- *   - die Einwilligungs-Box hob den Ring ausdrücklich auf;
- *   - in `.chip`, `.category-btn`, `.segmented button` und `.anchor-card__timer`
- *     stand `transition: all`, das auch den Ring animiert: er wuchs über 130 ms
- *     von 0 auf 2 px und war im entscheidenden Moment unsichtbar.
- *
- * Was gemessen wird
- * -----------------
- * Jedes fokussierbare Element wird per `Tab` erreicht (nicht per `.focus()`,
- * denn nur so gilt `:focus-visible`) und dann gefragt: Welche Farbe hat der
- * Ring, und wie weit ist sie von der Fläche *daneben* entfernt? Der
- * Hintergrund wird nicht aus dem Theme angenommen, sondern aus dem gerenderten
- * Elternelement gelesen – sonst prüft man die Palette statt den Bildschirm.
- *
- * Ein Element ohne Ring, aber mit `box-shadow` (die Felder) zählt ebenfalls –
- * gemessen wird, was man sieht.
+ * node tools/check-focus-ring.mjs [--url http://127.0.0.1:5174]
+ *   [--theme dark|light|night] [--out docs/FOCUS_RINGS.md]
+ *   [--css path/to/test-override.css]
  */
 import { chromium } from 'playwright';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const args = process.argv.slice(2);
-const arg = (name, fallback) => {
-  const i = args.indexOf(`--${name}`);
-  return i >= 0 && args[i + 1] ? args[i + 1] : fallback;
-};
-
+function arg(name, fallback) {
+  const index = args.indexOf(`--${name}`);
+  if (index === -1) return fallback;
+  if (!args[index + 1] || args[index + 1].startsWith('--')) throw new Error(`--${name} requires a value`);
+  return args[index + 1];
+}
 const url = arg('url', 'http://127.0.0.1:5174');
-const theme = arg('theme', 'dark');
+const requestedTheme = arg('theme', null);
+const themes = requestedTheme ? [requestedTheme] : ['dark', 'light', 'night'];
+if (themes.some((t) => !['dark', 'light', 'night'].includes(t))) throw new Error('Unknown theme');
 const outFile = arg('out', null);
+const css = arg('css', null);
+const override = css ? readFileSync(css, 'utf8') : null;
 const executablePath = arg('chromium', process.env.WAI_CHROMIUM || undefined);
 const MIN = 3;
 
-/* ---------------- Farbrechnung ---------------- */
-
-const parseColor = (value) => {
-  const m = value.match(/^rgba?\(([^)]+)\)$/i);
-  if (!m) return null;
-  const parts = m[1].split(/[,\s/]+/).filter(Boolean).map(Number);
-  return { rgb: parts.slice(0, 3), alpha: parts.length > 3 ? parts[3] : 1 };
-};
-
-const over = (top, bottom) => top.rgb.map((c, i) => c * top.alpha + bottom[i] * (1 - top.alpha));
-
-const luminance = (rgb) => {
-  const [r, g, b] = rgb.map((v) => {
+// This function runs inside the browser. Colour calculations are a model of
+// ancestor background-color layers, not a measurement of actual painted pixels.
+function measure() {
+  const el = document.activeElement;
+  if (!el || el === document.body || el === document.documentElement) return null;
+  window.__focusIds ??= new WeakMap();
+  window.__focusNextId ??= 0;
+  if (!window.__focusIds.has(el)) window.__focusIds.set(el, ++window.__focusNextId);
+  const focused = getComputedStyle(el);
+  // Search is the only component whose focus-within ring intentionally belongs
+  // to the parent. Do not let an unrelated ancestor ring hide a missing ring.
+  const parent = el.matches('.search input') ? el.closest('.search') : null;
+  const ringNode = parent && parseFloat(focused.outlineWidth) < 1 ? parent : el;
+  const cs = getComputedStyle(ringNode);
+  const parse = (value) => {
+    const match = value.match(/^rgba?\(([^)]+)\)$/i);
+    if (!match) return null;
+    const v = match[1].split(/[,\s/]+/).filter(Boolean).map(Number);
+    return v.length >= 3 && v.every(Number.isFinite) ? { rgb: v.slice(0, 3), alpha: v[3] ?? 1 } : null;
+  };
+  const over = (top, bottom) => top.rgb.map((c, i) => c * top.alpha + bottom[i] * (1 - top.alpha));
+  const lum = (rgb) => rgb.map((v) => {
     const s = v / 255;
-    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-  });
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-};
-
-const contrast = (a, b) => {
-  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
-  return (hi + 0.05) / (lo + 0.05);
-};
-
-/**
- * Der Grund hinter einem Element: der erste Vorfahr mit deckender Fläche.
- * `transparent` wird übersprungen, halbtransparente Flächen werden auf den
- * nächsten deckenden Grund gelegt – sonst wäre „3:1 gegen den Grund" eine
- * Aussage über eine Farbe, die auf dem Bildschirm nirgends vorkommt.
- */
-const backdropOf = (element) => {
-  let node = element.parentElement;
-  let stack = [];
-  while (node) {
-    const value = parseColor(getComputedStyle(node).backgroundColor);
-    if (value && value.alpha > 0) {
-      stack.push(value);
-      if (value.alpha >= 1) break;
+    return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  }).reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
+  const ratio = (a, b) => {
+    const [high, low] = [lum(a), lum(b)].sort((x, y) => y - x);
+    return (high + 0.05) / (low + 0.05);
+  };
+  const background = (node) => {
+    const stack = [];
+    for (let n = node; n; n = n.parentElement) {
+      const color = parse(getComputedStyle(n).backgroundColor);
+      if (color && color.alpha > 0) stack.push(color);
+      if (color && color.alpha >= 1) break;
     }
-    node = node.parentElement;
-  }
-  let base = [255, 255, 255];
-  for (let i = stack.length - 1; i >= 0; i -= 1) base = over(stack[i], base);
-  return base;
-};
+    return stack.reverse().reduce((base, layer) => over(layer, base), [255, 255, 255]);
+  };
+  const width = parseFloat(cs.outlineWidth) || 0;
+  const style = cs.outlineStyle;
+  const color = parse(cs.outlineColor);
+  const offset = parseFloat(cs.outlineOffset) || 0;
+  const bg = background(offset < 0 ? ringNode : ringNode.parentElement);
+  const contrast = width > 0 && style !== 'none' && style !== 'hidden' && color && color.alpha > 0
+    ? ratio(over(color, bg), bg) : 0;
+  const eligible = el.matches(':focus-visible') || (parent === ringNode && parent.matches(':focus-within'));
+  const reason = !eligible ? 'kein Tastaturfokus' : width < 2 ? 'Ring schmaler als 2px' :
+    !['solid', 'dashed', 'dotted', 'double'].includes(style) ? 'kein sichtbarer outline-Stil' :
+    contrast < 3 ? 'Kontrast unter 3:1' : '';
+  return {
+    id: window.__focusIds.get(el), tag: el.tagName.toLowerCase(),
+    cls: typeof el.className === 'string' ? el.className.trim() : '',
+    label: (el.getAttribute('aria-label') || el.getAttribute('placeholder') || el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 60),
+    width, style, contrast, reason,
+    inSheet: !!el.closest('.sheet'),
+    isSearch: el.matches('.search input'),
+    isCategory: el.matches('.category-btn'),
+    isField: el.matches('.field__input'),
+    isTextarea: el.matches('.field__textarea'),
+    isConsent: el.matches('.consent-card__box'),
+    isChip: el.matches('.chip:not(.is-active)'),
+  };
+}
 
-/* ---------------- Ablauf ---------------- */
+const browser = await chromium.launch({ args: ['--no-sandbox', '--disable-dev-shm-usage'], ...(executablePath ? { executablePath } : {}) });
+const report = [];
+const setupErrors = [];
+try {
+  for (const theme of themes) {
+    const context = await browser.newContext({ viewport: { width: 412, height: 900 }, locale: 'de-DE', isMobile: false, hasTouch: false });
+    try {
+      const page = await context.newPage();
+      await page.goto(url, { waitUntil: 'networkidle', timeout: 60_000 });
+      await page.evaluate((t) => {
+        localStorage.clear();
+        localStorage.setItem('wai.v1.settings', JSON.stringify({ locale: 'de', theme: t, proximity: false, units: 'metric', onboardingDone: true }));
+        const now = Date.now();
+        localStorage.setItem('wai.v1.anchors', JSON.stringify([{
+          id: 'focus-fixture', name: 'Fokus-Testauto', category: 'car', lat: 48.1362, lng: 11.5832,
+          altitude: 411, floorLabel: '', createdAt: now, updatedAt: now,
+          photos: [], voices: [], trail: [], favorite: false, archived: false,
+        }]));
+      }, theme);
+      await page.reload({ waitUntil: 'networkidle' });
+      if (override) await page.addStyleTag({ content: override });
+      await page.locator('.anchor-card__tap').waitFor({ state: 'visible', timeout: 10_000 });
+      if (await page.locator('html').getAttribute('data-theme') !== theme) throw new Error(`theme ${theme} not applied`);
 
-const browser = await chromium.launch({
-  args: ['--no-sandbox', '--disable-dev-shm-usage'],
-  ...(executablePath ? { executablePath } : {}),
-});
-const context = await browser.newContext({
-  viewport: { width: 412, height: 900 },
-  locale: 'de-DE',
-  isMobile: false, // Tastatur ist der Punkt dieser Prüfung
-  hasTouch: false,
-});
-const page = await context.newPage();
-await page.goto(url, { waitUntil: 'networkidle', timeout: 60_000 });
-await page.evaluate((t) => {
-  window.localStorage.setItem(
-    'wai.v1.settings',
-    JSON.stringify({ locale: 'de', theme: t, proximity: false, units: 'metric', onboardingDone: true }),
-  );
-}, theme);
-await page.reload({ waitUntil: 'networkidle' });
-await page.waitForTimeout(900);
-
-const results = [];
-
-const measureFocused = () =>
-  page.evaluate(
-    ({ min }) => {
-      const el = document.activeElement;
-      if (!el || el === document.body) return null;
-      const cs = getComputedStyle(el);
-      const parse = (v) => {
-        const m = String(v).match(/^rgba?\(([^)]+)\)$/i);
-        if (!m) return null;
-        const p = m[1].split(/[,\s/]+/).filter(Boolean).map(Number);
-        return { rgb: p.slice(0, 3), alpha: p.length > 3 ? p[3] : 1 };
-      };
-      const over = (top, bottom) => top.rgb.map((c, i) => c * top.alpha + bottom[i] * (1 - top.alpha));
-      const lum = (rgb) => {
-        const [r, g, b] = rgb.map((v) => {
-          const s = v / 255;
-          return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-        });
-        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-      };
-      const ratio = (a, b) => {
-        const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
-        return (hi + 0.05) / (lo + 0.05);
-      };
-      const backdrop = (node) => {
-        const stack = [];
-        let cur = node.parentElement;
-        while (cur) {
-          const c = parse(getComputedStyle(cur).backgroundColor);
-          if (c && c.alpha > 0) {
-            stack.push(c);
-            if (c.alpha >= 1) break;
+      async function walk(view, scope, required) {
+        const rows = [];
+        const seen = new Set();
+        let cycled = false;
+        // Browser chrome may briefly take focus when Tab wraps; keep going.
+        for (let i = 0; i < 120; i++) {
+          await page.keyboard.press('Tab');
+          // Measure after keyboard focus has settled, including component transitions.
+          await page.waitForTimeout(160);
+          const row = await page.evaluate(measure);
+          if (!row) continue;
+          if (scope === 'sheet' && !row.inSheet) throw new Error(`${view}: focus escaped the dialog`);
+          if (seen.has(row.id)) { cycled = true; break; }
+          seen.add(row.id);
+          rows.push(row);
+          // Typing changes the editor state and rerenders the sheet. Focus must
+          // remain on the field, not jump back to the start of the dialog.
+          if (view === 'Editor' && row.isField && !rows.slice(0, -1).some((r) => r.isField)) {
+            await page.keyboard.type('x');
+            await page.waitForTimeout(160);
+            const afterTyping = await page.evaluate(measure);
+            if (!afterTyping || afterTyping.id !== row.id) throw new Error(`${view}: focus moved after editing a field`);
           }
-          cur = cur.parentElement;
         }
-        let base = [255, 255, 255];
-        for (let i = stack.length - 1; i >= 0; i -= 1) base = over(stack[i], base);
-        return base;
-      };
+        if (!cycled) throw new Error(`${view}: keyboard cycle not completed after 120 tabs`);
+        if (process.env.WAI_FOCUS_DEBUG) console.log(view, rows.map(r => r.cls || r.tag));
+        for (const key of required) if (!rows.some((r) => r[key])) throw new Error(`${view}: required focus target ${key} was not reached`);
+        report.push({ theme, view, rows });
+      }
 
-      /**
-       * Ein randloses Feld in einem getönten Kasten hat seinen Ring auf dem
-       * Kasten, nicht auf sich selbst – ein `<input>` mit `border: none` hat
-       * keinen Platz für einen sichtbaren Umriss. Deshalb zählt der nächste
-       * Vorfahr mit einem gesetzten `outline` ebenfalls, und zwar mit dessen
-       * Farbe und dessen Grund.
-       */
-      const ringNode = (() => {
-        if ((parseFloat(cs.outlineWidth) || 0) > 0) return { node: el, cs };
-        let cur = el.parentElement;
-        while (cur && cur !== document.body) {
-          const s2 = getComputedStyle(cur);
-          if ((parseFloat(s2.outlineWidth) || 0) > 0) return { node: cur, cs: s2 };
-          cur = cur.parentElement;
-        }
-        return null;
-      })();
-
-      const bg = backdrop(el);
-      const ringCs = ringNode ? ringNode.cs : cs;
-      const width = ringNode ? parseFloat(ringCs.outlineWidth) || 0 : 0;
-      const offset = ringNode ? parseFloat(ringCs.outlineOffset) || 0 : 0;
-      const outlineColor = width > 0 ? parse(ringCs.outlineColor) : null;
-      /**
-       * Ein Ring mit `outline-offset: 2` liegt außerhalb des Elements – dort ist
-       * der Grund ein anderer als unter dem Element selbst. Bei negativem
-       * Offset liegt er *auf* dem Element, dann ist dessen eigener Grund richtig.
-       */
-      const ringGround = offset > 0 ? backdrop(ringNode?.node ?? el) : bg;
-
-      const shadow = cs.boxShadow && cs.boxShadow !== 'none' ? cs.boxShadow : null;
-      const shadowColor = shadow ? parse(shadow.match(/rgba?\([^)]+\)/)?.[0] ?? '') : null;
-
-      const ring = outlineColor ? over(outlineColor, ringGround) : null;
-      const shadowRing = shadowColor && shadowColor.alpha > 0 ? over(shadowColor, bg) : null;
-
-      return {
-        tag: el.tagName.toLowerCase(),
-        cls: (typeof el.className === 'string' ? el.className : '').trim().slice(0, 44),
-        label: (el.getAttribute('aria-label') || el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 30),
-        outline: `${ringCs.outlineStyle} ${ringCs.outlineWidth} ${ringCs.outlineColor}`,
-        ringWidth: width,
-        ratio: ring ? ratio(ring, ringGround) : shadowRing ? ratio(shadowRing, bg) : 0,
-        kind: ring ? 'outline' : shadowRing ? 'box-shadow' : 'keiner',
-        min,
-      };
-    },
-    { min: MIN },
-  );
-
-/** Elf Mal Tab – das deckt Kopfzeile, Leiste und den ersten Bildschirm ab. */
-for (let i = 0; i < 11; i += 1) {
-  await page.keyboard.press('Tab');
-  await page.waitForTimeout(250);
-  const row = await measureFocused();
-  if (row) results.push(row);
-}
-
-/** Und dasselbe im Editor, wo die Textfelder und Kategorie-Knöpfe sitzen. */
-await page.evaluate(() => {
-  const card = document.querySelector('.anchor-card__tap');
-  if (card) card.click();
-});
-await page.waitForTimeout(700);
-await page.evaluate(() => document.activeElement?.blur?.());
-for (let i = 0; i < 14; i += 1) {
-  await page.keyboard.press('Tab');
-  await page.waitForTimeout(250);
-  const row = await measureFocused();
-  if (row) results.push({ ...row, view: 'Editor' });
-}
-
-await browser.close();
-
-/* ---------------- Auswertung ---------------- */
-
-const failures = results.filter((row) => row.ratio + 0.02 < MIN);
-
-const lines = [];
-lines.push('# Fokusringe');
-lines.push('');
-lines.push(
-  `Gemessen mit \`tools/check-focus-ring.mjs\` bei 412 dp, Theme \`${theme}\`: jedes Element ` +
-    'wird mit `Tab` erreicht (nicht mit `.focus()`, sonst gilt `:focus-visible` nicht) und der ' +
-    'Ring gegen den Grund **daneben** gerechnet.',
-);
-lines.push('');
-lines.push(`Zusage (\`docs/DESIGN_SYSTEM.md\` §2): **≥ ${MIN}:1** gegen Fläche und Umgebung.`);
-lines.push('');
-lines.push(`Geprüft: **${results.length} Stationen** im Tastaturweg (Start + Editor).`);
-lines.push('');
-if (!failures.length) {
-  lines.push(`Alle ${results.length} Ringe liegen über ${MIN}:1.`);
-} else {
-  lines.push(`${failures.length} Stationen liegen darunter:`);
-  lines.push('');
-  lines.push('| Element | Ring | Verhältnis |');
-  lines.push('|---|---|---|');
-  for (const row of failures) {
-    lines.push(`| \`${row.cls || row.tag}\` — ${row.label || '—'} | ${row.kind} | **${row.ratio.toFixed(2)}:1** |`);
+      await walk('Start', 'page', ['isSearch', 'isChip']);
+      await page.locator('.anchor-card__tap').first().click();
+      await page.locator('.sheet .field__textarea').waitFor({ state: 'visible', timeout: 10_000 });
+      await walk('Editor', 'sheet', ['isField', 'isTextarea', 'isCategory', 'isChip']);
+      await page.keyboard.press('Escape');
+      await page.locator('.sheet').waitFor({ state: 'hidden', timeout: 10_000 });
+      // Escape must use the latest close callback, including the changed draft.
+      const savedLabel = await page.locator('.anchor-card__tap').first().getAttribute('aria-label');
+      if (!savedLabel?.includes('x')) throw new Error('Editor: Escape did not save the edited draft');
+      await page.locator('.topbar__actions button').nth(1).click();
+      await page.locator('.sheet .consent-card__box').waitFor({ state: 'visible', timeout: 10_000 });
+      await walk('Pro', 'sheet', ['isConsent']);
+    } catch (error) {
+      setupErrors.push(`${theme}: ${error.message}`);
+    } finally {
+      await context.close();
+    }
   }
+} finally {
+  await browser.close();
 }
+
+const findings = report.flatMap(({ theme, view, rows }) => rows.filter((r) => r.reason).map((r) => ({ theme, view, ...r })));
+const lines = [
+  '# Fokusringe', '',
+  'Automatisierte Stichprobe bei 412 × 900 CSS-px: Startseite mit Testanker, Editor und Pro-Sheet.',
+  `Themes: ${themes.join(', ')}. Ziel: CSS-Outline von mindestens 2 px und berechneter Kontrast ≥ ${MIN}:1.`, '',
+  'Die Stationen werden per Tab erreicht; der Test fordert ausdrücklich Suchfeld, Chip,',
+  'Editor-Feld, Textfeld, Kategorie und Einwilligungs-Checkbox. Wenn eine Ansicht oder',
+  'ein Pflichtziel fehlt, schlägt der Lauf fehl.', '',
+  'Grenzen: Die Berechnung verwendet CSS-Outline und übereinandergelegte Hintergrundfarben',
+  'der Vorfahren; sie misst keine Pixel, Verläufe, Überlagerung oder abgeschnittene Ringe.',
+  'Sie ist kein vollständiger WCAG-Nachweis. Visuelle und Geräteprüfung bleiben nötig.', '',
+  '| Theme | Ansicht | Tab-Stationen | Befunde |', '|---|---|---:|---:|',
+];
+for (const { theme, view, rows } of report) lines.push(`| ${theme} | ${view} | ${rows.length} | ${rows.filter((r) => r.reason).length} |`);
+if (findings.length) {
+  lines.push('', '## Befunde', '', '| Theme | Ansicht | Element | Grund | Verhältnis |', '|---|---|---|---|---:|');
+  for (const r of findings) lines.push(`| ${r.theme} | ${r.view} | \`${(r.cls || r.tag).replaceAll('|', '\\|')}\` | ${r.reason} | ${r.contrast.toFixed(2)}:1 |`);
+}
+if (setupErrors.length) lines.push('', '## Fehlende Abdeckung', '', ...setupErrors.map((e) => `- ${e}`));
 const markdown = `${lines.join('\n')}\n`;
-
-if (outFile) {
-  mkdirSync(path.dirname(path.resolve(outFile)), { recursive: true });
-  writeFileSync(outFile, markdown);
-  console.log(`→ ${outFile}`);
-}
-
-console.log('');
+if (outFile) { mkdirSync(path.dirname(path.resolve(outFile)), { recursive: true }); writeFileSync(outFile, markdown); }
 console.log(markdown);
-for (const row of results) {
-  console.log(`  ${row.ratio + 0.02 >= MIN ? '✔' : '✖'} ${row.ratio.toFixed(2)}:1  ${row.kind.padEnd(10)} ${row.cls || row.tag}`);
-}
-
-if (failures.length) {
-  console.error(`\n✖ ${failures.length} Fokusring(e) unter ${MIN}:1.`);
-  process.exit(1);
-}
-console.log(`\n✔ Alle Fokusringe ≥ ${MIN}:1.`);
+for (const r of findings) console.error(`✖ ${r.theme}/${r.view}: ${r.cls || r.tag} — ${r.reason} (${r.contrast.toFixed(2)}:1)`);
+if (setupErrors.length || findings.length) process.exitCode = 1;
+else console.log('✔ Alle gemessenen Stationen bestehen; Grenzen siehe Bericht.');
