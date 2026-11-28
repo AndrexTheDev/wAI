@@ -8,7 +8,7 @@
 > wäre jeder Lauf ein Diff, auch wenn sich nichts geändert hat. Kurs,
 > Genauigkeit und Scrollhöhe sind geglättet, aus demselben Grund.
 
-**Ansichten:** 34 · **Befunde:** 0
+**Ansichten:** 36 · **Befunde:** 0
 
 Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 
@@ -236,6 +236,20 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - Erste Zeile: „wAI"
 - Sichtbar: wAI · UMGEBUNGS-GEDÄCHTNISANKER · GPS aktiv · Genauigkeit ±N m
 - Bedienelemente: Sprache | Pro freischalten | So funktioniert’s | Taschenlampe | Automatisch (Gerätesprache) | Deutsch | English | System | Hell | Dunkel | Nacht | Näher-dran-Signal | m | ft | Sensoren testen | Lizenz aktivieren | Daten exportieren | Daten importieren | Alle Daten löschen | SOL | BTC | ETH | Haftungsausschluss | AGB | Widerrufsbelehrung | Datenschutz | Impressum | Krypto-Kaufanleitung | Impressum auf der Website | hippie.highho@gmail.com | Einführung erneut zeigen | 2 Anker | Finden | Archiv | Einstellungen
+- Scroll: braucht Scrollen
+
+### Sehr kleines Telefon (EN)
+
+- Erste Zeile: „wAI"
+- Sichtbar: wAI · ENVIRONMENTAL MEMORY ANCHOR · GPS active · Accuracy ±N m
+- Bedienelemente: Language | Unlock Pro | How it works | Drop anchor TAP SAVES THIS S | N m AWAY | 24 min REMAINING | To the car | Parking timer | All 2 | Favourites | Car 1 | Nature 1 | Mein Auto · Säule B17 Car 1  | running | N m | Wegkreuzung West Nature | N m | 2 Anchors | Find | Archive | Settings
+- Scroll: braucht Scrollen
+
+### Sehr kleines Telefon: Einstellungen (EN)
+
+- Erste Zeile: „wAI"
+- Sichtbar: wAI · ENVIRONMENTAL MEMORY ANCHOR · GPS active · Accuracy ±N m
+- Bedienelemente: Language | Unlock Pro | How it works | Flashlight | Automatic (device language) | Deutsch | English | System | Light | Dark | Night | Getting-closer signal | m | ft | Test sensors | Activate licence | Export data | Import data | Delete all data | SOL | BTC | ETH | Disclaimer | Terms | Withdrawal notice | Privacy | Imprint | Crypto guide | Imprint on the website | hippie.highho@gmail.com | Show introduction again | 2 Anchors | Find | Archive | Settings
 - Scroll: braucht Scrollen
 
 ### Start (EN)
@@ -966,6 +980,68 @@ Keine Befunde: jede Ansicht war lesbar, erwartete Inhalte da, keine Platzhalter.
 - button: Finden
 - button: Archiv
 - button: Einstellungen
+
+**Sehr kleines Telefon (EN)**
+
+- button: Language
+- button: Unlock Pro
+- button: How it works
+- button: Drop anchor TAP SAVES THIS SPOT
+- button: N m AWAY
+- button: 24 min REMAINING
+- button: To the car
+- button: Parking timer
+- tab: All 2
+- tab: Favourites
+- tab: Car 1
+- tab: Nature 1
+- button: Mein Auto · Säule B17 Car N h 35 min · Zone B · 2,50 €/h
+- button: running
+- button: N m
+- button: Wegkreuzung West Nature
+- button: N m
+- button: 2 Anchors
+- button: Find
+- button: Archive
+- button: Settings
+
+**Sehr kleines Telefon: Einstellungen (EN)**
+
+- button: Language
+- button: Unlock Pro
+- button: How it works
+- button: Flashlight (aktiv: false)
+- button: Automatic (device language)
+- button: Deutsch
+- button: English
+- button: System
+- button: Light
+- button: Dark
+- button: Night
+- switch: Getting-closer signal (aktiv: false)
+- button: m
+- button: ft
+- button: Test sensors
+- button: Activate licence
+- button: Export data
+- button: Import data
+- button: Delete all data
+- button: SOL
+- button: BTC
+- button: ETH
+- button: Disclaimer
+- button: Terms
+- button: Withdrawal notice
+- button: Privacy
+- button: Imprint
+- button: Crypto guide
+- button: Imprint on the website
+- a: hippie.highho@gmail.com
+- button: Show introduction again
+- button: 2 Anchors
+- button: Find
+- button: Archive
+- button: Settings
 
 **Start (EN)**
 

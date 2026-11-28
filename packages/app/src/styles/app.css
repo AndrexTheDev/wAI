@@ -324,14 +324,31 @@ a {
 }
 
 /**
- * Kleine Geräte (360 dp sind noch immer verbreitet): dort reicht auch 0,08 em
- * nicht für „UMGEBUNGS-GEDÄCHTNISANKER". Statt den Satz abzuschneiden wird er
- * enger gesetzt – er ist der einzige Ort, an dem die App sagt, was sie ist.
+ * Kleine Geräte: dort reicht auch 0,08 em nicht für „UMGEBUNGS-GEDÄCHTNISANKER".
+ * Statt den Satz abzuschneiden wird er enger gesetzt – er ist der einzige Ort,
+ * an dem die App sagt, was sie ist.
  */
 @media (max-width: 380px) {
   .topbar__sub {
     font-size: 8.5px;
     letter-spacing: 0;
+  }
+}
+
+/**
+ * Auf 320 dp ist selbst das zu breit: „UMGEBUNGS-GEDÄCHT…" stand da, also genau
+ * das, was diese Regel verhindern soll. Ein zweizeiliger Untertitel kostet
+ * gemessen 1 px Kopfzeilenhöhe (58 → 59 px) und sagt dafür das ganze Wort.
+ * Er ist die einzige Selbstbeschreibung der App – Kürzen ist hier der falsche
+ * Kompromiss. Die Grenze ist gemessen: bei 360 px stehen 144 px für 144 px
+ * Text, darunter wird gekürzt. Ab 361 px bleibt alles einzeilig.
+ */
+@media (max-width: 360px) {
+  .topbar__sub {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    line-height: 1.25;
   }
 }
 
