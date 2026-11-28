@@ -196,7 +196,8 @@ ol {
 }
 
 .gradient-text {
-  background: var(--grad-aurora);
+  /* Text, nicht Fläche: eigener Verlauf, damit heller Grund lesbar bleibt. */
+  background: var(--grad-aurora-text);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

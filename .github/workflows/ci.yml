@@ -42,6 +42,9 @@ jobs:
       - name: Android project checks (XML, icons, permissions, locales)
         run: npm run check:android
 
+      - name: Kontrast der Farbpalette
+        run: npm run check:contrast
+
       - name: Store listing checks (limits, locales, product consistency)
         run: npm run check:store
 

@@ -180,7 +180,7 @@
   font-size: 1.32rem;
   font-weight: 750;
   letter-spacing: -0.02em;
-  background: var(--grad-aurora);
+  background: var(--grad-aurora-text);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
