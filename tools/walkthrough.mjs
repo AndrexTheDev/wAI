@@ -703,6 +703,20 @@ async function journeySmallPhone() {
   await tap(page, ['Einstellungen', 'Settings']);
   await step(page, 'Kleines Telefon: Einstellungen', { expect: ['Sprache'] });
   await context.close();
+
+  /**
+   * 320 × 568 ist das kleinste Gerät, das noch in Gebrauch ist (iPhone SE der
+   * ersten Generation, ältere Androids). Dort war der Untertitel unter dem
+   * Markennamen abgeschnitten – in beiden Sprachen, denn „Environmental Memory
+   * Anchor" ist länger als „UMGEBUNGS-GEDÄCHTNISANKER". `step` prüft
+   * abgeschnittenen Text an `.topbar__sub` von sich aus; hier geht es darum,
+   * dass die kleinste Breite überhaupt einmal gemessen wird.
+   */
+  const tiny = await session({ anchors: true, viewport: { width: 320, height: 568 }, locale: 'en' });
+  await step(tiny.page, 'Sehr kleines Telefon (EN)', { expect: ['Anchors'] });
+  await tap(tiny.page, ['Settings', 'Einstellungen']);
+  await step(tiny.page, 'Sehr kleines Telefon: Einstellungen (EN)', { expect: ['Language'] });
+  await tiny.context.close();
 }
 
 /* ============================================================
