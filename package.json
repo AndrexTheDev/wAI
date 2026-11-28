@@ -33,6 +33,7 @@
     "check:store": "node tools/check-store-listing.mjs",
     "check:claims": "node tools/check-claims.mjs",
     "check:contrast": "node tools/check-contrast.mjs",
+    "check:tap": "node tools/check-tap-targets.mjs",
     "screenshots": "node tools/capture-store-screenshots.mjs",
     "check:responsive": "node tools/check-responsive.mjs",
     "walkthrough": "node tools/walkthrough.mjs",

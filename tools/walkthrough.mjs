@@ -160,9 +160,32 @@ async function layoutOf(page) {
        * kürzen dürfen; ein zufälliger Überlauf ist ein Layoutfehler und wäre
        * schon oben aufgefallen.
        */
-      truncated: Array.from(document.querySelectorAll('.topbar__sub, .topbar__name, .tab, .chip'))
-        .filter((node) => node.offsetParent !== null && node.scrollWidth > node.clientWidth + 1)
-        .map((node) => (node.textContent ?? '').replace(/\s+/g, ' ').trim().slice(0, 40)),
+      truncated: (() => {
+        /**
+         * Ist der *Text* breiter als sein Kasten?
+         *
+         * `scrollWidth > clientWidth` ist der falsche Vergleich, seit Knöpfe
+         * eine unsichtbare Trefferfläche als `::after` tragen: ein 37 px breiter
+         * Chip mit 44 px Trefferfläche meldet `scrollWidth = 40`, obwohl im Bild
+         * nichts fehlt. Genau so wurden drei vollständig lesbare Chips als
+         * „abgeschnitten" gemeldet – ein Fehlalarm macht den nächsten echten
+         * Fund unglaubwürdig. Gemessen wird deshalb die Textstrecke selbst.
+         */
+        const overflows = (node) => {
+          const box = node.getBoundingClientRect();
+          if (box.width === 0) return false;
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          const ink = range.getBoundingClientRect();
+          range.detach?.();
+          if (ink.width === 0) return false;
+          const padRight = parseFloat(getComputedStyle(node).paddingRight) || 0;
+          return ink.right - (box.right - padRight) > 1;
+        };
+        return Array.from(document.querySelectorAll('.topbar__sub, .topbar__name, .tab, .chip'))
+          .filter((node) => node.offsetParent !== null && overflows(node))
+          .map((node) => (node.textContent ?? '').replace(/\s+/g, ' ').trim().slice(0, 40));
+      })(),
     };
   });
 }
