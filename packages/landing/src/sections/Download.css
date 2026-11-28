@@ -13,6 +13,12 @@
 
 .download__main {
   display: grid;
+  /**
+   * Ohne explizite Spalte nimmt das Grid die Min-Content-Breite seiner Kinder –
+   * und der Release-Knopf ist mit `white-space: nowrap` 314 px breit. Auf einem
+   * 320-dp-Telefon stand die Spalte damit 70 px über den Kasten hinaus.
+   */
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.9rem;
   align-content: start;
   min-width: 0;
@@ -189,6 +195,13 @@
 
 @media (max-width: 880px) {
   .download__panel {
-    grid-template-columns: 1fr;
+    /**
+     * `1fr` ist `minmax(auto, 1fr)` – die Spalte darf also so breit werden wie
+     * ihr breitestes Kind. Der Lizenz-/SHA-Block mit dem langen Code zieht sie
+     * auf einem 320-dp-Telefon auf 314 px, obwohl der Kasten nur 244 px hat:
+     * die ganze Seite ließ sich seitlich ziehen. `minmax(0, 1fr)` deckelt die
+     * Spalte auf den Kasten; lange Codes brechen ohnehin schon um.
+     */
+    grid-template-columns: minmax(0, 1fr);
   }
 }

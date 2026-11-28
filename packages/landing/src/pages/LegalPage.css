@@ -30,13 +30,29 @@
 
 .legal__head {
   display: grid;
+  /**
+   * `1fr` ist `minmax(auto, 1fr)`: die Spalte darf so breit werden wie ihr
+   * breitestes Wort. „Datenschutzhinweis" ist bei 320 dp breiter als der
+   * Bildschirm, also wurde die ganze Seite 7 px zu breit. `minmax(0, 1fr)`
+   * deckelt die Spalte; die Überschrift bricht dann um.
+   */
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.5rem;
   padding-bottom: 1.4rem;
   border-bottom: 1px solid var(--c-border);
 }
 
 .legal__head h1 {
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  /**
+   * „Datenschutzhinweis" ist ein Wort ohne Trennstelle. Bei 1,8rem braucht es
+   * 351 px und passt damit nicht in die 288 px, die auf einem 320-dp-Telefon
+   * übrig bleiben – mit Silbentrennung wäre es hübsch, aber ob ein Browser
+   * deutsche Wörterbücher hat, ist Glückssache (Chrome bringt sie nur auf
+   * Desktop-Systemen mit, nicht in jeder Linux-Distribution). Deshalb wird die
+   * Überschrift so klein, dass sie auch ohne Trennung in einer Zeile steht:
+   * 40 Zeichen à 0,5 em passen bei 320 px in 1,55rem.
+   */
+  font-size: clamp(1.55rem, 4vw, 2.6rem);
   letter-spacing: -0.03em;
 }
 

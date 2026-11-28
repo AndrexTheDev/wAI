@@ -80,6 +80,7 @@
   border-radius: var(--radius-pill);
   font-size: var(--fs-sm);
   font-weight: 600;
+  white-space: nowrap;
   color: var(--c-text-soft);
   transition:
     color var(--dur-fast),
@@ -170,6 +171,36 @@
   padding-top: 1rem;
 }
 
+/**
+ * Zwischen 941 und 1179 px ist die Kopfzeile zu breit: Marke mit Untertitel
+ * (236) + sechs Navigationseinträge (637) + Sprachknopf und Pro-Knopf (207)
+ * ergeben 1175 px. Auf einem Tablet im Querformat (1024 px) ließ sich die
+ * Website deshalb 127 px seitlich wegziehen. Der Untertitel entfällt dort,
+ * die Abstände werden enger – erst ab 1180 px bleibt alles wie gehabt.
+ */
+@media (max-width: 1179px) and (min-width: 941px) {
+  .brand__sub {
+    display: none;
+  }
+  .site-header__inner {
+    gap: 0.7rem;
+  }
+  .site-nav {
+    gap: 0;
+  }
+  .site-nav__link {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.82rem;
+  }
+  .site-header__actions {
+    gap: 0.3rem;
+  }
+  .cta-pro {
+    font-size: 0.8rem;
+    padding-inline: 0.95rem;
+  }
+}
+
 @media (max-width: 940px) {
   .site-nav {
     display: none;
@@ -185,8 +216,24 @@
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 600px) {
+  /**
+   * „Environmental Memory Anchor" unter dem Markennamen ist 236 px breit. Auf
+   * einem Telefon im Querformat (480 px) passt sie zusammen mit Sprachknopf,
+   * Pro-Knopf und Menü nicht mehr in die Zeile – die Seite ließ sich seitlich
+   * ziehen. Bis 600 px entfällt der Untertitel, darüber ist Platz.
+   */
   .brand__sub {
+    display: none;
+  }
+  /**
+   * Auf 360 dp passt die Kopfzeile nicht mehr: Marke (78) + Sprachknopf (57) +
+   * „Pro freischalten" (149) + Menü (32) plus Abstände ergeben 368 px, also
+   * 8 px mehr als der Bildschirm. Die ganze Website ließ sich seitlich ziehen.
+   * Der Pro-Knopf steht im mobilen Menü ohnehin noch einmal – hier wird er
+   * ausgeblendet, statt die Zeile zu quetschen.
+   */
+  .site-header__actions .cta-pro {
     display: none;
   }
 }

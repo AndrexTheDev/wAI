@@ -1,0 +1,70 @@
+# Passt die Website auf jeden Bildschirm?
+#
+# Der Überlauf, den dieser Lauf findet, ist unsichtbar: `body { overflow-x: hidden }`
+# schluckt die Scrollleiste, aber die Seite lässt sich weiterhin seitlich ziehen,
+# und rechts blitzt ein leerer Streifen auf. Auf einem 412-px-Telefon waren es
+# 3 px, auf einem 1024-px-Tablet 127 px – beide Male fiel es nur auf, weil
+# jemand zufällig `scrollWidth > clientWidth` gemessen hat.
+#
+# Deshalb misst dieser Lauf jede Route bei fünfzehn Breiten (die Kanten der Media
+# Queries plus/minus eins und die üblichen Gerätebreiten) und nennt das Element,
+# das übersteht. Läuft bei jedem Push, weil ein einziges neues `1fr` in einem Grid
+# genügt, um den Fehler zurückzubringen.
+name: Responsive layout
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'packages/landing/src/**'
+      - 'packages/landing/index.html'
+      - 'tools/check-responsive.mjs'
+      - '.github/workflows/responsive.yml'
+  pull_request:
+    paths:
+      - 'packages/landing/src/**'
+      - 'packages/landing/index.html'
+      - 'tools/check-responsive.mjs'
+      - '.github/workflows/responsive.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: responsive-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  measure:
+    name: Measure every route at every width
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium --only-shell
+
+      # `vite preview` statt `python3 -m http.server`: nur der Preview-Server
+      # beantwortet /legal/privacy mit der Seite statt mit 404. Genau dort saß
+      # der Überlauf, und mit dem einfachen Dateiserver wäre er unsichtbar
+      # geblieben – die Messung hätte 404-Seiten auf allen Breiten geprüft.
+      - name: Build and serve the landing page
+        run: |
+          npm run build -w @wai/landing
+          npm run preview -w @wai/landing > preview.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:4173/ >/dev/null && break
+            sleep 1
+          done
+
+      - name: Measure
+        run: npm run check:responsive -- --url http://127.0.0.1:4173

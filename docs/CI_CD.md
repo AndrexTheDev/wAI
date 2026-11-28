@@ -9,9 +9,10 @@ Kein Build-Server, kein Docker, kein lokales SDK nötig – nur ein Push.
 
 | Workflow | Datei | Auslöser | Ergebnis |
 |---|---|---|---|
-| **CI** | `.github/workflows/ci.yml` | jeder Push, jeder PR | Typecheck, 28 Unit-Tests, Render-Smoke (DE/EN, alle Routen), Android-Asset-Checks, Web-Build |
+| **CI** | `.github/workflows/ci.yml` | jeder Push, jeder PR | Typecheck, 72 Unit-Tests, Render-Smoke (DE/EN, alle Routen), Android-Asset-Checks, Web-Build |
 | **Android build** | `.github/workflows/android.yml` | Push auf `main`/`arena/**`, Tags `v*`, manuell | signiertes APK + AAB, Prüfsummen, Build-Info, optional GitHub-Release |
 | **Deploy website** | `.github/workflows/pages.yml` | Push auf `main` | Landingpage inkl. eingebetteter App-Demo auf GitHub Pages |
+| **Responsive layout** | `.github/workflows/responsive.yml` | Änderungen an `packages/landing/src/**` | jede Route bei 15 Breiten (320–1440 px) auf seitlichen Überlauf gemessen |
 
 Alle Workflows lassen sich zusätzlich manuell starten (Actions → Workflow →
 „Run workflow“).
@@ -141,13 +142,15 @@ PR-/Actions-Tab sichtbar, ohne das komplette Log herunterzuladen.
 
 ## English summary
 
-Three workflows: **CI** (every push/PR — typecheck, 52 unit tests, bilingual
+Four workflows: **CI** (every push/PR — typecheck, 72 unit tests, bilingual
 render smoke tests, Android asset checks, web build), **Android build** (JDK 21 +
 SDK 36, `tools/ci-signing.sh`, `tools/build-android.sh` producing a signed APK and
 AAB with signature, manifest and bundle-content verification, artifacts plus an
-optional GitHub release) and **Deploy website** (builds the landing page with the
+optional GitHub release), **Deploy website** (builds the landing page with the
 embedded app demo and publishes it to GitHub Pages, skipping cleanly until Pages is
-enabled).
+enabled) and **Responsive layout** (`tools/check-responsive.mjs` measures every
+route at fifteen widths from 320 to 1440 px and fails on any horizontal overflow,
+naming the element that sticks out).
 
 Signing: run `bash tools/make-keystore.sh` once, store the four `WAI_*` secrets in
 the repository; without them the pipeline still builds but labels the artifact a

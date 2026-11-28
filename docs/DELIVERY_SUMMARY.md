@@ -23,7 +23,7 @@ Brand: **AndrexTheDev** · hippie.highho@gmail.com
 | Themes | Dunkel, Hell, Nacht (rotverschoben), System |
 | Extras | Taschenlampe (eigenes natives Torch-Plugin), Sensor-Diagnose, Kalibrierhinweise |
 
-Verifiziert mit `tsc --noEmit`, `vite build`, 31 Unit-Tests und SSR-Render-Smoke-Tests
+Verifiziert mit `tsc --noEmit`, `vite build`, 72 Unit-Tests und SSR-Render-Smoke-Tests
 in beiden Sprachen (578 i18n-Schlüssel, keine fehlenden Keys).
 
 ### 1.2 Android-Projekt (`packages/app/android`)
@@ -76,7 +76,7 @@ Drei GitHub-Actions-Workflows bauen und veröffentlichen alles automatisch:
 
 | Workflow | Ergebnis |
 |---|---|
-| `ci.yml` | Typecheck, 28 Unit-Tests, Render-Smoke (DE/EN, alle Routen), Android-Asset-Checks, Web-Build |
+| `ci.yml` | Typecheck, 72 Unit-Tests, Render-Smoke (DE/EN, alle Routen), Android-Asset-Checks, Web-Build |
 | `android.yml` | signiertes APK (2,4 MB) + AAB (3,5 MB), Signatur-/Manifest-/Inhaltsprüfung, Prüfsummen, GitHub-Release |
 | `pages.yml` | Landingpage inkl. App-Demo auf GitHub Pages |
 
@@ -101,7 +101,7 @@ Während des Aufbaus gefunden und behoben:
 ## 2. Verifikation
 
 ```bash
-npm run verify   # typecheck (3 Pakete) + 28 Unit-Tests + Render-Smoke-Tests
+npm run verify   # typecheck (3 Pakete) + 72 Unit-Tests + Render-Smoke-Tests
 npm run build    # App → Demo in Landingpage → Landingpage-Dist
 ```
 
@@ -133,7 +133,7 @@ manifest, adaptive icons and a custom torch plugin, a bilingual conversion-focus
 landing page that embeds the actual app as a live demo, complete bilingual legal
 texts including a new standalone withdrawal notice with an active consent gate
 before any payment route is shown, the non-custodial SOL/BTC/ETH unlock flow with
-offline Ed25519 licences, 52 unit tests, render smoke tests for every route in both
+offline Ed25519 licences, 72 unit tests, render smoke tests for every route in both
 languages, and the full documentation suite (concept, design system, marketing,
 store listing, licensing, release runbook, legal review, delivery).
 
