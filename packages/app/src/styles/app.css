@@ -47,6 +47,13 @@
   --mint: #ffb08a;
   --sky: #ff9560;
   --violet: #d98a6a;
+  /* Rot für Fehler muss im Nachtmodus zum warmen Rest passen – #f87171 wirkte
+     daneben blass, und ohne eigenen Wert erbte das Theme stillschweigend den
+     Dunkelmodus. */
+  --danger: #ff7a6a;
+  /* `--amber` fehlte auch hier: das kalte #fbbf24 stand neben dem warmen Rest
+     des Nachtmodus. #ffb347 liegt in derselben Farbfamilie (11,3:1). */
+  --amber: #ffb347;
   --grad: linear-gradient(120deg, #ffb08a, #ff8b6a 55%, #d98a6a);
   --grad-soft: linear-gradient(120deg, rgba(255, 176, 138, 0.16), rgba(255, 139, 106, 0.12));
 }
@@ -62,9 +69,32 @@
   --text: #0b1220;
   --text-2: #33415c;
   --text-3: #5c6b82;
-  --mint: #0f9c74;
-  --sky: #0284c7;
+  /**
+   * Mint und Sky sind im dunklen Theme Akzentfarben, im hellen sind sie
+   * Textfarben: „GPS aktiv", „3 Anker", die Reiter, der Kompasswert. #0f9c74
+   * kommt auf dem hellen Grund nur auf 3,2:1 und #0284c7 auf 3,8:1 – unter der
+   * Zusage von 4,5:1.
+   *
+   * Mint muss dabei auch auf dem *eigenen* Schleier bestehen („GPS aktiv" sitzt
+   * auf 10 % Mint über der Karte). Deshalb #077452: 5,4:1 auf der Seitenfläche
+   * und 5,1:1 auf dem Chip.
+   */
+  --mint: #077452;
+  --sky: #0369a1;
   --violet: #7c3aed;
+  /**
+   * `--amber` fehlte hier ebenfalls und erbte #fbbf24 aus dem Dunkelmodus – als
+   * Text 1,6:1, praktisch unsichtbar (Warnhinweise, Zeitstempel, Toasts).
+   * #a04a08 erreicht 5,6:1 auf der Seitenfläche und 4,8:1 auf dem Warnchip.
+   */
+  --amber: #a04a08;
+  /**
+   * Ohne eigener Wert erbte das helle Theme das Rot des dunklen Themes
+   * (#f87171) – auf hellem Grund kommt das auf 2,57:1 und ist damit für
+   * „Alle Daten löschen" und jede Fehlermeldung zu blass. #b91c1c erreicht
+   * 6,0:1 auf der Seitenfläche und 6,5:1 auf Weiß.
+   */
+  --danger: #b91c1c;
   color-scheme: light;
 }
 

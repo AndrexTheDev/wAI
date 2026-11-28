@@ -21,6 +21,11 @@
   --c-eth: #627eea;
 
   --grad-aurora: linear-gradient(120deg, #6ee7b7 0%, #38bdf8 48%, #a78bfa 100%);
+  /* Verläufe, die als *Text* benutzt werden (`.gradient-text`, die Kennzahlen im
+     Hero). Im Dunkelmodus reicht der Aurora-Verlauf; auf hellem Grund käme
+     #6ee7b7 nur auf 1,4:1 und #a78bfa auf 2,6:1 – der Text wäre praktisch weg.
+     Deshalb ein eigenes Token mit dunkleren, aber gleichen Farbtönen. */
+  --grad-aurora-text: linear-gradient(120deg, #6ee7b7 0%, #38bdf8 48%, #a78bfa 100%);
   --grad-aurora-soft: linear-gradient(120deg, rgba(110, 231, 183, 0.16), rgba(56, 189, 248, 0.16) 50%, rgba(167, 139, 250, 0.16));
   --grad-card: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
 
@@ -83,10 +88,24 @@
   --c-text: #0b1220;
   --c-text-soft: #33415c;
   --c-text-dim: #5c6b82;
-  --c-mint: #0f9c74;
-  --c-sky: #0284c7;
+  /* Mint und Sky sind auf der hellen Website Textfarben (Akzente, Links,
+     Kompasswerte). #0f9c74 käme auf 3,3:1, #0284c7 auf 3,9:1 – unter der
+     Zusage von 4,5:1. Die dunkleren Werte erreichen 4,8 bzw. 5,6:1. */
+  /* Mint besteht auch auf seinem eigenen Schleier (Badge `.badge--live`):
+     #077452 kommt auf 5,4:1 auf der Seite und 5,2:1 auf dem getönten Badge. */
+  --c-mint: #077452;
+  --c-sky: #0369a1;
   --c-violet: #7c3aed;
   --c-success: #12855f;
+  /* `--c-amber` fehlte im hellen Theme und erbte #fbbf24 (1,6:1) – Warnhinweise
+     in den Rechtstexten waren damit nicht lesbar. #a04a08 erreicht 5,6:1. */
+  --c-amber: #a04a08;
+  /* Fehlerrot auf hellem Grund: der Dunkelmodus-Wert #f87171 kommt hier auf
+     2,6:1 – zu blass für Text. #b91c1c erreicht 6,0:1. */
+  --c-danger: #b91c1c;
+  /* Textverlauf auf hellem Grund: dieselben drei Farbtöne, dunkel genug für
+     4,5:1 über den ganzen Verlauf (schlechtester Zwischenwert 4,8:1). */
+  --grad-aurora-text: linear-gradient(120deg, #0a7d5c 0%, #0369a1 48%, #6d28d9 100%);
   --grad-card: linear-gradient(160deg, rgba(11, 18, 32, 0.05), rgba(11, 18, 32, 0.015));
   --shadow: 0 12px 32px -16px rgba(11, 18, 32, 0.18);
   --shadow-lg: 0 32px 80px -40px rgba(11, 18, 32, 0.28);

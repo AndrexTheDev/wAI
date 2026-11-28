@@ -24,20 +24,44 @@ they are intentionally the same values.
 | `--text` | `#eaf0fb` | `#0b1220` | `#f0c8b0` | Primary text |
 | `--text-2` | `#b7c3d6` | `#3d4a5c` | `#c79b83` | Secondary text |
 | `--text-3` | `#8494aa` | `#63718a` | `#9b7a68` | Meta, captions |
-| `--mint` | `#6ee7b7` | `#0f9f6e` | `#ffb08a` | Success, primary accent |
-| `--sky` | `#38bdf8` | `#0284c7` | `#ff9560` | Info, compass needle |
+| `--mint` | `#6ee7b7` | `#077452` | `#ffb08a` | Success, primary accent |
+| `--sky` | `#38bdf8` | `#0369a1` | `#ff9560` | Info, compass needle |
 | `--violet` | `#a78bfa` | `#7c3aed` | `#d98a6a` | Pro accent |
-| `--amber` | `#fbbf24` | `#b45309` | `#ffb347` | Timer, warnings |
-| `--danger` | `#f87171` | `#dc2626` | `#ff7a6a` | Destructive, sensor error |
+| `--amber` | `#fbbf24` | `#a04a08` | `#ffb347` | Timer, warnings |
+| `--danger` | `#f87171` | `#b91c1c` | `#ff7a6a` | Destructive, sensor error |
+
+Light-mode accent values are **not** the dark ones scaled: in the app and on the
+website these tokens are *text* (status chips, links, the compass readout), and
+the pale dark-mode hues only reach 1.6–3.9:1 on `#f4f7fb`. The values above are
+measured, not chosen by eye — `npm run check:contrast` fails the build otherwise.
 
 **Gradient** `linear-gradient(120deg, #6ee7b7, #38bdf8 50%, #a78bfa)` — the aurora
 mark. Only for the primary CTA, the logo and the FAB. Never for body text.
+
+Where the aurora *is* used as text (`.gradient-text`, the hero statistics) it
+goes through its own token, `--grad-aurora-text`: the same three hues, dark
+enough for 4.5:1 on a light background. Clipping a fill to text and then reusing
+the dark-mode gradient on `#f6f8fc` made "1 Tipp · 0 Byte · 0 €" 1.4:1 — present
+in the DOM, invisible on screen.
 
 **Night mode** deliberately shifts to red/orange (`hue ≈ 20–30°`) because red light
 preserves dark adaptation. Contrast stays ≥ 4.5:1 for text.
 
 Contrast: all body text ≥ 4.5:1, large text ≥ 3:1, focus rings ≥ 3:1 against both
 the surface and the surrounding background.
+
+This is checked, not asserted: `npm run check:contrast`
+(`tools/check-contrast.mjs`) reads the tokens straight out of the two CSS files
+and computes 77 pairs across the five themes — body/secondary/meta text on the
+page and on a card, every accent, every accent again on its own 10 % chip tint,
+and the gradient text sampled at 20 points between each stop. The check is part
+of `npm run verify` and of CI.
+
+Three bugs it found that review had not: `--danger`, `--amber` and
+`--grad-aurora-text` were missing from light (and `--amber` from night), so the
+light theme silently inherited the dark values — 1.4:1 to 2.6:1, i.e. text that
+is there but cannot be read. **A missing token is not an error in CSS; it is an
+inheritance.** Only a check that reads the palette per theme catches it.
 
 ## 3. Typography
 
