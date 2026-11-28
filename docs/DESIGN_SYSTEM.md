@@ -174,7 +174,14 @@ fades only. The compass needle uses `transform` only (composited, no layout).
 - `lang` attribute is set on `<html>` and updated on language switch.
 - Distance and heading are mirrored into text (`"42 m · 20° rechts"`), so the
   compass is not the only channel.
-- Text scales with browser/OS font size (all sizes in `rem` inside the app shell).
+- Text scales with browser/OS font size. Every font size in
+  `packages/app/src/styles/app.css` is in `rem` against a **10 px root** — so
+  `1.5rem` is the familiar 15 px, and a user's 200 % setting really doubles it.
+  Before this rule existed the file held 93 font sizes, all in `px`, so the app
+  ignored the system setting completely while this document claimed otherwise.
+  Three exceptions are capped with `min()`: the four tab labels
+  (`min(0.95rem, 14px)`) because four words share one row, and
+  `.topbar__sub`, which wraps instead of shrinking.
 - Colour is never the sole carrier of meaning.
 
 ## 9. Content rules
@@ -186,6 +193,11 @@ fades only. The compass needle uses `transform` only (composited, no layout).
 - No exclamation marks in error messages; state what happened and what to do.
 
 ## English summary
+
+Text scales with the system setting: all app font sizes are in `rem` against a
+10 px root, so 200 % is genuinely twice as large. The tab bar sizes its four
+columns to their labels instead of dividing the width into quarters, which is
+what keeps "Einstellungen" readable at 200 % on a 320 dp screen.
 
 Responsive: every route is measured at fifteen widths from 320 to 1440 px
 (`tools/check-responsive.mjs`); the header sheds its subtitle below 600 px and the
