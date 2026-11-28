@@ -111,9 +111,10 @@ Landingpage inkl. App-Demo 994 kB.
 ## 3. Was noch fehlt, um live zu gehen
 
 1. ~~Build-Umgebung~~ → erledigt: GitHub Actions baut APK + AAB.
-2. **Keystore + Secrets**: `bash tools/make-keystore.sh` ausführen, die vier
-   `WAI_*`-Secrets im Repository hinterlegen (dann wird aus dem „preview build“
-   ein echtes signiertes Release).
+2. **Keystore + Secrets und Lizenzschlüssel**: Signatur auf einem vertrauenswürdigen
+   Gerät einrichten; den kompromittierten Lizenz-Ausstellerschlüssel ersetzen und
+   den neuen öffentlichen Schlüssel einbinden. Siehe `docs/LAUNCH_CHECKLIST.md`;
+   allein das Setzen der Secrets ist keine Release-Freigabe.
 3. **Juristische Prüfung** nach `docs/LEGAL_REVIEW.md` – insbesondere
    Widerrufs-Klausel, Impressumsangaben, Play-Payment-Politik, Markenrecherche
    „wAI“, Hosting-AVV.
@@ -140,7 +141,8 @@ store listing, licensing, release runbook, legal review, delivery).
 A three-workflow GitHub Actions pipeline now verifies every push and builds a
 signed APK (2.4 MB) plus AAB (3.5 MB) on every tag, publishing them as a GitHub
 release with SHA-256 checksums; the site deploys to Pages and skips cleanly until
-Pages is enabled. Release v1.0.0 already exists with a preview key. Two real build
+Pages is enabled. The preview release v1.0.0 and its assets were deleted; the
+Git tag remains, and there is currently no final download. Two real build
 blockers were found and fixed on the way (an illegal `--` in a manifest XML comment
 and a nonexistent Capacitor API call), and the legal texts now render inside the
 app so they can be read offline.

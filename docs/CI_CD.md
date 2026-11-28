@@ -3,7 +3,7 @@
 Alles rund um Build, Signatur und Veröffentlichung läuft über GitHub Actions.
 Kein Build-Server, kein Docker, kein lokales SDK nötig. Ein Push allein ist aber
 keine Launch-Freigabe: siehe [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md), insbesondere
-zum öffentlichen Preview-Release und zum kompromittierten Lizenzschlüssel.
+zum noch offenen Downloadpfad und zum kompromittierten Lizenzschlüssel.
 
 ---
 
@@ -60,9 +60,10 @@ gh secret set WAI_KEY_ALIAS --body wai
 gh secret set WAI_KEY_PASSWORD
 ```
 
-Ohne diese Secrets baut der Workflow trotzdem – dann mit einem Wegwerf-Schlüssel,
-und das Release heißt ausdrücklich **„preview build“**. Solche APKs sind zum
-Testen gedacht, nicht zur Weitergabe.
+Ohne diese Secrets erzeugen gewöhnliche Branch-/PR-Läufe weiterhin Testartefakte
+mit einem Wegwerf-Schlüssel. Die Release-Sperre auf `main` blockiert eine
+Veröffentlichung mit Preview-Signatur. Das frühere öffentliche Preview-Release
+`v1.0.0` samt Assets wurde gelöscht; das gleichnamige Git-Tag bleibt bestehen.
 
 > **Wenn der Schlüssel verloren geht:** Bei aktiviertem Play App Signing kannst du
 > in der Play Console einen neuen Upload-Key hinterlegen. Bei reiner
@@ -87,10 +88,12 @@ Nur zum Testen, **ohne Veröffentlichung**:
 gh workflow run android.yml --ref main -f release=false
 ```
 
-Achtung: `release=true` veröffentlicht ein GitHub-Release. Auch ein `v*`-Tag
-löst die Veröffentlichung aus — bei fehlendem Release-Key ggf. als öffentliches
-Preview. Erst nach den Freigaben in [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md)
-veröffentlichen.
+Achtung: `release=true` und ein `v*`-Tag fordern eine Veröffentlichung an.
+Die Release-Sperre auf `main` blockiert Preview-Signatur, den bekannten
+kompromittierten Lizenz-Ausstellerschlüssel und Vite-Key-Overrides. Sie prüft
+weder die Identität des Signaturzertifikats noch Rechtsfreigabe oder Gerätetest.
+Erst nach allen Freigaben in [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) veröffentlichen.
+Alte Tags und andere Refs können ältere Workflow-Versionen enthalten.
 
 ## 4. Artefakte und wo sie landen
 
@@ -101,10 +104,10 @@ veröffentlichen.
 | `wai-build-logs-<n>` | Gradle-Logs, `mapping.txt`, Berichte | Actions-Artefakt (30 Tage) |
 | `landing-dist` | fertige Website inkl. `/app/`-Demo | Actions-Artefakt (14 Tage) |
 
-Die Landingpage verlinkt auf `/releases/latest`, weil GitHub-Release-Assets ein
-stabiles, immer aktuelles Download-Ziel sind. Sobald du eine eigene Domain mit
-direktem APK-Link hast, setze `VITE_APK_URL` (und `VITE_APK_SHA256`) – der Button
-zeigt dann direkt auf die Datei.
+Die Landingpage verlinkt standardmäßig auf `/releases/latest`. Nach Entfernung
+des Preview-Releases existiert derzeit kein finales Release als Download-Ziel.
+Vor öffentlichem Deploy Downloadpfad und Freigaben prüfen; `VITE_APK_URL` (und
+`VITE_APK_SHA256`) kann später auf eine eigene, geprüfte Datei zeigen.
 
 ## 5. Website veröffentlichen (GitHub Pages)
 
@@ -161,8 +164,9 @@ naming the element that sticks out).
 
 Signing: configure the four `WAI_*` secrets using a trusted machine. Ordinary
 builds without them remain preview artifacts; publication is blocked without
-release signing and a safe reviewed issuer key. The existing public preview is
-unchanged. `tools/release.sh` tags and pushes after checks; manual legal, device
+release signing and a reviewed issuer key not on the known-compromised list. The
+former public preview release and assets were deleted; its tag remains.
+`tools/release.sh` tags and pushes after checks; manual legal, device
 and certificate-identity approvals remain essential. The landing page links to
 `/releases/latest`; see the launch checklist before making it public.
 

@@ -215,7 +215,7 @@ const commands = {
     for (const item of [
       'rotate the compromised licence issuer key and test offline issuance',
       'release keystore, repository secrets and independently verified signing certificate',
-      'resolve the public preview release before enabling Pages',
+      'verify the final download path before enabling Pages (preview release removed)',
       'legal review and provider details per docs/LEGAL_REVIEW.md',
       'test the final APK on a real device in airplane mode',
       'see docs/LAUNCH_CHECKLIST.md for the full sequence',
