@@ -4,6 +4,14 @@ Der gesamte Kauf- und Freischaltweg funktioniert **ohne Server, ohne Konto und
 ohne Custody**. Dieses Dokument beschreibt den Ablauf für Käufer und für den
 Anbieter.
 
+> **Vor einem kommerziellen Launch:** Der bisherige lokale private Ausstellerschlüssel
+> wurde in einer Tool-Ausgabe offengelegt und ist als kompromittiert zu behandeln.
+> Neuen Schlüssel auf einem vertrauenswürdigen Gerät erzeugen, öffentlichen Schlüssel
+> einbinden und mit dem finalen Build testen: [Launch-Checkliste](LAUNCH_CHECKLIST.md#2-lizenz-ausstellung--eigentümer-vor-verkauf-von-pro).
+> `license-cli.mjs issue` verweigert inzwischen die Ausgabe mit dem bekannten
+> kompromittierten Schlüssel oder einem nicht zum eingebetteten Schlüssel passenden
+> privaten Schlüssel. Andere Ausstellungswege sind dadurch nicht gesperrt.
+
 The whole purchase and unlock path works without a server, account or custody.
 This document describes the flow for buyers and for the vendor.
 
@@ -63,8 +71,11 @@ node tools/license-cli.mjs keygen
 ```
 
 Writes `tools/keys/issuer.private.json` (git-ignored) and `issuer.public.json`.
-The public key is embedded in `packages/shared/src/license-key.ts` as
-`ISSUER_PUBLIC_KEY` and in `packages/app/.env` as `VITE_WAI_ISSUER_KEY`.
+It does **not** update the app's embedded public key. Put the new public key in
+`packages/shared/src/license-key.ts` as `ISSUER_PUBLIC_KEY`, review any
+`VITE_WAI_ISSUER_KEY` build override, and rebuild and test before distribution.
+Do not overwrite an existing private key without a backup and a migration plan
+for existing installations and licences.
 
 **Back up the private key offline** (two locations, e.g. encrypted USB + paper).
 If it is lost you can no longer issue licences that verify against the shipped

@@ -28,6 +28,11 @@ if [[ -n "$(git status --porcelain)" ]]; then
   exit 1
 fi
 
+# Stop before mutating files, committing, tagging or pushing when the reviewed
+# issuer key is compromised or Vite would override it during the release build.
+# CI separately verifies signing mode; this local check cannot inspect secrets.
+node tools/check-release-safety.mjs
+
 CURRENT="$(node -p "require('./packages/app/package.json').version")"
 IFS=. read -r MAJOR MINOR PATCH <<< "$CURRENT"
 case "$BUMP" in

@@ -13,6 +13,8 @@
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
+import { ISSUER_PUBLIC_KEY } from '../packages/shared/src/license-key.ts';
+import { validateIssuer } from './release-safety.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const args = process.argv.slice(2);
@@ -91,8 +93,14 @@ existsSync(path.join(ROOT, 'packages/landing/dist/index.html'))
   : warn('no landing build', 'run: npm run build:landing');
 const issuer = path.join(ROOT, 'tools/keys/issuer.private.json');
 existsSync(issuer)
-  ? ok('issuer private key present (git-ignored)')
-  : warn('issuer private key missing', 'run: npm run license:keygen — without it you cannot issue Pro licences');
+  ? warn('issuer private key file present (git-ignored)', 'presence alone does not establish safety, ownership or matching public key')
+  : warn('issuer private key missing', 'see docs/LAUNCH_CHECKLIST.md before generating or replacing keys');
+try {
+  validateIssuer(ISSUER_PUBLIC_KEY);
+  ok('embedded issuer key is not on the known-compromised list', 'still verify the key pair and backups');
+} catch {
+  warn('embedded issuer key blocked', 'see docs/LAUNCH_CHECKLIST.md');
+}
 
 head('GitHub');
 // `gh auth status` writes to stderr and may exit 0 with empty stdout, so the
@@ -109,7 +117,7 @@ if (wantAndroid) {
     ok('local Android build possible', 'bash tools/build-android.sh --apk-only');
   } else {
     console.log('  Local Android build not possible here. Use GitHub Actions:');
-    console.log('    gh workflow run android.yml --ref main -f release=true');
+    console.log('    gh workflow run android.yml --ref main -f release=false');
     console.log('  Nothing else in the deliverable is blocked by this.');
   }
 } else {
