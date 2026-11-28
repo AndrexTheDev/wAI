@@ -25,6 +25,10 @@ export function Sheet({
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const restoreFocus = useRef<HTMLElement | null>(null);
+  // The parent may create a new callback on every render. Keep the latest
+  // callback without reopening the focus trap or resetting the user's focus.
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   /**
    * Markiert den Körper, solange ein Sheet offen ist.
@@ -74,7 +78,7 @@ export function Sheet({
      */
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onClose();
+        onCloseRef.current();
         return;
       }
       if (event.key !== 'Tab') return;
@@ -129,7 +133,7 @@ export function Sheet({
       window.clearTimeout(timer);
       restoreFocus.current?.focus?.();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 

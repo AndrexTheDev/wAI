@@ -29,6 +29,17 @@ on:
       - 'packages/app/src/screens/**'
       - 'packages/app/src/ui/**'
       - 'tools/check-tap-targets.mjs'
+      - 'tools/check-focus-ring.mjs'
+      - 'tools/test-focus-ring.sh'
+      - '.github/workflows/tap-targets.yml'
+  pull_request:
+    paths:
+      - 'packages/app/src/**'
+      - 'packages/shared/src/**'
+      - 'tools/check-tap-targets.mjs'
+      - 'tools/check-focus-ring.mjs'
+      - 'tools/test-focus-ring.sh'
+      - '.github/workflows/tap-targets.yml'
 
 permissions:
   contents: write
@@ -82,6 +93,9 @@ jobs:
           set -o pipefail
           npm run check:focus -- --out docs/FOCUS_RINGS.md 2>&1 | tee focus.log
 
+      - name: Check focus regression detection
+        run: bash tools/test-focus-ring.sh
+
       - name: Report
         if: always()
         env:
@@ -102,7 +116,7 @@ jobs:
             -f body="$(cat report.md)" >/dev/null 2>&1 || echo 'Kommentar nicht möglich'
 
       - name: Commit report back
-        if: ${{ always() && (github.event_name == 'push' || inputs.commit) }}
+        if: ${{ success() && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.commit)) }}
         run: |
           git config user.name 'wAI tap-target bot'
           git config user.email 'bot@andrexthedev.dev'

@@ -67,10 +67,14 @@ and still invisible on screen:
   grew from 0 to 2 px over 130 ms, so it was invisible at the moment it mattered.
   List the three properties that actually change.
 
-`tools/check-focus-ring.mjs` walks the keyboard path (`Tab`, not `.focus()` —
-`:focus-visible` only applies to real keyboard focus), reads the ring colour from
-the rendered element and computes it against the backdrop *next to* it, in all
-three themes. It runs in the same workflow as the tap-target check.
+`tools/check-focus-ring.mjs` uses `Tab` to walk a seeded home screen, the editor
+and the Pro sheet in all three app themes. It checks for a 2 px outline and models
+its contrast against composited ancestor background colours. It fails when required
+controls or a view are missing, and verifies focus survives an editor rerender.
+It does **not** measure painted pixels, gradients, clipping or occlusion and is
+not a complete accessibility audit. Manual keyboard and device checks remain
+necessary. It runs with the tap-target workflow; `tools/test-focus-ring.sh` verifies
+that removing the editor textarea outline makes the check fail.
 
 This is checked, not asserted: `npm run check:contrast`
 (`tools/check-contrast.mjs`) reads the tokens straight out of the two CSS files
